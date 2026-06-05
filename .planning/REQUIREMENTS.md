@@ -123,60 +123,61 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01 | TBD | Pending |
-| FND-02 | TBD | Pending |
-| FND-03 | TBD | Pending |
-| FND-04 | TBD | Pending |
-| FND-05 | TBD | Pending |
-| FAM-01 | TBD | Pending |
-| FAM-02 | TBD | Pending |
-| FAM-03 | TBD | Pending |
-| FAM-04 | TBD | Pending |
-| FAM-05 | TBD | Pending |
-| FAM-06 | TBD | Pending |
-| FAM-07 | TBD | Pending |
-| LEDG-01 | TBD | Pending |
-| LEDG-02 | TBD | Pending |
-| LEDG-03 | TBD | Pending |
-| LEDG-04 | TBD | Pending |
-| LEDG-05 | TBD | Pending |
-| LEDG-06 | TBD | Pending |
-| LEDG-07 | TBD | Pending |
-| LEDG-08 | TBD | Pending |
-| ACT-01 | TBD | Pending |
-| ACT-02 | TBD | Pending |
-| ACT-03 | TBD | Pending |
-| ACT-04 | TBD | Pending |
-| ACT-05 | TBD | Pending |
-| ACT-06 | TBD | Pending |
-| ACT-07 | TBD | Pending |
-| ACT-08 | TBD | Pending |
-| ACT-09 | TBD | Pending |
-| GOAL-01 | TBD | Pending |
-| GOAL-02 | TBD | Pending |
-| GOAL-03 | TBD | Pending |
-| GOAL-04 | TBD | Pending |
-| GOAL-05 | TBD | Pending |
-| GOAL-06 | TBD | Pending |
-| GOAL-07 | TBD | Pending |
-| BIBL-01 | TBD | Pending |
-| BIBL-02 | TBD | Pending |
-| BIBL-03 | TBD | Pending |
-| BIBL-04 | TBD | Pending |
-| BIBL-05 | TBD | Pending |
-| BIBL-06 | TBD | Pending |
-| PWA-01 | TBD | Pending |
-| PWA-02 | TBD | Pending |
-| PWA-03 | TBD | Pending |
-| PWA-04 | TBD | Pending |
-| PWA-05 | TBD | Pending |
-| PWA-06 | TBD | Pending |
+| FND-01 | Phase 1 | Pending |
+| FND-02 | Phase 1 | Pending |
+| FND-03 | Phase 1 | Pending |
+| FND-04 | Phase 1 | Pending |
+| FND-05 | Phase 1 | Pending |
+| FAM-01 | Phase 2 | Pending |
+| FAM-02 | Phase 2 | Pending |
+| FAM-03 | Phase 2 | Pending |
+| FAM-04 | Phase 2 | Pending |
+| FAM-05 | Phase 2 | Pending |
+| FAM-06 | Phase 2 | Pending |
+| FAM-07 | Phase 2 | Pending |
+| LEDG-01 | Phase 3 | Pending |
+| LEDG-02 | Phase 3 | Pending |
+| LEDG-03 | Phase 3 | Pending |
+| LEDG-04 | Phase 3 | Pending |
+| LEDG-05 | Phase 3 | Pending |
+| LEDG-06 | Phase 3 | Pending |
+| LEDG-07 | Phase 3 | Pending |
+| LEDG-08 | Phase 3 | Pending |
+| ACT-01 | Phase 4 | Pending |
+| ACT-02 | Phase 4 | Pending |
+| ACT-03 | Phase 4 | Pending |
+| ACT-04 | Phase 5 | Pending |
+| ACT-05 | Phase 5 | Pending |
+| ACT-06 | Phase 5 | Pending |
+| ACT-07 | Phase 5 | Pending |
+| ACT-08 | Phase 5 | Pending |
+| ACT-09 | Phase 5 | Pending |
+| GOAL-01 | Phase 6 | Pending |
+| GOAL-02 | Phase 6 | Pending |
+| GOAL-03 | Phase 7 | Pending |
+| GOAL-04 | Phase 7 | Pending |
+| GOAL-05 | Phase 7 | Pending |
+| GOAL-06 | Phase 7 | Pending |
+| GOAL-07 | Phase 7 | Pending |
+| BIBL-01 | Phase 8 | Pending |
+| BIBL-02 | Phase 8 | Pending |
+| BIBL-03 | Phase 8 | Pending |
+| BIBL-04 | Phase 8 | Pending |
+| BIBL-05 | Phase 8 | Pending |
+| BIBL-06 | Phase 8 | Pending |
+| PWA-01 | Phase 9 | Pending |
+| PWA-02 | Phase 9 | Pending |
+| PWA-03 | Phase 9 | Pending |
+| PWA-04 | Phase 9 | Pending |
+| PWA-05 | Phase 9 | Pending |
+| PWA-06 | Phase 9 | Pending |
 
 **Coverage:**
 - v1 requirements: 48 total
-- Mapped to phases: 0
-- Unmapped: 48 pending roadmap mapping
+- Mapped to phases: 48
+- Unmapped: 0
+- Duplicate mappings: 0
 
 ---
 *Requirements defined: 2026-06-04*
-*Last updated: 2026-06-04 after initial definition*
+*Last updated: 2026-06-04 after roadmap creation*
