@@ -91,7 +91,7 @@ The initial audience is Christian parents and guardians who want to educate chil
 
 | Technology | Recommended Version / Family | Purpose | Why | Confidence |
 |------------|------------------------------|---------|-----|------------|
-| **Better Auth** | 1.6.x current | Authentication | TypeScript-native, framework-agnostic auth with Next.js and Drizzle ecosystem fit. Organization plugin supports roles; map organization/family carefully. | MEDIUM-HIGH |
+| **ZITADEL OIDC** | HassLab instance at `https://auth.hasslab.pro` | Authentication / identity provider | Project decision. OIDC discovery confirms issuer, authorization/token/userinfo/JWKS endpoints, PKCE support, `openid profile email offline_access` scopes, and English/Portuguese UI locales. | HIGH |
 | **Custom authorization layer** | Project code | Parent/guardian/child permissions | Do not rely only on generic auth roles. Kreds needs domain roles: guardian, child, possibly secondary guardian, and child-managed profile constraints. | HIGH |
 | **Parent-managed child profiles** | Project code | Minor-safe account model | For v1, children should be profiles under a family, not fully independent public accounts. This avoids overbuilding identity flows for minors. | MEDIUM |
 
@@ -149,7 +149,7 @@ The initial audience is Christian parents and guardians who want to educate chil
 | Node.js/TypeScript over Go | HIGH | Strong fit for Next.js PWA, shared validation, and rapid product iteration. |
 | PostgreSQL + append-only ledger | HIGH | Required by PRD and standard for auditable relational financial records. |
 | Drizzle ORM | HIGH | Verified docs show PostgreSQL schema, relations, and transactions; explicit SQL is valuable for ledger work. |
-| Better Auth | MEDIUM-HIGH | Docs show organization roles and custom access control; child-profile modeling still needs project-specific design. |
+| ZITADEL OIDC | HIGH | OIDC discovery verified against `https://auth.hasslab.pro`; exact Next.js integration library/session strategy still needs implementation design. |
 | Serwist for PWA | MEDIUM-HIGH | Official docs show Next.js setup; should be verified against chosen Next.js version/Turbopack config during implementation. |
 | Tailwind CSS 4 | HIGH | Official 2025 release docs confirm v4 architecture and benefits. |
 | pg-boss jobs | MEDIUM | Good fit because it avoids Redis, but job semantics should be validated with weekly cycle requirements. |
@@ -158,12 +158,12 @@ The initial audience is Christian parents and guardians who want to educate chil
 
 - Context7: Next.js `/vercel/next.js` docs for App Router, Server Actions, PWA guidance, and `refresh` behavior. Confidence: HIGH.
 - Context7: Drizzle ORM `/drizzle-team/drizzle-orm-docs` docs for PostgreSQL schema, relations, migrations, and transactions. Confidence: HIGH.
-- Context7: Better Auth `/better-auth/better-auth` docs for organization plugin, custom roles, and access control. Confidence: HIGH for library capability; MEDIUM for Kreds-specific fit.
+- ZITADEL OIDC discovery: `https://auth.hasslab.pro/.well-known/openid-configuration` verified issuer, endpoints, scopes, PKCE, and locales. Confidence: HIGH for provider availability; MEDIUM for app integration details until Phase 2.
 - Node.js official release page: `https://nodejs.org/en/about/previous-releases` — production apps should use Active/Maintenance LTS; Node 24 and Node 22 LTS status observed. Confidence: HIGH.
 - PostgreSQL official versioning policy: `https://www.postgresql.org/support/versioning/` — major versions supported for 5 years; PostgreSQL 18 and 17 currently supported. Confidence: HIGH.
 - Tailwind CSS v4 official release notes: `https://tailwindcss.com/blog/tailwindcss-v4` — v4 released Jan 22, 2025 with performance and CSS-first changes. Confidence: HIGH.
 - Serwist Next.js docs: `https://serwist.pages.dev/docs/next/getting-started` — documented `@serwist/next` install, service worker, manifest, metadata setup. Confidence: MEDIUM-HIGH.
-- npm package metadata checked 2026-06-04 for current versions: `next 16.2.7`, `react 19.2.7`, `typescript 6.0.3`, `zod 4.4.3`, `drizzle-orm 0.45.2`, `better-auth 1.6.14`, `@serwist/next 9.5.11`, `tailwindcss 4.3.0`, `@tanstack/react-query 5.101.0`, `react-hook-form 7.77.0`, `pg 8.21.0`, `vitest 4.1.8`, `playwright 1.60.0`, `pino 10.3.1`, `pg-boss 12.18.2`, `testcontainers 12.0.1`. Confidence: HIGH at research time; re-check during bootstrap.
+- npm package metadata checked 2026-06-04 for current versions: `next 16.2.7`, `react 19.2.7`, `typescript 6.0.3`, `zod 4.4.3`, `drizzle-orm 0.45.2`, `@serwist/next 9.5.11`, `tailwindcss 4.3.0`, `@tanstack/react-query 5.101.0`, `react-hook-form 7.77.0`, `pg 8.21.0`, `vitest 4.1.8`, `playwright 1.60.0`, `pino 10.3.1`, `pg-boss 12.18.2`, `testcontainers 12.0.1`. Confidence: HIGH at research time; re-check during bootstrap.
 
 <!-- GSD:stack-end -->
 

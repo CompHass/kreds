@@ -10,7 +10,7 @@
 
 Build Kreds as a **TypeScript-first Next.js full-stack PWA backed by PostgreSQL**. Use **Node.js/TypeScript**, not Go, for the application backend because Kreds is a domain-heavy family product with forms, role-gated UI, child/parent flows, scheduled reports, and an auditable ledger where correctness comes from PostgreSQL transactions, constraints, and append-only modeling—not from backend runtime language. A single TypeScript domain layer lets the team share validation schemas, role rules, date-cycle logic, and ledger command types across the PWA and API.
 
-Recommended shape: **modular monolith first** using Next.js App Router, Route Handlers/Server Actions for product flows, PostgreSQL for data and ledger integrity, Drizzle ORM for typed SQL, Better Auth for parent/guardian authentication, and a Postgres-backed worker for weekly cycle jobs. Keep the ledger code in a strict server-only module with transaction boundaries and database constraints. Do not split into microservices before the ledger, family isolation, and weekly cycle semantics are proven.
+Recommended shape: **modular monolith first** using Next.js App Router, Route Handlers/Server Actions for product flows, PostgreSQL for data and ledger integrity, Drizzle ORM for typed SQL, ZITADEL OIDC for parent/guardian authentication, and a Postgres-backed worker for weekly cycle jobs. Keep the ledger code in a strict server-only module with transaction boundaries and database constraints. Do not split into microservices before the ledger, family isolation, and weekly cycle semantics are proven.
 
 ## Go vs Node.js Decision
 
@@ -81,11 +81,11 @@ Versions below reflect packages checked from npm on 2026-06-04. For a 2025 imple
 
 | Technology | Recommended Version / Family | Purpose | Why | Confidence |
 |------------|------------------------------|---------|-----|------------|
-| **Better Auth** | 1.6.x current | Authentication | TypeScript-native, framework-agnostic auth with Next.js and Drizzle ecosystem fit. Organization plugin supports roles; map organization/family carefully. | MEDIUM-HIGH |
+| **ZITADEL OIDC** | HassLab instance at `https://auth.hasslab.pro` | Authentication / identity provider | Project decision. OIDC discovery confirms issuer, authorization/token/userinfo/JWKS endpoints, PKCE support, `openid profile email offline_access` scopes, and English/Portuguese UI locales. | HIGH |
 | **Custom authorization layer** | Project code | Parent/guardian/child permissions | Do not rely only on generic auth roles. Kreds needs domain roles: guardian, child, possibly secondary guardian, and child-managed profile constraints. | HIGH |
 | **Parent-managed child profiles** | Project code | Minor-safe account model | For v1, children should be profiles under a family, not fully independent public accounts. This avoids overbuilding identity flows for minors. | MEDIUM |
 
-**Important auth modeling guidance:** Treat Better Auth organizations as an implementation helper, not the domain model. The domain aggregate is `family`. Store Kreds roles in domain tables keyed by `family_id`, and project them into auth/session claims only as a convenience.
+**Important auth modeling guidance:** Treat ZITADEL as the identity provider, not the Kreds domain model. The domain aggregate is `family`. Store Kreds roles in domain tables keyed by `family_id`, and project them into auth/session claims only as a convenience. Do not model family isolation only as external IdP organizations.
 
 ### Testing and Quality
 
@@ -116,7 +116,7 @@ Use a **modular monolith** with explicit server-only packages/modules:
 apps/web
   app/                    # Next.js App Router UI, route handlers, server actions
   components/             # UI components
-  lib/auth/               # Better Auth integration and session helpers
+  lib/auth/               # ZITADEL OIDC integration and session helpers
   lib/db/                 # Drizzle client, schema, migrations
   modules/family/         # family membership, avatars, roles
   modules/tasks/          # weekly tasks, activation history, 72h validation
@@ -143,7 +143,7 @@ Use `pnpm` and pin exact versions in `package.json` during bootstrap.
 pnpm create next-app@latest kreds --ts --eslint --app --src-dir --import-alias "@/*"
 
 # Core domain and data
-pnpm add drizzle-orm pg zod better-auth pino pg-boss date-fns ulid
+pnpm add drizzle-orm pg zod pino pg-boss date-fns ulid
 pnpm add -D drizzle-kit typescript tsx @types/pg
 
 # UI and PWA
@@ -184,7 +184,7 @@ pnpm add -D vitest playwright testcontainers @testing-library/react @testing-lib
 | Node.js/TypeScript over Go | HIGH | Strong fit for Next.js PWA, shared validation, and rapid product iteration. |
 | PostgreSQL + append-only ledger | HIGH | Required by PRD and standard for auditable relational financial records. |
 | Drizzle ORM | HIGH | Verified docs show PostgreSQL schema, relations, and transactions; explicit SQL is valuable for ledger work. |
-| Better Auth | MEDIUM-HIGH | Docs show organization roles and custom access control; child-profile modeling still needs project-specific design. |
+| ZITADEL OIDC | HIGH | OIDC discovery verified against `https://auth.hasslab.pro`; exact Next.js integration library/session strategy still needs implementation design. |
 | Serwist for PWA | MEDIUM-HIGH | Official docs show Next.js setup; should be verified against chosen Next.js version/Turbopack config during implementation. |
 | Tailwind CSS 4 | HIGH | Official 2025 release docs confirm v4 architecture and benefits. |
 | pg-boss jobs | MEDIUM | Good fit because it avoids Redis, but job semantics should be validated with weekly cycle requirements. |
@@ -193,9 +193,9 @@ pnpm add -D vitest playwright testcontainers @testing-library/react @testing-lib
 
 - Context7: Next.js `/vercel/next.js` docs for App Router, Server Actions, PWA guidance, and `refresh` behavior. Confidence: HIGH.
 - Context7: Drizzle ORM `/drizzle-team/drizzle-orm-docs` docs for PostgreSQL schema, relations, migrations, and transactions. Confidence: HIGH.
-- Context7: Better Auth `/better-auth/better-auth` docs for organization plugin, custom roles, and access control. Confidence: HIGH for library capability; MEDIUM for Kreds-specific fit.
+- ZITADEL OIDC discovery: `https://auth.hasslab.pro/.well-known/openid-configuration` verified issuer, endpoints, scopes, PKCE, and locales. Confidence: HIGH for provider availability; MEDIUM for app integration details until Phase 2.
 - Node.js official release page: `https://nodejs.org/en/about/previous-releases` — production apps should use Active/Maintenance LTS; Node 24 and Node 22 LTS status observed. Confidence: HIGH.
 - PostgreSQL official versioning policy: `https://www.postgresql.org/support/versioning/` — major versions supported for 5 years; PostgreSQL 18 and 17 currently supported. Confidence: HIGH.
 - Tailwind CSS v4 official release notes: `https://tailwindcss.com/blog/tailwindcss-v4` — v4 released Jan 22, 2025 with performance and CSS-first changes. Confidence: HIGH.
 - Serwist Next.js docs: `https://serwist.pages.dev/docs/next/getting-started` — documented `@serwist/next` install, service worker, manifest, metadata setup. Confidence: MEDIUM-HIGH.
-- npm package metadata checked 2026-06-04 for current versions: `next 16.2.7`, `react 19.2.7`, `typescript 6.0.3`, `zod 4.4.3`, `drizzle-orm 0.45.2`, `better-auth 1.6.14`, `@serwist/next 9.5.11`, `tailwindcss 4.3.0`, `@tanstack/react-query 5.101.0`, `react-hook-form 7.77.0`, `pg 8.21.0`, `vitest 4.1.8`, `playwright 1.60.0`, `pino 10.3.1`, `pg-boss 12.18.2`, `testcontainers 12.0.1`. Confidence: HIGH at research time; re-check during bootstrap.
+- npm package metadata checked 2026-06-04 for current versions: `next 16.2.7`, `react 19.2.7`, `typescript 6.0.3`, `zod 4.4.3`, `drizzle-orm 0.45.2`, `@serwist/next 9.5.11`, `tailwindcss 4.3.0`, `@tanstack/react-query 5.101.0`, `react-hook-form 7.77.0`, `pg 8.21.0`, `vitest 4.1.8`, `playwright 1.60.0`, `pino 10.3.1`, `pg-boss 12.18.2`, `testcontainers 12.0.1`. Confidence: HIGH at research time; re-check during bootstrap.

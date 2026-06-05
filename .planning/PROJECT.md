@@ -57,7 +57,8 @@ The provided technical direction is a React/Next.js web and mobile PWA, a Go or 
 - **Language**: Planning docs, code, comments, identifiers, and commit messages are English - required by the active agent rules.
 - **Product language**: User-facing copy can be localized later, but the current planning artifacts are written in English for implementation consistency.
 - **Frontend**: React/Next.js PWA - requested by the PRD for web and mobile reach.
-- **Backend**: Go or Node.js API - final choice is still pending and should be resolved before implementation.
+- **Backend**: Node.js/TypeScript is recommended by research for v1; any backend choice must integrate with ZITADEL OIDC.
+- **Authentication**: ZITADEL is the authentication provider, with issuer `https://auth.hasslab.pro` discovered via OIDC metadata.
 - **Database**: PostgreSQL - required for relational financial records and auditability.
 - **Infrastructure**: Kubernetes, ArgoCD, Docker, and Harbor - requested target platform for deployment.
 - **Financial integrity**: All Kreds Engine transactions need an auditable model because the app teaches stewardship and must preserve trust.
@@ -74,6 +75,7 @@ The provided technical direction is a React/Next.js web and mobile PWA, a Go or 
 | Target a PWA first | The PRD requests web and mobile reach without native mobile scope | - Pending |
 | Use PostgreSQL for the financial ledger | Relational records support auditability for transactions and family data isolation | - Pending |
 | Resolve Go versus Node.js before implementation | The PRD leaves backend language open; choosing one affects stack, hiring assumptions, and architecture | - Pending |
+| Use ZITADEL for authentication | The project will use the HassLab ZITADEL instance as the OIDC identity provider | - Pending |
 
 ## Evolution
 
@@ -93,4 +95,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-04 after initialization*
+*Last updated: 2026-06-05 after selecting ZITADEL authentication*

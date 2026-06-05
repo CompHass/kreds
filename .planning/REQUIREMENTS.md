@@ -17,10 +17,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Family And Roles
 
-- [ ] **FAM-01**: Parent can create a family account with data isolated by `family_id`.
+- [ ] **FAM-01**: Parent can authenticate through ZITADEL and create a family account with data isolated by `family_id`.
 - [ ] **FAM-02**: Parent can invite or register another guardian in the same family.
 - [ ] **FAM-03**: Parent can create child profiles without public child registration.
-- [ ] **FAM-04**: Parent can assign each member a guardian or child role.
+- [ ] **FAM-04**: Parent can assign each member a Kreds guardian or child role that is stored in the Kreds domain model, not only in ZITADEL claims.
 - [ ] **FAM-05**: Family member can view only data that belongs to their own family.
 - [ ] **FAM-06**: Parent can customize child profiles with simple avatars or visual identifiers.
 - [ ] **FAM-07**: Parent can review an audit trail for identity, membership, and profile changes.
@@ -180,4 +180,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-06-04*
-*Last updated: 2026-06-04 after roadmap creation*
+*Last updated: 2026-06-05 after selecting ZITADEL authentication*

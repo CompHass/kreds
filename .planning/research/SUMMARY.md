@@ -17,7 +17,7 @@ The biggest risks are child privacy, cross-family data leaks, mutable balances, 
 
 ### Recommended Stack
 
-Use a single-language TypeScript stack for faster product iteration and shared validation across UI, API, domain services, tests, and workers. The core architecture should be a Next.js App Router PWA with server-only domain modules, PostgreSQL as system of record, Drizzle for typed SQL/migrations, Better Auth plus custom authorization, and a Postgres-backed worker for cycle/report jobs.
+Use a single-language TypeScript stack for faster product iteration and shared validation across UI, API, domain services, tests, and workers. The core architecture should be a Next.js App Router PWA with server-only domain modules, PostgreSQL as system of record, Drizzle for typed SQL/migrations, ZITADEL OIDC for authentication, custom Kreds authorization, and a Postgres-backed worker for cycle/report jobs.
 
 **Core technologies:**
 - **Node.js 24 LTS / 22 LTS baseline:** runtime for a unified TypeScript application.
@@ -25,7 +25,7 @@ Use a single-language TypeScript stack for faster product iteration and shared v
 - **Next.js 16 / 15 baseline + React 19:** full-stack PWA framework with App Router, Route Handlers, and Server Actions.
 - **PostgreSQL 18 / 17 baseline:** transactional relational source of truth for tenancy, audit, and ledger integrity.
 - **Drizzle ORM + `pg`:** explicit typed SQL, migrations, transactions, and raw-SQL escape hatches.
-- **Better Auth:** auth/session foundation; do not treat its organization model as the Kreds domain model.
+- **ZITADEL OIDC:** authentication provider using issuer `https://auth.hasslab.pro`; do not treat IdP organizations/claims as the Kreds domain model.
 - **PostgreSQL RLS:** defense-in-depth isolation for every family-scoped table.
 - **Serwist:** modern Next-compatible service worker/PWA tooling; verify with chosen Next version during bootstrap.
 - **Tailwind CSS 4 + shadcn/Radix:** accessible, owned UI component foundation.
@@ -121,7 +121,7 @@ Kreds should be a modular monolith with strict server/client boundaries. The fro
 
 ### Phase 1: Auth, Family Tenancy, Roles, and Profiles
 **Rationale:** Every later feature is family-scoped and role-sensitive; retrofitting tenancy is expensive and dangerous.  
-**Delivers:** Better Auth integration, families, memberships, guardian invitations, child profiles, generated avatars, tenant context, RLS baseline, authorization helpers, cross-family tests, audit events for identity/profile changes.  
+**Delivers:** ZITADEL OIDC integration, families, memberships, guardian invitations, child profiles, generated avatars, tenant context, RLS baseline, authorization helpers, cross-family tests, audit events for identity/profile changes.  
 **Addresses:** Family account, parent/guardian/child roles, child profiles.  
 **Avoids:** Cross-family leaks, multi-guardian ambiguity, unsafe avatar uploads, shared parent credentials.
 
@@ -191,7 +191,7 @@ Phases with standard patterns that can usually skip additional research:
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Core Next.js/TypeScript/PostgreSQL/Drizzle recommendation is strongly supported; Serwist/Better Auth details need version-specific verification during bootstrap. |
+| Stack | HIGH | Core Next.js/TypeScript/PostgreSQL/Drizzle recommendation is strongly supported; Serwist and ZITADEL app integration details need version-specific verification during bootstrap. |
 | Features | MEDIUM-HIGH | Generic allowance/chore table stakes are strongly verified; Christian stewardship differentiators need target-family validation. |
 | Architecture | HIGH | Tenant isolation, append-only ledger, command services, RLS, audit, and report snapshots are well-established patterns. |
 | Pitfalls | HIGH | Privacy, security, ledger, accessibility, and donation-risk pitfalls are backed by official guidance; religious-content UX remains more product-specific. |
@@ -220,7 +220,7 @@ Phases with standard patterns that can usually skip additional research:
 - W3C WCAG 2.2 guidance — accessibility baseline for web/mobile web applications.
 
 ### Secondary (MEDIUM confidence)
-- Better Auth docs — auth organizations/custom roles capability; Kreds-specific family-role modeling still needs implementation design.
+- ZITADEL OIDC discovery at `https://auth.hasslab.pro/.well-known/openid-configuration` — issuer, endpoints, scopes, PKCE support, and locales verified 2026-06-05.
 - Serwist Next.js docs — PWA setup; verify against chosen Next.js/Turbopack configuration.
 - CFPB Money as You Grow — age-appropriate financial education prompts and parent-child conversations.
 - Greenlight, GoHenry/Acorns Early, BusyKid, FamZoo official pages — competitor table stakes and feature expectations.

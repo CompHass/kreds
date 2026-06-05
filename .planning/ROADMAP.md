@@ -13,7 +13,7 @@ Kreds v1 moves from a privacy-safe delivery skeleton into family tenancy, a trus
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation, Privacy, and Delivery Skeleton** - Developers and maintainers can run, test, package, and review Kreds before child data exists.
-- [ ] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created with isolated memberships, guardians, children, roles, avatars, and identity audit history.
+- [ ] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created through ZITADEL-backed authentication with isolated memberships, guardians, children, roles, avatars, and identity audit history.
 - [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules.
 - [ ] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved.
 - [ ] **Phase 5: Task Completion, Approval, and Earnings Slice** - Children complete tasks, parents approve them, and approved work posts Kreds earnings with visible status and history.
@@ -39,14 +39,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 **UI hint**: yes
 
 ### Phase 2: Family Access, Tenancy, Roles, and Profiles
-**Goal**: Parents can create isolated family accounts with guardians, children, roles, profile identifiers, and audit visibility.
+**Goal**: Parents can authenticate through ZITADEL and create isolated family accounts with guardians, children, roles, profile identifiers, and audit visibility.
 **Mode:** mvp
 **Depends on**: Phase 1
 **Requirements**: FAM-01, FAM-02, FAM-03, FAM-04, FAM-05, FAM-06, FAM-07
 **Success Criteria** (what must be TRUE):
-  1. Parent can create a family account and all family-scoped data is isolated by `family_id`.
+  1. Parent can authenticate through ZITADEL, create a family account, and all family-scoped data is isolated by `family_id`.
   2. Parent can invite or register another guardian and create child profiles without public child self-registration.
-  3. Parent can assign guardian or child roles and family members only see data from their own family.
+  3. Parent can assign Kreds guardian or child roles stored in the domain model, and family members only see data from their own family.
   4. Parent can customize child profiles with simple avatars or visual identifiers.
   5. Parent can review an audit trail for identity, membership, and profile changes.
 **Plans**: TBD
