@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketch 003 - Generosity Gratitude Tone</title>
+  <link rel="stylesheet" href="../themes/default.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Montserrat:wght@700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0&display=swap" rel="stylesheet">
+  <style>
+    .page { min-height:100vh; padding:82px 18px 90px; }
+    .narrow { max-width:520px; margin:0 auto; }
+    .wide { max-width:1040px; margin:0 auto; }
+    .hero { border-radius:32px; padding:26px; position:relative; overflow:hidden; margin-bottom:18px; }
+    .hero:before { content:""; position:absolute; inset:auto -60px -70px auto; width:220px; height:220px; border-radius:50%; background:var(--color-gold-soft); filter:blur(12px); }
+    .hero > * { position:relative; z-index:1; }
+    .cause { display:flex; gap:14px; align-items:center; padding:14px; border-radius:22px; margin:12px 0; cursor:pointer; transition:all .15s ease; }
+    .cause:hover, .cause.selected { background:var(--color-gold-soft); border-color:rgba(255,211,106,.35); }
+    .cause-icon { width:52px; height:52px; border-radius:18px; display:grid; place-items:center; background:rgba(255,211,106,.14); border:1px solid rgba(255,211,106,.2); font-size:24px; }
+    .amount-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0; }
+    .report-grid { display:grid; grid-template-columns:1.2fr .8fr; gap:18px; }
+    .metric { border-radius:22px; padding:16px; }
+    .path { display:grid; gap:14px; }
+    .step { display:grid; grid-template-columns:54px 1fr; gap:14px; align-items:start; padding:16px; border-radius:24px; }
+    textarea { width:100%; min-height:92px; resize:vertical; border-radius:18px; border:1px solid var(--color-border); background:rgba(255,255,255,.045); color:var(--color-text); padding:14px; outline:none; transition:all .15s ease; }
+    textarea:focus { border-color:var(--color-primary); box-shadow:var(--glow-primary); }
+    @media (max-width: 820px) { .report-grid { grid-template-columns:1fr; } .amount-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="variant-nav">
+    <button class="variant-tab active" onclick="showVariant(event,'a')">A: Giving Moment</button>
+    <button class="variant-tab" onclick="showVariant(event,'b')">B: Gratitude Report</button>
+    <button class="variant-tab" onclick="showVariant(event,'c')">C: Blessing Path ★ Selected</button>
+  </nav>
+  <main id="viewport" class="sketch-shell">
+    <section id="variant-a" class="variant active">
+      <div class="page narrow">
+        <section class="hero glass"><span class="chip">Kreds do Bem</span><h1 class="heading" style="font-size:34px;margin:14px 0 8px">Escolha uma forma de servir</h1><p style="color:var(--color-text-muted)">Isto registra uma intenção de generosidade da família. Não é pagamento real nem recibo de doação.</p></section>
+        <section class="glass" style="border-radius:28px;padding:18px"><div class="label">Causas aprovadas pelos responsáveis</div><article class="cause selected" onclick="selectCause(this)"><div class="cause-icon">🏠</div><div style="flex:1"><strong>Ajudar o abrigo local</strong><p>Família registra a entrega fora do app.</p></div><span class="chip">+10%</span></article><article class="cause" onclick="selectCause(this)"><div class="cause-icon">🎁</div><div style="flex:1"><strong>Presente para um amigo</strong><p>Generosidade relacional e supervisionada.</p></div><span class="chip">+10%</span></article><article class="cause" onclick="selectCause(this)"><div class="cause-icon">⛪</div><div style="flex:1"><strong>Oferta na igreja</strong><p>Referência familiar, sem processamento financeiro.</p></div><span class="chip">+10%</span></article></section>
+        <section class="soft-glass" style="border-radius:28px;padding:18px;margin-top:16px"><div class="label">Quanto separar?</div><div class="amount-grid"><button class="pill ghost" onclick="setAmount(this,'10')">10 KRD</button><button class="pill ghost" onclick="setAmount(this,'25')">25 KRD</button><button class="pill ghost" onclick="setAmount(this,'50')">50 KRD</button></div><p id="match-copy">Escolha um valor para ver o incentivo dos pais.</p><button class="pill lime" style="width:100%" onclick="toast('Pedido enviado para aprovação dos responsáveis')">Enviar para aprovação</button></section>
+      </div>
+    </section>
+    <section id="variant-b" class="variant">
+      <div class="page wide">
+        <div class="report-grid">
+          <section class="hero glass"><span class="chip">Relatório de gratidão</span><h1 class="heading" style="font-size:38px;margin:14px 0 8px">Semana de cuidado e mordomia</h1><p style="color:var(--color-text-muted)">Snapshot imutável do ciclo Domingo-Sábado para conversar em família.</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px"><div class="metric soft-glass"><div class="label">Tarefas</div><h2 class="heading">18/22</h2></div><div class="metric soft-glass"><div class="label">Primícias</div><h2 class="heading" style="color:var(--color-gold)">126 ₭</h2></div><div class="metric soft-glass"><div class="label">Bem</div><h2 class="heading" style="color:var(--color-lime)">35 ₭</h2></div></div></section>
+          <aside class="glass" style="border-radius:28px;padding:20px"><div class="label">Referência da semana</div><h2 class="heading">Colossenses 3:23</h2><p>Mostrar referência e prompt aprovado. Texto completo depende de licença/tradução.</p><textarea onblur="validateReflection(this)" placeholder="Pelo que você quer agradecer nesta semana?"></textarea><button class="pill primary" style="width:100%;margin-top:12px" onclick="saveReflection(this)">Salvar reflexão</button></aside>
+        </div>
+      </div>
+    </section>
+    <section id="variant-c" class="variant">
+      <div class="page narrow">
+        <section class="hero glass"><span class="chip">Caminho da benção</span><h1 class="heading" style="font-size:34px;margin:14px 0 8px">Do trabalho fiel ao coração generoso</h1><p>Um fluxo guiado para crianças entenderem a ordem: ganhar, separar primeiro, sonhar, servir e agradecer.</p></section>
+        <section class="path"><article class="step soft-glass"><div class="cause-icon">✅</div><div><div class="label">1. Responsabilidade</div><strong>Você completou 4 missões com zelo.</strong></div></article><article class="step soft-glass"><div class="cause-icon">⛪</div><div><div class="label">2. Primícias</div><strong>10% foi separado primeiro.</strong><p>O app faz isso automaticamente para ensinar prioridade.</p></div></article><article class="step glass"><div class="cause-icon">💛</div><div><div class="label">3. Generosidade</div><strong>Quer separar 25 KRD para ajudar?</strong><p>Seus pais acrescentam +2.5 KRD como incentivo.</p><button class="pill lime" onclick="toast('Generosidade adicionada ao caminho')">sim, separar</button></div></article><article class="step soft-glass"><div class="cause-icon">🙏</div><div><div class="label">4. Gratidão</div><strong>O que Deus te ajudou a aprender?</strong><textarea onblur="validateReflection(this)" placeholder="Escreva uma frase curta..."></textarea></div></article></section>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast">Pronto</div>
+  <div id="sketch-tools" style="position:fixed;bottom:12px;right:12px;z-index:9999;font-family:system-ui;font-size:12px;background:rgba(0,0,0,0.7);color:white;padding:8px 12px;border-radius:8px;opacity:0.45;transition:opacity 0.2s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.45'"><select onchange="document.querySelector('link[href*=themes]').href='../themes/'+this.value+'.css'"><option value="default">Default</option></select><button onclick="setViewport('375px')">Phone</button><button onclick="setViewport('768px')">Tablet</button><button onclick="setViewport('1280px')">Desktop</button><button onclick="setViewport('100%')">Full</button></div>
+  <script>
+    function showVariant(event,id){document.querySelectorAll('.variant').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.variant-tab').forEach(t=>t.classList.remove('active'));document.getElementById('variant-'+id).classList.add('active');event.target.classList.add('active')}
+    function setViewport(width){document.getElementById('viewport').style.maxWidth=width}
+    function toast(message){const t=document.getElementById('toast');t.textContent=message;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
+    function selectCause(el){document.querySelectorAll('.cause').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');toast('Causa selecionada')}
+    function setAmount(button, amount){document.querySelectorAll('.amount-grid .pill').forEach(b=>b.classList.remove('primary'));button.classList.add('primary');document.getElementById('match-copy').textContent='Se aprovado, os pais acrescentam +' + (Number(amount)*0.1).toFixed(1) + ' KRD.'}
+    function validateReflection(el){if(el.value.trim().length<4){el.style.borderColor='var(--color-danger)';toast('Escreva pelo menos uma frase curta')}else{el.style.borderColor='var(--color-lime)';toast('Reflexão pronta para salvar')}}
+    function saveReflection(button){button.textContent='Salvando...';setTimeout(()=>{button.textContent='Reflexão salva ✓';toast('Relatório atualizado')},600)}
+  </script>
+</body>
+</html>
