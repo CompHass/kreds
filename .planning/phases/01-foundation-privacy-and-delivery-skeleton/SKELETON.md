@@ -5,7 +5,7 @@
 
 ## Capability Proven End-to-End
 
-A developer can run the Kreds app locally, view a page that reads family data from PostgreSQL, create a new family through a form, and see it appear — proving the full Next.js → API → Drizzle → PostgreSQL stack works end-to-end.
+A developer can run the Kreds app locally, view a page that reads family data from PostgreSQL (a live count via an async Server Component), and call the GET /api/families Route Handler directly — proving the full Next.js App Router → Drizzle ORM → PostgreSQL stack works end-to-end. Family creation (POST) is deferred to Phase 2.
 
 ## Architectural Decisions
 
@@ -30,8 +30,8 @@ A developer can run the Kreds app locally, view a page that reads family data fr
 
 - [x] Project scaffold (Next.js 16, TypeScript, pnpm, Tailwind CSS 4, Serwist, Pino, Zod)
 - [x] Routing — home page (/) and health API (/api/health)
-- [x] Database — families table created via Drizzle migration; page reads/writes families
-- [x] UI — home page with Tailwind styling; family creation form wired to API route
+- [x] Database — families table created via Drizzle migration (`pnpm db:generate` + `pnpm db:migrate`); GET /api/families Route Handler queries PostgreSQL; home page async Server Component renders live family count
+- [x] UI — home page with Tailwind styling; async Server Component renders `{families.length} families registered` read from PostgreSQL
 - [x] Deployment — Docker multi-stage build with standalone output, non-root user, K8s-ready
 
 ## Out of Scope (Deferred to Later Slices)
