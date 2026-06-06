@@ -35,7 +35,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Developer can build a Docker image suitable for the target Kubernetes delivery path.
   4. Maintainer can review child-privacy data inventory before any child profile data is collected.
   5. Maintainer can use canonical Kreds terminology for firstfruits, giving, tasks, and weekly reports.
-**Plans**: TBD
+**Plans**: 3 plans
+**Plans:**
+- [ ] 01-01-PLAN.md — Project scaffolding, dependency installation with human-verified packages, Drizzle ORM layer, health API endpoint
+- [ ] 01-02-PLAN.md — Testing infrastructure (Vitest/Playwright/Testcontainers), Docker multi-stage build, docker-compose PostgreSQL
+- [ ] 01-03-PLAN.md — Child privacy data inventory, canonical terminology glossary with TypeScript constants
 **UI hint**: yes
 
 ### Phase 2: Family Access, Tenancy, Roles, and Profiles
