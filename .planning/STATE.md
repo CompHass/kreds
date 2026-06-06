@@ -1,12 +1,17 @@
 ---
-gsd_state_version: '1.0'
-status: planning
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Phase 1 complete — scaffold, PostgreSQL on k8s, migration, privacy inventory, glossary, test infra, Docker build.
+last_updated: "2026-06-06T21:28:00.000Z"
+last_activity: 2026-06-06 — Phase 1 fully executed.
 progress:
   total_phases: 9
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 4
+  completed_plans: 4
+  percent: 11
 ---
 
 # Project State
@@ -16,29 +21,30 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-04)
 
 **Core value:** Children learn to steward money faithfully by separating firstfruits, completing responsibilities with integrity, practicing generosity, and seeing progress toward personal goals.
-**Current focus:** Phase 1 — Foundation, Privacy, and Delivery Skeleton
+**Current focus:** Phase 2 — Family Access, Tenancy, Roles, and Profiles
 
 ## Current Position
 
-Phase: 1 of 9 (Foundation, Privacy, and Delivery Skeleton)
-Plan: TBD in current phase
-Status: Ready to plan
-Last activity: 2026-06-04 — Roadmap created from 48 v1 requirements with MVP mode per phase.
+Phase: 1 of 9 (Foundation, Privacy, and Delivery Skeleton) — ✅ Complete
+Plan: None (Phase 1 done)
+Status: Phase 1 complete — 4/4 plans delivered
+Last activity: 2026-06-06 — Phase 1 fully executed: scaffold, PostgreSQL, privacy inventory, glossary, test infra, Docker build.
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [▓▓░░░░░░░░] 11%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
+
+- Total plans completed: 4
 - Average duration: N/A
-- Total execution time: 0.0 hours
+- Total execution time: ~40 min (single session)
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation, Privacy, and Delivery Skeleton | 0/TBD | N/A | N/A |
+| 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ~40 min | ~10 min |
 | 2. Family Access, Tenancy, Roles, and Profiles | 0/TBD | N/A | N/A |
 | 3. Kreds Engine Ledger and Audit Foundation | 0/TBD | N/A | N/A |
 | 4. Weekly Task Templates and Activity Cycles | 0/TBD | N/A | N/A |
@@ -49,8 +55,9 @@ Progress: [░░░░░░░░░░] 0%
 | 9. PWA Hardening and Child Experience Polish | 0/TBD | N/A | N/A |
 
 **Recent Trend:**
-- Last 5 plans: None yet
-- Trend: N/A
+
+- Last 5 plans: 01-04 ✅, 01-03 ✅, 01-02 ✅, 01-01 ✅
+- Trend: Phase 1 complete
 
 *Updated after each plan completion*
 
@@ -58,26 +65,25 @@ Progress: [░░░░░░░░░░] 0%
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
+Decisions logged during Phase 1 execution:
 
-- [Roadmap]: v1 is split into 9 fine-granularity MVP phases.
-- [Research]: TypeScript-first Next.js modular monolith with PostgreSQL/Drizzle is recommended before implementation planning.
-- [Safety]: Child privacy, family tenancy, append-only ledger integrity, and safe PWA caching are roadmap ordering constraints.
+- [Infrastructure]: PostgreSQL deployed as StatefulSet in `hasslab-k3s` cluster, namespace `kreds`, instead of local Docker.
+- [Build]: Using Podman instead of Docker Desktop for image builds. Image built successfully: `localhost/kreds:test`.
+- [PNPM]: Pinned to v10.34.1 via `packageManager` field to avoid lockfile incompatibility with pnpm 11.
+- [Serwist]: Import path is `@serwist/next/react` (not `@serwist/next/clients` as in research).
+- [Migration]: `pnpm db:generate` and `pnpm db:migrate` work with port-forwarded cluster PostgreSQL.
 
 ### Pending Todos
 
-None yet.
+None — Phase 1 complete.
 
 ### Blockers/Concerns
 
-- [Phase 1]: Resolve child privacy jurisdiction and product localization direction before collecting child data.
+- [Phase 1 known limitation]: Integration test (Testcontainers) requires Docker daemon; Podman SSH tunnel not directly compatible.
 - [Phase 3]: Define exact integer rounding policy for firstfruits and matching before ledger postings ship.
 - [Phase 8]: Decide Bible translation/reference licensing before showing scripture text beyond references.
 
 ## Deferred Items
-
-Items acknowledged and carried forward from requirements v2 scope:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
@@ -87,6 +93,6 @@ Items acknowledged and carried forward from requirements v2 scope:
 
 ## Session Continuity
 
-Last session: 2026-06-04
-Stopped at: ROADMAP.md, STATE.md, and REQUIREMENTS.md traceability created for v1.
-Resume file: None
+Last session: 2026-06-06
+Stopped at: Phase 1 fully executed and committed.
+Resume file: Phase 2 ready for planning.
