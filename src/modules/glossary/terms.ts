@@ -1,0 +1,21 @@
+export const TERMS = {
+  KREDS: 'Kreds',
+  FIRSTFRUITS: 'Firstfruits',
+  FIRSTFRUITS_TREASURY: 'Firstfruits Treasury',
+  KREDS_DO_BEM: 'Kreds do Bem',
+  DONATION_MATCH: 'Donation Match',
+  TASK_TEMPLATE: 'Task Template',
+  TASK_COMPLETION: 'Task Completion',
+  SEVENTY_TWO_HOUR_RULE: '72-Hour Rule',
+  WEEKLY_CYCLE: 'Weekly Cycle',
+  WEEKLY_GRATITUDE_REPORT: 'Weekly Gratitude Report',
+  WISHLIST_GOAL: 'Wishlist Goal',
+  GUARDIAN: 'Guardian',
+  CHILD: 'Child',
+  FAMILY: 'Family',
+  KREDS_ENGINE: 'Kreds Engine',
+  NEGATIVE_ADJUSTMENT: 'Negative Adjustment',
+  LEDGER_TRANSACTION: 'Ledger Transaction',
+} as const
+
+export type TermKey = keyof typeof TERMS
