@@ -69,6 +69,12 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'Email is required' }, { status: 400 })
         }
 
+        // Validate email format at the API boundary (WR-06)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(email)) {
+          return NextResponse.json({ error: 'Invalid email address format' }, { status: 400 })
+        }
+
         // Get the guardian's active family membership
         const memberships = await db
           .select({
