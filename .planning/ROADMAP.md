@@ -140,7 +140,20 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. System computes each family activity cycle from Sunday through Saturday using the family timezone.
   3. System preserves task activation and deactivation history for later weekly reporting.
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+**Wave 0** *(TDD — função pura getCycleForDate e schema Zod, testes RED-GREEN)*
+
+- [ ] 04-01-PLAN.md — getCycleForDate pure function (ACT-02) + taskTemplateSchema Zod (ACT-01) com ciclo TDD completo
+
+**Wave 1** *(bloqueado pela Wave 0)*
+
+- [ ] 04-02-PLAN.md — Schema Drizzle task_templates + migration + CRUD API (GET/POST) + página guardian /family/tasks
+
+**Wave 2** *(bloqueado pela Wave 1)*
+
+- [ ] 04-03-PLAN.md — Toggle deactivate/reactivate (ACT-03) + página /family/tasks/current com ciclo timezone-aware
+
 **UI hint**: yes
 
 ### Phase 5: Task Completion, Approval, and Earnings Slice
@@ -233,10 +246,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ✅ Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete   | 2026-06-07 |
+| 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
+| 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
 | 3. Kreds Engine Ledger and Audit Foundation | 0/4 | Planned | - |
-| 4. Weekly Task Templates and Activity Cycles | 0/TBD | Not started | - |
+| 4. Weekly Task Templates and Activity Cycles | 0/3 | Planned | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
 | 7. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
