@@ -563,17 +563,19 @@ The `FAMILY_TIMEZONES` list in `src/lib/families/timezones.ts` is a closed set o
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Route prefix: `/api/families/tasks` vs. `/api/tasks`**
    - What we know: Existing routes use `/api/families/children`, `/api/families/invitations` — the pattern nests under `/api/families/`.
    - What's unclear: Whether tasks belong to the family prefix or merit their own top-level `api/tasks`.
    - Recommendation: Follow established pattern → `/api/families/tasks`. Planner can override if a different convention is preferred (Claude's Discretion).
+   - **RESOLVED: `/api/families/tasks` — follows the established `/api/families/children` pattern. Plans use this prefix.**
 
 2. **Guardian page URL structure**
    - What we know: D-05 requires a page; existing pages live under `/family/`. D-07 requires active/inactive toggle.
    - What's unclear: Whether to put the current-cycle view at `/guardian/tasks/current` or `/family/tasks/current` or `/dashboard/tasks`.
    - Recommendation: Use `/family/tasks` for the list and `/family/tasks/current` for the cycle view, consistent with the `/family/children` pattern.
+   - **RESOLVED: `/family/tasks` (list) + `/family/tasks/current` (cycle view) — consistent with `/family/children` pattern. Plans use these URLs.**
 
 ---
 
