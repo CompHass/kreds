@@ -1,6 +1,9 @@
 import NextAuth from 'next-auth'
 import Zitadel from 'next-auth/providers/zitadel'
 import { env } from '@/lib/env'
+import { db } from '@/lib/db'
+import * as schema from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -20,9 +23,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (profile?.email_verified === false) return false
       return true
     },
-    jwt({ token, profile }) {
+    async jwt({ token, profile }) {
       if (profile?.sub) {
         token.sub = profile.sub
+
+        // Upsert kreds_identities on first login so resolveKredsIdentityId
+        // can find a row for this ZITADEL subject on subsequent requests.
+        try {
+          const existing = await db
+            .select({ id: schema.identities.id })
+            .from(schema.identities)
+            .where(eq(schema.identities.zitadelSubject, profile.sub))
+            .limit(1)
+
+          if (existing.length === 0) {
+            await db.insert(schema.identities).values({
+              zitadelSubject: profile.sub,
+              email: typeof profile.email === 'string' ? profile.email : null,
+              emailVerified: profile.email_verified === true,
+              displayName:
+                typeof profile.name === 'string'
+                  ? profile.name
+                  : typeof profile.preferred_username === 'string'
+                    ? profile.preferred_username
+                    : null,
+            })
+          }
+        } catch (err) {
+          // Log but do not block sign-in — identity row will be created on retry
+          console.error('[auth] kreds_identities upsert failed:', err)
+        }
       }
       return token
     },
