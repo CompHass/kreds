@@ -29,9 +29,13 @@ jobs:
           short_sha="${GITHUB_SHA::12}"
           image="${IMAGE_NAME}:${short_sha}"
           migration_image="${MIGRATION_IMAGE_NAME}:${short_sha}"
+          latest_image="${IMAGE_NAME}:latest"
+          latest_migration_image="${MIGRATION_IMAGE_NAME}:latest"
           echo "short_sha=${short_sha}" >> "${GITHUB_OUTPUT}"
           echo "image=${image}" >> "${GITHUB_OUTPUT}"
           echo "migration_image=${migration_image}" >> "${GITHUB_OUTPUT}"
+          echo "latest_image=${latest_image}" >> "${GITHUB_OUTPUT}"
+          echo "latest_migration_image=${latest_migration_image}" >> "${GITHUB_OUTPUT}"
 
       - name: Check Docker Hub connectivity
         run: |
@@ -68,6 +72,7 @@ jobs:
               --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
               --label "org.opencontainers.image.revision=${{ github.sha }}" \
               --tag "${{ steps.meta.outputs.image }}" \
+              --tag "${{ steps.meta.outputs.latest_image }}" \
               .; then
               exit 0
             fi
@@ -85,6 +90,7 @@ jobs:
               --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
               --label "org.opencontainers.image.revision=${{ github.sha }}" \
               --tag "${{ steps.meta.outputs.migration_image }}" \
+              --tag "${{ steps.meta.outputs.latest_migration_image }}" \
               .; then
               exit 0
             fi
@@ -128,13 +134,17 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
 
-      - name: Push immutable image
+      - name: Push images
         run: |
           docker push "${{ steps.meta.outputs.image }}"
+          docker push "${{ steps.meta.outputs.latest_image }}"
           docker push "${{ steps.meta.outputs.migration_image }}"
+          docker push "${{ steps.meta.outputs.latest_migration_image }}"
 
       - name: Print deploy tag
         run: |
           echo "Image pushed: ${{ steps.meta.outputs.image }}"
+          echo "Latest image pushed: ${{ steps.meta.outputs.latest_image }}"
           echo "Migration image pushed: ${{ steps.meta.outputs.migration_image }}"
+          echo "Latest migration image pushed: ${{ steps.meta.outputs.latest_migration_image }}"
           echo "Use tag: ${{ steps.meta.outputs.short_sha }}"
