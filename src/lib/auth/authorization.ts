@@ -12,6 +12,31 @@ export interface KredsIdentity {
   displayName: string | null
 }
 
+/**
+ * Resolves the local Kreds identity UUID for a given ZITADEL subject string.
+ *
+ * `requireAuthenticatedIdentity` sets `identity.id = zitadelSub` (the raw
+ * ZITADEL sub string). All DB membership columns (`identityId`) store the UUID
+ * primary key of `kreds_identities`, not the ZITADEL sub. This helper performs
+ * the sub → UUID lookup so callers can use the correct key for DB queries.
+ *
+ * @throws {Error} If no `kreds_identities` row exists for the given ZITADEL sub.
+ *   Callers should return 401 when this throws (upsert happens during onboarding).
+ */
+export async function resolveKredsIdentityId(zitadelSub: string): Promise<string> {
+  const [row] = await db
+    .select({ id: schema.identities.id })
+    .from(schema.identities)
+    .where(eq(schema.identities.zitadelSubject, zitadelSub))
+    .limit(1)
+
+  if (!row) {
+    throw new Error(`No Kreds identity found for ZITADEL sub: ${zitadelSub}`)
+  }
+
+  return row.id
+}
+
 export interface FamilyMembership {
   familyId: string
   identityId: string | null

@@ -3,7 +3,7 @@ import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { requireAuthenticatedIdentity } from '@/lib/auth/authorization'
+import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { createChildProfile } from '@/lib/families/child-profiles'
 
 /**
@@ -23,6 +23,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
   }
 
+  // Resolve Kreds UUID from ZITADEL sub — membership columns use the DB UUID, not the sub string
+  let kredsIdentityId: string
+  try {
+    kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   let body: Record<string, string>
   try {
     body = await request.json()
@@ -35,7 +43,7 @@ export async function POST(request: NextRequest) {
   const [membership] = await db
     .select({ familyId: schema.familyMemberships.familyId })
     .from(schema.familyMemberships)
-    .where(eq(schema.familyMemberships.identityId, identity.id))
+    .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
     .limit(1)
 
   if (!membership) {
@@ -52,7 +60,7 @@ export async function POST(request: NextRequest) {
   try {
     await createChildProfile({
       familyId,
-      guardianIdentityId: identity.id,
+      guardianIdentityId: kredsIdentityId,
       displayName: body.displayName ?? '',
       ageYears: parseInt(body.ageYears ?? '0', 10),
       avatarPreset: body.avatarPreset ?? '',

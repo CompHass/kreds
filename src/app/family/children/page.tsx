@@ -4,7 +4,7 @@ import { auth } from '../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { requireAuthenticatedIdentity } from '@/lib/auth/authorization'
+import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { listActiveChildProfiles } from '@/lib/families/child-profiles'
 import {
   AVATAR_PRESETS,
@@ -33,6 +33,14 @@ export default async function FamilyChildrenPage() {
     redirect('/api/auth/signin')
   }
 
+  // Resolve Kreds UUID from ZITADEL sub — membership columns use the DB UUID, not the sub string
+  let kredsIdentityId: string
+  try {
+    kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+  } catch {
+    redirect('/family/onboarding')
+  }
+
   // Get the guardian's family membership
   const [membership] = await db
     .select({
@@ -40,7 +48,7 @@ export default async function FamilyChildrenPage() {
       role: schema.familyMemberships.role,
     })
     .from(schema.familyMemberships)
-    .where(eq(schema.familyMemberships.identityId, identity.id))
+    .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
     .limit(1)
 
   if (!membership) {

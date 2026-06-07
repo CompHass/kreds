@@ -3,7 +3,7 @@ import { auth } from '../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
-import { requireAuthenticatedIdentity, requireActiveGuardian } from '@/lib/auth/authorization'
+import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import {
   createInvitation,
   revokeInvitation,
@@ -33,6 +33,14 @@ export default async function InvitationsPage() {
     redirect('/api/auth/signin')
   }
 
+  // Resolve Kreds UUID from ZITADEL sub — membership columns use the DB UUID, not the sub string
+  let kredsIdentityId: string
+  try {
+    kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+  } catch {
+    redirect('/family/onboarding')
+  }
+
   // Find the user's active guardian membership
   const memberships = await db
     .select({
@@ -43,7 +51,7 @@ export default async function InvitationsPage() {
     .from(schema.familyMemberships)
     .where(
       and(
-        eq(schema.familyMemberships.identityId, identity.id),
+        eq(schema.familyMemberships.identityId, kredsIdentityId),
         eq(schema.familyMemberships.role, 'guardian'),
         eq(schema.familyMemberships.status, 'active'),
       ),

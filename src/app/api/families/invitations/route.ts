@@ -3,7 +3,7 @@ import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
-import { requireAuthenticatedIdentity, requireActiveGuardian } from '@/lib/auth/authorization'
+import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import {
   createInvitation,
   acceptInvitation,
@@ -49,8 +49,18 @@ export async function POST(request: NextRequest) {
     switch (action) {
       case 'create': {
         // Requires active guardian (T-02-14)
-        const identity = requireAuthenticatedIdentity(session)
-        if (!identity) {
+        let identity
+        try {
+          identity = requireAuthenticatedIdentity(session)
+        } catch {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
+        // Resolve Kreds UUID from ZITADEL sub — membership columns use the DB UUID, not the sub string
+        let kredsIdentityId: string
+        try {
+          kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+        } catch {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
@@ -69,7 +79,7 @@ export async function POST(request: NextRequest) {
           .from(schema.familyMemberships)
           .where(
             and(
-              eq(schema.familyMemberships.identityId, identity.id),
+              eq(schema.familyMemberships.identityId, kredsIdentityId),
               eq(schema.familyMemberships.role, 'guardian'),
               eq(schema.familyMemberships.status, 'active'),
             ),
@@ -88,7 +98,7 @@ export async function POST(request: NextRequest) {
         const invitation = await createInvitation({
           familyId: membership.familyId,
           email,
-          invitedByIdentityId: identity.id,
+          invitedByIdentityId: kredsIdentityId,
         })
 
         // Generate the copyable invitation link
@@ -111,8 +121,18 @@ export async function POST(request: NextRequest) {
 
       case 'revoke': {
         // Requires active guardian (T-02-14)
-        const identity = requireAuthenticatedIdentity(session)
-        if (!identity) {
+        let identity
+        try {
+          identity = requireAuthenticatedIdentity(session)
+        } catch {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
+        // Resolve Kreds UUID from ZITADEL sub — membership columns use the DB UUID, not the sub string
+        let kredsIdentityId: string
+        try {
+          kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+        } catch {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
@@ -124,7 +144,7 @@ export async function POST(request: NextRequest) {
           )
         }
 
-        // Verify the invitation belongs to the guardian's family
+        // Verify the requester is an active guardian and get their family
         const memberships = await db
           .select({
             familyId: schema.familyMemberships.familyId,
@@ -132,7 +152,7 @@ export async function POST(request: NextRequest) {
           .from(schema.familyMemberships)
           .where(
             and(
-              eq(schema.familyMemberships.identityId, identity.id),
+              eq(schema.familyMemberships.identityId, kredsIdentityId),
               eq(schema.familyMemberships.role, 'guardian'),
               eq(schema.familyMemberships.status, 'active'),
             ),
@@ -146,7 +166,27 @@ export async function POST(request: NextRequest) {
           )
         }
 
-        const result = await revokeInvitation(invitationId, identity.id)
+        // Verify the invitation belongs to the guardian's family (cross-family revoke prevention)
+        const guardianFamilyId = memberships[0].familyId
+        const [targetInvitation] = await db
+          .select({
+            id: schema.guardianInvitations.id,
+            familyId: schema.guardianInvitations.familyId,
+          })
+          .from(schema.guardianInvitations)
+          .where(
+            and(
+              eq(schema.guardianInvitations.id, invitationId),
+              eq(schema.guardianInvitations.familyId, guardianFamilyId),
+            ),
+          )
+          .limit(1)
+
+        if (!targetInvitation) {
+          return NextResponse.json({ error: 'Invitation not found' }, { status: 404 })
+        }
+
+        const result = await revokeInvitation(invitationId, kredsIdentityId)
 
         return NextResponse.json({
           id: result.id,
@@ -156,8 +196,10 @@ export async function POST(request: NextRequest) {
 
       case 'accept': {
         // Requires authentication (T-02-11)
-        const identity = requireAuthenticatedIdentity(session)
-        if (!identity) {
+        let identity
+        try {
+          identity = requireAuthenticatedIdentity(session)
+        } catch {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
@@ -169,7 +211,7 @@ export async function POST(request: NextRequest) {
         try {
           const result = await acceptInvitation({
             token,
-            identityId: identity.id,
+            identityId: identity.zitadelSub,
           })
 
           // Redirect to family dashboard after successful acceptance
@@ -190,6 +232,13 @@ export async function POST(request: NextRequest) {
       }
 
       case 'decline': {
+        // Must be authenticated — prevents anonymous token-guessing attacks
+        try {
+          requireAuthenticatedIdentity(session)
+        } catch {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
         const token = body.token
         if (!token) {
           return NextResponse.json({ error: 'Token is required' }, { status: 400 })

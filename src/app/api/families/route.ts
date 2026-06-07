@@ -3,7 +3,7 @@ import { auth } from '../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { requireAuthenticatedIdentity } from '@/lib/auth/authorization'
+import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { createFamilyForGuardian } from '@/lib/families/commands'
 import { isValidTimezone } from '@/lib/families/timezones'
 
@@ -19,9 +19,9 @@ export async function GET() {
 
   try {
     const identity = requireAuthenticatedIdentity(session)
-    if (!identity) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+
+    // Resolve the Kreds UUID (DB key) from the ZITADEL sub (session key)
+    const kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
 
     const memberships = await db
       .select({
@@ -29,7 +29,7 @@ export async function GET() {
         role: schema.familyMemberships.role,
       })
       .from(schema.familyMemberships)
-      .where(eq(schema.familyMemberships.identityId, identity.id))
+      .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
       .limit(1)
 
     if (memberships.length === 0) {
@@ -74,9 +74,6 @@ export async function POST(request: NextRequest) {
 
   try {
     const identity = requireAuthenticatedIdentity(session)
-    if (!identity) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
 
     let body: { familyName?: string; timezone?: string }
     try {

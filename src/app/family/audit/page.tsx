@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import Link from 'next/link'
+import { resolveKredsIdentityId } from '@/lib/auth/authorization'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,7 +54,21 @@ export default async function AuditPage() {
     )
   }
 
-  const identityId = session.user.id as string
+  const zitadelSub = session.user.id as string
+
+  // Resolve the Kreds UUID — membership columns use the DB UUID, not the ZITADEL sub string
+  let kredsIdentityId: string
+  try {
+    kredsIdentityId = await resolveKredsIdentityId(zitadelSub)
+  } catch {
+    return (
+      <main>
+        <h1>Audit Timeline</h1>
+        <p>Account not yet set up. Please create your family first.</p>
+        <Link href="/family/onboarding">Create Your Family</Link>
+      </main>
+    )
+  }
 
   // Find the guardian's active family membership
   const [membership] = await db
@@ -61,7 +76,7 @@ export default async function AuditPage() {
       familyId: schema.familyMemberships.familyId,
     })
     .from(schema.familyMemberships)
-    .where(eq(schema.familyMemberships.identityId, identityId))
+    .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
     .limit(1)
 
   if (!membership) {
@@ -76,7 +91,7 @@ export default async function AuditPage() {
 
   let timeline: Awaited<ReturnType<typeof listFamilyAuditTimeline>>
   try {
-    timeline = await listFamilyAuditTimeline(identityId, membership.familyId)
+    timeline = await listFamilyAuditTimeline(kredsIdentityId, membership.familyId)
   } catch (err: any) {
     return (
       <main>

@@ -3,7 +3,7 @@ import { auth } from '../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { requireAuthenticatedIdentity } from '@/lib/auth/authorization'
+import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { getTimezoneOptions } from '@/lib/families/timezones'
 
 export const dynamic = 'force-dynamic'
@@ -27,12 +27,24 @@ export default async function FamilyOnboardingPage() {
     redirect('/api/auth/signin')
   }
 
+  // Resolve Kreds UUID from ZITADEL sub (if the identity exists already)
+  // On first visit (before family creation), the identity may not exist yet — that's OK
+  let kredsIdentityId: string | null = null
+  try {
+    kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+  } catch {
+    // Identity not yet in kreds_identities — this is the first onboarding visit
+  }
+
   // Check if already has a family
-  const existingMemberships = await db
-    .select({ familyId: schema.familyMemberships.familyId })
-    .from(schema.familyMemberships)
-    .where(eq(schema.familyMemberships.identityId, identity.id))
-    .limit(1)
+  const existingMemberships =
+    kredsIdentityId
+      ? await db
+          .select({ familyId: schema.familyMemberships.familyId })
+          .from(schema.familyMemberships)
+          .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
+          .limit(1)
+      : []
 
   if (existingMemberships.length > 0) {
     // Already has a family — redirect to children setup
