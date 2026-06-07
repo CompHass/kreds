@@ -51,3 +51,7 @@ Update both IaC files:
 ## Security Scan
 
 The workflow scans the built image with Trivy before pushing. It fails on HIGH or CRITICAL vulnerabilities.
+
+## Build-Time Environment
+
+The Docker build uses non-secret placeholder values for environment variables required by Next.js static analysis. Real runtime values are injected by Kubernetes through `kreds-secret` and `kreds-config`.
