@@ -31,7 +31,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **LEDG-02**: System stores Kreds amounts as integer units, not floating-point values.
 - [ ] **LEDG-03**: System applies a single documented rounding policy for 10% firstfruits and 10% donation matching.
 - [ ] **LEDG-04**: System automatically withholds 10% of every positive earning into the Firstfruits Treasury before available balance changes.
-- [ ] **LEDG-05**: Parent can record a negative adjustment with a reason and optional restoration note.
+- [x] **LEDG-05**: Parent can record a negative adjustment with a reason and optional restoration note.
 - [ ] **LEDG-06**: System prevents duplicate ledger postings for the same approved command.
 - [ ] **LEDG-07**: Parent and child can view an activity history explaining why each balance changed.
 - [ ] **LEDG-08**: System corrects ledger mistakes through reversal or adjustment entries rather than editing historical transactions.
@@ -139,7 +139,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEDG-02 | Phase 3 | Pending |
 | LEDG-03 | Phase 3 | Pending |
 | LEDG-04 | Phase 3 | Pending |
-| LEDG-05 | Phase 3 | Pending |
+| LEDG-05 | Phase 3 | Complete |
 | LEDG-06 | Phase 3 | Pending |
 | LEDG-07 | Phase 3 | Pending |
 | LEDG-08 | Phase 3 | Pending |
