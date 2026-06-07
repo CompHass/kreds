@@ -119,9 +119,11 @@ export async function POST(request: NextRequest) {
       { status: 201 },
     )
   } catch (err) {
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 400 })
+    // Auth errors thrown by requireAuthenticatedIdentity are handled here; return 401
+    if (err instanceof Error && err.message.startsWith('Authentication required')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Do not leak internal DB or server error messages to clients
+    return NextResponse.json({ error: 'Failed to create family' }, { status: 500 })
   }
 }
