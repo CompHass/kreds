@@ -18,12 +18,12 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Family And Roles
 
 - [ ] **FAM-01**: Parent can authenticate through ZITADEL and create a family account with data isolated by `family_id`.
-- [ ] **FAM-02**: Parent can invite or register another guardian in the same family.
+- [x] **FAM-02**: Parent can invite or register another guardian in the same family.
 - [ ] **FAM-03**: Parent can create child profiles without public child registration.
-- [ ] **FAM-04**: Parent can assign each member a Kreds guardian or child role that is stored in the Kreds domain model, not only in ZITADEL claims.
-- [ ] **FAM-05**: Family member can view only data that belongs to their own family.
+- [x] **FAM-04**: Parent can assign each member a Kreds guardian or child role that is stored in the Kreds domain model, not only in ZITADEL claims.
+- [x] **FAM-05**: Family member can view only data that belongs to their own family.
 - [ ] **FAM-06**: Parent can customize child profiles with simple avatars or visual identifiers.
-- [ ] **FAM-07**: Parent can review an audit trail for identity, membership, and profile changes.
+- [x] **FAM-07**: Parent can review an audit trail for identity, membership, and profile changes.
 
 ### Ledger And Stewardship Engine
 
@@ -129,12 +129,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FND-04 | Phase 1 | Pending |
 | FND-05 | Phase 1 | Pending |
 | FAM-01 | Phase 2 | Pending |
-| FAM-02 | Phase 2 | Pending |
+| FAM-02 | Phase 2 | Complete |
 | FAM-03 | Phase 2 | Pending |
-| FAM-04 | Phase 2 | Pending |
-| FAM-05 | Phase 2 | Pending |
+| FAM-04 | Phase 2 | Complete |
+| FAM-05 | Phase 2 | Complete |
 | FAM-06 | Phase 2 | Pending |
-| FAM-07 | Phase 2 | Pending |
+| FAM-07 | Phase 2 | Complete |
 | LEDG-01 | Phase 3 | Pending |
 | LEDG-02 | Phase 3 | Pending |
 | LEDG-03 | Phase 3 | Pending |
@@ -173,6 +173,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PWA-06 | Phase 9 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 48 total
 - Mapped to phases: 48
 - Unmapped: 0

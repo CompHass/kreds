@@ -88,8 +88,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 02-05-PLAN.md — Guardian-managed child profiles with consent, Sylvan avatars, accent colors, and privacy inventory update
-- [ ] 02-06-PLAN.md — Guardian invitation lifecycle with authenticated acceptance, copyable link behavior, and audit events
+- [x] 02-05-PLAN.md — Guardian-managed child profiles with consent, Sylvan avatars, accent colors, and privacy inventory update
+- [x] 02-06-PLAN.md — Guardian invitation lifecycle with authenticated acceptance, copyable link behavior, and audit events
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
@@ -234,7 +234,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ✅ Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 4/7 | In Progress|  |
+| 2. Family Access, Tenancy, Roles, and Profiles | 6/7 | In Progress|  |
 | 3. Kreds Engine Ledger and Audit Foundation | 0/4 | Planned | - |
 | 4. Weekly Task Templates and Activity Cycles | 0/TBD | Not started | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
