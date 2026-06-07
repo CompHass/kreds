@@ -1,6 +1,7 @@
 import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
 type ChildBalancePageProps = {
   params: Promise<{ childId: string }>
