@@ -119,6 +119,21 @@ export default async function FamilyChildrenPage({
         </div>
 
         <div style={{ display: 'flex', gap: '8px' }}>
+          <Link
+            href="/family/invitations"
+            style={{
+              fontSize: '0.8125rem',
+              color: 'var(--color-primary, #154212)',
+              textDecoration: 'none',
+              padding: '8px 14px',
+              borderRadius: '99px',
+              background: 'rgba(255,255,255,0.82)',
+              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+              fontWeight: 600,
+            }}
+          >
+            Guardiões
+          </Link>
           {children.length > 0 && (
             <Link
               href="/family/dashboard"

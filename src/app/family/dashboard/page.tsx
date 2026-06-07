@@ -86,6 +86,24 @@ export default async function FamilyDashboardPage() {
           >
             Gerenciar filhos
           </Link>
+
+          <Link
+            href="/family/invitations"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '52px',
+              borderRadius: '9999px',
+              background: 'rgba(255,255,255,0.82)',
+              color: 'var(--color-primary, #154212)',
+              textDecoration: 'none',
+              fontWeight: 700,
+              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+            }}
+          >
+            Gerenciar guardiões
+          </Link>
         </div>
       </div>
     </main>

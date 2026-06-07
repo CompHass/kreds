@@ -87,80 +87,218 @@ export default async function InvitationsPage() {
     .orderBy(desc(schema.guardianInvitations.createdAt))
 
   return (
-    <main>
-      <h1>Guardian Invitations</h1>
-      <p>Invite another guardian to help manage your family&apos;s stewardship.</p>
+    <main style={{
+      minHeight: '100vh',
+      padding: '32px 24px 64px',
+      maxWidth: '480px',
+      margin: '0 auto',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '32px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '16px',
+            display: 'grid',
+            placeItems: 'center',
+            fontSize: '24px',
+            background: 'radial-gradient(circle, #fff3b8, #d2a501 58%, #8b6a08)',
+            boxShadow: '0 8px 20px rgba(210,165,1,.2)',
+            flexShrink: 0,
+          }}>
+            🧺
+          </div>
+          <div>
+            <h1 style={{
+              fontFamily: 'var(--font-heading, "Plus Jakarta Sans", system-ui, sans-serif)',
+              fontWeight: 800,
+              fontSize: '1.25rem',
+              letterSpacing: '-0.02em',
+              color: 'var(--color-primary, #154212)',
+              margin: 0,
+            }}>
+              Guardiões
+            </h1>
+            <p style={{
+              fontSize: '0.8125rem',
+              color: 'var(--color-text-soft, #72796e)',
+              margin: 0,
+            }}>
+              Gestão de convites
+            </p>
+          </div>
+        </div>
+
+        <Link
+          href="/family/children"
+          style={{
+            fontSize: '0.8125rem',
+            color: 'var(--color-primary, #154212)',
+            textDecoration: 'none',
+            padding: '8px 14px',
+            borderRadius: '99px',
+            background: 'rgba(255,255,255,0.82)',
+            border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+            fontWeight: 600,
+          }}
+        >
+          Voltar
+        </Link>
+      </div>
 
       {/* Invitation creation form */}
-      <section>
-        <h2>Invite a Guardian</h2>
-        <form action="/api/families/invitations" method="POST">
+      <section style={{
+        background: 'var(--color-card, rgba(255,255,255,0.64))',
+        border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+        borderRadius: '28px',
+        boxShadow: 'var(--shadow-soft, 0 18px 55px rgba(45,90,39,0.1))',
+        backdropFilter: 'blur(22px)',
+        padding: '24px',
+        marginBottom: '32px',
+      }}>
+        <h2 style={{
+          fontSize: '1rem',
+          fontWeight: 800,
+          color: 'var(--color-primary, #154212)',
+          margin: '0 0 8px',
+        }}>
+          Convidar Guardião
+        </h2>
+        <p style={{
+          fontSize: '0.875rem',
+          color: 'var(--color-text-soft, #72796e)',
+          margin: '0 0 20px',
+          lineHeight: 1.5,
+        }}>
+          Convide outro adulto (ex: cônjuge) para ajudar na gestão da mordomia da família.
+        </p>
+
+        <form action="/api/families/invitations" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <input type="hidden" name="action" value="create" />
-          <div>
-            <label htmlFor="email">Email address</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <label htmlFor="email" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted, #42493e)', textTransform: 'uppercase' }}>
+              Endereço de E-mail
+            </label>
             <input
               id="email"
               name="email"
               type="email"
               required
-              placeholder="guardian@example.com"
+              placeholder="exemplo@email.com"
+              style={{
+                padding: '12px 16px',
+                borderRadius: '12px',
+                border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+                background: 'rgba(255,255,255,0.5)',
+                fontSize: '0.9375rem',
+              }}
             />
           </div>
-          <button type="submit">Send Invitation</button>
+          <button type="submit" style={{
+            padding: '12px',
+            borderRadius: '99px',
+            background: 'linear-gradient(135deg, #3b6934, #154212)',
+            color: '#fff',
+            fontWeight: 700,
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 8px 20px rgba(45,90,39,0.15)',
+          }}>
+            Enviar Convite
+          </button>
         </form>
       </section>
 
       {/* Existing invitations list */}
       <section>
-        <h2>Sent Invitations</h2>
+        <p style={{
+          fontSize: '0.75rem',
+          fontWeight: 700,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          color: 'var(--color-text-muted, #42493e)',
+          margin: '0 0 12px',
+        }}>
+          Convites Enviados ({invitations.length})
+        </p>
+        
         {invitations.length === 0 ? (
-          <p>No invitations sent yet.</p>
+          <div style={{
+            padding: '24px',
+            textAlign: 'center',
+            background: 'rgba(255,255,255,0.4)',
+            borderRadius: '20px',
+            border: '1px dashed var(--color-border, rgba(45,90,39,0.16))',
+          }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--color-text-soft, #72796e)', margin: 0 }}>
+              Nenhum convite enviado ainda.
+            </p>
+          </div>
         ) : (
-          <ul>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {invitations.map((inv) => (
-              <li key={inv.id}>
-                <strong>{inv.email}</strong>
-                {' — '}
-                <span>{inv.status}</span>
+              <div key={inv.id} style={{
+                padding: '16px 20px',
+                background: 'var(--color-card, rgba(255,255,255,0.64))',
+                border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backdropFilter: 'blur(12px)',
+              }}>
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--color-primary, #154212)', margin: 0 }}>
+                    {inv.email}
+                  </p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--color-text-soft, #72796e)', margin: 0 }}>
+                    Status: <span style={{ 
+                      fontWeight: 600, 
+                      color: inv.status === INVITATION_STATUS.PENDING ? '#d2a501' : 
+                             inv.status === INVITATION_STATUS.ACCEPTED ? '#3b6934' : '#72796e'
+                    }}>
+                      {inv.status === INVITATION_STATUS.PENDING ? 'Pendente' : 
+                       inv.status === INVITATION_STATUS.ACCEPTED ? 'Aceito' : 
+                       inv.status === INVITATION_STATUS.EXPIRED ? 'Expirado' : inv.status}
+                    </span>
+                  </p>
+                </div>
+
                 {inv.status === INVITATION_STATUS.PENDING && (
-                  <>
-                    {' '}
-                    <form
-                      action="/api/families/invitations"
-                      method="POST"
-                      style={{ display: 'inline' }}
-                    >
-                      <input type="hidden" name="action" value="revoke" />
-                      <input type="hidden" name="invitationId" value={inv.id} />
-                      <button type="submit">Revoke</button>
-                    </form>
-                  </>
+                  <form action="/api/families/invitations" method="POST">
+                    <input type="hidden" name="action" value="revoke" />
+                    <input type="hidden" name="invitationId" value={inv.id} />
+                    <button type="submit" style={{
+                      fontSize: '0.75rem',
+                      color: '#b91c1c',
+                      background: 'rgba(220,38,38,0.08)',
+                      border: '1px solid rgba(220,38,38,0.2)',
+                      borderRadius: '99px',
+                      padding: '6px 12px',
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                    }}>
+                      Revogar
+                    </button>
+                  </form>
                 )}
-                {inv.status === INVITATION_STATUS.ACCEPTED && inv.acceptedByIdentityId && (
-                  <span> (accepted)</span>
-                )}
-                {inv.status === INVITATION_STATUS.EXPIRED && (
-                  <span> (link expired)</span>
-                )}
-                <br />
-                <small>
-                  Invited:{' '}
-                  {inv.createdAt instanceof Date
-                    ? inv.createdAt.toLocaleDateString()
-                    : String(inv.createdAt)}
-                  {inv.expiresAt instanceof Date &&
-                    inv.status === INVITATION_STATUS.PENDING &&
-                    ` — Expires: ${inv.expiresAt.toLocaleDateString()}`}
-                </small>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </section>
 
-      <p>
-        <a href="/">Return home</a>
-      </p>
+      <div style={{ marginTop: '32px', textAlign: 'center' }}>
+        <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--color-text-soft, #72796e)', textDecoration: 'none' }}>
+          Voltar ao início
+        </Link>
+      </div>
     </main>
   )
 }
