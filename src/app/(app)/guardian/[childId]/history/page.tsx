@@ -47,7 +47,7 @@ export default async function GuardianHistoryPage({ params }: GuardianHistoryPag
         <h1 className="mt-3 text-3xl font-bold text-slate-950">Detailed audit trail</h1>
 
         {rows.length === 0 ? (
-          <p className="mt-6 text-base text-slate-600">Nenhuma transação registrada ainda.</p>
+          <p className="mt-6 text-base text-slate-600">No transactions have been recorded yet.</p>
         ) : (
           <ul className="mt-6 space-y-4">
             {rows.map((row) => (

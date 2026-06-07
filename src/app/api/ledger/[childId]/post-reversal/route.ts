@@ -25,7 +25,7 @@ export async function POST(
 
     if (pgErr.message === 'cross_family_reversal_forbidden') {
       return NextResponse.json(
-        { error: 'Reversal não autorizado: transação pertence a outra família' },
+        { error: 'Reversal is not authorized: transaction belongs to another family' },
         { status: 403 },
       )
     }

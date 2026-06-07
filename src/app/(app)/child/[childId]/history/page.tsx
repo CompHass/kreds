@@ -17,7 +17,7 @@ function formatTimestamp(value: Date) {
 
 function getChildLabel(row: Awaited<ReturnType<typeof getChildLedgerHistory>>[number]) {
   if (row.transactionType === 'reversal') {
-    return 'Correção aplicada'
+    return 'Correction applied'
   }
 
   if (row.transactionType === 'task_earning' && row.accountType === 'available') {
@@ -29,7 +29,7 @@ function getChildLabel(row: Awaited<ReturnType<typeof getChildLedgerHistory>>[nu
   }
 
   if (row.transactionType === 'negative_adjustment') {
-    return `Ajuste de ${formatKreds(Math.abs(row.amount) * -1)} registrado`
+    return `Adjustment of ${formatKreds(Math.abs(row.amount) * -1)} recorded`
   }
 
   return `${row.amount >= 0 ? '+' : ''}${formatKreds(row.amount)}`
@@ -48,7 +48,7 @@ export default async function ChildHistoryPage({ params }: ChildHistoryPageProps
         <h1 className="mt-3 text-3xl font-bold text-slate-950">See how your Kreds grew</h1>
 
         {rows.length === 0 ? (
-          <p className="mt-6 text-base text-slate-600">Seu histórico de Kreds aparecerá aqui.</p>
+          <p className="mt-6 text-base text-slate-600">Your Kreds history will appear here.</p>
         ) : (
           <ul className="mt-6 space-y-4">
             {rows.map((row) => (
