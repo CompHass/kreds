@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server'
 import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { createChildProfile } from '@/lib/families/child-profiles'
 
@@ -39,11 +39,17 @@ export async function POST(request: NextRequest) {
     body = Object.fromEntries(formData.entries()) as Record<string, string>
   }
 
-  // Get the guardian's family
+  // Get the guardian's active family membership — role and status guard (WR-01)
   const [membership] = await db
     .select({ familyId: schema.familyMemberships.familyId })
     .from(schema.familyMemberships)
-    .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
+    .where(
+      and(
+        eq(schema.familyMemberships.identityId, kredsIdentityId),
+        eq(schema.familyMemberships.role, 'guardian'),
+        eq(schema.familyMemberships.status, 'active'),
+      ),
+    )
     .limit(1)
 
   if (!membership) {
