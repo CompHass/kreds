@@ -26,7 +26,10 @@ describe('ledger queries', () => {
   })
 
   it('returns summed balance for an account', async () => {
-    const balance = await getBalance()
+    const balance = await getBalance(
+      '11111111-1111-4111-8111-111111111111',
+      'available',
+    )
 
     expect(balance).toBe(10)
   })
