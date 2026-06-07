@@ -92,12 +92,11 @@ export default async function AuditPage() {
   let timeline: Awaited<ReturnType<typeof listFamilyAuditTimeline>>
   try {
     timeline = await listFamilyAuditTimeline(kredsIdentityId, membership.familyId)
-  } catch (err: any) {
+  } catch {
     return (
       <main>
         <h1>Audit Timeline</h1>
-        <p>Unable to load audit history.</p>
-        <p>{err.message}</p>
+        <p>An error occurred loading your audit history. Please try again later.</p>
         <Link href="/">Back to Home</Link>
       </main>
     )
