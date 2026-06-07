@@ -63,12 +63,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Explicit parental consent is required (D-02)' }, { status: 400 })
   }
 
+  // Strict numeric validation for age — reject mixed strings like "8abc" (WR-07)
+  const rawAge = body.ageYears ?? ''
+  if (!/^\d+$/.test(rawAge)) {
+    return NextResponse.json({ error: 'Age must be a whole number' }, { status: 400 })
+  }
+  const ageYears = parseInt(rawAge, 10)
+
   try {
     await createChildProfile({
       familyId,
       guardianIdentityId: kredsIdentityId,
       displayName: body.displayName ?? '',
-      ageYears: parseInt(body.ageYears ?? '0', 10),
+      ageYears,
       avatarPreset: body.avatarPreset ?? '',
       accentColor: body.accentColor ?? '',
       consentGiven,
