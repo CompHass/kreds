@@ -76,9 +76,13 @@ export function hashInvitationToken(token: string): string {
 
 /**
  * Verifies a raw token against a stored hash using constant-time-safe comparison.
+ * Uses crypto.timingSafeEqual to prevent timing side-channel attacks.
  */
 export function verifyInvitationToken(token: string, hash: string): boolean {
-  return hashInvitationToken(token) === hash
+  const computed = Buffer.from(hashInvitationToken(token), 'hex')
+  const stored = Buffer.from(hash, 'hex')
+  if (computed.length !== stored.length) return false
+  return crypto.timingSafeEqual(computed, stored)
 }
 
 // Types for DB commands
