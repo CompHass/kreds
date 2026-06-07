@@ -22,7 +22,11 @@ const ACCENT_CSS: Record<string, string> = {
   sage: '#65a30d',
 }
 
-export default async function FamilyChildrenPage() {
+export default async function FamilyChildrenPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ firstChildAdded?: string }>
+}) {
   const session = await auth()
 
   let identity
@@ -49,6 +53,8 @@ export default async function FamilyChildrenPage() {
 
   const familyId = membership.familyId
   const children = await listActiveChildProfiles(familyId)
+  const params = searchParams ? await searchParams : undefined
+  const showFirstChildDecision = params?.firstChildAdded === '1' && children.length > 0
 
   const [family] = await db
     .select({ name: schema.families.name })
@@ -209,35 +215,115 @@ export default async function FamilyChildrenPage() {
         </div>
       )}
 
-      {/* Add child card */}
-      <div style={{
-        background: 'var(--color-card, rgba(255,255,255,0.64))',
-        border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-        borderRadius: 'var(--radius-xl, 36px)',
-        boxShadow: 'var(--shadow-soft, 0 18px 55px rgba(45,90,39,0.1))',
-        backdropFilter: 'blur(22px)',
-        padding: '28px 24px',
-      }}>
-        <p style={{
-          fontSize: '0.75rem',
-          fontWeight: 700,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          color: 'var(--color-text-muted, #42493e)',
-          margin: '0 0 4px',
+      {showFirstChildDecision ? (
+        <div style={{
+          background: 'var(--color-card, rgba(255,255,255,0.72))',
+          border: '1px solid rgba(45,90,39,0.16)',
+          borderRadius: 'var(--radius-xl, 36px)',
+          boxShadow: 'var(--shadow-soft, 0 18px 55px rgba(45,90,39,0.1))',
+          backdropFilter: 'blur(22px)',
+          padding: '28px 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '18px',
         }}>
-          Adicionar filho
-        </p>
-        <p style={{
-          fontSize: '0.9rem',
-          color: 'var(--color-text-soft, #72796e)',
-          margin: '0 0 20px',
-          lineHeight: 1.5,
+          <div>
+            <p style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: 'var(--color-text-muted, #42493e)',
+              margin: '0 0 4px',
+            }}>
+              Primeiro filho cadastrado
+            </p>
+            <h2 style={{
+              margin: '0 0 8px',
+              fontSize: '1.5rem',
+              fontWeight: 800,
+              color: 'var(--color-primary, #154212)',
+            }}>
+              Deseja cadastrar outra criança?
+            </h2>
+            <p style={{
+              fontSize: '0.95rem',
+              color: 'var(--color-text-soft, #72796e)',
+              margin: 0,
+              lineHeight: 1.5,
+            }}>
+              Você já concluiu a configuração mínima da família. Agora pode adicionar mais uma criança ou seguir para o dashboard.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <Link
+              href="/family/children"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '52px',
+                borderRadius: '9999px',
+                background: 'linear-gradient(135deg, #3b6934, #154212)',
+                color: '#fff',
+                textDecoration: 'none',
+                fontWeight: 700,
+                boxShadow: 'inset 0 2px 0 rgba(255,223,144,0.38), 0 18px 55px rgba(45,90,39,0.1)',
+              }}
+            >
+              Cadastrar outra criança
+            </Link>
+
+            <Link
+              href="/family/dashboard"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '52px',
+                borderRadius: '9999px',
+                background: 'rgba(255,255,255,0.82)',
+                color: 'var(--color-primary, #154212)',
+                textDecoration: 'none',
+                fontWeight: 700,
+                border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+              }}
+            >
+              Ir para o dashboard
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <div style={{
+          background: 'var(--color-card, rgba(255,255,255,0.64))',
+          border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+          borderRadius: 'var(--radius-xl, 36px)',
+          boxShadow: 'var(--shadow-soft, 0 18px 55px rgba(45,90,39,0.1))',
+          backdropFilter: 'blur(22px)',
+          padding: '28px 24px',
         }}>
-          Crie um perfil para cada filho. Todas as informações ficam dentro da sua conta familiar.
-        </p>
-        <ChildrenForm avatarOptions={avatarOptions} accentOptions={accentOptions} />
-      </div>
+          <p style={{
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: 'var(--color-text-muted, #42493e)',
+            margin: '0 0 4px',
+          }}>
+            Adicionar filho
+          </p>
+          <p style={{
+            fontSize: '0.9rem',
+            color: 'var(--color-text-soft, #72796e)',
+            margin: '0 0 20px',
+            lineHeight: 1.5,
+          }}>
+            Crie um perfil para cada filho. Todas as informações ficam dentro da sua conta familiar.
+          </p>
+          <ChildrenForm avatarOptions={avatarOptions} accentOptions={accentOptions} />
+        </div>
+      )}
 
       {children.length === 0 && (
         <p style={{

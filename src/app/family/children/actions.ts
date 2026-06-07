@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '../../../../auth'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { createChildProfile, deactivateChildProfile } from '@/lib/families/child-profiles'
+import { listActiveChildProfiles } from '@/lib/families/child-profiles'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
@@ -35,6 +36,8 @@ export async function addChildAction(
     .limit(1)
 
   if (!membership) redirect('/family/onboarding')
+
+  const existingChildren = await listActiveChildProfiles(membership.familyId)
 
   const displayName = formData.get('displayName')?.toString()?.trim()
   const ageYearsRaw = formData.get('ageYears')?.toString()
@@ -68,6 +71,10 @@ export async function addChildAction(
   } catch (err) {
     console.error('[addChildAction] error:', err)
     return { error: 'Não foi possível adicionar o filho. Tente novamente.' }
+  }
+
+  if (existingChildren.length === 0) {
+    redirect('/family/children?firstChildAdded=1')
   }
 
   redirect('/family/children')
