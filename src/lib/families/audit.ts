@@ -152,6 +152,11 @@ export async function listFamilyAuditTimeline(
  * Creates a sanitized audit event for the parent-readable timeline.
  * Does NOT store raw technical diffs or full identity payloads (D-18).
  *
+ * Sanitizes metadata on write to prevent forbidden keys from reaching the
+ * database at all — not just at read time. This enforces D-18 at the storage
+ * layer rather than relying solely on the read-path sanitization in
+ * listFamilyAuditTimeline.
+ *
  * The optional `tx` parameter accepts either the app DB or a Drizzle
  * transaction, enabling audit writes inside transactional commands.
  */
@@ -160,6 +165,9 @@ export async function createAuditEvent(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tx: any = db,
 ): Promise<AuditEvent> {
+  // Sanitize on write to prevent forbidden keys from reaching the DB at all (D-18)
+  const safeMetadata = sanitizeAuditMetadata(input.metadata ?? {})
+
   const [row] = await tx
     .insert(schema.familyAuditEvents)
     .values({
@@ -169,7 +177,7 @@ export async function createAuditEvent(
       subjectType: input.subjectType,
       subjectId: input.subjectId,
       summary: input.summary,
-      metadata: input.metadata ?? {},
+      metadata: safeMetadata,
     })
     .returning({
       id: schema.familyAuditEvents.id,
