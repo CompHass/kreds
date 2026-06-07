@@ -13,17 +13,17 @@ export const dynamic = 'force-dynamic'
  */
 function eventLabel(eventType: string): string {
   const labels: Record<string, string> = {
-    'family.created': 'Family Created',
-    'membership.created': 'Membership Added',
-    'invitation.created': 'Invitation Sent',
-    'invitation.accepted': 'Invitation Accepted',
-    'invitation.declined': 'Invitation Declined',
-    'invitation.revoked': 'Invitation Revoked',
-    'role.changed': 'Role Changed',
-    'consent.granted': 'Consent Granted',
-    'child_profile.created': 'Child Profile Created',
-    'child_profile.updated': 'Child Profile Updated',
-    'child_profile.deactivated': 'Child Profile Deactivated',
+    'family.created': 'Família Criada',
+    'membership.created': 'Membro Adicionado',
+    'invitation.created': 'Convite Enviado',
+    'invitation.accepted': 'Convite Aceito',
+    'invitation.declined': 'Convite Recusado',
+    'invitation.revoked': 'Convite Revogado',
+    'role.changed': 'Papel Alterado',
+    'consent.granted': 'Consentimento Concedido',
+    'child_profile.created': 'Perfil de Filho Criado',
+    'child_profile.updated': 'Perfil de Filho Atualizado',
+    'child_profile.deactivated': 'Perfil de Filho Desativado',
   }
   return labels[eventType] ?? eventType
 }
@@ -32,7 +32,7 @@ function eventLabel(eventType: string): string {
  * Formats a Date to a readable timestamp string.
  */
 function formatTimestamp(date: Date): string {
-  return date.toLocaleString('en-US', {
+  return date.toLocaleString('pt-BR', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -45,13 +45,7 @@ export default async function AuditPage() {
   const session = await auth()
 
   if (!session?.user?.id) {
-    return (
-      <main>
-        <h1>Audit Timeline</h1>
-        <p>Please sign in to view your family audit history.</p>
-        <Link href="/api/auth/signin">Sign in with ZITADEL</Link>
-      </main>
-    )
+    redirect('/api/auth/signin')
   }
 
   const zitadelSub = session.user.id as string
@@ -61,13 +55,7 @@ export default async function AuditPage() {
   try {
     kredsIdentityId = await resolveKredsIdentityId(zitadelSub)
   } catch {
-    return (
-      <main>
-        <h1>Audit Timeline</h1>
-        <p>Account not yet set up. Please create your family first.</p>
-        <Link href="/family/onboarding">Create Your Family</Link>
-      </main>
-    )
+    redirect('/family/onboarding')
   }
 
   // Find the guardian's active family membership
@@ -80,13 +68,7 @@ export default async function AuditPage() {
     .limit(1)
 
   if (!membership) {
-    return (
-      <main>
-        <h1>Audit Timeline</h1>
-        <p>You are not a member of any family yet.</p>
-        <Link href="/family/onboarding">Create Your Family</Link>
-      </main>
-    )
+    redirect('/family/onboarding')
   }
 
   let timeline: Awaited<ReturnType<typeof listFamilyAuditTimeline>>
@@ -94,57 +76,161 @@ export default async function AuditPage() {
     timeline = await listFamilyAuditTimeline(kredsIdentityId, membership.familyId)
   } catch {
     return (
-      <main>
-        <h1>Audit Timeline</h1>
-        <p>An error occurred loading your audit history. Please try again later.</p>
-        <Link href="/">Back to Home</Link>
+      <main style={{ minHeight: '100vh', padding: '32px 24px', textAlign: 'center' }}>
+        <h1 style={{ color: 'var(--color-primary, #154212)' }}>Trilha de Auditoria</h1>
+        <p>Ocorreu um erro ao carregar o histórico. Tente novamente mais tarde.</p>
+        <Link href="/">Voltar ao início</Link>
       </main>
     )
   }
 
   return (
-    <main>
-      <h1>Audit Timeline</h1>
-      <p>
-        History of changes to your family&apos;s identity, membership,
-        invitations, roles, and profiles.
+    <main style={{
+      minHeight: '100vh',
+      padding: '32px 24px 64px',
+      maxWidth: '480px',
+      margin: '0 auto',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '32px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '16px',
+            display: 'grid',
+            placeItems: 'center',
+            fontSize: '24px',
+            background: 'radial-gradient(circle, #fff3b8, #d2a501 58%, #8b6a08)',
+            boxShadow: '0 8px 20px rgba(210,165,1,.2)',
+            flexShrink: 0,
+          }}>
+            🧺
+          </div>
+          <div>
+            <h1 style={{
+              fontFamily: 'var(--font-heading, "Plus Jakarta Sans", system-ui, sans-serif)',
+              fontWeight: 800,
+              fontSize: '1.25rem',
+              letterSpacing: '-0.02em',
+              color: 'var(--color-primary, #154212)',
+              margin: 0,
+            }}>
+              Auditoria
+            </h1>
+            <p style={{
+              fontSize: '0.8125rem',
+              color: 'var(--color-text-soft, #72796e)',
+              margin: 0,
+            }}>
+              Histórico de alterações
+            </p>
+          </div>
+        </div>
+
+        <Link
+          href="/family/dashboard"
+          style={{
+            fontSize: '0.8125rem',
+            color: 'var(--color-primary, #154212)',
+            textDecoration: 'none',
+            padding: '8px 14px',
+            borderRadius: '99px',
+            background: 'rgba(255,255,255,0.82)',
+            border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+            fontWeight: 600,
+          }}
+        >
+          Voltar
+        </Link>
+      </div>
+
+      <p style={{
+        fontSize: '0.875rem',
+        color: 'var(--color-text-soft, #72796e)',
+        margin: '0 0 24px',
+        lineHeight: 1.5,
+      }}>
+        Registro completo de mudanças na identidade, membros, convites e perfis da sua família.
       </p>
 
       {timeline.length === 0 ? (
-        <section>
-          <h2>No Audit Events</h2>
-          <p>No changes have been recorded for your family yet.</p>
-          <nav>
-            <Link href="/">Back to Home</Link>
-          </nav>
-        </section>
+        <div style={{
+          padding: '48px 24px',
+          textAlign: 'center',
+          background: 'var(--color-card, rgba(255,255,255,0.64))',
+          borderRadius: '28px',
+          border: '1px dashed var(--color-border, rgba(45,90,39,0.16))',
+          backdropFilter: 'blur(12px)',
+        }}>
+          <p style={{ fontSize: '0.9375rem', color: 'var(--color-text-soft, #72796e)', margin: 0 }}>
+            Nenhum evento registrado ainda.
+          </p>
+        </div>
       ) : (
-        <section>
-          <ol>
-            {timeline.map((event) => (
-              <li key={event.id}>
-                <article>
-                  <header>
-                    <strong>{eventLabel(event.eventType)}</strong>
-                    {' — '}
-                    <span>{event.subjectType}</span>
-                  </header>
-                  <p>{event.summary}</p>
-                  <footer>
-                    <time dateTime={event.createdAt.toISOString()}>
-                      {formatTimestamp(event.createdAt)}
-                    </time>
-                  </footer>
-                </article>
-              </li>
-            ))}
-          </ol>
-        </section>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {timeline.map((event) => (
+            <article key={event.id} style={{
+              padding: '20px',
+              background: 'var(--color-card, rgba(255,255,255,0.64))',
+              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+              borderRadius: '24px',
+              boxShadow: '0 4px 16px rgba(45,90,39,0.06)',
+              backdropFilter: 'blur(12px)',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <span style={{
+                  fontSize: '0.6875rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  color: 'var(--color-gold, #d2a501)',
+                  background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
+                  padding: '2px 8px',
+                  borderRadius: '6px',
+                }}>
+                  {event.subjectType}
+                </span>
+                <time dateTime={event.createdAt.toISOString()} style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--color-text-soft, #72796e)',
+                }}>
+                  {formatTimestamp(event.createdAt)}
+                </time>
+              </div>
+              
+              <h3 style={{
+                fontSize: '1rem',
+                fontWeight: 700,
+                color: 'var(--color-primary, #154212)',
+                margin: '0 0 6px',
+              }}>
+                {eventLabel(event.eventType)}
+              </h3>
+              
+              <p style={{
+                fontSize: '0.875rem',
+                color: 'var(--color-text-muted, #42493e)',
+                margin: 0,
+                lineHeight: 1.4,
+              }}>
+                {event.summary}
+              </p>
+            </article>
+          ))}
+        </div>
       )}
 
-      <nav>
-        <Link href="/">Back to Home</Link>
-      </nav>
+      <div style={{ marginTop: '32px', textAlign: 'center' }}>
+        <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--color-text-soft, #72796e)', textDecoration: 'none' }}>
+          Início
+        </Link>
+      </div>
     </main>
   )
 }

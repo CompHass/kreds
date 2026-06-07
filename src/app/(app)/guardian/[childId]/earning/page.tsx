@@ -1,9 +1,10 @@
 import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
-import AdjustmentFormClient from './AdjustmentFormClient'
+import Link from 'next/link'
+import EarningFormClient from './EarningFormClient'
 
-type GuardianAdjustmentPageProps = {
+type GuardianEarningPageProps = {
   params: Promise<{ childId: string }>
 }
 
@@ -11,7 +12,7 @@ function formatKreds(amount: number): string {
   return `${amount} Kreds`
 }
 
-export default async function GuardianAdjustmentPage({ params }: GuardianAdjustmentPageProps) {
+export default async function GuardianEarningPage({ params }: GuardianEarningPageProps) {
   const { childId } = await params
 
   try {
@@ -63,14 +64,14 @@ export default async function GuardianAdjustmentPage({ params }: GuardianAdjustm
               color: 'var(--color-primary, #154212)',
               margin: 0,
             }}>
-              Ajuste Negativo
+              Lançar Ganhos
             </h1>
             <p style={{
               fontSize: '0.8125rem',
               color: 'var(--color-text-soft, #72796e)',
               margin: 0,
             }}>
-              Correção de saldo
+              Recompensar fidelidade
             </p>
           </div>
         </div>
@@ -114,7 +115,7 @@ export default async function GuardianAdjustmentPage({ params }: GuardianAdjustm
           <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-primary, #154212)' }}>{formatKreds(availableBalance)}</span>
         </div>
 
-        <AdjustmentFormClient childId={childId} />
+        <EarningFormClient childId={childId} />
       </section>
 
       <p style={{
@@ -124,7 +125,7 @@ export default async function GuardianAdjustmentPage({ params }: GuardianAdjustm
         textAlign: 'center',
         lineHeight: 1.5,
       }}>
-        Ajustes negativos são usados para deduzir Kreds em casos de quebra de regras ou correções manuais.
+        Ao lançar um ganho, 10% do valor será automaticamente reservado como Primícias (Tesouro).
       </p>
     </main>
   )

@@ -226,24 +226,91 @@ export default async function FamilyChildrenPage({
                 </div>
               </div>
 
-              <form action={deactivateChildAction}>
-                <input type="hidden" name="childProfileId" value={child.id} />
-                <button
-                  type="submit"
-                  style={{
-                    fontSize: '0.75rem',
-                    color: '#b91c1c',
-                    background: 'rgba(220,38,38,0.08)',
-                    border: '1px solid rgba(220,38,38,0.2)',
-                    borderRadius: '99px',
-                    padding: '6px 12px',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                  }}
-                >
-                  Desativar
-                </button>
-              </form>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <Link
+                    href={`/guardian/${child.id}/history`}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-primary, #154212)',
+                      background: 'rgba(45,90,39,0.08)',
+                      border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+                      borderRadius: '99px',
+                      padding: '4px 10px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Histórico
+                  </Link>
+                  <Link
+                    href={`/guardian/${child.id}/earning`}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-success, #3b6934)',
+                      background: 'rgba(59,105,52,0.08)',
+                      border: '1px solid rgba(59,105,52,0.16)',
+                      borderRadius: '99px',
+                      padding: '4px 10px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Ganho
+                  </Link>
+                  <Link
+                    href={`/guardian/${child.id}/adjustment`}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-gold, #d2a501)',
+                      background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
+                      border: '1px solid rgba(210,165,1,0.2)',
+                      borderRadius: '99px',
+                      padding: '4px 10px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Ajuste
+                  </Link>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <Link
+                    href={`/child/${child.id}/balance`}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-success, #3b6934)',
+                      background: 'rgba(59,105,52,0.08)',
+                      border: '1px solid rgba(59,105,52,0.16)',
+                      borderRadius: '99px',
+                      padding: '4px 10px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Saldo (Criança)
+                  </Link>
+                  <form action={deactivateChildAction}>
+                    <input type="hidden" name="childProfileId" value={child.id} />
+                    <button
+                      type="submit"
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#b91c1c',
+                        background: 'rgba(220,38,38,0.08)',
+                        border: '1px solid rgba(220,38,38,0.2)',
+                        borderRadius: '99px',
+                        padding: '4px 10px',
+                        cursor: 'pointer',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Desativar
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           ))}
         </div>

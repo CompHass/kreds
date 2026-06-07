@@ -2,22 +2,9 @@
 
 import { useState } from 'react'
 
-function parseErrorMessage(responseStatus: number, payload: { error?: string } | null): string {
-  if (responseStatus === 422 && payload?.error?.includes('Insufficient balance')) {
-    return 'Saldo insuficiente para este ajuste'
-  }
-
-  if (responseStatus === 422) {
-    return 'Revise os campos do formulário'
-  }
-
-  return 'Não foi possível registrar o ajuste'
-}
-
-export default function AdjustmentFormClient({ childId }: { childId: string }) {
+export default function EarningFormClient({ childId }: { childId: string }) {
   const [amount, setAmount] = useState('')
-  const [reason, setReason] = useState('')
-  const [restorationNote, setRestorationNote] = useState('')
+  const [note, setNote] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -29,22 +16,20 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
     const commandId = crypto.randomUUID()
 
     try {
-      const response = await fetch(`/api/ledger/${childId}/post-adjustment`, {
+      const response = await fetch(`/api/ledger/${childId}/post-earning`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           commandId,
           amount: Number.parseInt(amount, 10),
-          reason,
-          restorationNote: restorationNote || undefined,
+          note: note || undefined,
         }),
       })
 
       if (response.ok) {
         setStatus('success')
         setAmount('')
-        setReason('')
-        setRestorationNote('')
+        setNote('')
         return
       }
 
@@ -52,10 +37,10 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
         | { error?: string }
         | null
 
-      setErrorMessage(parseErrorMessage(response.status, payload))
+      setErrorMessage(payload?.error || 'Não foi possível registrar o ganho')
       setStatus('error')
     } catch {
-      setErrorMessage('Não foi possível registrar o ajuste')
+      setErrorMessage('Não foi possível registrar o ganho')
       setStatus('error')
     }
   }
@@ -64,7 +49,7 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
     <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} onSubmit={handleSubmit}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         <label htmlFor="amount" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted, #42493e)', textTransform: 'uppercase' }}>
-          Valor da Dedução (Kreds)
+          Valor do Ganho (Kreds)
         </label>
         <input
           id="amount"
@@ -74,7 +59,7 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
           required
           value={amount}
           onChange={(event) => setAmount(event.target.value)}
-          placeholder="Ex: 5"
+          placeholder="Ex: 50"
           style={{
             padding: '12px 16px',
             borderRadius: '12px',
@@ -86,40 +71,17 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <label htmlFor="reason" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted, #42493e)', textTransform: 'uppercase' }}>
-          Motivo
+        <label htmlFor="note" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted, #42493e)', textTransform: 'uppercase' }}>
+          Observação / Tarefa
         </label>
         <textarea
-          id="reason"
-          name="reason"
-          required
-          placeholder="Ex: Não arrumou o quarto como combinado"
-          value={reason}
-          onChange={(event) => setReason(event.target.value)}
+          id="note"
+          name="note"
+          placeholder="Ex: Limpeza do jardim ou tarefa semanal concluída"
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
           style={{
             minHeight: '100px',
-            padding: '12px 16px',
-            borderRadius: '12px',
-            border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-            background: 'rgba(255,255,255,0.5)',
-            fontSize: '0.9375rem',
-            fontFamily: 'inherit',
-          }}
-        />
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <label htmlFor="restorationNote" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted, #42493e)', textTransform: 'uppercase' }}>
-          Nota de Restauração (Opcional)
-        </label>
-        <textarea
-          id="restorationNote"
-          name="restorationNote"
-          placeholder="Como os Kreds podem ser recuperados? Ex: Se fizer a tarefa amanhã sem reclamar."
-          value={restorationNote}
-          onChange={(event) => setRestorationNote(event.target.value)}
-          style={{
-            minHeight: '80px',
             padding: '12px 16px',
             borderRadius: '12px',
             border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
@@ -136,21 +98,21 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
         style={{
           padding: '14px',
           borderRadius: '99px',
-          background: 'linear-gradient(135deg, #ba1a1a, #8b0000)',
+          background: 'linear-gradient(135deg, #3b6934, #154212)',
           color: '#fff',
           fontWeight: 700,
           border: 'none',
           cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-          boxShadow: '0 8px 20px rgba(186,26,26,0.15)',
+          boxShadow: '0 8px 20px rgba(45,90,39,0.15)',
           opacity: status === 'loading' ? 0.7 : 1,
         }}
       >
-        {status === 'loading' ? 'Registrando...' : 'Registrar Ajuste Negativo'}
+        {status === 'loading' ? 'Registrando...' : 'Registrar Ganho'}
       </button>
 
       {status === 'success' && (
         <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-success, #3b6934)', textAlign: 'center', margin: 0 }}>
-          ✓ Ajuste registrado com sucesso!
+          ✓ Ganho registrado com sucesso!
         </p>
       )}
       {status === 'error' && errorMessage && (

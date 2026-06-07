@@ -104,6 +104,24 @@ export default async function FamilyDashboardPage() {
           >
             Gerenciar guardiões
           </Link>
+
+          <Link
+            href="/family/audit"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '52px',
+              borderRadius: '9999px',
+              background: 'rgba(255,255,255,0.82)',
+              color: 'var(--color-primary, #154212)',
+              textDecoration: 'none',
+              fontWeight: 700,
+              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+            }}
+          >
+            Trilha de auditoria
+          </Link>
         </div>
       </div>
     </main>
