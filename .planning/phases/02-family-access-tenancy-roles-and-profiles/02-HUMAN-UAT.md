@@ -24,12 +24,20 @@ result: [pending]
 expected: POST unauthenticated com `action=decline` retorna 401, validando CR-03 em runtime
 result: [pending]
 
+### 4. Tela de autenticação Sylvan (UI-01)
+expected: acessar `/` sem login mostra gradiente Sylvan, símbolo 🧺 dourado, card glass com botão "Entrar com ZITADEL", sem conteúdo bruto de texto
+result: [pending]
+
+### 5. Redirect pós-login com família
+expected: usuário autenticado com família existente é redirecionado para `/family/children` diretamente ao acessar `/`
+result: [pending]
+
 ## Summary
 
-total: 3
+total: 5
 passed: 0
 issues: 0
-pending: 3
+pending: 5
 skipped: 0
 blocked: 0
 

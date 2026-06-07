@@ -14,6 +14,8 @@ re_verification:
     - "CR-04: verifyInvitationToken now uses crypto.timingSafeEqual for constant-time comparison"
     - "CR-05: unique_pending_invite index has WHERE status = 'pending' partial predicate"
     - "CR-06: createAuditEvent sanitizes metadata on write via sanitizeAuditMetadata before DB insert"
+  gaps_closed_post_verification:
+    - "UI-01: página inicial (/) agora renderiza tela de autenticação Sylvan completa (gradiente, símbolo Firstfruits, card glass, botão ZITADEL) — substituído placeholder sem estilo"
   gaps_remaining: []
   regressions: []
 human_verification:

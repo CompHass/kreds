@@ -1,7 +1,8 @@
 # Phase 02: Family Access, Tenancy, Roles, and Profiles - Context
 
 **Gathered:** 2026-06-06T22:18:07Z
-**Status:** Ready for planning
+**Updated:** 2026-06-07T00:00:00Z (UI-01: auth landing screen decisions added post-execution)
+**Status:** Complete — phase executed and verified
 
 <domain>
 ## Phase Boundary
@@ -55,6 +56,14 @@ The phase must establish trustworthy family isolation by `family_id` before late
 - **D-21:** Only guardians can change child avatars in v1.
 - **D-22:** Siblings should be visually differentiated through a Sylvan preset avatar plus a per-child accent color.
 
+### Auth Landing Screen (UI-01)
+
+- **D-23:** Unauthenticated visitors must see a branded Sylvan landing screen — not a plain HTML placeholder. The screen uses: full Sylvan radial-gradient background, golden Firstfruits basket symbol (🧺), wordmark "Kreds", subtitle "Mordomia cristã para famílias", and a glass card containing the "Entrar com ZITADEL" CTA button (pill.primary style: `linear-gradient(135deg, #3b6934, #154212)` with gold inset shimmer).
+- **D-24:** `src/app/page.tsx` routing rules: (1) unauthenticated → `LandingScreen`; (2) authenticated but no family in DB → `OnboardingScreen` (same Sylvan style, CTA to `/family/onboarding`); (3) authenticated with active family → `redirect('/family/children')`.
+- **D-25:** Fonts loaded via `next/font/google` in `src/app/layout.tsx`: `Plus_Jakarta_Sans` (700, 800) as `--font-heading` CSS variable and `Be_Vietnam_Pro` (400, 500, 600, 700) as `--font-body` CSS variable. `<html>` receives both font class names.
+- **D-26:** All Sylvan design tokens live in `src/app/globals.css` as CSS custom properties (`--color-*`, `--radius-*`, `--shadow-*`, `--glow-*`). Inline styles in page components reference these vars with fallbacks for SSR. No Tailwind classes used for the landing screen — pure CSS vars for Sylvan fidelity.
+- **D-27:** `resolveKredsIdentityId` is called server-side on the home page; if it throws (identity not yet in DB), the page falls back to `LandingScreen` rather than erroring. This handles first-login race before family creation.
+
 ### the agent's Discretion
 
 - Downstream agents may decide implementation details such as exact table names, route names, form layout, copy wording, invitation token mechanics, and audit event schema, as long as they preserve the decisions above and the phase requirements.
@@ -83,7 +92,9 @@ The phase must establish trustworthy family isolation by `family_id` before late
 - `src/lib/db/schema/index.ts` — Current Drizzle schema has the initial `families` table with `name` and `timezone`.
 - `src/lib/db/index.ts` — Current database integration pattern using Drizzle and `pg`.
 - `src/app/api/families/route.ts` — Current simple family API proof point; must not remain unscoped once auth and tenancy are introduced.
-- `src/app/page.tsx` — Current DB-backed homepage proof point; should evolve toward authenticated/family-aware onboarding.
+- `src/app/page.tsx` — Implemented: Sylvan `LandingScreen` (unauthenticated), `OnboardingScreen` (authenticated, no family), and `redirect('/family/children')` (authenticated with family). Server component using `resolveKredsIdentityId`.
+- `src/app/layout.tsx` — Loads `Plus_Jakarta_Sans` and `Be_Vietnam_Pro` via `next/font/google`; injects `--font-heading` and `--font-body` CSS variables via `<html>` className.
+- `src/app/globals.css` — Full Sylvan token set as CSS custom properties; Sylvan radial-gradient body background.
 - `src/modules/glossary/terms.ts` — Existing canonical terms include `GUARDIAN`, `CHILD`, and `FAMILY`.
 
 ### Design Direction

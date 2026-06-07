@@ -68,6 +68,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Parent can assign Kreds guardian or child roles stored in the domain model, and family members only see data from their own family.
   4. Parent can customize child profiles with simple avatars or visual identifiers.
   5. Parent can review an audit trail for identity, membership, and profile changes.
+  6. Unauthenticated visitor sees a branded Sylvan landing screen with ZITADEL sign-in CTA — no unstyled placeholder.
 
 **Plans**: 7 plans
 **Wave 0**
@@ -94,6 +95,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Wave 5** *(blocked on Wave 4 completion)*
 
 - [x] 02-07-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
+
+**Post-verification fix:**
+
+- [x] UI-01 — Tela de autenticação Sylvan: landing page com gradiente, símbolo Firstfruits, card glass e botão "Entrar com ZITADEL"; redirect automático para `/family/children` quando usuário já tem família
 
 **UI hint**: yes
 
