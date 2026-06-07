@@ -1,0 +1,78 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  REGISTRY: harbor.hasslab.pro
+  IMAGE_NAME: kreds/kreds
+
+jobs:
+  build-scan-push:
+    name: Build, scan, and push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare image metadata
+        id: meta
+        run: |
+          short_sha="${GITHUB_SHA::12}"
+          image="${REGISTRY}/${IMAGE_NAME}:${short_sha}"
+          echo "short_sha=${short_sha}" >> "${GITHUB_OUTPUT}"
+          echo "image=${image}" >> "${GITHUB_OUTPUT}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build image locally
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          load: true
+          tags: ${{ steps.meta.outputs.image }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Scan image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ${{ steps.meta.outputs.image }}
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH
+          exit-code: '1'
+
+      - name: Upload Trivy scan results
+        if: always()
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-results.sarif
+
+      - name: Push immutable image
+        run: docker push "${{ steps.meta.outputs.image }}"
+
+      - name: Print deploy tag
+        run: |
+          echo "Image pushed: ${{ steps.meta.outputs.image }}"
+          echo "Use tag: ${{ steps.meta.outputs.short_sha }}"
