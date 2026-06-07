@@ -63,6 +63,46 @@ export async function GET() {
 }
 
 /**
+ * Parses request body from either JSON or form-encoded submissions.
+ *
+ * Node.js 22+ (undici) marks the body stream as consumed after any read attempt,
+ * even a failed one. Calling json() and then formData() on the same request will
+ * always throw "Body is unusable: Body has already been read" on the second call.
+ *
+ * Fix: inspect Content-Type first, then call only one read method.
+ */
+async function parseBody(
+  request: NextRequest,
+): Promise<{ familyName?: string; timezone?: string }> {
+  const contentType = request.headers.get('content-type') ?? ''
+
+  if (contentType.includes('application/json')) {
+    return request.json()
+  }
+
+  if (
+    contentType.includes('application/x-www-form-urlencoded') ||
+    contentType.includes('multipart/form-data')
+  ) {
+    const formData = await request.formData()
+    return {
+      familyName: formData.get('familyName')?.toString(),
+      timezone: formData.get('timezone')?.toString(),
+    }
+  }
+
+  // Fallback: try JSON, then form-data only if Content-Type is absent/unknown
+  // and the body has not yet been consumed.
+  try {
+    return await request.json()
+  } catch {
+    // If json() failed and consumed the body, formData() will throw too.
+    // Return empty object — the caller's validation will produce a 400.
+    return {}
+  }
+}
+
+/**
  * POST /api/families
  *
  * Creates a new family for an authenticated guardian (D-01, D-03).
@@ -75,17 +115,7 @@ export async function POST(request: NextRequest) {
   try {
     const identity = requireAuthenticatedIdentity(session)
 
-    let body: { familyName?: string; timezone?: string }
-    try {
-      body = await request.json()
-    } catch {
-      // Fallback for form-encoded (onboarding page submits as form)
-      const formData = await request.formData()
-      body = {
-        familyName: formData.get('familyName')?.toString(),
-        timezone: formData.get('timezone')?.toString(),
-      }
-    }
+    const body = await parseBody(request)
 
     const { familyName, timezone } = body
 
@@ -124,6 +154,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     // Do not leak internal DB or server error messages to clients
+    console.error('[POST /api/families] unexpected error:', err)
     return NextResponse.json({ error: 'Failed to create family' }, { status: 500 })
   }
 }
