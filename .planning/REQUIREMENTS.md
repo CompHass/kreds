@@ -33,8 +33,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **LEDG-04**: System automatically withholds 10% of every positive earning into the Firstfruits Treasury before available balance changes.
 - [x] **LEDG-05**: Parent can record a negative adjustment with a reason and optional restoration note.
 - [ ] **LEDG-06**: System prevents duplicate ledger postings for the same approved command.
-- [ ] **LEDG-07**: Parent and child can view an activity history explaining why each balance changed.
-- [ ] **LEDG-08**: System corrects ledger mistakes through reversal or adjustment entries rather than editing historical transactions.
+- [x] **LEDG-07**: Parent and child can view an activity history explaining why each balance changed.
+- [x] **LEDG-08**: System corrects ledger mistakes through reversal or adjustment entries rather than editing historical transactions.
 
 ### Weekly Activities
 
@@ -141,8 +141,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEDG-04 | Phase 3 | Pending |
 | LEDG-05 | Phase 3 | Complete |
 | LEDG-06 | Phase 3 | Pending |
-| LEDG-07 | Phase 3 | Pending |
-| LEDG-08 | Phase 3 | Pending |
+| LEDG-07 | Phase 3 | Complete |
+| LEDG-08 | Phase 3 | Complete |
 | ACT-01 | Phase 4 | Pending |
 | ACT-02 | Phase 4 | Pending |
 | ACT-03 | Phase 4 | Pending |

@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation, Privacy, and Delivery Skeleton** - Developers and maintainers can run, test, package, and review Kreds before child data exists.
 - [x] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created through ZITADEL-backed authentication with isolated memberships, guardians, children, roles, avatars, and identity audit history. (completed 2026-06-07)
-- [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules. (1/4 plans complete)
+- [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules. (4/4 plans complete; ready for verification)
 - [ ] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved.
 - [ ] **Phase 5: Task Completion, Approval, and Earnings Slice** - Children complete tasks, parents approve them, and approved work posts Kreds earnings with visible status and history.
 - [ ] **Phase 6: Wishlist Goals and Progress** - Children can set wishlist goals and move available Kreds toward visible goal progress.
@@ -120,16 +120,16 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 0** *(scaffolding de testes e contratos — nenhuma implementação real)*
 
-- [ ] 03-01-PLAN.md — Schema Drizzle ledger_transactions+ledger_lines, calculateFirstfruits pura, tipos Zod de comando, testes RED para LEDG-01 a LEDG-08
+- [x] 03-01-PLAN.md — Schema Drizzle ledger_transactions+ledger_lines, calculateFirstfruits pura, tipos Zod de comando, testes RED para LEDG-01 a LEDG-08
 
 **Wave 1** *(bloqueado pela Wave 0)*
 
-- [ ] 03-02-PLAN.md — Slice 1: postEarning + firstfruits split + getBalance + rota POST + página de saldo do child
+- [x] 03-02-PLAN.md — Slice 1: postEarning + firstfruits split + getBalance + rota POST + página de saldo do child
 
 **Wave 2** *(bloqueado pela Wave 1 — planos 03 e 04 rodam em paralelo)*
 
-- [ ] 03-03-PLAN.md — Slice 2: postNegativeAdjustment com reason obrigatório + rota POST + formulário guardian
-- [ ] 03-04-PLAN.md — Slice 3+4: postReversal + queries de histórico diferenciadas + páginas de histórico guardian e child
+- [x] 03-03-PLAN.md — Slice 2: postNegativeAdjustment com reason obrigatório + rota POST + formulário guardian
+- [x] 03-04-PLAN.md — Slice 3+4: postReversal + queries de histórico diferenciadas + páginas de histórico guardian e child
 
 **UI hint**: yes
 
@@ -253,7 +253,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
 | 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
-| 3. Kreds Engine Ledger and Audit Foundation | 1/4 | In progress | 2026-06-07 |
+| 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
 | 4. Weekly Task Templates and Activity Cycles | 0/3 | Planned | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
