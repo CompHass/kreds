@@ -116,7 +116,7 @@ describe('Family audit isolation (FAM-01 through FAM-07)', () => {
       // Should contain at least the Family A created event
       const familyACreated = timelineA.find((e: { eventType: string }) => e.eventType === 'family.created')
       expect(familyACreated).toBeDefined()
-      expect(familyACreated.summary).toBe('Family A created')
+      expect(familyACreated!.summary).toBe('Family A created')
     })
 
     it('should include events for family creation, membership, invitation, role, consent, and child profile', () => {

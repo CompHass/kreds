@@ -73,6 +73,8 @@ export default async function HomePage() {
       <nav>
         <ul>
           <li><Link href="/family/children">Children</Link></li>
+          <li><Link href="/family/invitations">Invitations</Link></li>
+          <li><Link href="/family/audit">Audit Timeline</Link></li>
           <li><Link href="/api/auth/signout">Sign out</Link></li>
         </ul>
       </nav>
