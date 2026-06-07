@@ -76,7 +76,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1** *(blocked on Wave 0 completion)*
 
-- [ ] 02-02-PLAN.md — Auth.js/ZITADEL package, env validation, and auth route foundation
+- [x] 02-02-PLAN.md — Auth.js/ZITADEL package, env validation, and auth route foundation
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -220,7 +220,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ✅ Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 1/7 | In Progress|  |
+| 2. Family Access, Tenancy, Roles, and Profiles | 2/7 | In Progress|  |
 | 3. Kreds Engine Ledger and Audit Foundation | 0/TBD | Not started | - |
 | 4. Weekly Task Templates and Activity Cycles | 0/TBD | Not started | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
