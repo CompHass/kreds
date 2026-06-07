@@ -111,7 +111,21 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Parent can record negative adjustments with reasons and optional restoration notes.
   5. Parent and child can view activity history that explains balance changes, while mistakes are corrected through reversals or adjustments instead of historical edits.
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+**Wave 0** *(scaffolding de testes e contratos — nenhuma implementação real)*
+
+- [ ] 03-01-PLAN.md — Schema Drizzle ledger_transactions+ledger_lines, calculateFirstfruits pura, tipos Zod de comando, testes RED para LEDG-01 a LEDG-08
+
+**Wave 1** *(bloqueado pela Wave 0)*
+
+- [ ] 03-02-PLAN.md — Slice 1: postEarning + firstfruits split + getBalance + rota POST + página de saldo do child
+
+**Wave 2** *(bloqueado pela Wave 1 — planos 03 e 04 rodam em paralelo)*
+
+- [ ] 03-03-PLAN.md — Slice 2: postNegativeAdjustment com reason obrigatório + rota POST + formulário guardian
+- [ ] 03-04-PLAN.md — Slice 3+4: postReversal + queries de histórico diferenciadas + páginas de histórico guardian e child
+
 **UI hint**: yes
 
 ### Phase 4: Weekly Task Templates and Activity Cycles
@@ -221,7 +235,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ✅ Complete | 2026-06-06 |
 | 2. Family Access, Tenancy, Roles, and Profiles | 3/7 | In Progress|  |
-| 3. Kreds Engine Ledger and Audit Foundation | 0/TBD | Not started | - |
+| 3. Kreds Engine Ledger and Audit Foundation | 0/4 | Planned | - |
 | 4. Weekly Task Templates and Activity Cycles | 0/TBD | Not started | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
