@@ -25,7 +25,7 @@ const ACCENT_CSS: Record<string, string> = {
 export default async function FamilyChildrenPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ firstChildAdded?: string }>
+  searchParams?: Promise<{ success?: string }>
 }) {
   const session = await auth()
 
@@ -54,7 +54,7 @@ export default async function FamilyChildrenPage({
   const familyId = membership.familyId
   const children = await listActiveChildProfiles(familyId)
   const params = searchParams ? await searchParams : undefined
-  const showFirstChildDecision = params?.firstChildAdded === '1' && children.length > 0
+  const showAdditionDecision = params?.success === '1' && children.length > 0
 
   const [family] = await db
     .select({ name: schema.families.name })
@@ -118,19 +118,38 @@ export default async function FamilyChildrenPage({
           </div>
         </div>
 
-        <Link
-          href="/api/auth/signout"
-          style={{
-            fontSize: '0.8125rem',
-            color: 'var(--color-text-soft, #72796e)',
-            textDecoration: 'none',
-            padding: '8px 14px',
-            borderRadius: '99px',
-            border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-          }}
-        >
-          Sair
-        </Link>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {children.length > 0 && (
+            <Link
+              href="/family/dashboard"
+              style={{
+                fontSize: '0.8125rem',
+                color: 'var(--color-primary, #154212)',
+                textDecoration: 'none',
+                padding: '8px 14px',
+                borderRadius: '99px',
+                background: 'rgba(255,255,255,0.82)',
+                border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+                fontWeight: 600,
+              }}
+            >
+              Dashboard
+            </Link>
+          )}
+          <Link
+            href="/api/auth/signout"
+            style={{
+              fontSize: '0.8125rem',
+              color: 'var(--color-text-soft, #72796e)',
+              textDecoration: 'none',
+              padding: '8px 14px',
+              borderRadius: '99px',
+              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+            }}
+          >
+            Sair
+          </Link>
+        </div>
       </div>
 
       {/* Active children list */}
@@ -215,7 +234,7 @@ export default async function FamilyChildrenPage({
         </div>
       )}
 
-      {showFirstChildDecision ? (
+      {showAdditionDecision ? (
         <div style={{
           background: 'var(--color-card, rgba(255,255,255,0.72))',
           border: '1px solid rgba(45,90,39,0.16)',
@@ -236,7 +255,7 @@ export default async function FamilyChildrenPage({
               color: 'var(--color-text-muted, #42493e)',
               margin: '0 0 4px',
             }}>
-              Primeiro filho cadastrado
+              Filho cadastrado
             </p>
             <h2 style={{
               margin: '0 0 8px',
@@ -252,7 +271,7 @@ export default async function FamilyChildrenPage({
               margin: 0,
               lineHeight: 1.5,
             }}>
-              Você já concluiu a configuração mínima da família. Agora pode adicionar mais uma criança ou seguir para o dashboard.
+              O perfil foi criado com sucesso. Agora você pode adicionar mais uma criança ou seguir para o dashboard.
             </p>
           </div>
 

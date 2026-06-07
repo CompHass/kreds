@@ -73,11 +73,7 @@ export async function addChildAction(
     return { error: 'Não foi possível adicionar o filho. Tente novamente.' }
   }
 
-  if (existingChildren.length === 0) {
-    redirect('/family/children?firstChildAdded=1')
-  }
-
-  redirect('/family/children')
+  redirect('/family/children?success=1')
 }
 
 export async function deactivateChildAction(formData: FormData): Promise<void> {
