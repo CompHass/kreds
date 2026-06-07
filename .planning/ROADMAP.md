@@ -69,7 +69,19 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Parent can customize child profiles with simple avatars or visual identifiers.
   5. Parent can review an audit trail for identity, membership, and profile changes.
 
-**Plans**: TBD
+**Plans**: 4 plans
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — ZITADEL-backed family onboarding, domain roles, isolation schema, and blocking Drizzle schema push
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Guardian-managed child profiles with consent, Sylvan avatars, accent colors, and privacy inventory update
+- [ ] 02-03-PLAN.md — Guardian invitation lifecycle with authenticated acceptance and audit events
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-04-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
 **UI hint**: yes
 
 ### Phase 3: Kreds Engine Ledger and Audit Foundation
