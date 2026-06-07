@@ -23,22 +23,24 @@ export async function postEarning(command: EarningCommand) {
     const firstfruits = calculateFirstfruits(command.amount)
     const available = command.amount - firstfruits
 
-    await tx.insert(ledgerLines).values([
+    const lines = [
       {
         id: crypto.randomUUID(),
         transactionId: txHeader.id,
         childProfileId: command.childProfileId,
-        accountType: 'available',
+        accountType: 'available' as const,
         amount: available,
       },
       {
         id: crypto.randomUUID(),
         transactionId: txHeader.id,
         childProfileId: command.childProfileId,
-        accountType: 'firstfruits',
+        accountType: 'firstfruits' as const,
         amount: firstfruits,
       },
-    ])
+    ].filter((line) => line.amount !== 0)
+
+    await tx.insert(ledgerLines).values(lines)
 
     return txHeader
   })
