@@ -1,4 +1,6 @@
+import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getGuardianLedgerHistory } from '@/modules/ledger/queries'
+import { redirect } from 'next/navigation'
 
 type GuardianHistoryPageProps = {
   params: Promise<{ childId: string }>
@@ -36,7 +38,20 @@ function formatNote(row: { transactionType: string; note: string | null }) {
 
 export default async function GuardianHistoryPage({ params }: GuardianHistoryPageProps) {
   const { childId } = await params
-  const rows = await getGuardianLedgerHistory(childId, '')
+
+  let familyId: string
+  try {
+    const context = await requireCurrentFamilyContext()
+    if (context.role !== 'guardian') {
+      redirect('/')
+    }
+    familyId = context.familyId
+    await requireChildInFamily(childId, familyId)
+  } catch {
+    redirect('/api/auth/signin')
+  }
+
+  const rows = await getGuardianLedgerHistory(childId, familyId)
 
   return (
     <main className="min-h-screen bg-amber-50 px-6 py-10 text-slate-900">

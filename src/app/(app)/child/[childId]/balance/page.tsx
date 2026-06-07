@@ -1,4 +1,6 @@
+import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
+import { redirect } from 'next/navigation'
 
 type ChildBalancePageProps = {
   params: Promise<{ childId: string }>
@@ -10,6 +12,14 @@ function formatKreds(amount: number): string {
 
 export default async function ChildBalancePage({ params }: ChildBalancePageProps) {
   const { childId } = await params
+
+  try {
+    const { familyId } = await requireCurrentFamilyContext()
+    await requireChildInFamily(childId, familyId)
+  } catch {
+    redirect('/api/auth/signin')
+  }
+
   const [available, firstfruits] = await Promise.all([
     getBalance(childId, 'available'),
     getBalance(childId, 'firstfruits'),

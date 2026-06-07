@@ -1,4 +1,6 @@
+import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
+import { redirect } from 'next/navigation'
 import AdjustmentFormClient from './AdjustmentFormClient'
 
 type GuardianAdjustmentPageProps = {
@@ -11,6 +13,17 @@ function formatKreds(amount: number): string {
 
 export default async function GuardianAdjustmentPage({ params }: GuardianAdjustmentPageProps) {
   const { childId } = await params
+
+  try {
+    const { familyId, role } = await requireCurrentFamilyContext()
+    if (role !== 'guardian') {
+      redirect('/')
+    }
+    await requireChildInFamily(childId, familyId)
+  } catch {
+    redirect('/api/auth/signin')
+  }
+
   const availableBalance = await getBalance(childId, 'available')
 
   return (
@@ -20,10 +33,10 @@ export default async function GuardianAdjustmentPage({ params }: GuardianAdjustm
           Guardian Ledger
         </p>
         <h1 className="mt-3 text-3xl font-bold text-slate-950">
-          Registrar Ajuste para {childId}
+          Record Adjustment for {childId}
         </h1>
         <p className="mt-3 text-base text-slate-600">
-          Saldo atual: {formatKreds(availableBalance)}
+          Current balance: {formatKreds(availableBalance)}
         </p>
 
         <AdjustmentFormClient childId={childId} />

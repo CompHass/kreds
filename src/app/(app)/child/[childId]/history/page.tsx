@@ -1,4 +1,6 @@
+import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getChildLedgerHistory } from '@/modules/ledger/queries'
+import { redirect } from 'next/navigation'
 
 type ChildHistoryPageProps = {
   params: Promise<{ childId: string }>
@@ -37,7 +39,17 @@ function getChildLabel(row: Awaited<ReturnType<typeof getChildLedgerHistory>>[nu
 
 export default async function ChildHistoryPage({ params }: ChildHistoryPageProps) {
   const { childId } = await params
-  const rows = await getChildLedgerHistory(childId, '')
+
+  let familyId: string
+  try {
+    const context = await requireCurrentFamilyContext()
+    familyId = context.familyId
+    await requireChildInFamily(childId, familyId)
+  } catch {
+    redirect('/api/auth/signin')
+  }
+
+  const rows = await getChildLedgerHistory(childId, familyId)
 
   return (
     <main className="min-h-screen bg-emerald-50 px-6 py-10 text-slate-900">

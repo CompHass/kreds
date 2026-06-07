@@ -3,15 +3,15 @@
 import { useState } from 'react'
 
 function parseErrorMessage(responseStatus: number, payload: { error?: string } | null): string {
-  if (responseStatus === 422 && payload?.error?.includes('Saldo insuficiente')) {
-    return 'Saldo insuficiente para este ajuste'
+  if (responseStatus === 422 && payload?.error?.includes('Insufficient balance')) {
+    return 'Insufficient balance for this adjustment'
   }
 
   if (responseStatus === 422) {
-    return 'Revise os campos do formulário'
+    return 'Review the form fields'
   }
 
-  return 'Não foi possível registrar o ajuste'
+  return 'Could not record the adjustment'
 }
 
 export default function AdjustmentFormClient({ childId }: { childId: string }) {
@@ -34,9 +34,6 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           commandId,
-          familyId: '00000000-0000-0000-0000-000000000000',
-          guardianIdentityId: '00000000-0000-0000-0000-000000000000',
-          childProfileId: childId,
           amount: Number.parseInt(amount, 10),
           reason,
           restorationNote: restorationNote || undefined,
@@ -58,7 +55,7 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
       setErrorMessage(parseErrorMessage(response.status, payload))
       setStatus('error')
     } catch {
-      setErrorMessage('Não foi possível registrar o ajuste')
+      setErrorMessage('Could not record the adjustment')
       setStatus('error')
     }
   }
@@ -67,7 +64,7 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
     <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
       <div className="space-y-2">
         <label htmlFor="amount" className="text-sm font-semibold text-slate-700">
-          Valor do ajuste
+          Adjustment amount
         </label>
         <input
           id="amount"
@@ -89,7 +86,7 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
           id="reason"
           name="reason"
           required
-          placeholder="Ex.: Tarefa não completada"
+          placeholder="Example: Task was not completed"
           value={reason}
           onChange={(event) => setReason(event.target.value)}
           className="min-h-32 w-full rounded-2xl border border-slate-200 px-4 py-3"
@@ -103,7 +100,7 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
         <textarea
           id="restorationNote"
           name="restorationNote"
-          placeholder="Opcional: note de restauração"
+          placeholder="Optional: note about how to restore it later"
           value={restorationNote}
           onChange={(event) => setRestorationNote(event.target.value)}
           className="min-h-28 w-full rounded-2xl border border-slate-200 px-4 py-3"
@@ -115,11 +112,11 @@ export default function AdjustmentFormClient({ childId }: { childId: string }) {
         className="rounded-full bg-amber-700 px-6 py-3 font-semibold text-white"
         disabled={status === 'loading'}
       >
-        Registrar Ajuste
+        Record Adjustment
       </button>
 
       {status === 'success' && (
-        <p className="text-sm font-medium text-green-600">Ajuste registrado com sucesso</p>
+        <p className="text-sm font-medium text-green-600">Adjustment recorded successfully</p>
       )}
       {status === 'error' && errorMessage && (
         <p className="text-sm font-medium text-red-600">{errorMessage}</p>
