@@ -198,10 +198,12 @@ Risks:
 - **Child privacy drift:** Adding age years without updating the privacy inventory violates D-13 and weakens phase closure evidence. [CITED: 02-CONTEXT.md] [CITED: docs/PRIVACY-INVENTORY.md]
 - **Invitation token leakage:** Storing raw invitation tokens would make database exposure more damaging; planner should require token hashing. [ASSUMED]
 
-Open questions for planning:
+## Open Questions (RESOLVED)
 
-1. What exact ZITADEL app/client has been created for Kreds, and what redirect/post-logout URLs should be documented for local and deployed environments? [CITED: https://zitadel.com/docs/sdk-examples/nextjs]
-2. Should Phase 02 implement PostgreSQL RLS now, or leave it as a planned defense-in-depth follow-up after application-level authorization tests pass? [CITED: https://www.postgresql.org/docs/current/ddl-rowsecurity.html]
-3. Will guardian invitation emails actually be sent in Phase 02, or should the MVP expose/copy the invitation link while persisting the full lifecycle? [ASSUMED]
-4. What is the approved closed set of Sylvan avatar preset identifiers and accent colors from the design artifacts? [CITED: 02-CONTEXT.md]
-5. Should system owner authorization be read from a ZITADEL project role claim in Phase 02, or deferred until an admin surface exists? ZITADEL can assert project roles as claims when requested/configured. [CITED: https://zitadel.com/docs/apis/openidoauth/claims]
+Planning decisions selected for Phase 02 execution:
+
+1. **ZITADEL config:** Use HassLab issuer `https://auth.hasslab.pro` with Auth.js env keys `AUTH_SECRET`, `AUTH_ZITADEL_ID`, `AUTH_ZITADEL_SECRET`, and `AUTH_ZITADEL_ISSUER`. Document local callback `/api/auth/callback/zitadel`; live credentials remain `user_setup` because the agent cannot create or read the user's ZITADEL client secret. [CITED: https://zitadel.com/docs/sdk-examples/nextjs]
+2. **RLS:** Implement application-level authorization helpers, family_id indexes, schema constraints, and tests in Phase 02. Do not implement PostgreSQL RLS in this phase; keep it as a later defense-in-depth hardening item after app-level checks are green, because incomplete RLS must not substitute for server-side authorization. [CITED: https://www.postgresql.org/docs/current/ddl-rowsecurity.html]
+3. **Invitation email/link behavior:** Phase 02 persists the full invitation lifecycle and exposes a one-time copyable invitation link; it does not add outbound email transport. Email delivery can be added later without changing the domain lifecycle. [ASSUMED]
+4. **Avatar IDs/colors:** Use closed static identifiers in code: `oak-sprout`, `cedar-sapling`, `olive-branch`, `mustard-seed`, `fig-leaf`, `river-stone`; accent colors `moss`, `gold`, `sky`, `berry`, `clay`, `sage`. No uploads, URLs, or progress/growth semantics in Phase 02. [CITED: 02-CONTEXT.md]
+5. **System owner handling:** Phase 02 models system owner as external/global authorization potentially asserted by ZITADEL but does not implement an admin UI or system-owner authorization surface. Kreds family roles remain `guardian` and `child` stored by `family_id`. [CITED: https://zitadel.com/docs/apis/openidoauth/claims] [CITED: 02-CONTEXT.md]

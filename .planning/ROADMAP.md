@@ -69,19 +69,31 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Parent can customize child profiles with simple avatars or visual identifiers.
   5. Parent can review an audit trail for identity, membership, and profile changes.
 
-**Plans**: 4 plans
-**Wave 1**
+**Plans**: 7 plans
+**Wave 0**
 
-- [ ] 02-01-PLAN.md — ZITADEL-backed family onboarding, domain roles, isolation schema, and blocking Drizzle schema push
+- [ ] 02-01-PLAN.md — Wave 0 validation scaffolds for authorization, tenancy, child profiles, invitations, and audit
+
+**Wave 1** *(blocked on Wave 0 completion)*
+
+- [ ] 02-02-PLAN.md — Auth.js/ZITADEL package, env validation, and auth route foundation
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-02-PLAN.md — Guardian-managed child profiles with consent, Sylvan avatars, accent colors, and privacy inventory update
-- [ ] 02-03-PLAN.md — Guardian invitation lifecycle with authenticated acceptance and audit events
+- [ ] 02-03-PLAN.md — Family tenancy, memberships, invitations, child profiles, consent, audit schema, and blocking Drizzle push
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 02-04-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
+- [ ] 02-04-PLAN.md — Family authorization helpers, transactional family creation, guarded API, and onboarding redirect to first child setup
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 02-05-PLAN.md — Guardian-managed child profiles with consent, Sylvan avatars, accent colors, and privacy inventory update
+- [ ] 02-06-PLAN.md — Guardian invitation lifecycle with authenticated acceptance, copyable link behavior, and audit events
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 02-07-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
 **UI hint**: yes
 
 ### Phase 3: Kreds Engine Ledger and Audit Foundation
@@ -207,7 +219,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ✅ Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 0/TBD | Not started | - |
+| 2. Family Access, Tenancy, Roles, and Profiles | 0/7 | Not started | - |
 | 3. Kreds Engine Ledger and Audit Foundation | 0/TBD | Not started | - |
 | 4. Weekly Task Templates and Activity Cycles | 0/TBD | Not started | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
