@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { ledgerLines, ledgerTransactions } from '@/lib/db/schema/ledger'
 import { calculateFirstfruits } from './calculate'
@@ -83,6 +84,48 @@ export async function postNegativeAdjustment(command: AdjustmentCommand) {
   })
 }
 
-export async function postReversal(_command: ReversalCommand): Promise<never> {
-  throw new Error('not implemented')
+export async function postReversal(command: ReversalCommand) {
+  const [original] = await db
+    .select({ familyId: ledgerTransactions.familyId })
+    .from(ledgerTransactions)
+    .where(eq(ledgerTransactions.id, command.correctsTransactionId))
+
+  if (!original || original.familyId !== command.familyId) {
+    throw new Error('cross_family_reversal_forbidden')
+  }
+
+  const originalLines = await db
+    .select()
+    .from(ledgerLines)
+    .where(eq(ledgerLines.transactionId, command.correctsTransactionId))
+
+  return await db.transaction(async (tx) => {
+    const [txHeader] = await tx
+      .insert(ledgerTransactions)
+      .values({
+        id: crypto.randomUUID(),
+        familyId: command.familyId,
+        childProfileId: command.childProfileId,
+        commandId: command.commandId,
+        transactionType: 'reversal',
+        initiatedByIdentityId: command.guardianIdentityId,
+        correctsTransactionId: command.correctsTransactionId,
+        note: command.correctionNote,
+      })
+      .returning()
+
+    const reversalLines = originalLines.map((line) => ({
+      id: crypto.randomUUID(),
+      transactionId: txHeader.id,
+      childProfileId: command.childProfileId,
+      accountType: line.accountType,
+      amount: -line.amount,
+    }))
+
+    if (reversalLines.length > 0) {
+      await tx.insert(ledgerLines).values(reversalLines)
+    }
+
+    return txHeader
+  })
 }
