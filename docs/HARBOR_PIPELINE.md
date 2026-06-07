@@ -1,6 +1,6 @@
-# Harbor Image Pipeline
+# Docker Hub Image Pipeline
 
-This repository builds and publishes the Kreds production image to Harbor using GitHub Actions.
+This repository builds and publishes the Kreds production image to Docker Hub using GitHub Actions.
 
 ## Workflow
 
@@ -14,35 +14,36 @@ Triggers:
 Published image format:
 
 ```text
-harbor.hasslab.pro/kreds/kreds:<12-char-git-sha>
-harbor.hasslab.pro/kreds/kreds-migrate:<12-char-git-sha>
+eduhass/kreds:<12-char-git-sha>
+eduhass/kreds-migrate:<12-char-git-sha>
 ```
 
 The workflow intentionally does not publish `latest`.
 
-## Required Harbor Setup
+## Required Docker Hub Setup
 
-Create project `kreds` in Harbor before running the workflow.
+Create repositories `eduhass/kreds` and `eduhass/kreds-migrate` in Docker Hub before running the workflow.
 
-Recommended Harbor robot account permissions for pushing from CI:
+Recommended Docker Hub access token permissions for pushing from CI:
 
-- Project: `kreds`
-- Permission: push/pull repository images
+- Repository: `eduhass/kreds`
+- Repository: `eduhass/kreds-migrate`
+- Permission: read/write
 
 ## Required GitHub Secrets
 
 Configure these repository secrets in GitHub:
 
-- `HARBOR_USERNAME`: Harbor username or robot account name
-- `HARBOR_PASSWORD`: Harbor password or robot account token
+- `DOCKERHUB_USERNAME`: Docker Hub username
+- `DOCKERHUB_TOKEN`: Docker Hub access token
 
 ## Deploy Tag
 
 After a successful run, use the printed 12-character tag in the IaC manifests:
 
 ```text
-harbor.hasslab.pro/kreds/kreds:<12-char-git-sha>
-harbor.hasslab.pro/kreds/kreds-migrate:<12-char-git-sha>
+eduhass/kreds:<12-char-git-sha>
+eduhass/kreds-migrate:<12-char-git-sha>
 ```
 
 Update both IaC files:

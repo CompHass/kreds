@@ -11,9 +11,9 @@ permissions:
   security-events: write
 
 env:
-  REGISTRY: harbor.hasslab.pro
-  IMAGE_NAME: kreds/kreds
-  MIGRATION_IMAGE_NAME: kreds/kreds-migrate
+  REGISTRY: docker.io
+  IMAGE_NAME: eduhass/kreds
+  MIGRATION_IMAGE_NAME: eduhass/kreds-migrate
 
 jobs:
   build-scan-push:
@@ -27,34 +27,34 @@ jobs:
         id: meta
         run: |
           short_sha="${GITHUB_SHA::12}"
-          image="${REGISTRY}/${IMAGE_NAME}:${short_sha}"
-          migration_image="${REGISTRY}/${MIGRATION_IMAGE_NAME}:${short_sha}"
+          image="${IMAGE_NAME}:${short_sha}"
+          migration_image="${MIGRATION_IMAGE_NAME}:${short_sha}"
           echo "short_sha=${short_sha}" >> "${GITHUB_OUTPUT}"
           echo "image=${image}" >> "${GITHUB_OUTPUT}"
           echo "migration_image=${migration_image}" >> "${GITHUB_OUTPUT}"
 
-      - name: Check Harbor connectivity
+      - name: Check Docker Hub connectivity
         run: |
           getent hosts "${REGISTRY}"
           for attempt in 1 2 3 4 5; do
             if curl --fail-with-body --verbose --connect-timeout 20 "https://${REGISTRY}/v2/" || test "$?" = "22"; then
               exit 0
             fi
-            echo "Harbor connectivity attempt ${attempt} failed; retrying in $((attempt * 10))s"
+            echo "Docker Hub connectivity attempt ${attempt} failed; retrying in $((attempt * 10))s"
             sleep $((attempt * 10))
           done
           exit 1
 
-      - name: Log in to Harbor
+      - name: Log in to Docker Hub
         env:
-          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
-          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           for attempt in 1 2 3; do
-            if printf '%s' "${HARBOR_PASSWORD}" | docker login "${REGISTRY}" --username "${HARBOR_USERNAME}" --password-stdin; then
+            if printf '%s' "${DOCKERHUB_TOKEN}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin; then
               exit 0
             fi
-            echo "Harbor login attempt ${attempt} failed; retrying in 15s"
+            echo "Docker Hub login attempt ${attempt} failed; retrying in 15s"
             sleep 15
           done
           exit 1
