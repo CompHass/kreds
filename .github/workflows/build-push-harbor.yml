@@ -36,7 +36,14 @@ jobs:
       - name: Check Harbor connectivity
         run: |
           getent hosts "${REGISTRY}"
-          curl --fail-with-body --verbose --connect-timeout 20 "https://${REGISTRY}/v2/" || test "$?" = "22"
+          for attempt in 1 2 3 4 5; do
+            if curl --fail-with-body --verbose --connect-timeout 20 "https://${REGISTRY}/v2/" || test "$?" = "22"; then
+              exit 0
+            fi
+            echo "Harbor connectivity attempt ${attempt} failed; retrying in $((attempt * 10))s"
+            sleep $((attempt * 10))
+          done
+          exit 1
 
       - name: Log in to Harbor
         env:
