@@ -54,6 +54,7 @@ Atomic task earning posting now creates ledger transaction headers plus availabl
 | ---- | ---- | ------ | ------ |
 | 1 | postEarning real + getBalance | 24e81e8 | Implemented `postEarning(command)` with `db.transaction`, firstfruits split, caller `commandId`, and `getBalance()` via `SUM(ledger_lines.amount)`. |
 | 2 | POST earning route, history scaffold, child balance page | 3a7c0cb | Added Zod-validated POST route with `23505` → `409 already_posted`, scaffolded history GET route, and SSR child balance page. |
+| Fix | Skip zero ledger lines | 5bfc812 | Prevented `amount=1` earnings from inserting a zero-value available line that violates `non_zero_amount`. |
 
 ## Verification
 
@@ -61,6 +62,7 @@ Atomic task earning posting now creates ledger transaction headers plus availabl
 | ------- | ------ |
 | `pnpm test tests/unit/ledger-calculate.test.ts --run` | Passed: 8 tests passed. |
 | `pnpm exec tsc --noEmit` | Passed with no output/errors. |
+| `pnpm exec tsc --noEmit` after zero-line fix | Passed with no output/errors. |
 | Grep acceptance checks | Passed for `db.transaction`, `calculateFirstfruits`, `sum(ledgerLines.amount)`, `safeParse`, `23505`, `already_posted`, history `GET`, balance `getBalance`, and `Firstfruits`. |
 
 The curl verification against `localhost:3000` was not run because no local Next.js server was started for this execution. Docker/Testcontainers integration tests were not run because this project has a known Docker daemon limitation with Testcontainers; they require an available Docker daemon or the documented cluster port-forward workaround.
@@ -75,6 +77,13 @@ The curl verification against `localhost:3000` was not run because no local Next
 - **Fix:** Updated test call sites to pass typed sample ledger commands and balance parameters so TypeScript can compile. Integration tests remain environment-gated and were not executed.
 - **Files modified:** `tests/integration/ledger-engine.test.ts`, `tests/unit/ledger-queries.test.ts`
 - **Commit:** `24e81e8`
+
+**2. [Rule 3 - Blocking] Skipped zero-value ledger lines**
+- **Found during:** Orchestrator spot-check after Wave 1
+- **Issue:** `amount=1` calculates `firstfruits=1` and `available=0`; inserting both lines would violate the ledger `non_zero_amount` check.
+- **Fix:** Filtered ledger lines before insert so only non-zero postings are persisted.
+- **Files modified:** `src/modules/ledger/engine.ts`
+- **Commit:** `5bfc812`
 
 ## Known Stubs
 
@@ -94,5 +103,5 @@ The curl verification against `localhost:3000` was not run because no local Next
 ## Self-Check: PASSED
 
 - Created and modified plan files exist.
-- Task commits exist: `24e81e8`, `3a7c0cb`.
+- Task commits exist: `24e81e8`, `3a7c0cb`, fix commit `5bfc812`.
 - Unrelated pre-existing dirty files were not staged or committed.
