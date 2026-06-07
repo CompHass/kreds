@@ -1,5 +1,6 @@
 import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import AdjustmentFormClient from './AdjustmentFormClient'
 
