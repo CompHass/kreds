@@ -16,6 +16,11 @@ export const TERMS = {
   KREDS_ENGINE: 'Kreds Engine',
   NEGATIVE_ADJUSTMENT: 'Negative Adjustment',
   LEDGER_TRANSACTION: 'Ledger Transaction',
+  AVAILABLE_BALANCE: 'Available Balance',
+  FIRSTFRUITS_BALANCE: 'Firstfruits Balance',
+  REVERSAL: 'Reversal',
+  ADJUSTMENT_REASON: 'Adjustment Reason',
+  CORRECTION_NOTE: 'Correction Note',
 } as const
 
 export type TermKey = keyof typeof TERMS

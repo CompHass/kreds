@@ -170,3 +170,5 @@ export const parentalConsents = pgTable(
     familyIdIdx: index('parental_consents_family_id_idx').on(table.familyId),
   }),
 )
+
+export * from './ledger'

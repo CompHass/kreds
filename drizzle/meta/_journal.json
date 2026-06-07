@@ -15,6 +15,13 @@
       "when": 1780798564806,
       "tag": "0001_omniscient_scarlet_spider",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780868942131,
+      "tag": "0002_familiar_rick_jones",
+      "breakpoints": true
     }
   ]
 }
