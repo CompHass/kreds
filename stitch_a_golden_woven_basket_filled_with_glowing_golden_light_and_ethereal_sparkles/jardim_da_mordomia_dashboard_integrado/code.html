@@ -1,0 +1,249 @@
+<!DOCTYPE html><html class="light" lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Jardim da Mordomia</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@700&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#caec7d",
+                        "primary-fixed-dim": "#a1d494",
+                        "tertiary-fixed-dim": "#f0c12c",
+                        "on-secondary-fixed": "#151f00",
+                        "inverse-on-surface": "#ffede2",
+                        "tertiary": "#755b00",
+                        "inverse-surface": "#3f2d1e",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#cdef7f",
+                        "inverse-primary": "#a1d494",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#28180b",
+                        "secondary": "#4c6700",
+                        "tertiary-fixed": "#ffdf90",
+                        "on-tertiary-container": "#503d00",
+                        "surface-container-highest": "#fbddc7",
+                        "on-secondary-fixed-variant": "#394d00",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#d2a501",
+                        "on-primary-fixed": "#002201",
+                        "outline-variant": "#c2c9bb",
+                        "secondary-fixed-dim": "#b2d266",
+                        "surface": "#fff8f5",
+                        "surface-variant": "#fbddc7",
+                        "on-primary-container": "#9dd090",
+                        "primary-container": "#2d5a27",
+                        "surface-tint": "#3b6934",
+                        "on-primary-fixed-variant": "#23501e",
+                        "background": "#fff8f5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#506b03",
+                        "surface-container": "#ffeadc",
+                        "surface-bright": "#fff8f5",
+                        "primary": "#154212",
+                        "on-background": "#28180b",
+                        "surface-dim": "#f2d4bf",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#584400",
+                        "on-error": "#ffffff",
+                        "outline": "#72796e",
+                        "on-surface-variant": "#42493e",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#ffe3cf",
+                        "surface-container-low": "#fff1e9",
+                        "on-tertiary-fixed": "#241a00",
+                        "primary-fixed": "#bcf0ae"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "section-margin": "48px",
+                        "base": "8px",
+                        "element-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(45, 90, 39, 0.05);
+        }
+        .sunkissed-gradient {
+            background: linear-gradient(135deg, #a1d494 0%, #2d5a27 100%);
+            box-shadow: inset 0 2px 4px rgba(255, 223, 144, 0.5);
+        }
+        .organic-shape {
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-[90px] md:pb-0 font-body-md bg-gradient-to-b from-[#F0F4F0] to-[#FFFFFF] bg-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-40 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm flex justify-between items-center px-container-padding py-4">
+<div class="flex items-center gap-3 cursor-pointer hover:bg-primary-container/20 p-2 -ml-2 rounded-full transition-transform duration-150 active:scale-95">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container bg-surface-variant flex-shrink-0">
+<img alt="Profile picture of a smiling child with a leafy crown" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY75nAF08jSaaK9Le47sqienA8HwCZ7fmPwSv8cgRbBVm2bPLY9eZgZoMEiBmZiZf-_QixiidA1g_LT9oeXm3QvKMGTOJeOc8mswCmFvSESpUfV8xwrhhuGUTG0hvYy-sHBva3FnIMXe1oHTtZUn087M03viP1kjiknHDANibY-wrr5vL8vKIQeMHvHTBdMszuJnhACmZUAWfeqTQBM0yd8HZpQ5ppkVUhQBgyPbhfCToemiGBeaMFMcvp_4CIiZGJIiTYU8Ycles">
+</div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-primary truncate max-w-[150px] sm:max-w-none">Olá, Pequeno Mordomo!</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 glass-panel px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-tertiary-container text-xl" style="font-variation-settings: 'FILL' 1;">toll</span>
+<span class="text-lg font-bold text-tertiary-container">142</span>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-primary-container/20 transition-transform duration-150 active:scale-95 hidden sm:flex">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">eco</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-[90px] px-container-padding max-w-4xl mx-auto space-y-8">
+<!-- The Garden Canvas (Hero) -->
+<section class="relative w-full aspect-square md:aspect-[21/9] rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/50 group mt-4">
+<div class="absolute inset-0 bg-gradient-to-b from-[#e8f4e5] to-[#cbe4c5] z-0"></div>
+<!-- Isometric Garden Image -->
+<img alt="A lush, vibrant 3D isometric floating garden island for a children's mobile game." class="absolute inset-0 w-full h-full object-cover z-10 opacity-100 transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AP1WRLvEH1nSxvawXMP4s0NuEibIiLm4wgCwasI2ka96aJwBJLdGhrgwPf3IQKj2RObAzeO_IHJwscSQNtV6SK3__lt4WN3j9a1RXNH9Fq74M4mOFM0UIZ5aNEoX6ugmMyB2hHIu1_WFTH6KCKys8go1-4e21rZAWtIApNkZwxbm-SVslzCKcwFmJN9W7PcT73cVJynyMY-0IwqB9rrAbPMYVrCUYpK6CxGfhSMAkqbg-O8fgviW2aPcBoZnDg">
+<!-- Overlay Vignette -->
+
+
+</section>
+<!-- Active Missions (Seeds) -->
+<section class="space-y-6 pb-12 relative z-10 -mt-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="text-[22px] font-headline-lg-mobile text-primary-container">Missões Ativas</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">Ver todas</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-element-gap">
+<!-- Mission 1: Seed -->
+<div class="glass-panel rounded-[1.5rem] p-5 flex items-center gap-4 hover:-translate-y-1 transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-md">
+<div class="w-16 h-16 rounded-2xl bg-[#f8efe6] border border-[#e8d5c4] flex items-center justify-center flex-shrink-0 relative overflow-hidden">
+<div class="absolute bottom-0 w-full h-1/3 bg-[#8B5A2B]/10"></div>
+<span class="material-symbols-outlined text-[#8B5A2B] text-3xl z-10 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface mb-1 text-[17px]">Arrumar a Cama</h4>
+<div class="flex items-center gap-1.5 mb-2.5">
+<span class="w-2 h-2 rounded-full bg-[#8B5A2B] animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-[#8B5A2B]">Semente Plantada</span>
+</div>
+<div class="w-full bg-surface-variant/50 rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#8B5A2B] h-full rounded-full w-[10%]"></div>
+</div>
+</div>
+</div>
+<!-- Mission 2: Sapling -->
+<div class="glass-panel rounded-[1.5rem] p-5 flex items-center gap-4 hover:-translate-y-1 transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-md">
+<div class="w-16 h-16 rounded-2xl bg-primary-fixed/40 border border-primary-fixed flex items-center justify-center flex-shrink-0 relative overflow-hidden">
+<span class="material-symbols-outlined text-primary-container text-3xl z-10 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">local_florist</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface mb-1 text-[17px]">Leitura Diária</h4>
+<div class="flex items-center gap-1.5 mb-2.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="text-label-sm font-label-sm text-primary-container">Brotando</span>
+</div>
+<div class="w-full bg-surface-variant/50 rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full w-[50%]"></div>
+</div>
+</div>
+</div>
+<!-- Mission 3: Tree -->
+<div class="glass-panel rounded-[1.5rem] p-5 flex items-center gap-4 hover:-translate-y-1 transition-all duration-300 cursor-pointer group shadow-sm hover:shadow-md">
+<div class="w-16 h-16 rounded-2xl bg-secondary-container/60 border border-secondary-container flex items-center justify-center flex-shrink-0 relative overflow-hidden">
+<span class="material-symbols-outlined text-secondary text-3xl z-10 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">park</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface mb-1 text-[17px]">Ajudar na Cozinha</h4>
+<div class="flex items-center gap-1.5 mb-2.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-label-sm font-label-sm text-secondary">Árvore Forte</span>
+</div>
+<div class="w-full bg-surface-variant/50 rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[90%] relative">
+<div class="absolute right-0 top-0 w-4 h-full bg-tertiary-fixed blur-sm rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button (Contextual: Home/Garden) -->
+<button class="fixed bottom-[100px] md:bottom-8 right-6 z-40 sunkissed-gradient text-on-primary rounded-2xl p-4 shadow-[0_8px_16px_rgba(45,90,39,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 group organic-shape">
+<span class="material-symbols-outlined transition-transform group-hover:rotate-90">add</span>
+<span class="font-bold pr-2 hidden sm:inline">Plantar Nova Missão</span>
+</button>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-2xl shadow-[0_-4px_12px_rgba(45,90,39,0.08)] rounded-t-xl flex justify-around items-center px-4 pt-2 pb-6">
+<!-- Jardim (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-1 active:scale-90 duration-200 ease-out transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">potted_plant</span>
+<span class="text-label-sm font-label-sm mt-1">Jardim</span>
+</a>
+<!-- Missões -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">assignment</span>
+<span class="text-label-sm font-label-sm mt-1">Missões</span>
+</a>
+<!-- Sonhos -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">auto_awesome</span>
+<span class="text-label-sm font-label-sm mt-1">Sonhos</span>
+</a>
+<!-- Perfil -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="text-label-sm font-label-sm mt-1">Perfil</span>
+</a>
+</nav>
+<!-- SideNav (Desktop Equivalent - Hidden on mobile) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full w-24 bg-surface/90 backdrop-blur-2xl border-r border-outline-variant/20 pt-[90px] items-center space-y-8 z-30">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-2xl w-16 h-16 hover:scale-110 transition-all group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">potted_plant</span>
+<span class="text-[10px] font-bold mt-1">Jardim</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 w-16 h-16 rounded-2xl hover:bg-surface-variant/50 hover:opacity-100 hover:scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">assignment</span>
+<span class="text-[10px] font-bold mt-1">Missões</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 w-16 h-16 rounded-2xl hover:bg-surface-variant/50 hover:opacity-100 hover:scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">auto_awesome</span>
+<span class="text-[10px] font-bold mt-1">Sonhos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 w-16 h-16 rounded-2xl hover:bg-surface-variant/50 hover:opacity-100 hover:scale-110 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="text-[10px] font-bold mt-1">Perfil</span>
+</a>
+</aside>
+
+
+</body></html>

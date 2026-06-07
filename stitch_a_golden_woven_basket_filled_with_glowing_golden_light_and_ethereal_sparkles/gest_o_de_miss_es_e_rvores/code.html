@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestão de Missões - Sylvan Growth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Plus+Jakarta+Sans:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#fff1e9",
+                        "tertiary-fixed": "#ffdf90",
+                        "surface-container-highest": "#fbddc7",
+                        "surface-tint": "#3b6934",
+                        "on-secondary-fixed-variant": "#394d00",
+                        "surface": "#fff8f5",
+                        "inverse-primary": "#a1d494",
+                        "on-surface-variant": "#42493e",
+                        "surface-container-high": "#ffe3cf",
+                        "primary-fixed": "#bcf0ae",
+                        "outline-variant": "#c2c9bb",
+                        "inverse-on-surface": "#ffede2",
+                        "on-tertiary-container": "#503d00",
+                        "primary": "#154212",
+                        "on-primary-fixed": "#002201",
+                        "secondary-container": "#caec7d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fff8f5",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#584400",
+                        "surface-dim": "#f2d4bf",
+                        "on-surface": "#28180b",
+                        "inverse-surface": "#3f2d1e",
+                        "tertiary-container": "#d2a501",
+                        "on-secondary-fixed": "#151f00",
+                        "on-secondary-container": "#506b03",
+                        "on-error-container": "#93000a",
+                        "secondary": "#4c6700",
+                        "tertiary": "#755b00",
+                        "secondary-fixed-dim": "#b2d266",
+                        "on-tertiary-fixed": "#241a00",
+                        "surface-variant": "#fbddc7",
+                        "primary-container": "#2d5a27",
+                        "on-background": "#28180b",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#23501e",
+                        "on-error": "#ffffff",
+                        "background": "#fff8f5",
+                        "surface-container": "#ffeadc",
+                        "tertiary-fixed-dim": "#f0c12c",
+                        "secondary-fixed": "#cdef7f",
+                        "on-primary": "#ffffff",
+                        "outline": "#72796e",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#9dd090",
+                        "primary-fixed-dim": "#a1d494",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "organic": "40% 60% 70% 30% / 40% 50% 60% 50%",
+                        "organic-2": "50% 50% 30% 70% / 60% 40% 70% 40%"
+                    },
+                    "spacing": {
+                        "element-gap": "16px",
+                        "section-margin": "48px",
+                        "container-padding": "24px",
+                        "base": "8px",
+                        "safe": "env(safe-area-inset-bottom, 20px)"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    },
+                    "backgroundImage": {
+                        "mist-gradient": "linear-gradient(to bottom, rgba(240, 244, 240, 0.8), rgba(255, 255, 255, 0.9))",
+                        "sunkissed-gradient": "linear-gradient(to right, #2d5a27, #3b6934)"
+                    },
+                    "boxShadow": {
+                        "canopy": "0 8px 32px -4px rgba(45, 90, 39, 0.08)",
+                        "leaf": "inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 2px 10px rgba(45, 90, 39, 0.05)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff8f5;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(205, 239, 127, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(188, 240, 174, 0.15) 0%, transparent 25%);
+            background-attachment: fixed;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(161, 212, 148, 0.3);
+            box-shadow: 0 8px 32px -4px rgba(45, 90, 39, 0.08);
+        }
+        .vine-progress {
+            position: relative;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .vine-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(to right, #bcf0ae, #3b6934);
+            border-radius: 999px;
+            transition: width 1s ease-out;
+        }
+        .vine-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(to right, transparent, #ffdf90);
+            opacity: 0.8;
+            border-radius: 0 999px 999px 0;
+        }
+        .squishy-btn:active {
+            transform: scale(0.96);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .organic-blob {
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 8s ease-in-out infinite;
+        }
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+            67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm flex justify-between items-center px-container-padding h-16 transition-all">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border-2 border-primary-fixed">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold tracking-tight">Sylvan Growth</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-primary rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="pt-24 px-container-padding max-w-4xl mx-auto space-y-section-margin">
+<!-- Header Section -->
+<section class="text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Cultivar Missões</h2>
+<p class="text-on-surface-variant font-body-md text-body-md max-w-lg">Com zelo e dedicação, cada pequena tarefa faz nossa floresta crescer. Qual semente vamos regar hoje?</p>
+</div>
+<button class="squishy-btn bg-sunkissed-gradient text-on-primary px-6 py-3 rounded-2xl font-label-sm text-label-sm flex items-center gap-2 shadow-canopy transition-all hover:scale-105 group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-tertiary-fixed to-transparent opacity-50"></div>
+<span class="material-symbols-outlined group-hover:rotate-90 transition-transform duration-300">add</span>
+                Nova Missão
+            </button>
+</section>
+<!-- Active Missions Bento Grid -->
+<section>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Mission 1: Apple Tree -->
+<div class="glass-panel rounded-3xl p-6 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-surface-container-high rounded-full opacity-50 mix-blend-multiply blur-xl"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-primary mb-4 shadow-leaf">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bed</span>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-[10px] uppercase tracking-wider">Estágio 1/5</span>
+</div>
+<h3 class="font-headline-lg-mobile text-xl text-primary mb-1">Arrumar a Cama</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">park</span> Ligado à Macieira
+                    </p>
+<div class="mb-6">
+<div class="flex justify-between text-xs text-on-surface-variant mb-2 font-label-sm">
+<span>Semente</span>
+<span>Muda</span>
+</div>
+<div class="vine-progress">
+<div class="vine-fill" style="width: 20%;"></div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl border border-outline-variant/50 text-primary font-label-sm text-sm hover:bg-surface-container transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+                        Alterar Árvore
+                    </button>
+</div>
+<!-- Mission 2: Oak Tree -->
+<div class="glass-panel rounded-3xl p-6 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary-container rounded-full opacity-20 mix-blend-multiply blur-xl"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-primary mb-4 shadow-leaf">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-[10px] uppercase tracking-wider">Estágio 2/5</span>
+</div>
+<h3 class="font-headline-lg-mobile text-xl text-primary mb-1">Leitura Diária</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">park</span> Ligado ao Carvalho
+                    </p>
+<div class="mb-6">
+<div class="flex justify-between text-xs text-on-surface-variant mb-2 font-label-sm">
+<span>Brotinho</span>
+<span>Muda</span>
+</div>
+<div class="vine-progress">
+<div class="vine-fill" style="width: 40%;"></div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl border border-outline-variant/50 text-primary font-label-sm text-sm hover:bg-surface-container transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+                        Alterar Árvore
+                    </button>
+</div>
+<!-- Mission 3: Cedar Tree (Completed) -->
+<div class="glass-panel rounded-3xl p-6 relative overflow-hidden border-primary/30 group hover:-translate-y-1 transition-transform duration-300 bg-gradient-to-b from-transparent to-primary-fixed/10">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary rounded-full opacity-10 mix-blend-multiply blur-xl"></div>
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-tertiary-container text-3xl" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-2xl bg-primary text-on-primary flex items-center justify-center mb-4 shadow-leaf">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">skillet</span>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-sm text-[10px] uppercase tracking-wider font-bold">Completa!</span>
+</div>
+<h3 class="font-headline-lg-mobile text-xl text-primary mb-1">Ajudar na Cozinha</h3>
+<p class="text-sm text-on-surface-variant mb-6 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">park</span> Ligado ao Cedro
+                    </p>
+<div class="mb-6">
+<div class="flex justify-between text-xs text-primary mb-2 font-label-sm font-bold">
+<span>Árvore Frondosa</span>
+<span>100%</span>
+</div>
+<div class="vine-progress bg-primary-container/20">
+<div class="vine-fill bg-gradient-to-r from-primary to-primary-container" style="width: 100%;"></div>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-xl bg-surface-container text-primary font-label-sm text-sm hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">psychiatry</span>
+                        Plantar Nova
+                    </button>
+</div>
+</div>
+</section>
+<!-- Available Trees Section (Gallery) -->
+<section class="mt-section-margin">
+<h2 class="font-headline-lg text-2xl text-primary mb-2">Árvores Disponíveis</h2>
+<p class="text-on-surface-variant font-body-md text-sm mb-8">Veja como suas sementes podem crescer com zelo e missões cumpridas!</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Apple Tree Gallery -->
+<div class="glass-panel rounded-3xl overflow-hidden flex flex-col relative group">
+<div class="h-48 w-full bg-surface-container-low relative overflow-hidden">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOwEACqcn-eVXMOqMcL4uVEoyC9IkSnw7SaYBw19LeWgx4Sg5MRmWD8CNzyyd2DGeR8nxc-gw-km8X0d5FfPFtQUQrbttuadI3-MlfO7JFCtTNP3O219h_K96kZT4rzKeloZ51CWmr_tKhbtlx553BKgfQNGlpb8vMSLeGmvhsE4DJZTlaLLlMI_zW7lbe7aVcTy3Br_Vl4WdHuW41_MHwr30jlxM6bcnKWCo0w-agOKqsffoMtyBL6VBE8KVcO8pc8vV7UsSe4_8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h3 class="font-headline-lg-mobile text-lg text-primary">Macieira</h3>
+<p class="text-xs font-label-sm text-on-surface-variant tracking-wide">CRESCIMENTO DOCE</p>
+</div>
+</div>
+<div class="p-4 flex justify-between items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">1</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">2</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">3</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">4</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-xs font-bold shadow-sm">5</div>
+</div>
+</div>
+<!-- Oak Tree Gallery -->
+<div class="glass-panel rounded-3xl overflow-hidden flex flex-col relative group">
+<div class="h-48 w-full bg-surface-container-low relative overflow-hidden">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMRdeFCrQo2ji8tOaXzOsMtyXNsmOENfZU-xgQuCAKj5WdTyOClEpOVNx-o3dsdNlTrn6PwBXiUBsePPfZ6SaY05OIXYvH7dqhfSw4asykopdyZNDnEFuS3D_uIzjs_NX4iO9Isu2AsehXHHVhMypopGZe6P9_ydOMh0JsJrJnitmhtne6sDYYw5DbclJ6ALGFwOg9drPMBBHlpqyWgnTAoWnBQ5s6oM_6WXM_EdOGArB0nLuJncPel3fZ19tpGBg_5GSnmDNW9Tg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h3 class="font-headline-lg-mobile text-lg text-primary">Carvalho</h3>
+<p class="text-xs font-label-sm text-on-surface-variant tracking-wide">FORÇA ANTIGA</p>
+</div>
+</div>
+<div class="p-4 flex justify-between items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">1</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">2</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">3</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">4</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center text-xs font-bold shadow-sm">5</div>
+</div>
+</div>
+<!-- Cedar Tree Gallery -->
+<div class="glass-panel rounded-3xl overflow-hidden flex flex-col relative group">
+<div class="h-48 w-full bg-surface-container-low relative overflow-hidden">
+<img alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDS4JtmLt6oNOT8-U-3-eVnZpHdFIdB_4EHKB4V6oY79qFFsZa0xpPhdzk6efvrjWG9-ofGcw9DJMNzZsnXSUc9hdQthF1I85QtowmgmBIaXD1igio8UUGCKG7PXgeZYBqJyRn4uFY0-Ea2ib5MtvQ_J0obWS_nBrSrl_M_TuYXMSBioFLFRU4BpUHbt06nbC50znqZ-N44ZVEY3JRWE9tMbxQ3zKgzAQO2Z_mLzQv5fYQ745AYitQFEnblZ66mLnqLD4jp4tLsWvs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h3 class="font-headline-lg-mobile text-lg text-primary">Cedro</h3>
+<p class="text-xs font-label-sm text-on-surface-variant tracking-wide">ALTITUDE MAJESTOSA</p>
+</div>
+</div>
+<div class="p-4 flex justify-between items-center gap-1">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">1</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">2</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">3</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold text-primary">4</div>
+<div class="h-0.5 flex-1 bg-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold shadow-sm">5</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full rounded-t-xl bg-surface-container-low/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(45,90,39,0.08)] z-50 flex justify-around items-center px-4 pt-3 pb-safe md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 mb-2">
+<span class="material-symbols-outlined mb-1">park</span>
+<span class="font-label-sm text-[10px]">Forest</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1.5 transition-all duration-500 mb-2 active:scale-90">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+<span class="font-label-sm text-[10px]">Missions</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 mb-2">
+<span class="material-symbols-outlined mb-1">local_florist</span>
+<span class="font-label-sm text-[10px]">Garden</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 mb-2">
+<span class="material-symbols-outlined mb-1">account_tree</span>
+<span class="font-label-sm text-[10px]">Legacy</span>
+</button>
+</nav>
+<!-- Desktop Side/Top Nav placeholder logic for completeness based on rules -->
+<div class="hidden md:flex fixed top-0 left-0 h-full w-24 flex-col items-center py-20 bg-surface/80 backdrop-blur-xl border-r border-outline-variant/20 gap-8 z-40">
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-2xl mb-1">park</span>
+<span class="font-label-sm text-[10px]">Forest</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl w-16 h-16 transition-all duration-500 shadow-sm active:scale-90">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+<span class="font-label-sm text-[10px]">Missions</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-2xl mb-1">local_florist</span>
+<span class="font-label-sm text-[10px]">Garden</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-2xl mb-1">account_tree</span>
+<span class="font-label-sm text-[10px]">Legacy</span>
+</button>
+</div>
+<!-- Adjust main padding for desktop nav -->
+<style>
+        @media (min-width: 768px) {
+            main {
+                padding-left: 120px;
+            }
+        }
+    </style>
+</body></html>

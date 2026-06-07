@@ -34,6 +34,15 @@ A developer can run the Kreds app locally, view a page that reads family data fr
 - [x] UI — home page with Tailwind styling; async Server Component renders `{families.length} families registered` read from PostgreSQL
 - [x] Deployment — Docker multi-stage build with standalone output, non-root user, K8s-ready
 
+## Execution Plan Map
+
+| Plan | Wave | Depends On | Skeleton Responsibility |
+|---|---:|---|---|
+| 01-01-PLAN.md | 1 | — | Base Next.js scaffold, dependency install gate, health endpoint, families schema stub |
+| 01-02-PLAN.md | 2 | 01-01 | docker-compose PostgreSQL, Drizzle migration generation/application, families API, DB-backed home page |
+| 01-03-PLAN.md | 3 | 01-02 | Vitest/Playwright/Testcontainers infrastructure and Dockerfile delivery proof |
+| 01-04-PLAN.md | 2 | 01-01 | Child privacy inventory and canonical terminology glossary |
+
 ## Out of Scope (Deferred to Later Slices)
 
 - Authentication and ZITADEL OIDC integration (Phase 2)

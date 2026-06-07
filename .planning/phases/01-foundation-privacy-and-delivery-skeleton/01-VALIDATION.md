@@ -38,13 +38,16 @@ created: 2026-06-06
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-T1 | 01-01 | 1 | FND-01 | T-01-01 | Config files created; TypeScript compiles | unit | `npx tsc --noEmit` exits 0 | ❌ W0 | ⬜ pending |
+| 01-01-T1 | 01-01 | 1 | FND-01 | T-01-01 | Base scaffold files created without dependency-dependent commands | file/content | `test -f package.json && grep -q "output: 'standalone'" next.config.ts && grep -q "pgTable('families'" src/lib/db/schema/index.ts` | ❌ W0 | ⬜ pending |
 | 01-01-T2 | 01-01 | 1 | FND-01 | T-01-SC | Human verifies all packages on npmjs.com before install | manual | (blocking human checkpoint) | — | ⬜ pending |
-| 01-01-T3 | 01-01 | 1 | FND-01 | — | pnpm install succeeds; dev server starts; /api/health returns 200 | e2e | `pnpm install && (pnpm dev &) && sleep 8 && curl -sf localhost:3000/api/health \| grep status` | ❌ W0 | ⬜ pending |
-| 01-01-T4 | 01-01 | 1 | FND-02 | — | Migration SQL generated; families table applied; GET /api/families returns []; page renders family count | integration | `ls drizzle/*.sql && curl -sf localhost:3000/api/families` | ❌ W0 | ⬜ pending |
-| 01-02-T1 | 01-02 | 2 | FND-02, FND-03 | — | Test infrastructure files exist; Testcontainers verifies families table queryable post-migration | integration | `ls vitest.config.ts playwright.config.ts tests/integration/db-connection.test.ts && pnpm vitest run tests/integration/db-connection.test.ts` | ❌ W0 | ⬜ pending |
-| 01-02-T2 | 01-02 | 2 | FND-03 | T-01-03, T-01-05 | Docker multi-stage build succeeds with non-root user; docker-compose starts PostgreSQL | ci | `docker build -t kreds:test . && docker-compose up -d` | ❌ W0 | ⬜ pending |
-| 01-03-T1 | 01-03 | 2 | FND-04, FND-05 | T-01-04 | Privacy inventory and glossary docs exist; glossary terms accessible as typed TS constants | unit | `test -f docs/PRIVACY-INVENTORY.md && pnpm vitest run tests/unit/glossary.test.ts` | ❌ W0 | ⬜ pending |
+| 01-01-T3 | 01-01 | 1 | FND-01 | — | pnpm install succeeds; TypeScript runs after dependencies exist; dev server starts; /api/health returns 200 | e2e | `pnpm install && pnpm exec tsc --noEmit && (pnpm dev &) && sleep 8 && curl -sf localhost:3000/api/health \| grep status` | ❌ W0 | ⬜ pending |
+| 01-02-T1 | 01-02 | 2 | FND-01, FND-02 | T-01-02 | docker-compose PostgreSQL exists and is healthy before migration commands run; Drizzle runtime client exists | integration | `docker compose up -d && docker compose ps postgres` | ❌ W0 | ⬜ pending |
+| 01-02-T2 | 01-02 | 2 | FND-02 | T-01-07 | Migration SQL generated and families table applied to PostgreSQL | integration | `pnpm db:generate && pnpm db:migrate && docker exec $(docker compose ps -q postgres) psql -U kreds -d kreds_dev -c '\dt' \| grep families` | ❌ W0 | ⬜ pending |
+| 01-02-T3 | 01-02 | 2 | FND-01 | — | GET /api/families returns []; page renders family count from live DB read | e2e | `curl -sf localhost:3000/api/families && curl -sf localhost:3000 \| grep "families registered"` | ❌ W0 | ⬜ pending |
+| 01-03-T1 | 01-03 | 3 | FND-02 | T-01-08 | Testcontainers verifies families table queryable after applying migration | integration | `pnpm vitest run tests/integration/db-connection.test.ts` | ❌ W0 | ⬜ pending |
+| 01-03-T2 | 01-03 | 3 | FND-03 | T-01-03, T-01-05 | Docker multi-stage build succeeds with non-root user | ci | `docker build -t kreds:test .` | ❌ W0 | ⬜ pending |
+| 01-04-T1 | 01-04 | 2 | FND-04 | T-01-04 | Privacy inventory exists before child data collection | file/content | `test -f docs/PRIVACY-INVENTORY.md && grep -q COPPA docs/PRIVACY-INVENTORY.md` | ❌ W0 | ⬜ pending |
+| 01-04-T2 | 01-04 | 2 | FND-05 | T-01-06 | Glossary terms accessible as typed TS constants and tested | unit | `pnpm vitest run tests/unit/glossary.test.ts` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 

@@ -484,27 +484,27 @@ ZITADEL_ISSUER=https://auth.hasslab.pro
 | A4 | Drizzle Kit 0.31.x supports PostgreSQL 18 | Standard Stack | Low — Drizzle supports PostgreSQL broadly; version-specific issues unlikely |
 | A5 | Testcontainers Node works with Docker Desktop on macOS | Common Pitfalls | Low — Well-documented; macOS support is standard |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should pnpm workspaces be set up in Phase 1 or deferred?**
    - What we know: STACK.md recommends pnpm for "better monorepo ergonomics if app/worker packages split later."
    - What's unclear: Whether the worker package (pg-boss) is needed in Phase 1 or can be deferred.
-   - Recommendation: Start as a single package. Add pnpm workspace structure when the worker package is created (Phase 4+). This avoids unnecessary complexity in Phase 1.
+   - RESOLVED: Start as a single package. Add pnpm workspace structure when the worker package is created (Phase 4+). This avoids unnecessary complexity in Phase 1.
 
 2. **Which foundation database tables should Phase 1 create?**
    - What we know: Phase 2 needs `families`, `members`, `roles` tables. Phase 3 needs ledger tables.
    - What's unclear: Whether Phase 1 should pre-create the schema structure or leave it for Phase 2.
-   - Recommendation: Phase 1 should establish the Drizzle ORM configuration, migration tooling, and a minimal `families` table schema stub. The full schema with relations belongs in Phase 2. This proves the migration pipeline works without building Phase 2's features.
+   - RESOLVED: Phase 1 should establish the Drizzle ORM configuration, migration tooling, and a minimal `families` table schema stub. The full schema with relations belongs in Phase 2. This proves the migration pipeline works without building Phase 2's features.
 
 3. **What PostgreSQL instance should developers use for local development?**
    - What we know: docker-compose.yml can spin up PostgreSQL 18. Testcontainers can do the same for tests.
    - What's unclear: Whether developers should also be able to use a system-installed PostgreSQL.
-   - Recommendation: Document docker-compose as the primary method. Allow system PostgreSQL as an alternative with documented `DATABASE_URL` format.
+   - RESOLVED: Document docker-compose as the primary method. Allow system PostgreSQL as an alternative with documented `DATABASE_URL` format.
 
 4. **Should the health check endpoint return database connectivity status?**
    - What we know: FND-01 requires "PostgreSQL-backed configuration."
    - What's unclear: Whether the health endpoint should verify database connectivity or just return 200 OK.
-   - Recommendation: Phase 1 health endpoint returns 200 OK with app version. Database connectivity check can be added in Phase 2 when actual database operations exist.
+   - RESOLVED: Phase 1 health endpoint returns 200 OK with app version. Database connectivity check can be added in Phase 2 when actual database operations exist.
 
 ## Environment Availability
 
