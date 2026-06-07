@@ -20,6 +20,14 @@ RUN corepack enable pnpm && \
     pnpm build && \
     mkdir -p public
 
+FROM node:${NODE_VERSION} AS migration
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN corepack enable pnpm
+CMD ["pnpm", "db:push"]
+
 FROM node:${NODE_VERSION} AS runner
 WORKDIR /app
 ENV NODE_ENV=production

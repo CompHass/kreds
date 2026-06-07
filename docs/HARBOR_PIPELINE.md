@@ -15,6 +15,7 @@ Published image format:
 
 ```text
 harbor.hasslab.pro/kreds/kreds:<12-char-git-sha>
+harbor.hasslab.pro/kreds/kreds-migrate:<12-char-git-sha>
 ```
 
 The workflow intentionally does not publish `latest`.
@@ -41,6 +42,7 @@ After a successful run, use the printed 12-character tag in the IaC manifests:
 
 ```text
 harbor.hasslab.pro/kreds/kreds:<12-char-git-sha>
+harbor.hasslab.pro/kreds/kreds-migrate:<12-char-git-sha>
 ```
 
 Update both IaC files:
@@ -55,3 +57,5 @@ The workflow scans the built image with Trivy before pushing. It fails on HIGH o
 ## Build-Time Environment
 
 The Docker build uses non-secret placeholder values for environment variables required by Next.js static analysis. Real runtime values are injected by Kubernetes through `kreds-secret` and `kreds-config`.
+
+The app image uses the `runner` Docker target. The migration image uses the `migration` target and keeps the tooling required for `pnpm db:push`.
