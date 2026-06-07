@@ -124,10 +124,9 @@ export const guardianInvitations = pgTable(
   },
   (table) => ({
     familyIdIdx: index('guardian_invitations_family_id_idx').on(table.familyId),
-    uniquePendingInvite: uniqueIndex('unique_pending_invite').on(
-      table.familyId,
-      table.email,
-    ),
+    uniquePendingInvite: uniqueIndex('unique_pending_invite')
+      .on(table.familyId, table.email)
+      .where(sql`${table.status} = 'pending'`),
   }),
 )
 

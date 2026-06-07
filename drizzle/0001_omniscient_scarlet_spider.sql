@@ -90,6 +90,6 @@ CREATE INDEX "family_audit_events_family_id_idx" ON "family_audit_events" USING 
 CREATE INDEX "family_memberships_family_id_idx" ON "family_memberships" USING btree ("family_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "unique_active_guardian" ON "family_memberships" USING btree ("family_id","identity_id");--> statement-breakpoint
 CREATE INDEX "guardian_invitations_family_id_idx" ON "guardian_invitations" USING btree ("family_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "unique_pending_invite" ON "guardian_invitations" USING btree ("family_id","email");--> statement-breakpoint
+CREATE UNIQUE INDEX "unique_pending_invite" ON "guardian_invitations" USING btree ("family_id","email") WHERE status = 'pending';--> statement-breakpoint
 CREATE INDEX "parental_consents_family_id_idx" ON "parental_consents" USING btree ("family_id");--> statement-breakpoint
 ALTER TABLE "families" ADD CONSTRAINT "families_created_by_identity_id_kreds_identities_id_fk" FOREIGN KEY ("created_by_identity_id") REFERENCES "public"."kreds_identities"("id") ON DELETE no action ON UPDATE no action;
