@@ -13,9 +13,12 @@ This document catalogs all categories of child data that will be collected in fu
 | Data Category | Collected In | Requirement | Purpose | Legal Basis | Retention |
 |---------------|-------------|-------------|---------|-------------|-----------|
 | Child display name | Phase 2 | FAM-03 | Profile identification | Parental consent (parent creates profile) | Until family account deleted |
+| Child age in years | Phase 2 | FAM-03 | Age-appropriate UI and content filtering. Full date of birth is NOT collected (D-09). | Parental consent | Until family account deleted |
 | Child role assignment | Phase 2 | FAM-04 | Authorization and UI gating | Parental consent | Until family account deleted |
 | Child avatar / visual identifier | Phase 2 | FAM-06 | Profile customization and visual recognition | Parental consent | Until changed or account deleted |
 | Family membership | Phase 2 | FAM-01 | Tenancy and data isolation by family_id | Parental consent | Until family deleted |
+| Parental consent record | Phase 2 | FAM-03 | Auditable evidence of explicit guardian consent for child profile creation (D-02) | Legal obligation (COPPA) | Retained for audit — duration of family account + 30 days |
+| Identity link (optional future) | Phase 2 (nullable) | FAM-06 | Future optional child ZITADEL identity link. NULL in v1 — no child login (D-10). | Parental consent (future) | Until identity linked or family deleted |
 | Task completion records | Phase 5 | ACT-04 | Earnings tracking and accountability | Parental consent (parent approves) | Retained for audit and history |
 | Earnings and balance data | Phase 3 | LEDG-01 | Financial stewardship tracking | Parental consent | Retained for audit and history |
 | Firstfruits Treasury records | Phase 3 | LEDG-04 | Tracking of mandatory tithe withholdings | Parental consent | Retained for audit |
@@ -43,8 +46,9 @@ In Kreds v1, children are not independent account holders. Instead:
 1. A parent/guardian authenticates through ZITADEL OIDC (Phase 2).
 2. The parent creates a family account and child profiles within that family.
 3. All child data is managed under the parent's authenticated session.
-4. Parental consent is established through the parent's deliberate action of creating a child profile and configuring family settings.
+4. Parental consent is established through an explicit checkbox confirmation that the guardian attests to being the parent or legal guardian of the child. This consent is recorded as an auditable event in the `parental_consents` table alongside the child profile creation transaction (D-02, D-13).
 5. No child-facing registration flow exists — children cannot self-register or create accounts.
+6. A future optional `identity_id` column on child profiles is nullable, preparing for optional child ZITADEL identity linkage without enabling child login in v1 (D-10).
 
 This model means:
 - Parents explicitly opt in to each data category by using the relevant feature.
@@ -55,7 +59,8 @@ This model means:
 
 | Data Category | Retention Period | Deletion Mechanism |
 |---------------|-----------------|-------------------|
-| Display name, role, avatar | Duration of family account + 30 days grace | Cascade on family deletion |
+| Display name, role, avatar, age in years | Duration of family account + 30 days grace | Cascade on family deletion |
+| Parental consent records | Duration of family account + 30 days grace | Cascade on family deletion |
 | Task completion records | Duration of family account | Cascade on family deletion |
 | Earnings, balances, ledger transactions | Retained for audit (append-only) | Never deleted — correction entries only |
 | Firstfruits Treasury records | Retained for audit | Never deleted — append-only |
