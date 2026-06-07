@@ -8,22 +8,17 @@ FROM node:${NODE_VERSION} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ARG DATABASE_URL=postgresql://kreds:kreds@localhost:5432/kreds
-ARG AUTH_SECRET=build-time-placeholder-secret
-ARG AUTH_ZITADEL_ID=build-time-placeholder-client-id
-ARG AUTH_ZITADEL_SECRET=build-time-placeholder-client-secret
-ARG AUTH_ZITADEL_ISSUER=https://auth.hasslab.pro
-ARG ZITADEL_ISSUER=https://auth.hasslab.pro
-ARG NEXT_PUBLIC_APP_URL=https://kreds.hasslab.pro
 ENV NODE_ENV=production
-ENV DATABASE_URL=${DATABASE_URL}
-ENV AUTH_SECRET=${AUTH_SECRET}
-ENV AUTH_ZITADEL_ID=${AUTH_ZITADEL_ID}
-ENV AUTH_ZITADEL_SECRET=${AUTH_ZITADEL_SECRET}
-ENV AUTH_ZITADEL_ISSUER=${AUTH_ZITADEL_ISSUER}
-ENV ZITADEL_ISSUER=${ZITADEL_ISSUER}
-ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
-RUN corepack enable pnpm && pnpm build
+RUN corepack enable pnpm && \
+    DATABASE_URL=postgresql://kreds:kreds@localhost:5432/kreds \
+    AUTH_SECRET=build-time-placeholder-secret \
+    AUTH_ZITADEL_ID=build-time-placeholder-client-id \
+    AUTH_ZITADEL_SECRET=build-time-placeholder-client-secret \
+    AUTH_ZITADEL_ISSUER=https://auth.hasslab.pro \
+    ZITADEL_ISSUER=https://auth.hasslab.pro \
+    NEXT_PUBLIC_APP_URL=https://kreds.hasslab.pro \
+    pnpm build && \
+    mkdir -p public
 
 FROM node:${NODE_VERSION} AS runner
 WORKDIR /app
