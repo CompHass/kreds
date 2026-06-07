@@ -1,15 +1,6 @@
 import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getChildLedgerHistory } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
-
-type ChildHistoryPageProps = {
-  params: Promise<{ childId: string }>
-}
-
-function formatKreds(amount: number) {
-  return `${amount} Kreds`
-}
-
 import Link from 'next/link'
 
 type ChildHistoryPageProps = {
