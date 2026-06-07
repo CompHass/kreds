@@ -45,7 +45,7 @@ function formatNote(row: { transactionType: string; note: string | null }) {
 
 function translateTransactionType(type: string): string {
   const types: Record<string, string> = {
-    earning: 'Ganho',
+    task_earning: 'Ganho',
     negative_adjustment: 'Ajuste Negativo',
     reversal: 'Estorno',
     firstfruits_withholding: 'Reserva de Primícias',

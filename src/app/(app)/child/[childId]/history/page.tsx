@@ -23,11 +23,11 @@ function getChildLabel(row: Awaited<ReturnType<typeof getChildLedgerHistory>>[nu
     return 'Correção aplicada'
   }
 
-  if (row.transactionType === 'earning' && row.accountType === 'available') {
+  if (row.transactionType === 'task_earning' && row.accountType === 'available') {
     return `Você ganhou ${row.amount} Kreds`
   }
 
-  if (row.transactionType === 'earning' && row.accountType === 'firstfruits') {
+  if (row.transactionType === 'task_earning' && row.accountType === 'firstfruits') {
     return `${row.amount} Kreds foram reservados para suas Primícias`
   }
 
