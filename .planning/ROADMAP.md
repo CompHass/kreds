@@ -14,7 +14,7 @@ Kreds v1 moves from a privacy-safe delivery skeleton into family tenancy, a trus
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation, Privacy, and Delivery Skeleton** - Developers and maintainers can run, test, package, and review Kreds before child data exists.
-- [ ] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created through ZITADEL-backed authentication with isolated memberships, guardians, children, roles, avatars, and identity audit history.
+- [x] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created through ZITADEL-backed authentication with isolated memberships, guardians, children, roles, avatars, and identity audit history. (completed 2026-06-07)
 - [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules.
 - [ ] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved.
 - [ ] **Phase 5: Task Completion, Approval, and Earnings Slice** - Children complete tasks, parents approve them, and approved work posts Kreds earnings with visible status and history.
@@ -93,7 +93,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 02-07-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
+- [x] 02-07-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
 
 **UI hint**: yes
 
@@ -234,7 +234,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ✅ Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 6/7 | In Progress|  |
+| 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete   | 2026-06-07 |
 | 3. Kreds Engine Ledger and Audit Foundation | 0/4 | Planned | - |
 | 4. Weekly Task Templates and Activity Cycles | 0/TBD | Not started | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
