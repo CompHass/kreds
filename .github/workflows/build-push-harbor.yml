@@ -54,7 +54,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Scan image
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ steps.meta.outputs.image }}
           format: sarif
