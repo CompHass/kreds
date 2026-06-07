@@ -71,9 +71,17 @@ export default async function InvitationsPage() {
   const membership = memberships[0]
   const familyId = membership.familyId
 
-  // Fetch existing invitations for this family
+  // Fetch existing invitations for this family — explicit column selection excludes token_hash (WR-05)
   const invitations = await db
-    .select()
+    .select({
+      id: schema.guardianInvitations.id,
+      email: schema.guardianInvitations.email,
+      status: schema.guardianInvitations.status,
+      invitedByIdentityId: schema.guardianInvitations.invitedByIdentityId,
+      acceptedByIdentityId: schema.guardianInvitations.acceptedByIdentityId,
+      expiresAt: schema.guardianInvitations.expiresAt,
+      createdAt: schema.guardianInvitations.createdAt,
+    })
     .from(schema.guardianInvitations)
     .where(eq(schema.guardianInvitations.familyId, familyId))
     .orderBy(desc(schema.guardianInvitations.createdAt))
