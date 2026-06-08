@@ -149,7 +149,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 0** *(TDD — função pura getCycleForDate e schema Zod, testes RED-GREEN)*
 
-- [ ] 04-01-PLAN.md — getCycleForDate pure function (ACT-02) + taskTemplateSchema Zod (ACT-01) com ciclo TDD completo
+- [x] 04-01-PLAN.md — getCycleForDate pure function (ACT-02) + taskTemplateSchema Zod (ACT-01) com ciclo TDD completo
 
 **Wave 1** *(bloqueado pela Wave 0)*
 
@@ -254,7 +254,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
 | 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
-| 4. Weekly Task Templates and Activity Cycles | 0/3 | Planned | - |
+| 4. Weekly Task Templates and Activity Cycles | 1/3 | In Progress|  |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
 | 7. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
