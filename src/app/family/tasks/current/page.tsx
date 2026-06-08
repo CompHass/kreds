@@ -5,21 +5,12 @@ import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
-import { getActiveTasksForFamily } from '@/lib/db/tasks/queries'
 import { getCycleForDate } from '@/modules/activity/cycle'
+import { getActiveTasksForFamily } from '@/lib/db/tasks/queries'
 
 export const dynamic = 'force-dynamic'
 
-/**
- * FamilyTasksCurrentPage — SSR server component showing the current cycle's active tasks.
- *
- * - Computes current Sunday-Saturday cycle using getCycleForDate (D-03, D-04, D-05)
- * - Shows only active tasks for active children
- * - Exports getCycleForDate for Phase 5 consumption (D-05)
- *
- * Auth: redirects to /api/auth/signin if unauthenticated, /family/onboarding if no family.
- */
-export default async function FamilyTasksCurrentPage() {
+export default async function FamilyCurrentCyclePage() {
   const session = await auth()
 
   let identity
@@ -52,44 +43,54 @@ export default async function FamilyTasksCurrentPage() {
 
   const familyId = membership.familyId
 
-  // Get family timezone for cycle computation (D-03, D-04)
+  // T-04-10: timezone is read from DB (server-side), never from the client request
   const [family] = await db
     .select({ timezone: schema.families.timezone })
     .from(schema.families)
     .where(eq(schema.families.id, familyId))
     .limit(1)
 
-  const timezone = family?.timezone ?? 'America/Sao_Paulo'
+  const timezone = family?.timezone ?? 'UTC'
+
+  // D-03: cycles computed dynamically via pure function — no activity_cycle table
+  // D-04: Sunday is always Day 0
   const { cycleStart, cycleEnd } = getCycleForDate(new Date(), timezone)
 
-  // Format cycle boundaries for display in the family timezone
-  const formatDate = (d: Date) =>
+  // T-04-11: getActiveTasksForFamily always filters by familyId from session
+  const tasks = await getActiveTasksForFamily(familyId)
+
+  // T-04-12: format dates with Intl using family timezone — never .toLocaleDateString() alone
+  const formatCycleDate = (d: Date) =>
     new Intl.DateTimeFormat('pt-BR', {
       timeZone: timezone,
       weekday: 'long',
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric',
     }).format(d)
 
-  const tasks = await getActiveTasksForFamily(familyId)
-
   // Group tasks by child
-  const tasksByChild = tasks.reduce<Record<string, typeof tasks>>(
-    (acc, task) => {
-      const key = task.assignedChildId
-      if (!acc[key]) acc[key] = []
-      acc[key].push(task)
-      return acc
-    },
-    {},
-  )
+  const grouped = tasks.reduce<
+    Record<string, { childName: string; childAvatarPreset: string; tasks: typeof tasks }>
+  >((acc, task) => {
+    const key = task.assignedChildId
+    if (!acc[key]) {
+      acc[key] = {
+        childName: task.childName,
+        childAvatarPreset: task.childAvatarPreset,
+        tasks: [],
+      }
+    }
+    acc[key].tasks.push(task)
+    return acc
+  }, {})
+
+  const childGroups = Object.entries(grouped)
 
   return (
     <main style={{
       minHeight: '100vh',
       padding: '32px 24px 64px',
-      maxWidth: '520px',
+      maxWidth: '560px',
       margin: '0 auto',
     }}>
       {/* Header */}
@@ -107,11 +108,11 @@ export default async function FamilyTasksCurrentPage() {
             display: 'grid',
             placeItems: 'center',
             fontSize: '24px',
-            background: 'radial-gradient(circle, #e8f5e9, #3b6934 58%, #154212)',
+            background: 'radial-gradient(circle, #c3f3d8, #3b6934 58%, #154212)',
             boxShadow: '0 8px 20px rgba(59,105,52,.2)',
             flexShrink: 0,
           }}>
-            🗓
+            🌿
           </div>
           <div>
             <h1 style={{
@@ -122,14 +123,15 @@ export default async function FamilyTasksCurrentPage() {
               color: 'var(--color-primary, #154212)',
               margin: 0,
             }}>
-              Ciclo Atual
+              Semana atual
             </h1>
             <p style={{
               fontSize: '0.8125rem',
               color: 'var(--color-text-soft, #72796e)',
               margin: 0,
             }}>
-              {formatDate(cycleStart)} — {formatDate(cycleEnd)}
+              {/* T-04-10: always formatted with family timezone, never UTC raw */}
+              De {formatCycleDate(cycleStart)} a {formatCycleDate(cycleEnd)}
             </p>
           </div>
         </div>
@@ -145,65 +147,115 @@ export default async function FamilyTasksCurrentPage() {
             border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
           }}
         >
-          Todas as tarefas
+          Voltar para tarefas
         </Link>
       </div>
 
-      {/* Task list grouped by child */}
-      {Object.keys(tasksByChild).length === 0 ? (
+      {/* Empty state */}
+      {tasks.length === 0 ? (
         <div style={{
-          textAlign: 'center',
-          padding: '32px 24px',
           background: 'var(--color-card, rgba(255,255,255,0.64))',
-          borderRadius: '20px',
           border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+          borderRadius: '20px',
+          padding: '32px 24px',
+          textAlign: 'center',
         }}>
           <p style={{
-            fontSize: '0.95rem',
-            color: 'var(--color-text-soft, #72796e)',
-            margin: '0 0 16px',
+            fontSize: '1.5rem',
+            margin: '0 0 12px',
           }}>
-            Nenhuma tarefa ativa para esta semana.
+            🌱
+          </p>
+          <p style={{
+            fontSize: '0.9375rem',
+            color: 'var(--color-primary, #154212)',
+            fontWeight: 600,
+            margin: '0 0 8px',
+          }}>
+            Nenhuma tarefa ativa esta semana
+          </p>
+          <p style={{
+            fontSize: '0.8125rem',
+            color: 'var(--color-text-soft, #72796e)',
+            margin: '0 0 20px',
+          }}>
+            Adicione responsabilidades para seus filhos cultivarem bons hábitos.
           </p>
           <Link
             href="/family/tasks"
             style={{
-              fontSize: '0.875rem',
-              color: 'var(--color-primary, #154212)',
-              fontWeight: 600,
+              display: 'inline-flex',
+              padding: '10px 20px',
+              borderRadius: '99px',
+              background: 'linear-gradient(135deg, #3b6934, #154212)',
+              color: '#fff',
               textDecoration: 'none',
+              fontWeight: 700,
+              fontSize: '0.875rem',
             }}
           >
-            Criar tarefas
+            Adicionar tarefas
           </Link>
         </div>
       ) : (
-        Object.entries(tasksByChild).map(([, childTasks]) => {
-          const childName = 'childName' in childTasks[0] ? childTasks[0].childName : 'Filho'
-          return (
-            <div key={childTasks[0].assignedChildId} style={{ marginBottom: '24px' }}>
-              <p style={{
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                color: 'var(--color-text-muted, #42493e)',
-                margin: '0 0 8px',
+        // Tasks grouped by child
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {childGroups.map(([childId, group]) => (
+            <section key={childId}>
+              {/* Child header */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '12px',
               }}>
-                {childName} ({childTasks.length} {childTasks.length === 1 ? 'tarefa' : 'tarefas'})
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {childTasks.map((task) => (
-                  <div
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #3b6934, #154212)',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '18px',
+                  color: '#fff',
+                  fontWeight: 700,
+                  flexShrink: 0,
+                }}>
+                  {group.childName.charAt(0).toUpperCase()}
+                </div>
+                <h2 style={{
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  color: 'var(--color-primary, #154212)',
+                  margin: 0,
+                }}>
+                  {group.childName}
+                </h2>
+                <span style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--color-text-soft, #72796e)',
+                  background: 'rgba(45,90,39,0.08)',
+                  padding: '2px 8px',
+                  borderRadius: '99px',
+                }}>
+                  {group.tasks.length} {group.tasks.length === 1 ? 'tarefa' : 'tarefas'}
+                </span>
+              </div>
+
+              {/* Task list for this child */}
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {group.tasks.map((task) => (
+                  <li
                     key={task.id}
                     style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
                       padding: '14px 18px',
                       background: 'var(--color-card, rgba(255,255,255,0.64))',
                       border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-                      borderRadius: '16px',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+                      borderRadius: '14px',
+                      boxShadow: '0 2px 8px rgba(45,90,39,0.04)',
                     }}
                   >
                     <div>
@@ -215,53 +267,57 @@ export default async function FamilyTasksCurrentPage() {
                       }}>
                         {task.title}
                       </p>
-                      {'description' in task && task.description && (
+                      {task.description && (
                         <p style={{
-                          fontSize: '0.8125rem',
+                          fontSize: '0.75rem',
                           color: 'var(--color-text-soft, #72796e)',
-                          margin: 0,
+                          margin: '0 0 2px',
                         }}>
                           {task.description}
                         </p>
                       )}
                     </div>
-                    <span style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 700,
-                      color: 'var(--color-success, #3b6934)',
-                      background: 'rgba(59,105,52,0.08)',
-                      borderRadius: '99px',
-                      padding: '4px 12px',
-                      whiteSpace: 'nowrap',
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      flexShrink: 0,
+                      marginLeft: '12px',
                     }}>
-                      {task.kredsValue} Kreds
-                    </span>
-                  </div>
+                      <span style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 700,
+                        color: 'var(--color-gold, #d2a501)',
+                        background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
+                        border: '1px solid rgba(210,165,1,0.2)',
+                        borderRadius: '99px',
+                        padding: '4px 10px',
+                        whiteSpace: 'nowrap',
+                      }}>
+                        {task.kredsValue} Kreds
+                      </span>
+                    </div>
+                  </li>
                 ))}
-              </div>
-            </div>
-          )
-        })
+              </ul>
+            </section>
+          ))}
+        </div>
       )}
 
-      {/* Biblical verse */}
-      <div style={{
-        marginTop: '32px',
-        padding: '20px 24px',
-        background: 'rgba(210,165,1,0.06)',
-        borderRadius: '16px',
-        borderLeft: '3px solid rgba(210,165,1,0.4)',
-      }}>
-        <p style={{
-          fontSize: '0.875rem',
-          color: 'var(--color-text-soft, #72796e)',
-          fontStyle: 'italic',
-          margin: 0,
-          lineHeight: 1.6,
-        }}>
-          &ldquo;E tudo o que fizerdes, fazei-o de todo o coração, como ao Senhor, e não aos
-          homens.&rdquo; — Colossenses 3:23
-        </p>
+      {/* Back link */}
+      <div style={{ marginTop: '32px', textAlign: 'center' }}>
+        <Link
+          href="/family/tasks"
+          style={{
+            fontSize: '0.8125rem',
+            color: 'var(--color-text-soft, #72796e)',
+            textDecoration: 'none',
+          }}
+        >
+          Gerenciar lista de tarefas
+        </Link>
       </div>
     </main>
   )
