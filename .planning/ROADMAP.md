@@ -153,7 +153,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1** *(bloqueado pela Wave 0)*
 
-- [ ] 04-02-PLAN.md — Schema Drizzle task_templates + migration + CRUD API (GET/POST) + página guardian /family/tasks
+- [x] 04-02-PLAN.md — Schema Drizzle task_templates + migration + CRUD API (GET/POST) + página guardian /family/tasks
 
 **Wave 2** *(bloqueado pela Wave 1)*
 
@@ -254,7 +254,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
 | 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
-| 4. Weekly Task Templates and Activity Cycles | 1/3 | In Progress|  |
+| 4. Weekly Task Templates and Activity Cycles | 2/3 | In Progress|  |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
 | 7. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
