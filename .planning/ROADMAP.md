@@ -18,10 +18,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules. (4/4 plans complete; ready for verification)
 - [x] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved. (completed 2026-06-08)
 - [ ] **Phase 5: Task Completion, Approval, and Earnings Slice** - Children complete tasks, parents approve them, and approved work posts Kreds earnings with visible status and history.
-- [ ] **Phase 6: Wishlist Goals and Progress** - Children can set wishlist goals and move available Kreds toward visible goal progress.
-- [ ] **Phase 7: Kreds do Bem Giving and Matching** - Families can record internal giving allocations with parent-approved targets, matching, and ledger-backed history.
-- [ ] **Phase 8: Biblical Content and Weekly Gratitude Reports** - Families receive immutable weekly reports with curated scripture and reflection prompts tied to stewardship activity.
-- [ ] **Phase 9: PWA Hardening and Child Experience Polish** - Parent and child flows are installable, responsive, accessible, safe on shared devices, and encouraging in tone.
+- [ ] **Phase 6: Dynamic Stewardship Garden** - The family dashboard renders an empty garden when no missions exist and grows task-linked plants by weekly progress stage.
+- [ ] **Phase 7: Wishlist Goals and Progress** - Children can set wishlist goals and move available Kreds toward visible goal progress.
+- [ ] **Phase 8: Kreds do Bem Giving and Matching** - Families can record internal giving allocations with parent-approved targets, matching, and ledger-backed history.
+- [ ] **Phase 9: Biblical Content and Weekly Gratitude Reports** - Families receive immutable weekly reports with curated scripture and reflection prompts tied to stewardship activity.
+- [ ] **Phase 10: PWA Hardening and Child Experience Polish** - Parent and child flows are installable, responsive, accessible, safe on shared devices, and encouraging in tone.
 
 ## Phase Details
 
@@ -184,11 +185,28 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 6: Wishlist Goals and Progress
+### Phase 6: Dynamic Stewardship Garden
+
+**Goal**: Families can see the current stewardship garden reflect real mission state: an empty plot when no missions exist, and planted growth stages tied to task progress when missions are active.
+**Mode:** mvp
+**Depends on**: Phase 5
+**Requirements**: GARD-01, GARD-02, GARD-03, GARD-04, GARD-05
+**Success Criteria** (what must be TRUE):
+
+  1. Family dashboard shows an empty isometric garden base when the family has no active missions.
+  2. Family dashboard renders task-linked plants on top of the empty garden base when active missions exist.
+  3. Each rendered plant uses the configured plant template and growth-stage asset that matches the task's current weekly progress.
+  4. Garden composition remains responsive and visually coherent on mobile and desktop without relying on a single pre-composed full-garden image.
+  5. Empty, partial, and completed mission states are covered by automated tests or documented visual verification evidence.
+
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 7: Wishlist Goals and Progress
 
 **Goal**: Children can direct available Kreds toward personal wishlist goals and see progress grow.
 **Mode:** mvp
-**Depends on**: Phase 5
+**Depends on**: Phase 6
 **Requirements**: GOAL-01, GOAL-02
 **Success Criteria** (what must be TRUE):
 
@@ -199,11 +217,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 7: Kreds do Bem Giving and Matching
+### Phase 8: Kreds do Bem Giving and Matching
 
 **Goal**: Families can practice generosity through parent-approved internal giving allocations with transparent matching and history.
 **Mode:** mvp
-**Depends on**: Phase 6
+**Depends on**: Phase 7
 **Requirements**: GOAL-03, GOAL-04, GOAL-05, GOAL-06, GOAL-07
 **Success Criteria** (what must be TRUE):
 
@@ -216,11 +234,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 8: Biblical Content and Weekly Gratitude Reports
+### Phase 9: Biblical Content and Weekly Gratitude Reports
 
 **Goal**: Families can reflect on weekly stewardship with curated scripture prompts and immutable gratitude report snapshots.
 **Mode:** mvp
-**Depends on**: Phase 7
+**Depends on**: Phase 8
 **Requirements**: BIBL-01, BIBL-02, BIBL-03, BIBL-04, BIBL-05, BIBL-06
 **Success Criteria** (what must be TRUE):
 
@@ -233,11 +251,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 9: PWA Hardening and Child Experience Polish
+### Phase 10: PWA Hardening and Child Experience Polish
 
 **Goal**: Parents and children can use Kreds safely and comfortably across mobile and desktop browsers, including shared-device scenarios.
 **Mode:** mvp
-**Depends on**: Phase 8
+**Depends on**: Phase 9
 **Requirements**: PWA-01, PWA-02, PWA-03, PWA-04, PWA-05, PWA-06
 **Success Criteria** (what must be TRUE):
 
@@ -253,7 +271,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -262,7 +280,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
 | 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
-| 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
-| 7. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
-| 8. Biblical Content and Weekly Gratitude Reports | 0/TBD | Not started | - |
-| 9. PWA Hardening and Child Experience Polish | 0/TBD | Not started | - |
+| 6. Dynamic Stewardship Garden | 0/TBD | Not started | - |
+| 7. Wishlist Goals and Progress | 0/TBD | Not started | - |
+| 8. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
+| 9. Biblical Content and Weekly Gratitude Reports | 0/TBD | Not started | - |
+| 10. PWA Hardening and Child Experience Polish | 0/TBD | Not started | - |

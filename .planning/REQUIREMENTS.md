@@ -48,6 +48,14 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **ACT-08**: Parent can view pending approvals across children.
 - [ ] **ACT-09**: Child can view current weekly tasks, submitted completions, approvals, and earned Kreds.
 
+### Dynamic Garden
+
+- [ ] **GARD-01**: Family dashboard shows an empty isometric garden base when no active missions exist.
+- [ ] **GARD-02**: Family dashboard places active missions into stable garden slots instead of using a single pre-composed full-garden image.
+- [ ] **GARD-03**: Each active mission renders the plant template and growth-stage asset that matches current weekly task progress.
+- [ ] **GARD-04**: Garden rendering remains responsive and visually coherent on mobile and desktop.
+- [ ] **GARD-05**: Empty, partial-progress, and completed mission garden states have automated tests or documented visual verification evidence.
+
 ### Goals And Generosity
 
 - [ ] **GOAL-01**: Child can create wishlist goals with target amount and progress indicator.
@@ -152,33 +160,38 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACT-07 | Phase 5 | Pending |
 | ACT-08 | Phase 5 | Pending |
 | ACT-09 | Phase 5 | Pending |
-| GOAL-01 | Phase 6 | Pending |
-| GOAL-02 | Phase 6 | Pending |
-| GOAL-03 | Phase 7 | Pending |
-| GOAL-04 | Phase 7 | Pending |
-| GOAL-05 | Phase 7 | Pending |
-| GOAL-06 | Phase 7 | Pending |
-| GOAL-07 | Phase 7 | Pending |
-| BIBL-01 | Phase 8 | Pending |
-| BIBL-02 | Phase 8 | Pending |
-| BIBL-03 | Phase 8 | Pending |
-| BIBL-04 | Phase 8 | Pending |
-| BIBL-05 | Phase 8 | Pending |
-| BIBL-06 | Phase 8 | Pending |
-| PWA-01 | Phase 9 | Pending |
-| PWA-02 | Phase 9 | Pending |
-| PWA-03 | Phase 9 | Pending |
-| PWA-04 | Phase 9 | Pending |
-| PWA-05 | Phase 9 | Pending |
-| PWA-06 | Phase 9 | Pending |
+| GARD-01 | Phase 6 | Pending |
+| GARD-02 | Phase 6 | Pending |
+| GARD-03 | Phase 6 | Pending |
+| GARD-04 | Phase 6 | Pending |
+| GARD-05 | Phase 6 | Pending |
+| GOAL-01 | Phase 7 | Pending |
+| GOAL-02 | Phase 7 | Pending |
+| GOAL-03 | Phase 8 | Pending |
+| GOAL-04 | Phase 8 | Pending |
+| GOAL-05 | Phase 8 | Pending |
+| GOAL-06 | Phase 8 | Pending |
+| GOAL-07 | Phase 8 | Pending |
+| BIBL-01 | Phase 9 | Pending |
+| BIBL-02 | Phase 9 | Pending |
+| BIBL-03 | Phase 9 | Pending |
+| BIBL-04 | Phase 9 | Pending |
+| BIBL-05 | Phase 9 | Pending |
+| BIBL-06 | Phase 9 | Pending |
+| PWA-01 | Phase 10 | Pending |
+| PWA-02 | Phase 10 | Pending |
+| PWA-03 | Phase 10 | Pending |
+| PWA-04 | Phase 10 | Pending |
+| PWA-05 | Phase 10 | Pending |
+| PWA-06 | Phase 10 | Pending |
 
 **Coverage:**
 
-- v1 requirements: 48 total
-- Mapped to phases: 48
+- v1 requirements: 53 total
+- Mapped to phases: 53
 - Unmapped: 0
 - Duplicate mappings: 0
 
 ---
 *Requirements defined: 2026-06-04*
-*Last updated: 2026-06-05 after selecting ZITADEL authentication*
+*Last updated: 2026-06-08 after adding Dynamic Stewardship Garden requirements*

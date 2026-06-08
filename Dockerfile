@@ -16,6 +16,7 @@ RUN corepack enable pnpm && \
     AUTH_ZITADEL_SECRET=build-time-placeholder-client-secret \
     AUTH_ZITADEL_ISSUER=https://auth.hasslab.pro \
     ZITADEL_ISSUER=https://auth.hasslab.pro \
+    CHILD_SESSION_SECRET=build-time-placeholder-child-session-secret \
     NEXT_PUBLIC_APP_URL=https://kreds.hasslab.pro \
     pnpm build && \
     mkdir -p public
