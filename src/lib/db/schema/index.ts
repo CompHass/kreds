@@ -203,3 +203,27 @@ export const taskTemplates = pgTable(
 )
 
 export * from './ledger'
+
+// Wishlist goals — child savings targets (GOAL-01, GOAL-02)
+export const wishlistGoalStatusEnum = pgEnum('wishlist_goal_status', ['active', 'achieved', 'archived'])
+
+export const wishlistGoals = pgTable(
+  'wishlist_goals',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    familyId: uuid('family_id').notNull().references(() => families.id),
+    childProfileId: uuid('child_profile_id').notNull().references(() => childProfiles.id),
+    title: text('title').notNull(),
+    targetAmount: integer('target_amount').notNull(),
+    allocatedAmount: integer('allocated_amount').notNull().default(0),
+    status: wishlistGoalStatusEnum('status').notNull().default('active'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    childIdIdx: index('wishlist_goals_child_profile_id_idx').on(table.childProfileId),
+    familyIdIdx: index('wishlist_goals_family_id_idx').on(table.familyId),
+    targetAmountCheck: check('target_amount_positive', sql`${table.targetAmount} > 0`),
+    allocatedAmountCheck: check('allocated_non_negative', sql`${table.allocatedAmount} >= 0`),
+  }),
+)

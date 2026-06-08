@@ -304,7 +304,22 @@ export default async function FamilyChildrenPage({
                       fontWeight: 600,
                     }}
                   >
-                    Saldo (Criança)
+                    Sonhos
+                  </Link>
+                  <Link
+                    href={`/family/children/${child.id}/set-pin`}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: '#0369a1',
+                      background: 'rgba(3,105,161,0.08)',
+                      border: '1px solid rgba(3,105,161,0.2)',
+                      borderRadius: '99px',
+                      padding: '4px 10px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    PIN
                   </Link>
                   <form action={deactivateChildAction}>
                     <input type="hidden" name="childProfileId" value={child.id} />

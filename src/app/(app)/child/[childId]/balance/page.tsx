@@ -1,12 +1,13 @@
 import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
+import { listGoals } from '@/modules/goals/queries'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import GoalCard from './GoalCard'
 
 type ChildBalancePageProps = {
   params: Promise<{ childId: string }>
 }
-
 
 export default async function ChildBalancePage({ params }: ChildBalancePageProps) {
   const { childId } = await params
@@ -20,12 +21,15 @@ export default async function ChildBalancePage({ params }: ChildBalancePageProps
     redirect('/api/auth/signin')
   }
 
-  const [available, firstfruits] = await Promise.all([
+  const [available, firstfruits, goals] = await Promise.all([
     getBalance(childId, 'available'),
     getBalance(childId, 'firstfruits'),
+    listGoals(childId, familyId),
   ])
 
   const totalSaved = available + firstfruits
+  const activeGoals = goals.filter((g) => g.status === 'active')
+  const achievedGoals = goals.filter((g) => g.status === 'achieved')
 
   return (
     <>
@@ -66,7 +70,7 @@ export default async function ChildBalancePage({ params }: ChildBalancePageProps
           fontWeight: 700,
           color: '#154212',
         }}>
-          Sylvan Growth
+          Kreds
         </h1>
         <Link
           href="/family/dashboard"
@@ -86,7 +90,7 @@ export default async function ChildBalancePage({ params }: ChildBalancePageProps
         </Link>
       </header>
 
-      {/* Atmospheric background decorations */}
+      {/* Atmospheric background */}
       <div style={{
         position: 'fixed',
         zIndex: -1,
@@ -203,75 +207,112 @@ export default async function ChildBalancePage({ params }: ChildBalancePageProps
               </span>
             </h3>
           </div>
+          {available !== totalSaved && (
+            <p style={{ margin: '12px 0 0', fontSize: '13px', color: '#72796e' }}>
+              {available} disponível · {firstfruits} primícias
+            </p>
+          )}
         </div>
 
         {/* Goals Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          gap: '16px',
-          marginBottom: '40px',
-        }}>
-          {/* Empty state — wishlist goals not yet implemented */}
-          <div style={{
-            background: 'rgba(255,255,255,0.4)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '0.5px solid rgba(45,90,39,0.1)',
-            boxShadow: '0 8px 32px rgba(45,90,39,0.05)',
-            borderRadius: '28px',
-            padding: '40px 24px',
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '12px' }}>🌱</div>
-            <p style={{ margin: '0 0 4px', fontSize: '17px', fontWeight: 700, color: '#2d5a27' }}>
-              Nenhum sonho plantado ainda
-            </p>
-            <p style={{ margin: 0, fontSize: '14px', color: '#72796e' }}>
-              Plante seu primeiro sonho abaixo!
-            </p>
-          </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }}>
 
-          {/* Plant New Dream button */}
-          <button style={{
-            width: '100%',
-            minHeight: '160px',
-            borderRadius: '28px',
-            border: '2px dashed rgba(161,212,148,0.6)',
-            background: 'rgba(255,255,255,0.3)',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px',
-          }}>
+          {activeGoals.length === 0 && achievedGoals.length === 0 ? (
             <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '9999px',
-              background: 'rgba(202,236,125,0.5)',
+              background: 'rgba(255,255,255,0.4)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '0.5px solid rgba(45,90,39,0.1)',
+              borderRadius: '28px',
+              padding: '40px 24px',
+              textAlign: 'center',
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '12px' }}>🌱</div>
+              <p style={{ margin: '0 0 4px', fontSize: '17px', fontWeight: 700, color: '#2d5a27' }}>
+                Nenhum sonho plantado ainda
+              </p>
+              <p style={{ margin: 0, fontSize: '14px', color: '#72796e' }}>
+                Plante seu primeiro sonho abaixo!
+              </p>
+            </div>
+          ) : (
+            <>
+              {activeGoals.map((goal) => (
+                <GoalCard
+                  key={goal.id}
+                  goal={goal}
+                  childId={childId}
+                  availableBalance={available}
+                />
+              ))}
+              {achievedGoals.length > 0 && (
+                <>
+                  <p style={{
+                    margin: '8px 0 0',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    color: '#72796e',
+                  }}>
+                    Conquistados 🏆
+                  </p>
+                  {achievedGoals.map((goal) => (
+                    <GoalCard
+                      key={goal.id}
+                      goal={goal}
+                      childId={childId}
+                      availableBalance={available}
+                    />
+                  ))}
+                </>
+              )}
+            </>
+          )}
+
+          {/* Plant New Dream */}
+          <Link href={`/child/${childId}/new-goal`} style={{ textDecoration: 'none' }}>
+            <div style={{
+              width: '100%',
+              minHeight: '160px',
+              borderRadius: '28px',
+              border: '2px dashed rgba(161,212,148,0.6)',
+              background: 'rgba(255,255,255,0.3)',
+              cursor: 'pointer',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '28px',
-              color: '#506b03',
-              boxShadow: '0 4px 12px rgba(45,90,39,0.1)',
+              gap: '12px',
+              boxSizing: 'border-box',
             }}>
-              +
+              <div style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '9999px',
+                background: 'rgba(202,236,125,0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '28px',
+                color: '#506b03',
+                boxShadow: '0 4px 12px rgba(45,90,39,0.1)',
+              }}>
+                +
+              </div>
+              <span style={{
+                fontSize: '13px',
+                fontWeight: 700,
+                color: '#154212',
+                letterSpacing: '0.04em',
+              }}>
+                Plantar Novo Sonho
+              </span>
             </div>
-            <span style={{
-              fontSize: '13px',
-              fontWeight: 700,
-              color: '#154212',
-              letterSpacing: '0.04em',
-            }}>
-              Plantar Novo Sonho
-            </span>
-          </button>
+          </Link>
         </div>
 
-        {/* Balance details link */}
+        {/* History link */}
         <div style={{ textAlign: 'center' }}>
           <Link href={`/child/${childId}/history`} style={{
             fontSize: '14px',
@@ -310,18 +351,18 @@ export default async function ChildBalancePage({ params }: ChildBalancePageProps
         </a>
         <a href="/family/tasks" style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-          background: 'rgba(202,236,125,0.5)', color: '#506b03',
-          borderRadius: '9999px', padding: '6px 18px', textDecoration: 'none', fontSize: '10px', fontWeight: 700,
+          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
         }}>
           <span style={{ fontSize: '20px' }}>✅</span>
           Missions
         </a>
-        <a href="#" style={{
+        <a href={`/child/${childId}/balance`} style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
+          background: 'rgba(202,236,125,0.5)', color: '#506b03',
+          borderRadius: '9999px', padding: '6px 18px', textDecoration: 'none', fontSize: '10px', fontWeight: 700,
         }}>
           <span style={{ fontSize: '20px' }}>🌸</span>
-          Garden
+          Sonhos
         </a>
         <a href={`/child/${childId}/profile`} style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',

@@ -17,6 +17,7 @@ export const transactionTypeEnum = pgEnum('transaction_type', [
   'negative_adjustment',
   'reversal',
   'donation_match',
+  'goal_allocation',
 ])
 
 export const accountTypeEnum = pgEnum('account_type', ['available', 'firstfruits'])
