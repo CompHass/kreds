@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 permissions:
@@ -27,15 +29,28 @@ jobs:
         id: meta
         run: |
           short_sha="${GITHUB_SHA::12}"
-          image="${IMAGE_NAME}:${short_sha}"
-          migration_image="${MIGRATION_IMAGE_NAME}:${short_sha}"
+
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="0.1.0-${GITHUB_RUN_NUMBER}"
+          fi
+
+          image="${IMAGE_NAME}:${VERSION}"
+          migration_image="${MIGRATION_IMAGE_NAME}:${VERSION}"
+          sha_image="${IMAGE_NAME}:${short_sha}"
+          sha_migration_image="${MIGRATION_IMAGE_NAME}:${short_sha}"
           latest_image="${IMAGE_NAME}:latest"
           latest_migration_image="${MIGRATION_IMAGE_NAME}:latest"
-          echo "short_sha=${short_sha}" >> "${GITHUB_OUTPUT}"
+
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
           echo "image=${image}" >> "${GITHUB_OUTPUT}"
           echo "migration_image=${migration_image}" >> "${GITHUB_OUTPUT}"
+          echo "sha_image=${sha_image}" >> "${GITHUB_OUTPUT}"
+          echo "sha_migration_image=${sha_migration_image}" >> "${GITHUB_OUTPUT}"
           echo "latest_image=${latest_image}" >> "${GITHUB_OUTPUT}"
           echo "latest_migration_image=${latest_migration_image}" >> "${GITHUB_OUTPUT}"
+          echo "short_sha=${short_sha}" >> "${GITHUB_OUTPUT}"
 
       - name: Check Docker Hub connectivity
         run: |
@@ -71,7 +86,9 @@ jobs:
               --target runner \
               --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
               --label "org.opencontainers.image.revision=${{ github.sha }}" \
+              --label "org.opencontainers.image.version=${{ steps.meta.outputs.version }}" \
               --tag "${{ steps.meta.outputs.image }}" \
+              --tag "${{ steps.meta.outputs.sha_image }}" \
               --tag "${{ steps.meta.outputs.latest_image }}" \
               .; then
               exit 0
@@ -89,7 +106,9 @@ jobs:
               --target migration \
               --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
               --label "org.opencontainers.image.revision=${{ github.sha }}" \
+              --label "org.opencontainers.image.version=${{ steps.meta.outputs.version }}" \
               --tag "${{ steps.meta.outputs.migration_image }}" \
+              --tag "${{ steps.meta.outputs.sha_migration_image }}" \
               --tag "${{ steps.meta.outputs.latest_migration_image }}" \
               .; then
               exit 0
@@ -137,14 +156,20 @@ jobs:
       - name: Push images
         run: |
           docker push "${{ steps.meta.outputs.image }}"
+          docker push "${{ steps.meta.outputs.sha_image }}"
           docker push "${{ steps.meta.outputs.latest_image }}"
           docker push "${{ steps.meta.outputs.migration_image }}"
+          docker push "${{ steps.meta.outputs.sha_migration_image }}"
           docker push "${{ steps.meta.outputs.latest_migration_image }}"
 
       - name: Print deploy tag
         run: |
-          echo "Image pushed: ${{ steps.meta.outputs.image }}"
-          echo "Latest image pushed: ${{ steps.meta.outputs.latest_image }}"
-          echo "Migration image pushed: ${{ steps.meta.outputs.migration_image }}"
-          echo "Latest migration image pushed: ${{ steps.meta.outputs.latest_migration_image }}"
-          echo "Use tag: ${{ steps.meta.outputs.short_sha }}"
+          echo "=== Kreds build complete ==="
+          echo "Version: ${{ steps.meta.outputs.version }}"
+          echo "Primary image: ${{ steps.meta.outputs.image }}"
+          echo "Migration image: ${{ steps.meta.outputs.migration_image }}"
+          echo "SHA image: ${{ steps.meta.outputs.sha_image }}"
+          echo "Latest image: ${{ steps.meta.outputs.latest_image }}"
+          echo ""
+          echo "For ArgoCD, use tag: ${{ steps.meta.outputs.version }}"
+          echo "Trigger: ${{ github.ref_type }} (${{ github.ref_name }})"
