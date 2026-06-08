@@ -178,6 +178,24 @@ This plan includes a `checkpoint:human-verify` task before completion. The follo
    - Active tasks grouped by child name
 7. Test reactivate — task returns to /family/tasks/current
 
+## Self-Check: PASSED
+
+All files verified present on disk. All commits verified in git log.
+
+| Item | Status |
+|------|--------|
+| src/modules/activity/cycle.ts | FOUND |
+| src/lib/db/tasks/schema.ts | FOUND |
+| src/lib/db/tasks/commands.ts | FOUND |
+| src/lib/db/tasks/queries.ts | FOUND |
+| src/app/api/families/tasks/route.ts | FOUND |
+| src/app/api/families/tasks/[id]/route.ts | FOUND |
+| src/app/family/tasks/page.tsx | FOUND |
+| src/app/family/tasks/current/page.tsx | FOUND |
+| commit 8916ce5 (wave 0) | FOUND |
+| commit a6394ba (wave 1) | FOUND |
+| commit 31699cd (wave 2) | FOUND |
+
 ---
 *Phase: 04-weekly-task-templates-and-activity-cycles*
 *Completed: 2026-06-07*
