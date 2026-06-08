@@ -172,3 +172,32 @@ export const parentalConsents = pgTable(
 )
 
 export * from './ledger'
+
+// Task templates — guardian-created weekly tasks assigned to a specific child (ACT-01, D-01, D-02, D-06)
+export const taskTemplates = pgTable(
+  'task_templates',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    familyId: uuid('family_id')
+      .notNull()
+      .references(() => families.id),
+    assignedChildId: uuid('assigned_child_id')
+      .notNull()
+      .references(() => childProfiles.id),
+    title: text('title').notNull(),
+    description: text('description'), // nullable — description is optional
+    kredsValue: integer('kreds_value').notNull(),
+    isActive: boolean('is_active').notNull().default(true),
+    deactivatedAt: timestamp('deactivated_at'), // nullable — D-06: cleared on reactivation
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    familyIdIdx: index('task_templates_family_id_idx').on(table.familyId),
+    childIdIdx: index('task_templates_child_id_idx').on(table.assignedChildId),
+    kredsValueCheck: check(
+      'kreds_value_positive',
+      sql`${table.kredsValue} > 0`,
+    ),
+  }),
+)
