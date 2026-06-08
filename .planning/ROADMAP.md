@@ -182,7 +182,20 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. System posts task earnings only after parent approval and routes firstfruits through the Kreds Engine.
   5. Parent and child can view current weekly tasks and earned Kreds for the active cycle.
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+**Wave 0** *(asset and mapping contracts — safe before UI integration)*
+
+- [ ] 06-01-PLAN.md — Garden asset manifest, stable slot map, and plant-stage progress contract
+
+**Wave 1** *(visual composition component)*
+
+- [ ] 06-02-PLAN.md — Reusable GardenCanvas rendering empty base plus layered plant stage assets
+
+**Wave 2** *(dashboard integration after Phase 5 progress data exists)*
+
+- [ ] 06-03-PLAN.md — Family dashboard garden state wired to active missions and weekly progress
+
 **UI hint**: yes
 
 ### Phase 6: Dynamic Stewardship Garden
@@ -280,7 +293,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
 | 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
-| 6. Dynamic Stewardship Garden | 0/TBD | Not started | - |
+| 6. Dynamic Stewardship Garden | 0/3 | Not started | - |
 | 7. Wishlist Goals and Progress | 0/TBD | Not started | - |
 | 8. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
 | 9. Biblical Content and Weekly Gratitude Reports | 0/TBD | Not started | - |
