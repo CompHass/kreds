@@ -75,7 +75,9 @@ The phase must establish trustworthy family isolation by `family_id` before late
 
 ### Zitadel Roles Configuration
 
-- **D-34:** Family roles (`guardian`, `child`) remain in the Kreds domain DB only. Zitadel is a pure identity provider. No role claims will be injected into the OIDC token. The `system_owner` global role (D-14) will be a DB-level flag when needed — no Zitadel role/grant configuration required for v1.
+- **D-34:** Family roles (`guardian`, `child`) remain in the Kreds domain DB only — no Zitadel role claims for family roles. The `system_owner` global role (D-14) is managed in Zitadel: create the role in the project, grant it to the admin user, and `auth.ts` reads it via `urn:zitadel:iam:org:project:roles` scope (native) or a custom Action claim. Normalized to `session.user.systemRoles: string[]`.
+  - **Zitadel Console setup required:** (1) Projects → Roles → add `system_owner`; (2) Users → admin → Authorizations → grant `system_owner`; (3) Project General → enable "Assert Roles on Authentication". OR use a custom Action on "Complement Token / Pre Access Token Creation" flow (see `auth.ts` for both formats).
+  - **Implemented in:** `auth.ts` (scope, jwt callback, session callback), `src/types/next-auth.d.ts` (Session type augmentation).
 
 ### the agent's Discretion
 
