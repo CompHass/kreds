@@ -13,7 +13,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: env.AUTH_ZITADEL_SECRET,
       authorization: {
         params: {
-          scope: 'openid email profile offline_access',
+          scope: 'openid email profile offline_access urn:zitadel:iam:org:project:roles',
         },
       },
     }),
@@ -26,6 +26,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, profile }) {
       if (profile?.sub) {
         token.sub = profile.sub
+
+        // Persist system_owner role from Zitadel grant claims.
+        // Zitadel returns roles via urn:zitadel:iam:org:project:roles (native scope)
+        // OR via custom Action that sets a 'roles' claim directly.
+        // Check both formats and normalize to string[].
+        const nativeRoles = profile['urn:zitadel:iam:org:project:roles']
+        const customRoles = profile['roles']
+        if (nativeRoles && typeof nativeRoles === 'object') {
+          token.systemRoles = Object.keys(nativeRoles as Record<string, unknown>)
+        } else if (Array.isArray(customRoles)) {
+          token.systemRoles = customRoles as string[]
+        } else {
+          token.systemRoles = []
+        }
 
         // Upsert kreds_identities on first login so resolveKredsIdentityId
         // can find a row for this ZITADEL subject on subsequent requests.
@@ -59,6 +73,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub
+      }
+      if (token.systemRoles) {
+        session.user.systemRoles = token.systemRoles as string[]
       }
       return session
     },
