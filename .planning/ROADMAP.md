@@ -102,7 +102,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 6** *(child PIN auth — added post-execution, D-28 through D-33)*
 
-- [ ] 02-10-PLAN.md — Schema migration: pin_hash + last_accessed_at em child_profiles; PIN hashing commands; PIN input em /family/children; CHILD_SESSION_SECRET env var
+- [x] 02-10-PLAN.md — Schema migration: pin_hash + last_accessed_at em child_profiles; PIN hashing commands; PIN input em /family/children; CHILD_SESSION_SECRET env var
 - [ ] 02-11-PLAN.md — Child access entry point /family/access/[familyId]; POST /api/families/[familyId]/child-auth com brute-force protection; child-session JWT cookie
 - [ ] 02-12-PLAN.md — requireChildSession middleware; child home page /child/home; guardian audit timeline com eventos de login e last_accessed_at
 
@@ -258,7 +258,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
+| 2. Family Access, Tenancy, Roles, and Profiles | 10/12 | In Progress|  |
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
 | 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
