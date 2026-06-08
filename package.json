@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.34.1",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
@@ -29,6 +29,7 @@
     "react-dom": "19.2.7",
     "react-hook-form": "7.77.0",
     "server-only": "0.0.1",
+    "serwist": "9.5.11",
     "zod": "4.4.3"
   },
   "pnpm": {
