@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Foundation, Privacy, and Delivery Skeleton** - Developers and maintainers can run, test, package, and review Kreds before child data exists.
 - [x] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created through ZITADEL-backed authentication with isolated memberships, guardians, children, roles, avatars, and identity audit history. (completed 2026-06-07)
 - [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules. (4/4 plans complete; ready for verification)
-- [ ] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved.
+- [x] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved. (completed 2026-06-08)
 - [ ] **Phase 5: Task Completion, Approval, and Earnings Slice** - Children complete tasks, parents approve them, and approved work posts Kreds earnings with visible status and history.
 - [ ] **Phase 6: Wishlist Goals and Progress** - Children can set wishlist goals and move available Kreds toward visible goal progress.
 - [ ] **Phase 7: Kreds do Bem Giving and Matching** - Families can record internal giving allocations with parent-approved targets, matching, and ledger-backed history.
@@ -157,7 +157,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 2** *(bloqueado pela Wave 1)*
 
-- [ ] 04-03-PLAN.md — Toggle deactivate/reactivate (ACT-03) + página /family/tasks/current com ciclo timezone-aware
+- [x] 04-03-PLAN.md — Toggle deactivate/reactivate (ACT-03) + página /family/tasks/current com ciclo timezone-aware
 
 **UI hint**: yes
 
@@ -254,7 +254,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
 | 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
-| 4. Weekly Task Templates and Activity Cycles | 2/3 | In Progress|  |
+| 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Wishlist Goals and Progress | 0/TBD | Not started | - |
 | 7. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
