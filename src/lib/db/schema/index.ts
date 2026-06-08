@@ -65,6 +65,8 @@ export const childProfiles = pgTable(
     identityId: uuid('identity_id'), // nullable — future ZITADEL child identity link (D-10)
     active: boolean('active').notNull().default(true),
     deactivatedAt: timestamp('deactivated_at'),
+    pinHash: text('pin_hash'),
+    lastAccessedAt: timestamp('last_accessed_at'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },
