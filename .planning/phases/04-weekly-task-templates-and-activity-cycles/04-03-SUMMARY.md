@@ -155,28 +155,18 @@ No new threat surface beyond what was planned in the threat model.
 - Phase 5 must check is_active before accepting completion submissions (D-08)
 - Phase 5 snapshots kredsValue from the template at approval time (D-01: no versioning in Phase 4)
 
-## Checkpoint: Human Verification Required
+## Checkpoint: Human Verification
 
-This plan includes a `checkpoint:human-verify` task before completion. The following items require visual verification:
+This plan included a `checkpoint:human-verify` task requiring visual verification of the PATCH API and /family/tasks/current page.
 
-1. Start the dev server: `pnpm dev`
-2. Authenticate as a guardian at http://localhost:3000/api/auth/signin
-3. Visit http://localhost:3000/family/tasks — confirm list appears with create form
-4. Create a task template (title, kredsValue, select a child)
-5. Test PATCH deactivate:
-   ```
-   curl -s -X PATCH http://localhost:3000/api/families/tasks/{ID} \
-     -H 'Content-Type: application/json' \
-     -d '{"action":"deactivate"}' \
-     -b cookies.txt
-   ```
-   Expected: `{"success":true}`
-6. Visit http://localhost:3000/family/tasks/current — confirm:
-   - Header shows "Semana atual"
-   - Dates show "De [domingo, DD/MM] a [sábado, DD/MM]"
-   - Deactivated task NOT in the list
-   - Active tasks grouped by child name
-7. Test reactivate — task returns to /family/tasks/current
+**Status: APROVADO** — verificação humana concluída em 2026-06-08.
+
+Items verificados:
+1. PATCH /api/families/tasks/:id com action=deactivate retorna `{"success":true}`
+2. /family/tasks/current exibe cabeçalho "Semana atual" com datas no formato "De [domingo, DD/MM] a [sábado, DD/MM]"
+3. Tarefas desativadas não aparecem na página do ciclo atual
+4. Tarefas ativas agrupadas por nome do filho com valor em Kreds
+5. Reactivate via PATCH restaura a tarefa na visão do ciclo atual
 
 ## Self-Check: PASSED
 
