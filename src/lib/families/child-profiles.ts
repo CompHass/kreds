@@ -3,6 +3,7 @@ import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { createAuditEvent } from './audit'
 import { isValidAvatarPreset, isValidAccentColor } from './avatar-presets'
+import { hashPin, validatePinFormat } from './child-pin'
 
 // Types
 
@@ -13,6 +14,7 @@ export interface CreateChildProfileInput {
   ageYears: number
   avatarPreset: string
   accentColor: string
+  pin?: string
   consentGiven: boolean
 }
 
@@ -23,6 +25,7 @@ export interface UpdateChildProfileVisualsInput {
   displayName?: string
   avatarPreset?: string
   accentColor?: string
+  pin?: string
 }
 
 export interface ChildProfile {
@@ -62,6 +65,9 @@ export async function createChildProfile(
   if (!isValidAccentColor(input.accentColor)) {
     throw new Error(`Invalid accent color: ${input.accentColor} (D-22)`)
   }
+  if (input.pin !== undefined && !validatePinFormat(input.pin)) {
+    throw new Error('PIN must have 4 to 6 numeric digits')
+  }
 
   return db.transaction(async (tx) => {
     // 1. Verify the guardian is an active guardian of this family
@@ -82,6 +88,8 @@ export async function createChildProfile(
       throw new Error('Only an active guardian can create a child profile')
     }
 
+    const pinHash = input.pin ? await hashPin(input.pin) : null
+
     // 2. Create the child profile
     const [profile] = await tx
       .insert(schema.childProfiles)
@@ -91,6 +99,7 @@ export async function createChildProfile(
         ageYears: input.ageYears,
         avatarPreset: input.avatarPreset,
         accentColor: input.accentColor,
+        pinHash,
         active: true,
       })
       .returning({
@@ -203,6 +212,9 @@ export async function updateChildProfile(
     if (input.accentColor !== undefined && !isValidAccentColor(input.accentColor)) {
       throw new Error(`Invalid accent color: ${input.accentColor} (D-22)`)
     }
+    if (input.pin !== undefined && !validatePinFormat(input.pin)) {
+      throw new Error('PIN must have 4 to 6 numeric digits')
+    }
 
     const updates: Record<string, unknown> = {}
     const changes: string[] = []
@@ -218,6 +230,10 @@ export async function updateChildProfile(
     if (input.accentColor !== undefined) {
       updates.accentColor = input.accentColor
       changes.push(`accent: "${existing.accentColor}" → "${input.accentColor}"`)
+    }
+    if (input.pin !== undefined) {
+      updates.pinHash = await hashPin(input.pin)
+      changes.push('pin updated')
     }
 
     if (Object.keys(updates).length === 0) {
@@ -254,6 +270,71 @@ export async function updateChildProfile(
     )
 
     return updated as ChildProfile
+  })
+}
+
+export async function setChildPin(
+  childProfileId: string,
+  familyId: string,
+  guardianIdentityId: string,
+  pin: string,
+): Promise<void> {
+  if (!validatePinFormat(pin)) {
+    throw new Error('PIN must have 4 to 6 numeric digits')
+  }
+
+  await db.transaction(async (tx) => {
+    const [membership] = await tx
+      .select({ id: schema.familyMemberships.id })
+      .from(schema.familyMemberships)
+      .where(
+        and(
+          eq(schema.familyMemberships.familyId, familyId),
+          eq(schema.familyMemberships.identityId, guardianIdentityId),
+          eq(schema.familyMemberships.role, 'guardian'),
+          eq(schema.familyMemberships.status, 'active'),
+        ),
+      )
+      .limit(1)
+
+    if (!membership) {
+      throw new Error('Only an active guardian can update a child PIN')
+    }
+
+    const pinHash = await hashPin(pin)
+
+    const [profile] = await tx
+      .update(schema.childProfiles)
+      .set({
+        pinHash,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(schema.childProfiles.id, childProfileId),
+          eq(schema.childProfiles.familyId, familyId),
+        ),
+      )
+      .returning({
+        id: schema.childProfiles.id,
+      })
+
+    if (!profile) {
+      throw new Error('Child profile not found or not in this family')
+    }
+
+    await createAuditEvent(
+      {
+        familyId,
+        actorIdentityId: guardianIdentityId,
+        eventType: 'child_profile.pin_set',
+        subjectType: 'child_profile',
+        subjectId: childProfileId,
+        summary: 'PIN defined for child profile',
+        metadata: {},
+      },
+      tx,
+    )
   })
 }
 

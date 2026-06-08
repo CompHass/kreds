@@ -6,6 +6,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   ZITADEL_ISSUER: z.string().url().optional(),
   AUTH_SECRET: z.string().min(1),
+  CHILD_SESSION_SECRET: z.string().min(32),
   AUTH_ZITADEL_ID: z.string().min(1),
   AUTH_ZITADEL_SECRET: z.string().min(1),
   AUTH_ZITADEL_ISSUER: z.string().url().default('https://auth.hasslab.pro'),
