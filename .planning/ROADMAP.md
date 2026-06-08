@@ -70,7 +70,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. Parent can review an audit trail for identity, membership, and profile changes.
   6. Unauthenticated visitor sees a branded Sylvan landing screen with ZITADEL sign-in CTA — no unstyled placeholder.
 
-**Plans**: 7 plans
+**Plans**: 12 plans
 **Wave 0**
 
 - [x] 02-01-PLAN.md — Wave 0 validation scaffolds for authorization, tenancy, child profiles, invitations, and audit
@@ -99,6 +99,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Post-verification fix:**
 
 - [x] UI-01 — Tela de autenticação Sylvan: landing page com gradiente, símbolo Firstfruits, card glass e botão "Entrar com ZITADEL"; redirect automático para `/family/children` quando usuário já tem família
+
+**Wave 6** *(child PIN auth — added post-execution, D-28 through D-33)*
+
+- [ ] 02-10-PLAN.md — Schema migration: pin_hash + last_accessed_at em child_profiles; PIN hashing commands; PIN input em /family/children; CHILD_SESSION_SECRET env var
+- [ ] 02-11-PLAN.md — Child access entry point /family/access/[familyId]; POST /api/families/[familyId]/child-auth com brute-force protection; child-session JWT cookie
+- [ ] 02-12-PLAN.md — requireChildSession middleware; child home page /child/home; guardian audit timeline com eventos de login e last_accessed_at
 
 **UI hint**: yes
 
