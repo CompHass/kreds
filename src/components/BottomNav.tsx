@@ -28,7 +28,7 @@ export function BottomNav({ active }: { active: 'jardim' | 'missoes' | 'sonhos' 
   const items: NavItem[] = [
     { label: 'Jardim', href: '/family/dashboard', icon: '🪴', active: active === 'jardim' },
     { label: 'Missões', href: '/family/tasks', icon: '📋', active: active === 'missoes' },
-    { label: 'Sonhos', href: '/family/tasks/current', icon: '✨', active: active === 'sonhos' },
+    { label: 'Sonhos', href: '/family/wishes', icon: '✨', active: active === 'sonhos' },
     { label: 'Perfil', href: '/family/children', icon: '👤', active: active === 'perfil' },
   ]
 
