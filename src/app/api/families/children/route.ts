@@ -32,12 +32,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Parse body — inspect Content-Type first to avoid consuming the stream twice.
+  // Node.js 22+ (undici) marks the body as unusable after any read attempt, even a
+  // failed json() call, so the try-json-then-formData pattern always throws on the
+  // second call.
+  const contentType = request.headers.get('content-type') ?? ''
   let body: Record<string, string>
-  try {
+  if (contentType.includes('application/json')) {
     body = await request.json()
-  } catch {
+  } else if (
+    contentType.includes('application/x-www-form-urlencoded') ||
+    contentType.includes('multipart/form-data')
+  ) {
     const formData = await request.formData()
     body = Object.fromEntries(formData.entries()) as Record<string, string>
+  } else {
+    try {
+      body = await request.json()
+    } catch {
+      body = {}
+    }
   }
 
   // Get the guardian's active family membership — role and status guard (WR-01)

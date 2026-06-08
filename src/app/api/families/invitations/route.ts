@@ -12,6 +12,45 @@ import {
 } from '@/lib/families/invitations'
 
 /**
+ * Parses request body from either JSON or form-encoded submissions.
+ *
+ * Node.js 22+ (undici) marks the body stream as consumed after any read attempt,
+ * even a failed one. Calling json() and then formData() on the same request will
+ * always throw "Body is unusable: Body has already been read" on the second call,
+ * producing a 500 instead of the intended response.
+ *
+ * Fix: inspect Content-Type first, then call only one read method.
+ */
+async function parseBody(request: NextRequest): Promise<Record<string, string>> {
+  const contentType = request.headers.get('content-type') ?? ''
+
+  if (contentType.includes('application/json')) {
+    return request.json()
+  }
+
+  if (
+    contentType.includes('application/x-www-form-urlencoded') ||
+    contentType.includes('multipart/form-data')
+  ) {
+    const formData = await request.formData()
+    const body: Record<string, string> = {}
+    formData.forEach((value, key) => {
+      body[key] = value.toString()
+    })
+    return body
+  }
+
+  // Fallback: try JSON, then return empty object if body is absent/unknown.
+  // If json() consumed the stream, formData() would throw too — return {} and
+  // let the caller's field-validation produce a 400.
+  try {
+    return await request.json()
+  } catch {
+    return {}
+  }
+}
+
+/**
  * POST /api/families/invitations
  *
  * Handles guardian invitation lifecycle actions.
@@ -27,17 +66,8 @@ import {
 export async function POST(request: NextRequest) {
   const session = await auth()
 
-  // Parse form data (all actions use form submissions)
-  let body: Record<string, string>
-  try {
-    body = await request.json()
-  } catch {
-    const formData = await request.formData()
-    body = {}
-    formData.forEach((value, key) => {
-      body[key] = value.toString()
-    })
-  }
+  // Parse body — supports both JSON (fetch/XHR) and form-encoded (HTML form submit)
+  const body = await parseBody(request)
 
   const action = body.action
 

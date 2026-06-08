@@ -3,7 +3,7 @@ import { auth } from '../../../../auth'
 import { listFamilyAuditTimeline } from '@/lib/families/audit'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq, asc } from 'drizzle-orm'
 import Link from 'next/link'
 import { resolveKredsIdentityId } from '@/lib/auth/authorization'
 
@@ -25,8 +25,25 @@ function eventLabel(eventType: string): string {
     'child_profile.created': 'Perfil de Filho Criado',
     'child_profile.updated': 'Perfil de Filho Atualizado',
     'child_profile.deactivated': 'Perfil de Filho Desativado',
+    child_login_success: 'Login bem-sucedido',
+    child_login_failed: 'Tentativa de login falhou',
   }
   return labels[eventType] ?? eventType
+}
+
+function eventAccent(eventType: string): { color: string; background: string } {
+  if (eventType === 'child_login_success') {
+    return { color: '#166534', background: 'rgba(187, 247, 208, 0.7)' }
+  }
+
+  if (eventType === 'child_login_failed') {
+    return { color: '#a16207', background: 'rgba(254, 240, 138, 0.7)' }
+  }
+
+  return {
+    color: 'var(--color-gold, #d2a501)',
+    background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
+  }
 }
 
 /**
@@ -37,6 +54,20 @@ function formatTimestamp(date: Date): string {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+function formatLastAccess(date: Date | null): string {
+  if (!date) {
+    return 'Nunca acessou'
+  }
+
+  return date.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   })
@@ -82,8 +113,23 @@ export default async function AuditPage() {
         <p>Ocorreu um erro ao carregar o histórico. Tente novamente mais tarde.</p>
         <Link href="/">Voltar ao início</Link>
       </main>
-    )
+      )
   }
+
+  const childAccessRows = await db
+    .select({
+      id: schema.childProfiles.id,
+      displayName: schema.childProfiles.displayName,
+      lastAccessedAt: schema.childProfiles.lastAccessedAt,
+    })
+    .from(schema.childProfiles)
+    .where(
+      and(
+        eq(schema.childProfiles.familyId, membership.familyId),
+        eq(schema.childProfiles.active, true),
+      ),
+    )
+    .orderBy(asc(schema.childProfiles.displayName))
 
   return (
     <main style={{
@@ -160,6 +206,39 @@ export default async function AuditPage() {
         Registro completo de mudanças na identidade, membros, convites e perfis da sua família.
       </p>
 
+      <section
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          marginBottom: '24px',
+        }}
+      >
+        <h2 style={{ fontSize: '1rem', color: 'var(--color-primary, #154212)', margin: 0 }}>
+          Último acesso dos filhos
+        </h2>
+        {childAccessRows.map((child) => (
+          <article
+            key={child.id}
+            style={{
+              padding: '16px 18px',
+              background: 'var(--color-card, rgba(255,255,255,0.64))',
+              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+              borderRadius: '20px',
+              boxShadow: '0 4px 16px rgba(45,90,39,0.06)',
+              backdropFilter: 'blur(12px)',
+            }}
+          >
+            <p style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-primary, #154212)', margin: '0 0 4px' }}>
+              {child.displayName}
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-soft, #72796e)', margin: 0 }}>
+              {formatLastAccess(child.lastAccessedAt)}
+            </p>
+          </article>
+        ))}
+      </section>
+
       {timeline.length === 0 ? (
         <div style={{
           padding: '48px 24px',
@@ -190,8 +269,8 @@ export default async function AuditPage() {
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em',
-                  color: 'var(--color-gold, #d2a501)',
-                  background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
+                  color: eventAccent(event.eventType).color,
+                  background: eventAccent(event.eventType).background,
                   padding: '2px 8px',
                   borderRadius: '6px',
                 }}>
