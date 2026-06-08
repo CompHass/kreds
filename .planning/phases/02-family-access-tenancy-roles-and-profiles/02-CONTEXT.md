@@ -1,8 +1,8 @@
 # Phase 02: Family Access, Tenancy, Roles, and Profiles - Context
 
 **Gathered:** 2026-06-06T22:18:07Z
-**Updated:** 2026-06-07T00:00:00Z (UI-01: auth landing screen decisions added post-execution)
-**Status:** Complete — phase executed and verified
+**Updated:** 2026-06-08T00:00:00Z (D-28–D-34: child access via PIN + Zitadel roles clarification)
+**Status:** Complete — phase executed and verified; child auth decisions added post-execution
 
 <domain>
 ## Phase Boundary
@@ -64,6 +64,19 @@ The phase must establish trustworthy family isolation by `family_id` before late
 - **D-26:** All Sylvan design tokens live in `src/app/globals.css` as CSS custom properties (`--color-*`, `--radius-*`, `--shadow-*`, `--glow-*`). Inline styles in page components reference these vars with fallbacks for SSR. No Tailwind classes used for the landing screen — pure CSS vars for Sylvan fidelity.
 - **D-27:** `resolveKredsIdentityId` is called server-side on the home page; if it throws (identity not yet in DB), the page falls back to `LandingScreen` rather than erroring. This handles first-login race before family creation.
 
+### Child Authentication (PIN-based)
+
+- **D-28:** Children authenticate via app-local PIN, not Zitadel. Guardian defines the PIN when creating or editing a child profile. Zitadel is used exclusively for guardians. No Zitadel account is created for children in v1.
+- **D-29:** Children access the app via a guardian-generated QR code or shareable link that embeds `familyId`. The child opens the link, sees the family's child profiles by avatar+name, selects theirs, and enters the PIN.
+- **D-30:** Child authentication produces a separate session from the Zitadel session — a JWT containing `{ childProfileId, familyId, role: 'child' }` stored in an httpOnly cookie. The Auth.js/OIDC flow is bypassed for the child auth endpoint.
+- **D-31:** `child_profiles` table gains a `pin_hash` column (argon2 or bcrypt). Guardian sets the PIN; the hash is stored, never the raw PIN. PIN brute-force protection required at the API level.
+- **D-32:** Child session scope is limited to the child's own data only — tasks, balance/ledger, and wishlist. No family-wide view accessible from a child session.
+- **D-33:** `child_profiles` gains a `last_accessed_at` column updated on each child login. Guardian can see last access in the family audit timeline.
+
+### Zitadel Roles Configuration
+
+- **D-34:** Family roles (`guardian`, `child`) remain in the Kreds domain DB only. Zitadel is a pure identity provider. No role claims will be injected into the OIDC token. The `system_owner` global role (D-14) will be a DB-level flag when needed — no Zitadel role/grant configuration required for v1.
+
 ### the agent's Discretion
 
 - Downstream agents may decide implementation details such as exact table names, route names, form layout, copy wording, invitation token mechanics, and audit event schema, as long as they preserve the decisions above and the phase requirements.
@@ -101,6 +114,7 @@ The phase must establish trustworthy family isolation by `family_id` before late
 
 - `.planning/sketches/MANIFEST.md` — Selects Sylvan Growth visual direction and relevant child-facing design decisions.
 - `stitch_a_golden_woven_basket_filled_with_glowing_golden_light_and_ethereal_sparkles/sylvan_growth_system/DESIGN.md` — Visual system reference for Sylvan Growth avatar/preset direction.
+- `stitch_a_golden_woven_basket_filled_with_glowing_golden_light_and_ethereal_sparkles/set_of_5_growth_stages_for_a_stylized_3d_isometric_apple_tree_for_a_children_s/screen.png` — 5-stage tree growth visual reference (deferred to Phase 9+). Shows progression from sprout to full apple tree.
 
 </canonical_refs>
 
@@ -141,8 +155,9 @@ The phase must establish trustworthy family isolation by `family_id` before late
 <deferred>
 ## Deferred Ideas
 
-- Child-owned ZITADEL login is deferred beyond v1. The v1 model should prepare for optional future linkage but must not implement public child self-registration in Phase 02.
+- Child-owned ZITADEL login is deferred beyond v1. The v1 model should prepare for optional future linkage (`childProfiles.identityId` already nullable for this). D-28 supersedes by implementing PIN-based child auth for v1.
 - Avatar growth/progression is deferred to later task, earnings, or child experience phases. Phase 02 avatars are static identifiers only.
+- **Tree evolution visual (5 growth stages):** The app should show interactive 5-stage tree evolution previews (e.g., clicking stage buttons 1–5 shows the tree at each growth stage). Visual reference: `stitch_a_golden_woven_basket_filled_with_glowing_golden_light_and_ethereal_sparkles/set_of_5_growth_stages_for_a_stylized_3d_isometric_apple_tree_for_a_children_s/screen.png`. Deferred to the child experience polish phase (Phase 9 or later) — implement together with actual task/earnings-driven progression logic.
 
 </deferred>
 

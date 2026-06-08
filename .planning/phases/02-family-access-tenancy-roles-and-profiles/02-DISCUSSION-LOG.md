@@ -84,3 +84,36 @@
 
 - Child-owned ZITADEL login is deferred beyond v1, with only future-ready model support in Phase 02.
 - Avatar growth/progression is deferred to later task, earnings, or child experience phases.
+
+---
+
+# Post-Execution Update — 2026-06-08
+
+**Areas discussed:** acesso-filhos, roles-zitadel
+**Context:** Gaps identified after phase was marked complete — child access blocking issue + Zitadel role config clarification.
+
+## Acesso de filhos ao app
+
+| Option | Description | Selected |
+|--------|-------------|----------|
+| Conta Zitadel criada pelo guardian | Filho faz login com email+senha Zitadel criado pelo parent | |
+| PIN local no app | Filho usa PIN definido pelo guardian, auth flow separado do Zitadel | ✓ |
+| Guardian delega sessão | Guardian entra e seleciona perfil filho; sem conta separada | |
+
+**User's choice:** PIN local
+**Notes:** Usuário perguntou sobre colisões e armazenamento. PIN é per child_profile (scoped por family_id) — sem colisão possível. Acesso via QR/link gerado pelo guardian com familyId embutido. Child session = JWT separado {childProfileId, familyId, role:'child'} em httpOnly cookie. Guardian define PIN ao criar perfil. Sessão filho limitada ao próprio childProfileId. last_accessed_at registrado no child_profiles para audit do guardian.
+
+## Roles no Zitadel
+
+| Option | Description | Selected |
+|--------|-------------|----------|
+| Manter atual: roles só no DB Kreds | Zitadel = identity provider puro; system_owner = DB flag | ✓ |
+| Configurar system_owner no Zitadel | Role no Zitadel + claim no token | |
+| Claims de role no token OIDC | Zitadel Actions injetam roles no JWT | |
+
+**User's choice:** Manter roles só no DB Kreds
+**Notes:** D-16 implementado corretamente. Nenhuma config adicional no Zitadel para v1.
+
+## Deferred Ideas (post-execution session)
+
+- Tree evolution visual (5 growth stages): clicar nos botões 1-5 mostra preview da planta em cada estágio. Deferred para Fase 9+ junto com progressão real. Visual ref: `stitch_.../set_of_5_growth_stages.../screen.png`.
