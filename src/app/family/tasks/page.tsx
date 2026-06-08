@@ -17,11 +17,15 @@ const TREE_TYPES = [
   { name: 'Cedro', subtitle: 'ALTITUDE MAJESTOSA', icon: '🌲', bgColor: '#f0f6f2', iconBg: '#dceee1' },
 ]
 
-const STAGE_MAP = [
-  { label: 'Estágio 1/5', stageName: 'Semente', nextStage: 'Muda', progress: 20, color: '#8B5A2B', bgColor: 'rgba(255,241,230,0.9)', borderColor: 'rgba(139,90,43,0.2)' },
-  { label: 'Estágio 2/5', stageName: 'Brotinho', nextStage: 'Muda', progress: 40, color: '#2d5a27', bgColor: 'rgba(240,248,238,0.9)', borderColor: 'rgba(45,90,39,0.2)' },
-  { label: 'Completa!', stageName: 'Árvore Frondosa', nextStage: '100%', progress: 100, color: '#154212', bgColor: 'rgba(230,245,228,0.9)', borderColor: 'rgba(21,66,18,0.25)', completed: true },
-]
+// Pending stage shown for all tasks until task-completion is implemented (Phase 5)
+const PENDING_STAGE = {
+  label: 'Pendente',
+  stageName: 'Semente',
+  nextStage: 'Muda',
+  progress: 0,
+  color: '#8B5A2B',
+  completed: false,
+}
 
 export default async function FamilyTasksPage({
   searchParams,
@@ -213,7 +217,7 @@ export default async function FamilyTasksPage({
               gap: '24px',
             }}>
               {tasks.map((task, idx) => {
-                const stage = STAGE_MAP[idx % STAGE_MAP.length]
+                const stage = PENDING_STAGE
                 const treeType = TREE_TYPES[idx % TREE_TYPES.length]
                 const isCompleted = stage.completed
 

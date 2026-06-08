@@ -7,10 +7,6 @@ type ChildBalancePageProps = {
   params: Promise<{ childId: string }>
 }
 
-const DREAM_ITEMS = [
-  { name: 'Bicicleta Nova', icon: '🚲', kredsNeeded: 150, progress: 60 },
-  { name: 'Jogo de Tabuleiro', icon: '🎲', kredsNeeded: 80, progress: 20 },
-]
 
 export default async function ChildBalancePage({ params }: ChildBalancePageProps) {
   const { childId } = await params
@@ -216,117 +212,25 @@ export default async function ChildBalancePage({ params }: ChildBalancePageProps
           gap: '16px',
           marginBottom: '40px',
         }}>
-          {DREAM_ITEMS.map((dream) => {
-            const cultivated = Math.round((available / (available + dream.kredsNeeded)) * 100)
-            const displayProgress = available >= dream.kredsNeeded ? 100 : cultivated
-
-            return (
-              <div
-                key={dream.name}
-                style={{
-                  background: 'rgba(255,255,255,0.4)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  border: '0.5px solid rgba(45,90,39,0.1)',
-                  boxShadow: '0 8px 32px rgba(45,90,39,0.05)',
-                  borderRadius: '28px',
-                  padding: '20px',
-                }}
-              >
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '16px',
-                  marginBottom: '24px',
-                }}>
-                  {/* Dream image */}
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    background: 'rgba(255,234,220,0.8)',
-                    borderRadius: '16px',
-                    border: '1px solid rgba(194,201,187,0.3)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '40px',
-                    flexShrink: 0,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
-                  }}>
-                    {dream.icon}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <h4 style={{
-                      margin: '0 0 6px',
-                      fontSize: '22px',
-                      fontWeight: 700,
-                      color: '#2d5a27',
-                      lineHeight: 1.2,
-                    }}>
-                      {dream.name}
-                    </h4>
-                    <p style={{
-                      margin: 0,
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#42493e',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      letterSpacing: '0.02em',
-                    }}>
-                      <span style={{ color: '#d2a501' }}>⭐</span>
-                      Faltam {dream.kredsNeeded} Kreds
-                    </p>
-                  </div>
-                </div>
-
-                {/* Progress vine */}
-                <div style={{
-                  width: '100%',
-                  height: '24px',
-                  background: 'rgba(255,227,207,0.8)',
-                  borderRadius: '9999px',
-                  overflow: 'hidden',
-                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)',
-                  border: '1px solid rgba(194,201,187,0.2)',
-                  position: 'relative',
-                  marginBottom: '8px',
-                }}>
-                  <div style={{
-                    height: '100%',
-                    width: `${dream.progress}%`,
-                    background: 'linear-gradient(135deg, #3b6934, #2d5a27)',
-                    borderRadius: '9999px',
-                    position: 'relative',
-                    backgroundImage: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.1) 10px, transparent 10px, transparent 20px)',
-                    backgroundSize: '28px 28px',
-                  }}>
-                    <div style={{
-                      position: 'absolute',
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                      width: '16px',
-                      background: 'rgba(255,223,144,0.8)',
-                      filter: 'blur(4px)',
-                      borderRadius: '9999px',
-                    }} />
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#a1d494',
-                    letterSpacing: '0.04em',
-                  }}>
-                    {dream.progress}% cultivado
-                  </span>
-                </div>
-              </div>
-            )
-          })}
+          {/* Empty state — wishlist goals not yet implemented */}
+          <div style={{
+            background: 'rgba(255,255,255,0.4)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '0.5px solid rgba(45,90,39,0.1)',
+            boxShadow: '0 8px 32px rgba(45,90,39,0.05)',
+            borderRadius: '28px',
+            padding: '40px 24px',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '12px' }}>🌱</div>
+            <p style={{ margin: '0 0 4px', fontSize: '17px', fontWeight: 700, color: '#2d5a27' }}>
+              Nenhum sonho plantado ainda
+            </p>
+            <p style={{ margin: 0, fontSize: '14px', color: '#72796e' }}>
+              Plante seu primeiro sonho abaixo!
+            </p>
+          </div>
 
           {/* Plant New Dream button */}
           <button style={{
