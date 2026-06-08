@@ -9,17 +9,18 @@ import { getActiveTasksForFamily, getAllTasksForFamily } from '@/lib/db/tasks/qu
 
 export const dynamic = 'force-dynamic'
 
-/**
- * FamilyTasksPage — SSR server component for the guardian's task template list.
- *
- * - Shows active templates by default (D-07)
- * - Toggle ?showInactive=true to show all templates for audit
- * - Inline creation form posts to /api/families/tasks via JavaScript (JSON fetch)
- * - Lists tasks grouped conceptually by child
- * - Links to /family/tasks/current for the current cycle view (D-05)
- *
- * Auth: redirects to /api/auth/signin if unauthenticated, /family/onboarding if no family.
- */
+const TREE_TYPES = [
+  { name: 'Macieira', subtitle: 'CRESCIMENTO DOCE', icon: '🍎', bgColor: '#fef3f0', iconBg: '#fce8e3' },
+  { name: 'Carvalho', subtitle: 'FORÇA ANTIGA', icon: '🌳', bgColor: '#f0f4ef', iconBg: '#e0eddf' },
+  { name: 'Cedro', subtitle: 'ALTITUDE MAJESTOSA', icon: '🌲', bgColor: '#f0f6f2', iconBg: '#dceee1' },
+]
+
+const STAGE_MAP = [
+  { label: 'Estágio 1/5', stageName: 'Semente', nextStage: 'Muda', progress: 20, color: '#8B5A2B', bgColor: 'rgba(255,241,230,0.9)', borderColor: 'rgba(139,90,43,0.2)' },
+  { label: 'Estágio 2/5', stageName: 'Brotinho', nextStage: 'Muda', progress: 40, color: '#2d5a27', bgColor: 'rgba(240,248,238,0.9)', borderColor: 'rgba(45,90,39,0.2)' },
+  { label: 'Completa!', stageName: 'Árvore Frondosa', nextStage: '100%', progress: 100, color: '#154212', bgColor: 'rgba(230,245,228,0.9)', borderColor: 'rgba(21,66,18,0.25)', completed: true },
+]
+
 export default async function FamilyTasksPage({
   searchParams,
 }: {
@@ -57,7 +58,6 @@ export default async function FamilyTasksPage({
 
   const familyId = membership.familyId
 
-  // D-07: toggle between active-only and all templates
   const params = searchParams ? await searchParams : undefined
   const showInactive = params?.showInactive === 'true'
 
@@ -65,7 +65,6 @@ export default async function FamilyTasksPage({
     ? await getAllTasksForFamily(familyId)
     : await getActiveTasksForFamily(familyId)
 
-  // Query active children for the assignment select
   const children = await db
     .select({
       id: schema.childProfiles.id,
@@ -81,253 +80,539 @@ export default async function FamilyTasksPage({
     )
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      padding: '32px 24px 64px',
-      maxWidth: '520px',
-      margin: '0 auto',
-    }}>
-      {/* Header */}
-      <div style={{
+    <>
+      {/* Fixed TopAppBar */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        background: 'rgba(255,248,245,0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(194,201,187,0.2)',
+        boxShadow: '0 1px 6px rgba(45,90,39,0.06)',
+        height: '64px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: '32px',
+        padding: '0 24px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '16px',
-            display: 'grid',
-            placeItems: 'center',
-            fontSize: '24px',
-            background: 'radial-gradient(circle, #fff3b8, #d2a501 58%, #8b6a08)',
-            boxShadow: '0 8px 20px rgba(210,165,1,.2)',
-            flexShrink: 0,
+            width: '40px',
+            height: '40px',
+            borderRadius: '9999px',
+            background: 'rgba(202,236,125,0.5)',
+            border: '2px solid rgba(188,240,174,0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '18px',
           }}>
-            ✅
+            🌿
           </div>
+          <h1 style={{
+            margin: 0,
+            fontSize: '20px',
+            fontWeight: 700,
+            color: '#154212',
+            letterSpacing: '-0.01em',
+          }}>
+            Sylvan Growth
+          </h1>
+        </div>
+        <Link
+          href="/family/dashboard"
+          style={{
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '9999px',
+            color: '#154212',
+            textDecoration: 'none',
+            fontSize: '18px',
+          }}
+          aria-label="Configurações"
+        >
+          ⚙️
+        </Link>
+      </header>
+
+      <main style={{
+        paddingTop: '96px',
+        paddingBottom: '100px',
+        padding: '96px 24px 100px',
+        maxWidth: '768px',
+        margin: '0 auto',
+      }}>
+        {/* Header Section */}
+        <section style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: '16px',
+          marginBottom: '40px',
+          flexWrap: 'wrap',
+        }}>
           <div>
-            <h1 style={{
-              fontFamily: 'var(--font-heading, "Plus Jakarta Sans", system-ui, sans-serif)',
-              fontWeight: 800,
-              fontSize: '1.25rem',
-              letterSpacing: '-0.02em',
-              color: 'var(--color-primary, #154212)',
-              margin: 0,
+            <h2 style={{
+              margin: '0 0 8px',
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#154212',
+              lineHeight: 1.2,
             }}>
-              Tarefas Semanais
-            </h1>
+              Cultivar Missões
+            </h2>
             <p style={{
-              fontSize: '0.8125rem',
-              color: 'var(--color-text-soft, #72796e)',
               margin: 0,
+              fontSize: '16px',
+              color: '#42493e',
+              lineHeight: 1.5,
+              maxWidth: '400px',
             }}>
-              Responsabilidades da semana
+              Com zelo e dedicação, cada pequena tarefa faz nossa floresta crescer. Qual semente vamos regar hoje?
             </p>
           </div>
-        </div>
+          <button
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 24px',
+              borderRadius: '16px',
+              background: 'linear-gradient(to right, #2d5a27, #3b6934)',
+              color: '#fff',
+              border: 'none',
+              fontSize: '13px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              cursor: 'pointer',
+              boxShadow: '0 8px 24px rgba(45,90,39,0.2)',
+              whiteSpace: 'nowrap',
+            }}
+            onClick={undefined}
+          >
+            <span style={{ fontSize: '16px' }}>+</span>
+            Nova Missão
+          </button>
+        </section>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <Link
-            href="/family/tasks/current"
-            style={{
-              fontSize: '0.8125rem',
-              color: 'var(--color-primary, #154212)',
-              textDecoration: 'none',
-              padding: '8px 14px',
-              borderRadius: '99px',
-              background: 'rgba(255,255,255,0.82)',
-              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-              fontWeight: 600,
-            }}
-          >
-            Ciclo Atual
-          </Link>
-          <Link
-            href="/family/children"
-            style={{
-              fontSize: '0.8125rem',
-              color: 'var(--color-text-soft, #72796e)',
-              textDecoration: 'none',
-              padding: '8px 14px',
-              borderRadius: '99px',
-              border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-            }}
-          >
-            Filhos
-          </Link>
-        </div>
-      </div>
+        {/* Mission Cards Grid */}
+        {tasks.length > 0 ? (
+          <section style={{ marginBottom: '48px' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '24px',
+            }}>
+              {tasks.map((task, idx) => {
+                const stage = STAGE_MAP[idx % STAGE_MAP.length]
+                const treeType = TREE_TYPES[idx % TREE_TYPES.length]
+                const isCompleted = stage.completed
 
-      {/* Toggle de inativas (D-07) */}
-      <div style={{ marginBottom: '24px' }}>
-        {showInactive ? (
-          <Link
-            href="/family/tasks"
-            style={{
-              fontSize: '0.8125rem',
-              color: 'var(--color-primary, #154212)',
-              textDecoration: 'none',
-            }}
-          >
-            Ocultar inativas
-          </Link>
+                return (
+                  <div
+                    key={task.id}
+                    style={{
+                      background: isCompleted
+                        ? 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(188,240,174,0.15) 100%)'
+                        : 'rgba(255,255,255,0.7)',
+                      backdropFilter: 'blur(20px)',
+                      WebkitBackdropFilter: 'blur(20px)',
+                      border: isCompleted
+                        ? '1px solid rgba(45,90,39,0.25)'
+                        : '0.5px solid rgba(161,212,148,0.3)',
+                      boxShadow: '0 8px 32px rgba(45,90,39,0.08)',
+                      borderRadius: '24px',
+                      padding: '24px',
+                      position: 'relative',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {/* Completed star */}
+                    {isCompleted && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        fontSize: '24px',
+                      }}>
+                        ⭐
+                      </div>
+                    )}
+
+                    {/* Icon + Stage badge row */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '16px',
+                    }}>
+                      <div style={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '16px',
+                        background: isCompleted ? '#154212' : 'rgba(255,236,220,0.9)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '22px',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 8px rgba(45,90,39,0.06)',
+                      }}>
+                        {isCompleted ? '🍳' : idx % 3 === 0 ? '🛏️' : '📖'}
+                      </div>
+                      <span style={{
+                        background: isCompleted ? '#d2a501' : 'rgba(202,236,125,0.6)',
+                        color: isCompleted ? '#503d00' : '#506b03',
+                        padding: '4px 12px',
+                        borderRadius: '9999px',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                      }}>
+                        {stage.label}
+                      </span>
+                    </div>
+
+                    {/* Task title */}
+                    <h3 style={{
+                      margin: '0 0 4px',
+                      fontSize: '20px',
+                      fontWeight: 700,
+                      color: '#154212',
+                    }}>
+                      {task.title}
+                    </h3>
+
+                    {/* Tree link */}
+                    <p style={{
+                      margin: '0 0 24px',
+                      fontSize: '14px',
+                      color: '#42493e',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}>
+                      <span>🌳</span> Ligado à {treeType.name}
+                      {'childName' in task && task.childName ? ` · ${task.childName}` : ''}
+                    </p>
+
+                    {/* Progress */}
+                    <div style={{ marginBottom: '24px' }}>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: isCompleted ? '#154212' : '#42493e',
+                        marginBottom: '8px',
+                        letterSpacing: '0.04em',
+                      }}>
+                        <span>{stage.stageName}</span>
+                        <span>{isCompleted ? '100%' : stage.nextStage}</span>
+                      </div>
+                      <div style={{
+                        position: 'relative',
+                        height: '12px',
+                        background: isCompleted ? 'rgba(161,212,148,0.3)' : '#e5e7eb',
+                        borderRadius: '9999px',
+                        overflow: 'hidden',
+                      }}>
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          height: '100%',
+                          width: `${stage.progress}%`,
+                          background: 'linear-gradient(to right, #bcf0ae, #3b6934)',
+                          borderRadius: '9999px',
+                        }} />
+                      </div>
+                    </div>
+
+                    {/* Action button */}
+                    <button style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '12px',
+                      border: isCompleted ? 'none' : '1px solid rgba(194,201,187,0.5)',
+                      background: isCompleted ? 'rgba(255,236,220,0.6)' : 'transparent',
+                      color: '#154212',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}>
+                      <span>{isCompleted ? '🌱' : '🔄'}</span>
+                      {isCompleted ? 'Plantar Nova' : 'Alterar Árvore'}
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
         ) : (
-          <Link
-            href="/family/tasks?showInactive=true"
-            style={{
-              fontSize: '0.8125rem',
-              color: 'var(--color-text-soft, #72796e)',
-              textDecoration: 'none',
-            }}
-          >
-            Mostrar inativas
-          </Link>
+          <section style={{ marginBottom: '48px' }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.7)',
+              backdropFilter: 'blur(20px)',
+              border: '0.5px solid rgba(161,212,148,0.3)',
+              borderRadius: '24px',
+              padding: '48px 24px',
+              textAlign: 'center',
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🌱</div>
+              <p style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 700, color: '#154212' }}>
+                Nenhuma missão ainda
+              </p>
+              <p style={{ margin: '0 0 24px', fontSize: '15px', color: '#72796e' }}>
+                Adicione a primeira responsabilidade para começar a crescer!
+              </p>
+              {children.length === 0 && (
+                <Link href="/family/children" style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 20px',
+                  borderRadius: '12px',
+                  background: '#154212',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                }}>
+                  Adicionar filho primeiro
+                </Link>
+              )}
+            </div>
+          </section>
         )}
-      </div>
 
-      {/* Lista de tasks */}
-      {tasks.length > 0 ? (
-        <div style={{ marginBottom: '32px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <p style={{
-            fontSize: '0.75rem',
+        {/* Available Trees Section */}
+        <section>
+          <h2 style={{
+            margin: '0 0 8px',
+            fontSize: '24px',
             fontWeight: 700,
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            color: 'var(--color-text-muted, #42493e)',
-            margin: '0 0 4px',
+            color: '#154212',
           }}>
-            {showInactive ? `Todas as tarefas (${tasks.length})` : `Tarefas ativas (${tasks.length})`}
+            Árvores Disponíveis
+          </h2>
+          <p style={{
+            margin: '0 0 32px',
+            fontSize: '14px',
+            color: '#42493e',
+            lineHeight: 1.5,
+          }}>
+            Veja como suas sementes podem crescer com zelo e missões cumpridas!
           </p>
-          {tasks.map((task) => {
-            const isInactive = 'isActive' in task && !task.isActive
-            return (
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gap: '24px',
+          }}>
+            {TREE_TYPES.map((tree, treeIdx) => (
               <div
-                key={task.id}
+                key={tree.name}
                 style={{
+                  background: 'rgba(255,255,255,0.7)',
+                  backdropFilter: 'blur(20px)',
+                  border: '0.5px solid rgba(161,212,148,0.3)',
+                  boxShadow: '0 8px 32px rgba(45,90,39,0.08)',
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Tree image area */}
+                <div style={{
+                  height: '160px',
+                  background: tree.bgColor,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  {/* CSS tree illustration */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0',
+                  }}>
+                    <div style={{
+                      fontSize: treeIdx === 1 ? '72px' : '60px',
+                      filter: 'drop-shadow(0 8px 16px rgba(45,90,39,0.2))',
+                    }}>
+                      {tree.icon}
+                    </div>
+                  </div>
+                  {/* Gradient overlay */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '60px',
+                    background: 'linear-gradient(to top, rgba(255,255,255,0.95), transparent)',
+                  }} />
+                  {/* Label */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '12px',
+                    left: '16px',
+                  }}>
+                    <h3 style={{ margin: '0 0 2px', fontSize: '18px', fontWeight: 700, color: '#154212' }}>
+                      {tree.name}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: '10px', fontWeight: 600, color: '#42493e', letterSpacing: '0.08em' }}>
+                      {tree.subtitle}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Growth stages */}
+                <div style={{
+                  padding: '12px 16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '16px 20px',
-                  background: isInactive
-                    ? 'rgba(255,255,255,0.4)'
-                    : 'var(--color-card, rgba(255,255,255,0.64))',
-                  border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-                  borderRadius: '20px',
-                  boxShadow: '0 4px 16px rgba(45,90,39,0.06)',
-                  backdropFilter: 'blur(12px)',
-                  opacity: isInactive ? 0.7 : 1,
-                }}
-              >
-                <div>
-                  <p style={{
-                    fontWeight: 700,
-                    fontSize: '0.9375rem',
-                    color: 'var(--color-primary, #154212)',
-                    margin: '0 0 2px',
-                  }}>
-                    {task.title}
-                    {isInactive && (
-                      <span style={{
-                        marginLeft: '8px',
-                        fontSize: '0.7rem',
-                        fontWeight: 600,
-                        color: 'var(--color-text-soft, #72796e)',
-                        background: 'rgba(0,0,0,0.06)',
-                        borderRadius: '99px',
-                        padding: '2px 8px',
+                  gap: '4px',
+                }}>
+                  {[1, 2, 3, 4, 5].map((stage) => (
+                    <div key={stage} style={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1 }}>
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '9999px',
+                        background: stage === 5
+                          ? (treeIdx === 0 ? 'rgba(161,212,148,0.6)' : treeIdx === 1 ? '#d2a501' : 'rgba(202,236,125,0.6)')
+                          : 'rgba(255,234,220,0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        color: '#154212',
+                        border: '1px solid rgba(45,90,39,0.1)',
+                        flexShrink: 0,
                       }}>
-                        Inativa
-                      </span>
-                    )}
-                  </p>
-                  <p style={{
-                    fontSize: '0.8125rem',
-                    color: 'var(--color-text-soft, #72796e)',
-                    margin: 0,
-                  }}>
-                    {task.kredsValue} Kreds
-                    {'childName' in task && task.childName
-                      ? ` · ${task.childName}`
-                      : ''}
-                  </p>
+                        {stage}
+                      </div>
+                      {stage < 5 && (
+                        <div style={{
+                          flex: 1,
+                          height: '2px',
+                          background: 'rgba(194,201,187,0.4)',
+                        }} />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
-            )
-          })}
-        </div>
-      ) : (
-        <p style={{
-          fontSize: '0.9rem',
-          color: 'var(--color-text-soft, #72796e)',
-          textAlign: 'center',
-          marginBottom: '32px',
-        }}>
-          Nenhuma tarefa cadastrada ainda. Use o formulário abaixo para criar a primeira!
-        </p>
-      )}
+            ))}
+          </div>
+        </section>
 
-      {/* Formulário de criação (JSON fetch — CSRF guard via Content-Type: application/json) */}
-      <div style={{
-        background: 'var(--color-card, rgba(255,255,255,0.64))',
-        border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-        borderRadius: 'var(--radius-xl, 36px)',
-        boxShadow: 'var(--shadow-soft, 0 18px 55px rgba(45,90,39,0.1))',
-        backdropFilter: 'blur(22px)',
-        padding: '28px 24px',
-      }}>
-        <p style={{
-          fontSize: '0.75rem',
-          fontWeight: 700,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          color: 'var(--color-text-muted, #42493e)',
-          margin: '0 0 4px',
-        }}>
-          Adicionar Tarefa
-        </p>
-        <p style={{
-          fontSize: '0.9rem',
-          color: 'var(--color-text-soft, #72796e)',
-          margin: '0 0 20px',
-          lineHeight: 1.5,
-        }}>
-          Crie uma responsabilidade semanal para um dos seus filhos. Com fidelidade e dedicação,
-          cada tarefa concluída honra a Deus e fortalece o caráter.
-        </p>
-
-        {children.length === 0 ? (
-          <p style={{
-            fontSize: '0.875rem',
-            color: 'var(--color-text-soft, #72796e)',
-            textAlign: 'center',
-          }}>
-            Adicione um filho antes de criar tarefas.{' '}
-            <Link href="/family/children" style={{ color: 'var(--color-primary, #154212)' }}>
-              Ir para Filhos
-            </Link>
-          </p>
-        ) : (
-          <TaskCreationForm children={children} />
+        {/* Task Creation Form (toggle) */}
+        {children.length > 0 && (
+          <section style={{ marginTop: '48px' }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.7)',
+              backdropFilter: 'blur(20px)',
+              border: '0.5px solid rgba(161,212,148,0.3)',
+              borderRadius: '24px',
+              padding: '28px 24px',
+            }}>
+              <h3 style={{ margin: '0 0 6px', fontSize: '18px', fontWeight: 700, color: '#154212' }}>
+                Adicionar Missão
+              </h3>
+              <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#72796e', lineHeight: 1.5 }}>
+                Crie uma responsabilidade semanal para seu filho. Com fidelidade e dedicação, cada tarefa concluída fortalece o caráter.
+              </p>
+              <TaskCreationForm children={children} />
+            </div>
+          </section>
         )}
-      </div>
-    </main>
+
+        {/* Toggle inactive */}
+        <div style={{ marginTop: '24px', textAlign: 'center' }}>
+          <Link
+            href={showInactive ? '/family/tasks' : '/family/tasks?showInactive=true'}
+            style={{ fontSize: '13px', color: '#72796e', textDecoration: 'none' }}
+          >
+            {showInactive ? 'Ocultar inativas' : 'Mostrar inativas'}
+          </Link>
+        </div>
+      </main>
+
+      {/* Bottom Navigation */}
+      <nav style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        background: 'rgba(255,241,233,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 -4px 20px rgba(45,90,39,0.08)',
+        borderRadius: '20px 20px 0 0',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: '10px 16px 20px',
+      }}>
+        <a href="/family/dashboard" style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
+        }}>
+          <span style={{ fontSize: '20px' }}>🌳</span>
+          Forest
+        </a>
+        <a href="/family/tasks" style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+          background: 'rgba(202,236,125,0.5)', color: '#506b03',
+          borderRadius: '9999px', padding: '6px 18px', textDecoration: 'none', fontSize: '10px', fontWeight: 700,
+        }}>
+          <span style={{ fontSize: '20px' }}>✅</span>
+          Missions
+        </a>
+        <a href="#" style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
+        }}>
+          <span style={{ fontSize: '20px' }}>🌸</span>
+          Garden
+        </a>
+        <a href="#" style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
+        }}>
+          <span style={{ fontSize: '20px' }}>🌿</span>
+          Legacy
+        </a>
+      </nav>
+    </>
   )
 }
 
-/**
- * Client-side form that POSTs to /api/families/tasks with Content-Type: application/json.
- * Using a client component avoids the CSRF issue while keeping the page server-rendered.
- */
 function TaskCreationForm({ children }: {
   children: { id: string; displayName: string; avatarPreset: string }[]
 }) {
   return (
     <form
       id="task-creation-form"
-      onSubmit={undefined}
       style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
       suppressHydrationWarning
     >
@@ -359,126 +644,78 @@ function TaskCreationForm({ children }: {
         }}
       />
 
-      <div>
-        <label style={{
-          display: 'block',
-          fontSize: '0.8125rem',
-          fontWeight: 600,
-          color: 'var(--color-primary, #154212)',
-          marginBottom: '6px',
-        }}>
-          Título da tarefa *
-        </label>
-        <input
-          name="title"
-          type="text"
-          maxLength={100}
-          required
-          placeholder="Ex: Lavar a louça após o jantar"
-          style={{
-            width: '100%',
-            padding: '10px 14px',
-            borderRadius: '12px',
-            border: '1px solid var(--color-border, rgba(45,90,39,0.2))',
-            fontSize: '0.9375rem',
-            boxSizing: 'border-box',
-          }}
-        />
-      </div>
+      <input
+        name="title"
+        type="text"
+        maxLength={100}
+        required
+        placeholder="Título da missão *"
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          borderRadius: '14px',
+          border: '1px solid rgba(45,90,39,0.15)',
+          fontSize: '15px',
+          boxSizing: 'border-box',
+          background: 'rgba(255,255,255,0.8)',
+        }}
+      />
 
-      <div>
-        <label style={{
-          display: 'block',
-          fontSize: '0.8125rem',
-          fontWeight: 600,
-          color: 'var(--color-primary, #154212)',
-          marginBottom: '6px',
-        }}>
-          Descrição (opcional)
-        </label>
-        <textarea
-          name="description"
-          maxLength={500}
-          rows={2}
-          placeholder="Detalhes sobre como realizar a tarefa..."
-          style={{
-            width: '100%',
-            padding: '10px 14px',
-            borderRadius: '12px',
-            border: '1px solid var(--color-border, rgba(45,90,39,0.2))',
-            fontSize: '0.9375rem',
-            resize: 'vertical',
-            boxSizing: 'border-box',
-          }}
-        />
-      </div>
+      <textarea
+        name="description"
+        maxLength={500}
+        rows={2}
+        placeholder="Descrição (opcional)"
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          borderRadius: '14px',
+          border: '1px solid rgba(45,90,39,0.15)',
+          fontSize: '15px',
+          resize: 'vertical',
+          boxSizing: 'border-box',
+          background: 'rgba(255,255,255,0.8)',
+        }}
+      />
 
-      <div>
-        <label style={{
-          display: 'block',
-          fontSize: '0.8125rem',
-          fontWeight: 600,
-          color: 'var(--color-primary, #154212)',
-          marginBottom: '6px',
-        }}>
-          Filho responsável *
-        </label>
-        <select
-          name="assignedChildId"
-          required
-          style={{
-            width: '100%',
-            padding: '10px 14px',
-            borderRadius: '12px',
-            border: '1px solid var(--color-border, rgba(45,90,39,0.2))',
-            fontSize: '0.9375rem',
-            background: '#fff',
-            boxSizing: 'border-box',
-          }}
-        >
-          <option value="">Selecionar filho...</option>
-          {children.map((child) => (
-            <option key={child.id} value={child.id}>
-              {child.displayName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <select
+        name="assignedChildId"
+        required
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          borderRadius: '14px',
+          border: '1px solid rgba(45,90,39,0.15)',
+          fontSize: '15px',
+          background: 'rgba(255,255,255,0.8)',
+          boxSizing: 'border-box',
+        }}
+      >
+        <option value="">Selecionar filho *</option>
+        {children.map((child) => (
+          <option key={child.id} value={child.id}>
+            {child.displayName}
+          </option>
+        ))}
+      </select>
 
-      <div>
-        <label style={{
-          display: 'block',
-          fontSize: '0.8125rem',
-          fontWeight: 600,
-          color: 'var(--color-primary, #154212)',
-          marginBottom: '6px',
-        }}>
-          Valor em Kreds *
-        </label>
-        <input
-          name="kredsValue"
-          type="number"
-          min="1"
-          step="1"
-          required
-          placeholder="Ex: 5"
-          style={{
-            width: '100%',
-            padding: '10px 14px',
-            borderRadius: '12px',
-            border: '1px solid var(--color-border, rgba(45,90,39,0.2))',
-            fontSize: '0.9375rem',
-            boxSizing: 'border-box',
-          }}
-        />
-        <p style={{
-          fontSize: '0.75rem',
-          color: 'var(--color-text-soft, #72796e)',
-          margin: '4px 0 0',
-        }}>
-          Número inteiro positivo. &quot;Tudo o que fizerem, façam de todo o coração&quot; (Colossenses 3:23)
-        </p>
-      </div>
+      <input
+        name="kredsValue"
+        type="number"
+        min="1"
+        step="1"
+        required
+        placeholder="Valor em Kreds *"
+        style={{
+          width: '100%',
+          padding: '12px 16px',
+          borderRadius: '14px',
+          border: '1px solid rgba(45,90,39,0.15)',
+          fontSize: '15px',
+          boxSizing: 'border-box',
+          background: 'rgba(255,255,255,0.8)',
+        }}
+      />
 
       <button
         type="submit"
@@ -486,18 +723,19 @@ function TaskCreationForm({ children }: {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          gap: '8px',
           minHeight: '52px',
-          borderRadius: '9999px',
-          background: 'linear-gradient(135deg, #3b6934, #154212)',
+          borderRadius: '14px',
+          background: 'linear-gradient(to right, #2d5a27, #3b6934)',
           color: '#fff',
           border: 'none',
           fontWeight: 700,
-          fontSize: '1rem',
+          fontSize: '16px',
           cursor: 'pointer',
-          boxShadow: 'inset 0 2px 0 rgba(255,223,144,0.38), 0 18px 55px rgba(45,90,39,0.1)',
+          boxShadow: '0 8px 24px rgba(45,90,39,0.2)',
         }}
       >
-        Adicionar Tarefa
+        <span>🌱</span> Plantar Missão
       </button>
     </form>
   )
