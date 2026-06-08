@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { auth } from '../../../../auth'
 import { db } from '@/lib/db'
@@ -6,6 +7,7 @@ import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { getActiveTasksForFamily } from '@/lib/db/tasks/queries'
+import { BottomNav } from '@/components/BottomNav'
 
 export const dynamic = 'force-dynamic'
 
@@ -149,39 +151,25 @@ export default async function FamilyDashboardPage() {
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(180deg, #e8f4e5 0%, #cbe4c5 60%, #a8d4a0 100%)',
+            background: 'linear-gradient(180deg, #e8f4e5 0%, #cbe4c5 100%)',
           }} />
 
-          {/* Decorative garden shapes */}
-          <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-            {/* Ground */}
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '45%',
-              background: 'linear-gradient(180deg, #7ab870 0%, #5a9c56 100%)',
-              borderRadius: '50% 50% 0 0 / 30% 30% 0 0',
-            }} />
-            {/* Tree 1 */}
-            <div style={{ position: 'absolute', bottom: '38%', left: '12%' }}>
-              <div style={{ width: '56px', height: '72px', background: 'radial-gradient(circle at 50% 60%, #3b7a35, #2d5a27)', borderRadius: '50% 50% 48% 48%' }} />
-              <div style={{ width: '10px', height: '24px', background: '#5a3a1a', margin: '0 auto' }} />
-            </div>
-            {/* Tree 2 (larger) */}
-            <div style={{ position: 'absolute', bottom: '40%', left: '42%' }}>
-              <div style={{ width: '80px', height: '96px', background: 'radial-gradient(circle at 50% 55%, #4c9445, #2d5a27)', borderRadius: '50% 50% 44% 44%' }} />
-              <div style={{ width: '14px', height: '32px', background: '#5a3a1a', margin: '0 auto' }} />
-            </div>
-            {/* Tree 3 */}
-            <div style={{ position: 'absolute', bottom: '36%', right: '10%' }}>
-              <div style={{ width: '64px', height: '80px', background: 'radial-gradient(circle at 50% 58%, #56a050, #3b6934)', borderRadius: '50% 50% 46% 46%' }} />
-              <div style={{ width: '12px', height: '28px', background: '#5a3a1a', margin: '0 auto' }} />
-            </div>
-            {/* Small plants */}
-            <div style={{ position: 'absolute', bottom: '32%', left: '28%', fontSize: '24px' }}>🌱</div>
-            <div style={{ position: 'absolute', bottom: '30%', right: '28%', fontSize: '20px' }}>🌿</div>
+          {/* Isometric garden image */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Image
+              src="/garden-isometric.png"
+              alt="Jardim isométrico"
+              width={480}
+              height={360}
+              style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+              priority
+            />
           </div>
 
           {/* Overlay text */}
@@ -499,99 +487,7 @@ export default async function FamilyDashboardPage() {
         +
       </Link>
 
-      {/* Bottom Navigation */}
-      <nav style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: 'rgba(255,248,245,0.92)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 -4px 12px rgba(45,90,39,0.08)',
-        borderRadius: '20px 20px 0 0',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        padding: '8px 16px 20px',
-      }}>
-        {/* Jardim — active */}
-        <a
-          href="/family/dashboard"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            background: 'rgba(202,236,125,0.5)',
-            color: '#4c6700',
-            borderRadius: '9999px',
-            padding: '6px 20px',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontWeight: 700,
-            letterSpacing: '0.03em',
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>🪴</span>
-          Jardim
-        </a>
-
-        <a
-          href="/family/tasks/current"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            color: 'var(--color-text-soft)',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontWeight: 600,
-            padding: '6px 12px',
-          }}
-        >
-          <span style={{ fontSize: '20px', opacity: 0.7 }}>📋</span>
-          Missões
-        </a>
-
-        <a
-          href="#"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            color: 'var(--color-text-soft)',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontWeight: 600,
-            padding: '6px 12px',
-          }}
-        >
-          <span style={{ fontSize: '20px', opacity: 0.7 }}>✨</span>
-          Sonhos
-        </a>
-
-        <a
-          href="#"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            color: 'var(--color-text-soft)',
-            textDecoration: 'none',
-            fontSize: '11px',
-            fontWeight: 600,
-            padding: '6px 12px',
-          }}
-        >
-          <span style={{ fontSize: '20px', opacity: 0.7 }}>👤</span>
-          Perfil
-        </a>
-      </nav>
+      <BottomNav active="jardim" />
     </>
   )
 }

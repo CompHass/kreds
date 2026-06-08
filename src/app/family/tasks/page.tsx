@@ -6,6 +6,8 @@ import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { getActiveTasksForFamily, getAllTasksForFamily } from '@/lib/db/tasks/queries'
+import { TaskCreationFormClient } from './TaskCreationFormClient'
+import { BottomNav } from '@/components/BottomNav'
 
 export const dynamic = 'force-dynamic'
 
@@ -540,7 +542,7 @@ export default async function FamilyTasksPage({
               <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#72796e', lineHeight: 1.5 }}>
                 Crie uma responsabilidade semanal para seu filho. Com fidelidade e dedicação, cada tarefa concluída fortalece o caráter.
               </p>
-              <TaskCreationForm children={children} />
+              <TaskCreationFormClient children={children} />
             </div>
           </section>
         )}
@@ -556,187 +558,7 @@ export default async function FamilyTasksPage({
         </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: 'rgba(255,241,233,0.92)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 -4px 20px rgba(45,90,39,0.08)',
-        borderRadius: '20px 20px 0 0',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        padding: '10px 16px 20px',
-      }}>
-        <a href="/family/dashboard" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
-        }}>
-          <span style={{ fontSize: '20px' }}>🌳</span>
-          Forest
-        </a>
-        <a href="/family/tasks" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-          background: 'rgba(202,236,125,0.5)', color: '#506b03',
-          borderRadius: '9999px', padding: '6px 18px', textDecoration: 'none', fontSize: '10px', fontWeight: 700,
-        }}>
-          <span style={{ fontSize: '20px' }}>✅</span>
-          Missions
-        </a>
-        <a href="#" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
-        }}>
-          <span style={{ fontSize: '20px' }}>🌸</span>
-          Garden
-        </a>
-        <a href="#" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-          color: '#72796e', opacity: 0.7, textDecoration: 'none', fontSize: '10px', fontWeight: 700,
-        }}>
-          <span style={{ fontSize: '20px' }}>🌿</span>
-          Legacy
-        </a>
-      </nav>
+      <BottomNav active="missoes" />
     </>
-  )
-}
-
-function TaskCreationForm({ children }: {
-  children: { id: string; displayName: string; avatarPreset: string }[]
-}) {
-  return (
-    <form
-      id="task-creation-form"
-      style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-      suppressHydrationWarning
-    >
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-(function() {
-  var form = document.getElementById('task-creation-form');
-  if (!form) return;
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var data = {
-      title: form.querySelector('[name="title"]').value,
-      description: form.querySelector('[name="description"]').value || undefined,
-      assignedChildId: form.querySelector('[name="assignedChildId"]').value,
-      kredsValue: Number(form.querySelector('[name="kredsValue"]').value),
-    };
-    fetch('/api/families/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }).then(function(res) {
-      if (res.ok) { window.location.reload(); }
-      else { res.json().then(function(err) { alert('Erro: ' + (err.error || 'Tente novamente')); }); }
-    }).catch(function() { alert('Erro de rede. Tente novamente.'); });
-  });
-})();
-          `,
-        }}
-      />
-
-      <input
-        name="title"
-        type="text"
-        maxLength={100}
-        required
-        placeholder="Título da missão *"
-        style={{
-          width: '100%',
-          padding: '12px 16px',
-          borderRadius: '14px',
-          border: '1px solid rgba(45,90,39,0.15)',
-          fontSize: '15px',
-          boxSizing: 'border-box',
-          background: 'rgba(255,255,255,0.8)',
-        }}
-      />
-
-      <textarea
-        name="description"
-        maxLength={500}
-        rows={2}
-        placeholder="Descrição (opcional)"
-        style={{
-          width: '100%',
-          padding: '12px 16px',
-          borderRadius: '14px',
-          border: '1px solid rgba(45,90,39,0.15)',
-          fontSize: '15px',
-          resize: 'vertical',
-          boxSizing: 'border-box',
-          background: 'rgba(255,255,255,0.8)',
-        }}
-      />
-
-      <select
-        name="assignedChildId"
-        required
-        style={{
-          width: '100%',
-          padding: '12px 16px',
-          borderRadius: '14px',
-          border: '1px solid rgba(45,90,39,0.15)',
-          fontSize: '15px',
-          background: 'rgba(255,255,255,0.8)',
-          boxSizing: 'border-box',
-        }}
-      >
-        <option value="">Selecionar filho *</option>
-        {children.map((child) => (
-          <option key={child.id} value={child.id}>
-            {child.displayName}
-          </option>
-        ))}
-      </select>
-
-      <input
-        name="kredsValue"
-        type="number"
-        min="1"
-        step="1"
-        required
-        placeholder="Valor em Kreds *"
-        style={{
-          width: '100%',
-          padding: '12px 16px',
-          borderRadius: '14px',
-          border: '1px solid rgba(45,90,39,0.15)',
-          fontSize: '15px',
-          boxSizing: 'border-box',
-          background: 'rgba(255,255,255,0.8)',
-        }}
-      />
-
-      <button
-        type="submit"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          minHeight: '52px',
-          borderRadius: '14px',
-          background: 'linear-gradient(to right, #2d5a27, #3b6934)',
-          color: '#fff',
-          border: 'none',
-          fontWeight: 700,
-          fontSize: '16px',
-          cursor: 'pointer',
-          boxShadow: '0 8px 24px rgba(45,90,39,0.2)',
-        }}
-      >
-        <span>🌱</span> Plantar Missão
-      </button>
-    </form>
   )
 }
