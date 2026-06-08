@@ -21,6 +21,7 @@ export const TERMS = {
   REVERSAL: 'Reversal',
   ADJUSTMENT_REASON: 'Adjustment Reason',
   CORRECTION_NOTE: 'Correction Note',
+  ACTIVITY_CYCLE: 'Activity Cycle',
 } as const
 
 export type TermKey = keyof typeof TERMS
