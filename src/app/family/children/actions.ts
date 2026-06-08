@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '../../../../auth'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { createChildProfile, deactivateChildProfile } from '@/lib/families/child-profiles'
+import { validatePinFormat } from '@/lib/families/child-pin'
 import { listActiveChildProfiles } from '@/lib/families/child-profiles'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
@@ -43,6 +44,7 @@ export async function addChildAction(
   const ageYearsRaw = formData.get('ageYears')?.toString()
   const avatarPreset = formData.get('avatarPreset')?.toString()
   const accentColor = formData.get('accentColor')?.toString()
+  const pin = formData.get('pin')?.toString().trim() || undefined
   const consentGiven = formData.get('consentGiven') === 'true'
 
   if (!displayName || !ageYearsRaw || !avatarPreset || !accentColor) {
@@ -58,6 +60,10 @@ export async function addChildAction(
     return { error: 'O consentimento parental é obrigatório.' }
   }
 
+  if (pin && !validatePinFormat(pin)) {
+    return { error: 'PIN must have 4 to 6 numeric digits.' }
+  }
+
   try {
     await createChildProfile({
       familyId: membership.familyId,
@@ -66,6 +72,7 @@ export async function addChildAction(
       ageYears,
       avatarPreset,
       accentColor,
+      pin,
       consentGiven,
     })
   } catch (err) {

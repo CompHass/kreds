@@ -105,6 +105,25 @@ export default function ChildrenForm({ avatarOptions, accentOptions }: ChildrenF
         </span>
       </div>
 
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <label htmlFor="pin" style={labelStyle}>Child PIN (optional)</label>
+        <input
+          id="pin"
+          name="pin"
+          type="password"
+          placeholder="4 to 6 digits"
+          minLength={4}
+          maxLength={6}
+          inputMode="numeric"
+          pattern="\d{4,6}"
+          disabled={isPending}
+          style={{ ...inputStyle, opacity: isPending ? 0.6 : 1 }}
+        />
+        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-soft, #72796e)' }}>
+          The child will use this PIN to access the app.
+        </span>
+      </div>
+
       {/* Avatar — visual grid picker */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <span style={labelStyle}>Avatar</span>

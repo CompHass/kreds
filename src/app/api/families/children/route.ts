@@ -5,6 +5,7 @@ import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { createChildProfile } from '@/lib/families/child-profiles'
+import { validatePinFormat } from '@/lib/families/child-pin'
 
 /**
  * POST /api/families/children
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
 
   const familyId = membership.familyId
   const consentGiven = body.consentGiven === 'true' || body.consentGiven === 'on'
+  const pin = body.pin?.trim() || undefined
 
   if (!consentGiven) {
     return NextResponse.json({ error: 'Explicit parental consent is required (D-02)' }, { status: 400 })
@@ -70,6 +72,10 @@ export async function POST(request: NextRequest) {
   }
   const ageYears = parseInt(rawAge, 10)
 
+  if (pin && !validatePinFormat(pin)) {
+    return NextResponse.json({ error: 'PIN must have 4 to 6 numeric digits' }, { status: 400 })
+  }
+
   try {
     await createChildProfile({
       familyId,
@@ -78,6 +84,7 @@ export async function POST(request: NextRequest) {
       ageYears,
       avatarPreset: body.avatarPreset ?? '',
       accentColor: body.accentColor ?? '',
+      pin,
       consentGiven,
     })
 
