@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { auth } from '../../auth'
+import { auth, signIn } from '../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
@@ -174,26 +173,36 @@ function LandingScreen() {
             }}>
               Entre com sua conta para gerenciar a mordomia da sua família.
             </p>
-            <Link
-              href="/api/auth/signin"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '52px',
-                borderRadius: '9999px',
-                background: '#154212',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '12px',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                transition: 'transform 0.2s',
+            <form
+              action={async () => {
+                'use server'
+                await signIn('zitadel', { redirectTo: '/' })
               }}
+              style={{ width: '100%' }}
             >
-              ENTRAR COM ZITADEL
-            </Link>
+              <button
+                type="submit"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '52px',
+                  borderRadius: '9999px',
+                  background: '#154212',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  border: 'none',
+                  cursor: 'pointer',
+                  width: '100%',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                ENTRAR COM ZITADEL
+              </button>
+            </form>
           </div>
 
           <p style={{

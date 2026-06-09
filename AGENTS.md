@@ -174,6 +174,47 @@ The initial audience is Christian parents and guardians who want to educate chil
 Conventions not yet established. Will populate as patterns emerge during development.
 <!-- GSD:conventions-end -->
 
+<!-- GSD:infrastructure-start -->
+
+## Infrastructure
+
+### Kubernetes Cluster
+
+- **Context:** `hasslab-k3s` — always use this context for kreds cluster operations
+- **Namespace:** `kreds`
+- **Switch context:** `kubectl config use-context hasslab-k3s`
+
+### Deployed Services (namespace: kreds)
+
+| Resource | Details |
+|---|---|
+| App URL | `https://kreds.hasslab.pro` |
+| Ingress | `nginx`, `force-ssl-redirect: true`, cert-manager `letsencrypt-prod` |
+| App service | `kreds:3000` (ClusterIP) |
+| Database | `postgres` StatefulSet (ClusterIP, port 5432) |
+| TLS secret | `kreds-tls` |
+
+### ConfigMap: kreds-config
+
+| Key | Value |
+|---|---|
+| `AUTH_URL` | `https://kreds.hasslab.pro` |
+| `AUTH_TRUST_HOST` | `true` |
+| `AUTH_ZITADEL_ISSUER` | `https://auth.hasslab.pro` |
+| `NEXT_PUBLIC_APP_URL` | `https://kreds.hasslab.pro` |
+| `NODE_ENV` | `production` |
+
+### Zitadel (namespace: zitadel)
+
+- **URL:** `https://auth.hasslab.pro`
+- **Project:** `kreds` (ID: `376396522276782110`)
+- **OIDC App:** `application` (clientId: `376397200093151262`)
+- **Redirect URI registered:** `https://kreds.hasslab.pro/api/auth/callback/zitadel`
+- **Login UI:** V2 at `/ui/v2/login` (separate `zitadel-login` service)
+- **Service Account secret:** `iam-admin` in `zitadel` namespace
+
+<!-- GSD:infrastructure-end -->
+
 <!-- GSD:architecture-start source:ARCHITECTURE.md -->
 
 ## Architecture
