@@ -1,7 +1,7 @@
-import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getChildLedgerHistory } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { requireChildSession } from '@/lib/auth/child-guard'
 
 type ChildHistoryPageProps = {
   params: Promise<{ childId: string }>
@@ -49,14 +49,11 @@ function translateAccountType(type: string): string {
 export default async function ChildHistoryPage({ params }: ChildHistoryPageProps) {
   const { childId } = await params
 
-  let familyId: string
-  try {
-    const context = await requireCurrentFamilyContext()
-    familyId = context.familyId
-    await requireChildInFamily(childId, familyId)
-  } catch {
-    redirect('/api/auth/signin')
+  const session = await requireChildSession()
+  if (session.childProfileId !== childId) {
+    redirect(`/child/${session.childProfileId}/history`)
   }
+  const familyId = session.familyId
 
   const rows = await getChildLedgerHistory(childId, familyId)
 

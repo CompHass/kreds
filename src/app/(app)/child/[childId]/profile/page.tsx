@@ -1,4 +1,3 @@
-import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/family-context'
 import { getBalance } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -6,6 +5,7 @@ import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { getActiveTasksForFamily } from '@/lib/db/tasks/queries'
+import { requireChildSession } from '@/lib/auth/child-guard'
 
 type ProfilePageProps = {
   params: Promise<{ childId: string }>
@@ -16,14 +16,11 @@ export const dynamic = 'force-dynamic'
 export default async function ChildProfilePage({ params }: ProfilePageProps) {
   const { childId } = await params
 
-  let familyId: string
-  try {
-    const ctx = await requireCurrentFamilyContext()
-    familyId = ctx.familyId
-    await requireChildInFamily(childId, familyId)
-  } catch {
-    redirect('/api/auth/signin')
+  const session = await requireChildSession()
+  if (session.childProfileId !== childId) {
+    redirect(`/child/${session.childProfileId}/profile`)
   }
+  const familyId = session.familyId
 
   const [available, firstfruits, childProfile, tasks] = await Promise.all([
     getBalance(childId, 'available'),

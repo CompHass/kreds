@@ -9,6 +9,7 @@ import { listActiveChildProfiles } from '@/lib/families/child-profiles'
 import { AVATAR_PRESETS, ACCENT_COLORS, type AvatarPreset, type AccentColor } from '@/lib/families/avatar-presets'
 import ChildrenForm from './ChildrenForm'
 import { deactivateChildAction } from './actions'
+import { ShareLinkButton } from './ShareLinkButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -289,10 +290,10 @@ export default async function FamilyChildrenPage({
                     Ajuste
                   </Link>
                 </div>
-                
+
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <Link
-                    href={`/child/${child.id}/balance`}
+                    href={`/guardian/${child.id}/balance`}
                     style={{
                       fontSize: '0.75rem',
                       color: 'var(--color-success, #3b6934)',
@@ -304,7 +305,7 @@ export default async function FamilyChildrenPage({
                       fontWeight: 600,
                     }}
                   >
-                    Sonhos
+                    Ver saldo
                   </Link>
                   <Link
                     href={`/family/children/${child.id}/set-pin`}
@@ -340,6 +341,8 @@ export default async function FamilyChildrenPage({
                     </button>
                   </form>
                 </div>
+
+                <ShareLinkButton familyId={familyId} appUrl={process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'} />
               </div>
             </div>
           ))}
