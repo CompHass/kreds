@@ -4,10 +4,10 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 02 context updated — child PIN auth + Zitadel roles clarified
-last_updated: "2026-06-08T14:24:26.118Z"
+last_updated: "2026-06-10T20:12:09.877Z"
 last_activity: 2026-06-08 -- Phase 04 execution started
 progress:
-  total_phases: 10
+  total_phases: 11
   completed_phases: 3
   total_plans: 26
   completed_plans: 21
@@ -64,6 +64,10 @@ Progress: [▓▓░░░░░░░░] 11%
 | Phase 02-family-access-tenancy-roles-and-profiles P7 | 4min | 2 tasks | 4 files |
 
 ## Accumulated Context
+
+### Roadmap Evolution
+
+- Phase 11 added: Role Segregation — auth middleware, child route guard, guardian share link, child tasks with completion, child dashboard with garden, donations schema and UI. Depends on Phase 4. Inserted before Phase 5 in execution order.
 
 ### Decisions
 
