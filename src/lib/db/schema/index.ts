@@ -227,3 +227,59 @@ export const wishlistGoals = pgTable(
     allocatedAmountCheck: check('allocated_non_negative', sql`${table.allocatedAmount} >= 0`),
   }),
 )
+
+// Task completions — child task completion tracking per cycle (Phase 11, D-07)
+export const taskCompletionStatusEnum = pgEnum('task_completion_status', ['pending', 'completed'])
+
+export const taskCompletions = pgTable(
+  'task_completions',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    taskTemplateId: uuid('task_template_id')
+      .notNull()
+      .references(() => taskTemplates.id),
+    childProfileId: uuid('child_profile_id')
+      .notNull()
+      .references(() => childProfiles.id),
+    cycleStart: text('cycle_start').notNull(), // ISO date string: 'YYYY-MM-DD'
+    completedAt: timestamp('completed_at'),
+    status: taskCompletionStatusEnum('status').notNull().default('pending'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    childIdIdx: index('task_completions_child_id_idx').on(table.childProfileId),
+    taskIdIdx: index('task_completions_task_id_idx').on(table.taskTemplateId),
+    uniqueTaskChildCycle: uniqueIndex('unique_task_child_cycle').on(
+      table.taskTemplateId,
+      table.childProfileId,
+      table.cycleStart,
+    ),
+  }),
+)
+
+// Donations — Kreds do Bem requests (Phase 11, D-10)
+export const donationStatusEnum = pgEnum('donation_status', ['pending', 'approved', 'rejected'])
+
+export const donations = pgTable(
+  'donations',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    familyId: uuid('family_id')
+      .notNull()
+      .references(() => families.id),
+    childProfileId: uuid('child_profile_id')
+      .notNull()
+      .references(() => childProfiles.id),
+    targetLabel: text('target_label').notNull(),
+    amountKreds: integer('amount_kreds').notNull(),
+    status: donationStatusEnum('status').notNull().default('pending'),
+    requestedAt: timestamp('requested_at').defaultNow().notNull(),
+    approvedAt: timestamp('approved_at'),
+  },
+  (table) => ({
+    familyIdIdx: index('donations_family_id_idx').on(table.familyId),
+    childIdIdx: index('donations_child_id_idx').on(table.childProfileId),
+    amountCheck: check('donation_amount_positive', sql`${table.amountKreds} > 0`),
+  }),
+)

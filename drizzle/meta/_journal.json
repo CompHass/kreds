@@ -50,6 +50,13 @@
       "when": 1780960743917,
       "tag": "0006_vengeful_warpath",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781131952674,
+      "tag": "0007_tidy_cerise",
+      "breakpoints": true
     }
   ]
 }
