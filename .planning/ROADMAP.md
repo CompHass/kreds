@@ -168,6 +168,34 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **UI hint**: yes
 
+### Phase 11: Role Segregation: auth middleware, child nav, guardian share link, child tasks with completion, child dashboard, donations
+
+**Goal:** Rotas /child/* e /family/* são protegidas por papéis distintos via middleware Edge, filho tem experiência completa com dashboard, tarefas e sonhos, e guardião pode compartilhar o link de acesso com um toque.
+**Requirements**: D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11, D-12
+**Depends on:** Phase 4
+**Plans:** 7 plans
+
+**Wave 1** *(schema e migration — bloqueante)*
+
+- [ ] 11-01-PLAN.md — Schema task_completions + donations + migration [BLOCKING]
+
+**Wave 2** *(bloqueado pela Wave 1)*
+
+- [ ] 11-02-PLAN.md — src/middleware.ts com guard duplo Edge Runtime (child JWT + NextAuth)
+
+**Wave 3** *(bloqueado pela Wave 2 — planos 03, 04 e 05 rodam em paralelo)*
+
+- [ ] 11-03-PLAN.md — ChildBottomNav + /child/[childId]/dashboard + redirect /child/home
+- [ ] 11-04-PLAN.md — /child/[childId]/tasks + TaskToggleButton + POST /api/child/[childId]/tasks/[taskId]/toggle
+- [ ] 11-05-PLAN.md — /child/[childId]/dreams + /child/[childId]/balance + /child/[childId]/donations + POST /api/child/[childId]/donations
+
+**Wave 4** *(bloqueado pela Wave 3 — planos 06 e 07 rodam em paralelo)*
+
+- [ ] 11-06-PLAN.md — ShareLinkButton em /family/children + remoção link /child/*/balance + guards /(app)/* (D-04, D-11, D-12)
+- [ ] 11-07-PLAN.md — /guardian/[childId]/balance com NextAuth session (D-11)
+
+**UI hint**: yes
+
 ### Phase 5: Task Completion, Approval, and Earnings Slice
 
 **Goal**: Children can turn approved weekly responsibilities into earned Kreds through the parent-governed stewardship loop.
@@ -284,7 +312,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 11 → 5 → 6 → 7 → 8 → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -292,6 +320,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 2. Family Access, Tenancy, Roles, and Profiles | 10/12 | In Progress|  |
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
 | 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
+| 11. Role Segregation: auth middleware, child nav, guardian share link, child tasks with completion, child dashboard, donations | 0/7 | Not started | - |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Dynamic Stewardship Garden | 0/3 | Not started | - |
 | 7. Wishlist Goals and Progress | 0/TBD | Not started | - |
