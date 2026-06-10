@@ -14,10 +14,6 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  // Exclude auth routes from SW — OAuth PKCE/state cookies must reach the
-  // server unmodified. SW interception of /api/auth/* drops cookies and
-  // breaks the code exchange, causing Errors.AuthRequest.NoCode from Zitadel.
-  excludeFromInterception: [/\/api\/auth\/.*/],
 })
 
 serwist.addEventListeners()
