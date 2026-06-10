@@ -177,22 +177,22 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1** *(schema e migration — bloqueante)*
 
-- [ ] 11-01-PLAN.md — Schema task_completions + donations + migration [BLOCKING]
+- [x] 11-01-PLAN.md — Schema task_completions + donations + migration [BLOCKING]
 
 **Wave 2** *(bloqueado pela Wave 1)*
 
-- [ ] 11-02-PLAN.md — src/middleware.ts com guard duplo Edge Runtime (child JWT + NextAuth)
+- [x] 11-02-PLAN.md — src/middleware.ts com guard duplo Edge Runtime (child JWT + NextAuth)
 
 **Wave 3** *(bloqueado pela Wave 2 — planos 03, 04 e 05 rodam em paralelo)*
 
-- [ ] 11-03-PLAN.md — ChildBottomNav + /child/[childId]/dashboard + redirect /child/home
-- [ ] 11-04-PLAN.md — /child/[childId]/tasks + TaskToggleButton + POST /api/child/[childId]/tasks/[taskId]/toggle
-- [ ] 11-05-PLAN.md — /child/[childId]/dreams + /child/[childId]/balance + /child/[childId]/donations + POST /api/child/[childId]/donations
+- [x] 11-03-PLAN.md — ChildBottomNav + /child/[childId]/dashboard + redirect /child/home
+- [x] 11-04-PLAN.md — /child/[childId]/tasks + TaskToggleButton + POST /api/child/[childId]/tasks/[taskId]/toggle
+- [x] 11-05-PLAN.md — /child/[childId]/dreams + /child/[childId]/balance + /child/[childId]/donations + POST /api/child/[childId]/donations
 
 **Wave 4** *(bloqueado pela Wave 3 — planos 06 e 07 rodam em paralelo)*
 
-- [ ] 11-06-PLAN.md — ShareLinkButton em /family/children + remoção link /child/*/balance + guards /(app)/* (D-04, D-11, D-12)
-- [ ] 11-07-PLAN.md — /guardian/[childId]/balance com NextAuth session (D-11)
+- [x] 11-06-PLAN.md — ShareLinkButton em /family/children + remoção link /child/*/balance + guards /(app)/* (D-04, D-11, D-12)
+- [x] 11-07-PLAN.md — /guardian/[childId]/balance com NextAuth session (D-11)
 
 **UI hint**: yes
 
@@ -320,7 +320,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 11 → 5 → 6 → 7 �
 | 2. Family Access, Tenancy, Roles, and Profiles | 10/12 | In Progress|  |
 | 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
 | 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
-| 11. Role Segregation: auth middleware, child nav, guardian share link, child tasks with completion, child dashboard, donations | 0/7 | Not started | - |
+| 11. Role Segregation: auth middleware, child nav, guardian share link, child tasks with completion, child dashboard, donations | 7/7 | Complete | 2026-06-10 |
 | 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
 | 6. Dynamic Stewardship Garden | 0/3 | Not started | - |
 | 7. Wishlist Goals and Progress | 0/TBD | Not started | - |
