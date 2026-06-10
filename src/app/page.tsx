@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { auth, signIn } from '../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
