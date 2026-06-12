@@ -40,11 +40,13 @@ function translateAccountType(type: string): string {
 export default async function GuardianBalancePage({ params }: GuardianBalancePageProps) {
   const { childId } = await params
 
+  let familyId: string
   try {
-    const { familyId, role } = await requireCurrentFamilyContext()
-    if (role !== 'guardian') {
+    const context = await requireCurrentFamilyContext()
+    if (context.role !== 'guardian') {
       redirect('/')
     }
+    familyId = context.familyId
     await requireChildInFamily(childId, familyId)
   } catch {
     redirect('/api/auth/signin')
@@ -53,7 +55,7 @@ export default async function GuardianBalancePage({ params }: GuardianBalancePag
   const [available, firstfruits, rows] = await Promise.all([
     getBalance(childId, 'available'),
     getBalance(childId, 'firstfruits'),
-    getGuardianLedgerHistory(childId, childId),
+    getGuardianLedgerHistory(childId, familyId),
   ])
 
   const totalSaved = available + firstfruits
