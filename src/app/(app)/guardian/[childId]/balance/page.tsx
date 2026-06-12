@@ -2,6 +2,7 @@ import { requireChildInFamily, requireCurrentFamilyContext } from '@/lib/auth/fa
 import { getBalance, getGuardianLedgerHistory } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { BottomNav } from '@/components/BottomNav'
 
 type GuardianBalancePageProps = {
   params: Promise<{ childId: string }>
@@ -60,7 +61,7 @@ export default async function GuardianBalancePage({ params }: GuardianBalancePag
   return (
     <main style={{
       minHeight: '100vh',
-      padding: '32px 24px 64px',
+      padding: '32px 24px 100px',
       maxWidth: '480px',
       margin: '0 auto',
     }}>
@@ -276,6 +277,8 @@ export default async function GuardianBalancePage({ params }: GuardianBalancePag
           </div>
         )}
       </div>
+
+      <BottomNav active="perfil" />
     </main>
   )
 }

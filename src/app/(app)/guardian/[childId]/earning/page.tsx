@@ -3,6 +3,7 @@ import { getBalance } from '@/modules/ledger/queries'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import EarningFormClient from './EarningFormClient'
+import { BottomNav } from '@/components/BottomNav'
 
 type GuardianEarningPageProps = {
   params: Promise<{ childId: string }>
@@ -30,7 +31,7 @@ export default async function GuardianEarningPage({ params }: GuardianEarningPag
   return (
     <main style={{
       minHeight: '100vh',
-      padding: '32px 24px 64px',
+      padding: '32px 24px 100px',
       maxWidth: '480px',
       margin: '0 auto',
     }}>
@@ -127,6 +128,8 @@ export default async function GuardianEarningPage({ params }: GuardianEarningPag
       }}>
         Ao lançar um ganho, 10% do valor será automaticamente reservado como Primícias (Tesouro).
       </p>
+
+      <BottomNav active="perfil" />
     </main>
   )
 }

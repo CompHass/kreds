@@ -6,6 +6,7 @@ import * as schema from '@/lib/db/schema'
 import { and, eq, asc } from 'drizzle-orm'
 import Link from 'next/link'
 import { resolveKredsIdentityId } from '@/lib/auth/authorization'
+import { BottomNav } from '@/components/BottomNav'
 
 export const dynamic = 'force-dynamic'
 
@@ -134,7 +135,7 @@ export default async function AuditPage() {
   return (
     <main style={{
       minHeight: '100vh',
-      padding: '32px 24px 64px',
+      padding: '32px 24px 100px',
       maxWidth: '480px',
       margin: '0 auto',
     }}>
@@ -306,11 +307,7 @@ export default async function AuditPage() {
         </div>
       )}
 
-      <div style={{ marginTop: '32px', textAlign: 'center' }}>
-        <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--color-text-soft, #72796e)', textDecoration: 'none' }}>
-          Início
-        </Link>
-      </div>
+      <BottomNav active="perfil" />
     </main>
   )
 }

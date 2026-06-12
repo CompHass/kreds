@@ -127,7 +127,7 @@ export async function POST(
   const response = NextResponse.json({ ok: true, childProfileId, familyId })
   response.cookies.set('child-session', token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     path: '/',
     maxAge: 8 * 60 * 60,

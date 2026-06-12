@@ -6,11 +6,10 @@ import * as schema from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import {
-  createInvitation,
-  revokeInvitation,
   INVITATION_STATUS,
-  type InvitationResult,
 } from '@/lib/families/invitations'
+import InviteFormClient from './InviteFormClient'
+import { BottomNav } from '@/components/BottomNav'
 
 export const dynamic = 'force-dynamic'
 
@@ -90,7 +89,7 @@ export default async function InvitationsPage() {
   return (
     <main style={{
       minHeight: '100vh',
-      padding: '32px 24px 64px',
+      padding: '32px 24px 100px',
       maxWidth: '480px',
       margin: '0 auto',
     }}>
@@ -180,40 +179,7 @@ export default async function InvitationsPage() {
           Convide outro adulto (ex: cônjuge) para ajudar na gestão da mordomia da família.
         </p>
 
-        <form action="/api/families/invitations" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <input type="hidden" name="action" value="create" />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label htmlFor="email" style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted, #42493e)', textTransform: 'uppercase' }}>
-              Endereço de E-mail
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              placeholder="exemplo@email.com"
-              style={{
-                padding: '12px 16px',
-                borderRadius: '12px',
-                border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-                background: 'rgba(255,255,255,0.5)',
-                fontSize: '0.9375rem',
-              }}
-            />
-          </div>
-          <button type="submit" style={{
-            padding: '12px',
-            borderRadius: '99px',
-            background: 'linear-gradient(135deg, #3b6934, #154212)',
-            color: '#fff',
-            fontWeight: 700,
-            border: 'none',
-            cursor: 'pointer',
-            boxShadow: '0 8px 20px rgba(45,90,39,0.15)',
-          }}>
-            Enviar Convite
-          </button>
-        </form>
+        <InviteFormClient />
       </section>
 
       {/* Existing invitations list */}
@@ -295,11 +261,7 @@ export default async function InvitationsPage() {
         )}
       </section>
 
-      <div style={{ marginTop: '32px', textAlign: 'center' }}>
-        <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--color-text-soft, #72796e)', textDecoration: 'none' }}>
-          Voltar ao início
-        </Link>
-      </div>
+      <BottomNav active="perfil" />
     </main>
   )
 }

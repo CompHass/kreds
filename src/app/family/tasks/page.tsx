@@ -7,6 +7,7 @@ import { eq, and } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { getActiveTasksForFamily, getAllTasksForFamily } from '@/lib/db/tasks/queries'
 import { TaskCreationFormClient } from './TaskCreationFormClient'
+import { TaskCardActionsClient } from './TaskCardActionsClient'
 import { BottomNav } from '@/components/BottomNav'
 
 export const dynamic = 'force-dynamic'
@@ -184,7 +185,8 @@ export default async function FamilyTasksPage({
               Com zelo e dedicação, cada pequena tarefa faz nossa floresta crescer. Qual semente vamos regar hoje?
             </p>
           </div>
-          <button
+          <a
+            href="#nova-missao"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -193,7 +195,7 @@ export default async function FamilyTasksPage({
               borderRadius: '16px',
               background: 'linear-gradient(to right, #2d5a27, #3b6934)',
               color: '#fff',
-              border: 'none',
+              textDecoration: 'none',
               fontSize: '13px',
               fontWeight: 700,
               letterSpacing: '0.04em',
@@ -201,11 +203,10 @@ export default async function FamilyTasksPage({
               boxShadow: '0 8px 24px rgba(45,90,39,0.2)',
               whiteSpace: 'nowrap',
             }}
-            onClick={undefined}
           >
             <span style={{ fontSize: '16px' }}>+</span>
             Nova Missão
-          </button>
+          </a>
         </section>
 
         {/* Mission Cards Grid */}
@@ -343,24 +344,12 @@ export default async function FamilyTasksPage({
                     </div>
 
                     {/* Action button */}
-                    <button style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '12px',
-                      border: isCompleted ? 'none' : '1px solid rgba(194,201,187,0.5)',
-                      background: isCompleted ? 'rgba(255,236,220,0.6)' : 'transparent',
-                      color: '#154212',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                    }}>
-                      <span>{isCompleted ? '🌱' : '🔄'}</span>
-                      {isCompleted ? 'Plantar Nova' : 'Alterar Árvore'}
-                    </button>
+                    <TaskCardActionsClient
+                      taskId={task.id}
+                      taskTitle={task.title}
+                      kredsValue={task.kredsValue}
+                      isActive={task.isActive}
+                    />
                   </div>
                 )
               })}
@@ -532,7 +521,7 @@ export default async function FamilyTasksPage({
 
         {/* Task Creation Form (toggle) */}
         {children.length > 0 && (
-          <section style={{ marginTop: '48px' }}>
+          <section id="nova-missao" style={{ marginTop: '48px' }}>
             <div style={{
               background: 'rgba(255,255,255,0.7)',
               backdropFilter: 'blur(20px)',

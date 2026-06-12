@@ -3,10 +3,11 @@ import Link from 'next/link'
 import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
 import * as schema from '@/lib/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, inArray } from 'drizzle-orm'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
 import { getCycleForDate } from '@/modules/activity/cycle'
 import { getActiveTasksForFamily } from '@/lib/db/tasks/queries'
+import { BottomNav } from '@/components/BottomNav'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,6 +60,32 @@ export default async function FamilyCurrentCyclePage() {
   // T-04-11: getActiveTasksForFamily always filters by familyId from session
   const tasks = await getActiveTasksForFamily(familyId)
 
+  const cycleStartStr = cycleStart.toISOString().split('T')[0]
+
+  // Query completions for current cycle across all active tasks
+  const taskIds = tasks.map((t) => t.id)
+  const completions =
+    taskIds.length > 0
+      ? await db
+          .select({
+            taskTemplateId: schema.taskCompletions.taskTemplateId,
+            childProfileId: schema.taskCompletions.childProfileId,
+            status: schema.taskCompletions.status,
+          })
+          .from(schema.taskCompletions)
+          .where(
+            and(
+              inArray(schema.taskCompletions.taskTemplateId, taskIds),
+              eq(schema.taskCompletions.cycleStart, cycleStartStr),
+            ),
+          )
+      : []
+
+  // Build lookup: `${taskId}:${childId}` → 'completed' | 'pending'
+  const completionMap = new Map(
+    completions.map((c) => [`${c.taskTemplateId}:${c.childProfileId}`, c.status]),
+  )
+
   // T-04-12: format dates with Intl using family timezone — never .toLocaleDateString() alone
   const formatCycleDate = (d: Date) =>
     new Intl.DateTimeFormat('pt-BR', {
@@ -89,7 +116,7 @@ export default async function FamilyCurrentCyclePage() {
   return (
     <main style={{
       minHeight: '100vh',
-      padding: '32px 24px 64px',
+      padding: '32px 24px 100px',
       maxWidth: '560px',
       margin: '0 auto',
     }}>
@@ -203,103 +230,128 @@ export default async function FamilyCurrentCyclePage() {
           {childGroups.map(([childId, group]) => (
             <section key={childId}>
               {/* Child header */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                marginBottom: '12px',
-              }}>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #3b6934, #154212)',
-                  display: 'grid',
-                  placeItems: 'center',
-                  fontSize: '18px',
-                  color: '#fff',
-                  fontWeight: 700,
-                  flexShrink: 0,
-                }}>
-                  {group.childName.charAt(0).toUpperCase()}
-                </div>
-                <h2 style={{
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  color: 'var(--color-primary, #154212)',
-                  margin: 0,
-                }}>
-                  {group.childName}
-                </h2>
-                <span style={{
-                  fontSize: '0.75rem',
-                  color: 'var(--color-text-soft, #72796e)',
-                  background: 'rgba(45,90,39,0.08)',
-                  padding: '2px 8px',
-                  borderRadius: '99px',
-                }}>
-                  {group.tasks.length} {group.tasks.length === 1 ? 'tarefa' : 'tarefas'}
-                </span>
-              </div>
+              {(() => {
+                const completedCount = group.tasks.filter(
+                  (t) => completionMap.get(`${t.id}:${childId}`) === 'completed',
+                ).length
+                const total = group.tasks.length
+                const allDone = completedCount === total
+                return (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    marginBottom: '12px',
+                  }}>
+                    <div style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '12px',
+                      background: 'linear-gradient(135deg, #3b6934, #154212)',
+                      display: 'grid',
+                      placeItems: 'center',
+                      fontSize: '18px',
+                      color: '#fff',
+                      fontWeight: 700,
+                      flexShrink: 0,
+                    }}>
+                      {group.childName.charAt(0).toUpperCase()}
+                    </div>
+                    <h2 style={{
+                      fontSize: '1rem',
+                      fontWeight: 700,
+                      color: 'var(--color-primary, #154212)',
+                      margin: 0,
+                    }}>
+                      {group.childName}
+                    </h2>
+                    <span style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      color: allDone ? '#3b6934' : 'var(--color-text-soft, #72796e)',
+                      background: allDone ? 'rgba(59,105,52,0.1)' : 'rgba(45,90,39,0.08)',
+                      padding: '2px 8px',
+                      borderRadius: '99px',
+                    }}>
+                      {completedCount}/{total} {allDone ? '✓' : ''}
+                    </span>
+                  </div>
+                )
+              })()}
 
               {/* Task list for this child */}
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {group.tasks.map((task) => (
-                  <li
-                    key={task.id}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '14px 18px',
-                      background: 'var(--color-card, rgba(255,255,255,0.64))',
-                      border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-                      borderRadius: '14px',
-                      boxShadow: '0 2px 8px rgba(45,90,39,0.04)',
-                    }}
-                  >
-                    <div>
-                      <p style={{
-                        fontWeight: 600,
-                        fontSize: '0.9375rem',
-                        color: 'var(--color-primary, #154212)',
-                        margin: '0 0 2px',
-                      }}>
-                        {task.title}
-                      </p>
-                      {task.description && (
-                        <p style={{
-                          fontSize: '0.75rem',
-                          color: 'var(--color-text-soft, #72796e)',
-                          margin: '0 0 2px',
-                        }}>
-                          {task.description}
-                        </p>
-                      )}
-                    </div>
+                {group.tasks.map((task) => {
+                  const status = completionMap.get(`${task.id}:${childId}`) ?? 'pending'
+                  const done = status === 'completed'
+                  return (
+                      <li
+                        key={task.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '14px 18px',
+                          background: done
+                            ? 'rgba(59,105,52,0.06)'
+                            : 'var(--color-card, rgba(255,255,255,0.64))',
+                          border: done
+                            ? '1px solid rgba(59,105,52,0.2)'
+                            : '1px solid var(--color-border, rgba(45,90,39,0.16))',
+                          borderRadius: '14px',
+                          boxShadow: '0 2px 8px rgba(45,90,39,0.04)',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                          <span style={{ fontSize: '1.1rem', marginTop: '1px' }}>
+                            {done ? '✅' : '⬜'}
+                          </span>
+                          <div>
+                            <p style={{
+                              fontWeight: 600,
+                              fontSize: '0.9375rem',
+                              color: done ? '#3b6934' : 'var(--color-primary, #154212)',
+                              margin: '0 0 2px',
+                              textDecoration: done ? 'line-through' : 'none',
+                              opacity: done ? 0.7 : 1,
+                            }}>
+                              {task.title}
+                            </p>
+                            {task.description && (
+                              <p style={{
+                                fontSize: '0.75rem',
+                                color: 'var(--color-text-soft, #72796e)',
+                                margin: '0 0 2px',
+                              }}>
+                                {task.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
 
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      flexShrink: 0,
-                      marginLeft: '12px',
-                    }}>
-                      <span style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 700,
-                        color: 'var(--color-gold, #d2a501)',
-                        background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
-                        border: '1px solid rgba(210,165,1,0.2)',
-                        borderRadius: '99px',
-                        padding: '4px 10px',
-                        whiteSpace: 'nowrap',
-                      }}>
-                        {task.kredsValue} Kreds
-                      </span>
-                    </div>
-                  </li>
-                ))}
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          flexShrink: 0,
+                          marginLeft: '12px',
+                        }}>
+                          <span style={{
+                            fontSize: '0.875rem',
+                            fontWeight: 700,
+                            color: 'var(--color-gold, #d2a501)',
+                            background: 'var(--color-gold-soft, rgba(255, 223, 144, 0.48))',
+                            border: '1px solid rgba(210,165,1,0.2)',
+                            borderRadius: '99px',
+                            padding: '4px 10px',
+                            whiteSpace: 'nowrap',
+                          }}>
+                            {task.kredsValue} Kreds
+                          </span>
+                        </div>
+                      </li>
+                  )
+                })}
               </ul>
             </section>
           ))}
@@ -307,18 +359,7 @@ export default async function FamilyCurrentCyclePage() {
       )}
 
       {/* Back link */}
-      <div style={{ marginTop: '32px', textAlign: 'center' }}>
-        <Link
-          href="/family/tasks"
-          style={{
-            fontSize: '0.8125rem',
-            color: 'var(--color-text-soft, #72796e)',
-            textDecoration: 'none',
-          }}
-        >
-          Gerenciar lista de tarefas
-        </Link>
-      </div>
+      <BottomNav active="missoes" />
     </main>
   )
 }
