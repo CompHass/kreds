@@ -131,11 +131,24 @@ export async function POST(request: NextRequest) {
 
         const membership = memberships[0]
 
-        const invitation = await createInvitation({
-          familyId: membership.familyId,
-          email,
-          invitedByIdentityId: kredsIdentityId,
-        })
+        let invitation
+        try {
+          invitation = await createInvitation({
+            familyId: membership.familyId,
+            email,
+            invitedByIdentityId: kredsIdentityId,
+          })
+        } catch (inviteErr) {
+          // PG unique_pending_invite constraint: 23505 = unique_violation
+          const cause = (inviteErr as any)?.cause as any
+          if (cause?.code === '23505' || (inviteErr as Error)?.message?.includes('unique_pending_invite')) {
+            return NextResponse.json(
+              { error: 'Já existe um convite pendente para este e-mail nesta família.' },
+              { status: 409 },
+            )
+          }
+          throw inviteErr
+        }
 
         // Generate the copyable invitation link
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
