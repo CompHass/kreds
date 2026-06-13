@@ -42,10 +42,20 @@ export async function middleware(request: NextRequest) {
 
   // Child routes require child-session JWT
   if (pathname.startsWith('/child/')) {
+    // /child/[childId]/access is the unauthenticated entry point for share links
+    if (pathname.match(/^\/child\/[^/]+\/access$/)) {
+      return NextResponse.next()
+    }
+
     const token = request.cookies.get(CHILD_SESSION_COOKIE)?.value
 
     if (!token) {
-      // No token → redirect to home
+      // No token → extract childId from path and redirect to the child access page
+      const childId = pathname.split('/')[2]
+      if (childId) {
+        const next = encodeURIComponent(pathname)
+        return NextResponse.redirect(new URL(`/child/${childId}/access?next=${next}`, request.url))
+      }
       return NextResponse.redirect(new URL('/', request.url))
     }
 

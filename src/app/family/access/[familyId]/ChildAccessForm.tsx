@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 type ChildProfileCard = {
   id: string
@@ -29,6 +29,13 @@ export default function ChildAccessForm({
   const [pin, setPin] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [nextUrl, setNextUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const next = params.get('next')
+    if (next) setNextUrl(next)
+  }, [])
 
   const selectedProfile = useMemo(
     () => profiles.find((profile) => profile.id === selectedProfileId) ?? null,
@@ -54,7 +61,7 @@ export default function ChildAccessForm({
       })
 
       if (response.ok) {
-        window.location.href = '/child/home'
+        window.location.href = nextUrl ?? '/child/home'
         return
       }
 
