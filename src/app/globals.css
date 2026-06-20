@@ -1,51 +1,124 @@
 @import "tailwindcss";
 
-:root {
-  --color-bg: #fff8f5;
-  --color-bg-soft: #f0f4f0;
-  --color-surface: rgba(255, 255, 255, 0.72);
-  --color-surface-strong: rgba(255, 248, 245, 0.92);
-  --color-card: rgba(255, 255, 255, 0.64);
-  --color-border: rgba(45, 90, 39, 0.16);
-  --color-border-soft: rgba(161, 212, 148, 0.28);
-  --color-text: #28180b;
-  --color-text-muted: #42493e;
-  --color-text-soft: #72796e;
-  --color-primary: #154212;
-  --color-primary-strong: #2d5a27;
-  --color-primary-soft: rgba(188, 240, 174, 0.38);
-  --color-lime: #b2d266;
-  --color-lime-soft: rgba(202, 236, 125, 0.42);
-  --color-pink: #f2d4bf;
-  --color-pink-soft: rgba(242, 212, 191, 0.42);
-  --color-gold: #d2a501;
-  --color-gold-soft: rgba(255, 223, 144, 0.48);
-  --color-danger: #ba1a1a;
-  --color-success: #3b6934;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 36px;
-  --radius-full: 9999px;
-  --shadow-soft: 0 18px 55px rgba(45, 90, 39, 0.1);
-  --shadow-brutal: 0 10px 28px rgba(45, 90, 39, 0.08);
-  --glow-primary: 0 0 0 4px rgba(188, 240, 174, 0.28), 0 14px 36px rgba(45, 90, 39, 0.12);
+@theme {
+  /* ── Cores (DS-01) ─────────────────────────────────────────── */
+  --color-kreds-primary:    #3E6B4F;
+  --color-kreds-primary-lt: #5A8A66;
+  --color-kreds-soft:       #E7EFE8;
+  --color-kreds-hover:      #EEF3EA;
+  --color-kreds-bg:         #F2F0E7;
+  --color-kreds-card:       #FBFAF5;
+  --color-kreds-border:     #ECE7DB;
+  --color-kreds-border-alt: #E2DECF;
+  --color-kreds-orange:     #B5623F;
+  --color-kreds-coin:       #E3C57C;
+  --color-kreds-gold:       #9A7320;
+  --color-kreds-text:       #27372C;
+  --color-kreds-muted:      #7C8676;
+  --color-kreds-hint:       #9AA092;
+  --color-kreds-error:      #B14A2E;
+  --color-kreds-rose:       #C98AA0;
+  --color-kreds-water:      #6E9BA0;
+
+  /* ── Tipografia (DS-02) ────────────────────────────────────── */
+  --font-sans: var(--font-plus-jakarta), system-ui, sans-serif;
+
+  /* ── Border Radius (DS-04) ─────────────────────────────────── */
+  --radius-app:     26px;
+  --radius-card-lg: 20px;
+  --radius-card-md: 18px;
+  --radius-card-sm: 16px;
+  --radius-input:   13px;
+  --radius-chip:    10px;
+  --radius-pill:    999px;
+
+  /* ── Sombras (DS-04) ───────────────────────────────────────── */
+  --shadow-app:    0 40px 90px -36px rgba(40,55,45,.55);
+  --shadow-card:   0 16px 36px -26px rgba(40,55,45,.5);
+  --shadow-cta:    0 12px 24px -12px rgba(62,107,79,.6);
+  --shadow-device: 0 34px 70px -22px rgba(40,55,45,.5);
+
+  /* ── Animações (DS-03) ─────────────────────────────────────── */
+  --animate-kreds-breath:   kredsBreath 5s ease-in-out infinite;
+  --animate-kreds-pop:      kredsPop 0.6s ease;
+  --animate-kreds-sun:      kredsSun 5s ease-in-out infinite;
+  --animate-kreds-drift1:   kredsDrift1 16s ease-in-out alternate infinite;
+  --animate-kreds-drift2:   kredsDrift2 20s ease-in-out alternate infinite;
+  --animate-kreds-flutter:  kredsFlutter 3s ease-in-out infinite;
+  --animate-kreds-fruit:    kredsFruit 1.4s ease-in-out infinite;
+  --animate-kreds-drop:     kredsDrop 0.72s ease-in forwards;
+  --animate-kreds-confetti: kredsConfetti 2.4s linear infinite;
+  --animate-kreds-cele:     kredsCele 0.5s cubic-bezier(.2,.85,.3,1.3);
+  --animate-kreds-bubble:   kredsBubble 0.4s ease;
+  --animate-kreds-sprout:   kredsSprout 0.45s cubic-bezier(.2,.85,.3,1.3);
+  --animate-kreds-shake:    kredsShake 0.5s cubic-bezier(.36,.07,.19,.97);
+  --animate-kreds-new:      kredsNew 1.2s ease;
+  --animate-kreds-spin:     kredsSpin 0.7s linear infinite;
+
+  /* ── Keyframes (DS-03) — dentro do @theme para tree-shaking ── */
+  @keyframes kredsBreath {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-5px); }
+  }
+  @keyframes kredsPop {
+    0%   { transform: scale(1); }
+    28%  { transform: scale(1.09) translateY(-5px); }
+    60%  { transform: scale(.98); }
+    100% { transform: scale(1); }
+  }
+  @keyframes kredsSun {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+  }
+  @keyframes kredsDrift1 {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(34px); }
+  }
+  @keyframes kredsDrift2 {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-26px); }
+  }
+  @keyframes kredsFlutter {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50%      { transform: translateY(-7px) rotate(4deg); }
+  }
+  @keyframes kredsFruit {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.06); }
+  }
+  @keyframes kredsDrop {
+    0%   { transform: translateY(-12px) scale(.8); opacity: 0; }
+    25%  { opacity: 1; }
+    100% { transform: translateY(78px) scale(.55); opacity: 0; }
+  }
+  @keyframes kredsConfetti {
+    0%   { transform: translateY(-30px) rotate(0); opacity: 0; }
+    12%  { opacity: 1; }
+    100% { transform: translateY(540px) rotate(560deg); opacity: 0; }
+  }
+  @keyframes kredsCele {
+    0%   { transform: scale(.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes kredsBubble {
+    0%   { transform: translateY(6px) scale(.9); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes kredsSprout {
+    0%   { transform: scale(0) translateY(4px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  @keyframes kredsShake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-7px); }
+    40%, 60% { transform: translateX(7px); }
+  }
+  @keyframes kredsNew {
+    0%   { box-shadow: 0 0 0 3px rgba(62,107,79,.35); }
+    100% { box-shadow: 0 0 0 0 rgba(62,107,79,0); }
+  }
+  @keyframes kredsSpin {
+    to { transform: rotate(360deg); }
+  }
 }
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% 8%, rgba(188, 240, 174, 0.32), transparent 28%),
-    radial-gradient(circle at 90% 18%, rgba(255, 223, 144, 0.26), transparent 25%),
-    radial-gradient(circle at 50% 100%, rgba(242, 212, 191, 0.28), transparent 34%),
-    linear-gradient(180deg, #f0f4f0 0%, #fff8f5 48%, #ffffff 100%);
-  color: var(--color-text);
-  font-family: var(--font-body, 'Be Vietnam Pro', system-ui, sans-serif);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-button, input, select, textarea { font: inherit; }
