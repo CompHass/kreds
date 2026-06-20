@@ -1,197 +1,137 @@
 # Requirements: Kreds
 
-**Defined:** 2026-06-04  
-**Core Value:** Children learn to steward money faithfully by separating firstfruits, completing responsibilities with integrity, practicing generosity, and seeing progress toward personal goals.
+**Defined:** 2026-06-20
+**Core Value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
 
-## v1 Requirements
+## v2.0 Requirements — Redesign Jardim Kreds
 
-Requirements for initial release. Each maps to roadmap phases.
+Requirements para o redesign completo do frontend. Cada um mapeia para fases do roadmap.
 
-### Foundation
+### Design System
 
-- [ ] **FND-01**: Developer can run a Next.js TypeScript PWA shell locally with a PostgreSQL-backed configuration.
-- [ ] **FND-02**: Developer can run database migrations and automated tests from documented commands.
-- [ ] **FND-03**: Developer can build and package the app with Docker for the target Kubernetes delivery path.
-- [ ] **FND-04**: Maintainer can review a child-privacy data inventory before any child profile data is collected.
-- [ ] **FND-05**: Maintainer can use a canonical terminology glossary for Kreds, firstfruits, giving, tasks, and weekly reports.
+- [ ] **DS-01**: Tokens de cor implementados como variáveis CSS/Tailwind (verde primário `#3E6B4F`, fundos, bordas, estados)
+- [ ] **DS-02**: Tipografia Plus Jakarta Sans importada e configurada com pesos 400/500/600/700/800
+- [ ] **DS-03**: Animações CSS nomeadas implementadas (kredsBreath, kredsPop, kredsNew, kredsDrift, kredsSun, etc.)
+- [ ] **DS-04**: Border-radius, sombras e espaçamentos como tokens reutilizáveis no Tailwind config
 
-### Family And Roles
+### Autenticação Criança
 
-- [x] **FAM-01**: Parent can authenticate through ZITADEL and create a family account with data isolated by `family_id`.
-- [x] **FAM-02**: Parent can invite or register another guardian in the same family.
-- [x] **FAM-03**: Parent can create child profiles without public child registration.
-- [x] **FAM-04**: Parent can assign each member a Kreds guardian or child role that is stored in the Kreds domain model, not only in ZITADEL claims.
-- [x] **FAM-05**: Family member can view only data that belongs to their own family.
-- [x] **FAM-06**: Parent can customize child profiles with simple avatars or visual identifiers.
-- [x] **FAM-07**: Parent can review an audit trail for identity, membership, and profile changes.
+- [ ] **CAUTH-01**: Criança vê tela de PIN com 4 dots, teclado numérico 3×4, logo e plant hero animada
+- [ ] **CAUTH-02**: Erro de PIN dispara animação shake nos dots e reseta automaticamente após 950ms
+- [ ] **CAUTH-03**: PIN correto abre animação de portão (dois painéis + cubic-bezier 1s) revelando jardim
+- [ ] **CAUTH-04**: Link "Trocar perfil" reseta completamente a tela de PIN
+- [ ] **CAUTH-05**: Cada dot preenchido exibe SVG de brotinho com animação kredsSprout
 
-### Ledger And Stewardship Engine
+### Autenticação Responsável
 
-- [ ] **LEDG-01**: System records Kreds movements as append-only ledger transactions and lines.
-- [ ] **LEDG-02**: System stores Kreds amounts as integer units, not floating-point values.
-- [ ] **LEDG-03**: System applies a single documented rounding policy for 10% firstfruits and 10% donation matching.
-- [ ] **LEDG-04**: System automatically withholds 10% of every positive earning into the Firstfruits Treasury before available balance changes.
-- [x] **LEDG-05**: Parent can record a negative adjustment with a reason and optional restoration note.
-- [ ] **LEDG-06**: System prevents duplicate ledger postings for the same approved command.
-- [x] **LEDG-07**: Parent and child can view an activity history explaining why each balance changed.
-- [x] **LEDG-08**: System corrects ledger mistakes through reversal or adjustment entries rather than editing historical transactions.
+- [ ] **GAUTH-01**: Responsável vê tela de login com campo e-mail, senha e botão Entrar via Zitadel OIDC
+- [ ] **GAUTH-02**: Botões de login social (Google, Apple) e opção Passkey disponíveis
+- [ ] **GAUTH-03**: Checkbox "Lembrar-me" funcional com estilo customizado (verde `#3E6B4F`)
+- [ ] **GAUTH-04**: Botão de login exibe spinner CSS branco durante loading
+- [ ] **GAUTH-05**: Tela de redefinição de senha com form e estado de confirmação (e-mail mascarado + reenviar)
 
-### Weekly Activities
+### Jardim da Criança
 
-- [ ] **ACT-01**: Parent can create task templates with title, description, assigned child, Kreds value, and active period.
-- [ ] **ACT-02**: System computes family activity cycles from Sunday through Saturday using the family timezone.
-- [ ] **ACT-03**: System preserves historical task activation and deactivation state for weekly reporting.
-- [ ] **ACT-04**: Child can submit a task completion for a specific occurrence date.
-- [ ] **ACT-05**: System blocks task completion submission more than 72 hours after the occurrence date.
-- [ ] **ACT-06**: Parent can approve or reject submitted task completions.
-- [ ] **ACT-07**: System posts task earnings only after parent approval.
-- [ ] **ACT-08**: Parent can view pending approvals across children.
-- [ ] **ACT-09**: Child can view current weekly tasks, submitted completions, approvals, and earned Kreds.
+- [ ] **GARD-01**: Header com avatar inicial, nome da criança, saudação e badge de moedas (SVG coin)
+- [ ] **GARD-02**: Hero jardim 316px com céu gradiente, sol animado (kredsSun), 2 nuvens (kredsDrift1/2)
+- [ ] **GARD-03**: Planta exibida em 4 estágios (plant-a→d) baseada na contagem de tarefas concluídas
+- [ ] **GARD-04**: Tracker de água com 4 dots (azul `#6E9BA0` se rega feita, branco semi-transparente se não)
+- [ ] **GARD-05**: Ao concluir tarefa: 5 drops animados (kredsDrop) + pop na planta (kredsPop) + avanço de estágio
+- [ ] **GARD-06**: Badge de estação no hero com dot colorido e nome da estação
+- [ ] **GARD-07**: Speech bubble contextual aparece conforme estado do jardim (animação kredsBubble)
+- [ ] **GARD-08**: Botão "Colher" laranja com animação kredsFruit aparece somente quando todas tarefas concluídas
+- [ ] **GARD-09**: Flores decorativas SVG aparecem no jardim ao separar dízimo
+- [ ] **GARD-10**: Overlay de celebração com 20 confetes (kredsConfetti), card de versículo bíblico e botão voltar
 
-### Dynamic Garden
+### Tarefas da Criança
 
-- [ ] **GARD-01**: Family dashboard shows an empty isometric garden base when no active missions exist.
-- [ ] **GARD-02**: Family dashboard places active missions into stable garden slots instead of using a single pre-composed full-garden image.
-- [ ] **GARD-03**: Each active mission renders the plant template and growth-stage asset that matches current weekly task progress.
-- [ ] **GARD-04**: Garden rendering remains responsive and visually coherent on mobile and desktop.
-- [ ] **GARD-05**: Empty, partial-progress, and completed mission garden states have automated tests or documented visual verification evidence.
+- [ ] **CTASK-01**: Lista de task cards com visual distinto para pendente (branco) e concluído (verde suave `#EEF3EA`)
+- [ ] **CTASK-02**: Botão check circular 38×38px toggle — desmarcado (borda `#D7DBCC`) e marcado (bg `#3E6B4F` + check branco)
+- [ ] **CTASK-03**: Card de dízimo com ícone flor, botão "Plantar" gradiente rosa, estado "Feito ✓" após clicar
+- [ ] **CTASK-04**: Card de cofrinho com meta, valor salvo e progress bar animada (`.6s cubic-bezier`)
+- [ ] **CTASK-05**: Bottom nav fixo (80px) com 4 ícones: Jardim, Tarefas, Cofrinho, Doar — ativo verde `#3E6B4F`
 
-### Goals And Generosity
+### Painel de Tarefas dos Pais
 
-- [ ] **GOAL-01**: Child can create wishlist goals with target amount and progress indicator.
-- [ ] **GOAL-02**: Child can allocate available Kreds toward a wishlist goal.
-- [ ] **GOAL-03**: Parent can define family-approved Kreds do Bem giving targets.
-- [ ] **GOAL-04**: Child can allocate available Kreds toward a parent-approved giving target.
-- [ ] **GOAL-05**: System records Kreds do Bem as an internal family giving allocation, not a real-money charitable payment.
-- [ ] **GOAL-06**: System posts a parent-funded 10% match when a voluntary giving allocation is approved.
-- [ ] **GOAL-07**: Parent and child can view wishlist and giving history with ledger-backed totals.
+- [ ] **PTASK-01**: Layout 1180px com sidebar (80px) + área principal flex-col + painel lateral direito fixo (336px)
+- [ ] **PTASK-02**: Topbar 64px com breadcrumb (família em verde), badge de usuário logado com nome e avatar
+- [ ] **PTASK-03**: Filter chips "Todas" + chip por criança com mini avatar — selecionado em verde, normal em off-white
+- [ ] **PTASK-04**: Task cards com ícone de categoria, toggle ativo/inativo (switch 42×24px), botão lápis editar
+- [ ] **PTASK-05**: 5 categorias com cores e ícones distintos (quarto, higiene, estudos, casa, espiritual)
+- [ ] **PTASK-06**: Painel direito com form criar/editar: título, categoria chips, recompensa, recorrência, atribuição, aprovação
+- [ ] **PTASK-07**: Stepper de recompensa com botões ± — valor zero mostra "Mordomia" em verde, valor > 0 mostra "R$ X"
+- [ ] **PTASK-08**: Pills de recorrência D/S/T/Q/Q/S/S + botão "Todos os dias" — selecionado em verde
+- [ ] **PTASK-09**: Flash kredsNew (glow ring verde 1.2s) no card após adicionar ou salvar tarefa
+- [ ] **PTASK-10**: Botão excluir (laranja/vermelho) aparece somente em modo edição de tarefa existente
 
-### Biblical Content And Gratitude
+### Ajustes de API
 
-- [ ] **BIBL-01**: Maintainer can manage a curated catalog of scripture references and reflection prompts.
-- [ ] **BIBL-02**: System can show contextual scripture references for stewardship, diligence, generosity, and gratitude moments.
-- [ ] **BIBL-03**: System avoids unreviewed AI-generated Bible teaching in v1.
-- [ ] **BIBL-04**: Family can receive a weekly gratitude report at the end of each Sunday-Saturday cycle.
-- [ ] **BIBL-05**: Weekly gratitude report summarizes tasks, earnings, firstfruits, wishlist progress, giving, and reflection prompts.
-- [ ] **BIBL-06**: Weekly gratitude reports are saved as historical snapshots that do not drift after later task or content edits.
+- [ ] **API-01**: Campo `approval` em tasks persistido no banco e exposto via API (GET/POST/PATCH)
+- [ ] **API-02**: Endpoints de tasks retornam `category` e `days` (array de recorrência) no payload
+- [ ] **API-03**: Endpoint de colheita (`POST /api/child/[childId]/harvest`) registra evento de colheita no ledger
 
-### PWA And Child Experience
-
-- [ ] **PWA-01**: Parent and child can use responsive dashboards on mobile and desktop browsers.
-- [ ] **PWA-02**: User can install the app as a PWA on supported devices.
-- [ ] **PWA-03**: System avoids caching sensitive child or ledger data for offline financial writes in v1.
-- [ ] **PWA-04**: User can log out and clear locally stored family-sensitive state on shared devices.
-- [ ] **PWA-05**: Child-facing screens use formative, encouraging language rather than shame-based or competitive language.
-- [ ] **PWA-06**: User can navigate core parent and child flows with accessibility support for keyboard, labels, and readable contrast.
-
-## v2 Requirements
-
-Deferred to future release. Tracked but not in current roadmap.
-
-### Notifications And Habit Polish
-
-- **NOTF-01**: Parent and child receive in-app reminders for pending tasks and approvals.
-- **NOTF-02**: Family can enable push notifications after privacy and shared-device review.
-- **NOTF-03**: Parent can add encouragement notes to weekly reports.
-- **NOTF-04**: Child can use age-adaptive reflection prompts for different maturity bands.
-
-### Advanced Stewardship
-
-- **STEW-01**: Parent can tag tasks with values such as diligence, service, stewardship, obedience, and generosity.
-- **STEW-02**: Child can use a 72-hour wishlist purchase reflection or cooling-off flow.
-- **STEW-03**: Family can configure optional allocation templates beyond mandatory firstfruits.
-- **STEW-04**: Parent can manage a richer family blessings log across cycles.
-
-### Future Integrations
-
-- **INTG-01**: Family can connect real payment rails after a dedicated compliance phase.
-- **INTG-02**: Family can access a vetted charity marketplace after legal, tax, and theological review.
-- **INTG-03**: Family can export reports for external family or church conversations.
-
-## Out of Scope
-
-Explicitly excluded. Documented to prevent scope creep.
+## Fora do Escopo (v2.0)
 
 | Feature | Reason |
 |---------|--------|
-| Native mobile apps | PWA is the initial delivery target. |
-| Real debit cards or banking in v1 | Adds KYC, fraud, support, and compliance burden before stewardship value is validated. |
-| Public charity marketplace in v1 | Creates vetting, tax, payment, fraud, and theological-alignment complexity. |
-| Investing or trading features | Distracts from stewardship, firstfruits, generosity, and task responsibility. |
-| Public child profiles or social feeds | Creates child privacy risk and conflicts with family-centered discipleship. |
-| Ads, affiliate offers, or marketplace upsells to children | Violates child-safety and parent-trust expectations. |
-| AI-generated Bible teaching | Risk of theological error, hallucinated verses, and unreviewed pastoral claims. |
-| Complex arbitrary recurrence engine | Sunday-Saturday weekly tasks are sufficient for v1. |
-| Offline financial writes | Sensitive ledger mutations must remain server-authoritative in v1. |
-| Non-family organizations | Schools, churches, and groups require a different permission and safeguarding model. |
+| Fluxo de aprovação de tarefas (notificação → confirmar → creditar) | Não prototipado no handoff — alinhar com produto antes |
+| App nativo React Native | Web/PWA-first neste milestone |
+| Notificações push | Fora do design handoff v2.0 |
+| Onboarding passo 2 (perfil da criança) | Passo 2 não prototipado |
+| Card de credenciais da criança (Frame C do login) | Funcionalidade admin — prioridade menor |
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01 | Phase 1 | Pending |
-| FND-02 | Phase 1 | Pending |
-| FND-03 | Phase 1 | Pending |
-| FND-04 | Phase 1 | Pending |
-| FND-05 | Phase 1 | Pending |
-| FAM-01 | Phase 2 | Complete |
-| FAM-02 | Phase 2 | Complete |
-| FAM-03 | Phase 2 | Complete |
-| FAM-04 | Phase 2 | Complete |
-| FAM-05 | Phase 2 | Complete |
-| FAM-06 | Phase 2 | Complete |
-| FAM-07 | Phase 2 | Complete |
-| LEDG-01 | Phase 3 | Pending |
-| LEDG-02 | Phase 3 | Pending |
-| LEDG-03 | Phase 3 | Pending |
-| LEDG-04 | Phase 3 | Pending |
-| LEDG-05 | Phase 3 | Complete |
-| LEDG-06 | Phase 3 | Pending |
-| LEDG-07 | Phase 3 | Complete |
-| LEDG-08 | Phase 3 | Complete |
-| ACT-01 | Phase 4 | Pending |
-| ACT-02 | Phase 4 | Pending |
-| ACT-03 | Phase 4 | Pending |
-| ACT-04 | Phase 5 | Pending |
-| ACT-05 | Phase 5 | Pending |
-| ACT-06 | Phase 5 | Pending |
-| ACT-07 | Phase 5 | Pending |
-| ACT-08 | Phase 5 | Pending |
-| ACT-09 | Phase 5 | Pending |
-| GARD-01 | Phase 6 | Pending |
-| GARD-02 | Phase 6 | Pending |
-| GARD-03 | Phase 6 | Pending |
-| GARD-04 | Phase 6 | Pending |
-| GARD-05 | Phase 6 | Pending |
-| GOAL-01 | Phase 7 | Pending |
-| GOAL-02 | Phase 7 | Pending |
-| GOAL-03 | Phase 8 | Pending |
-| GOAL-04 | Phase 8 | Pending |
-| GOAL-05 | Phase 8 | Pending |
-| GOAL-06 | Phase 8 | Pending |
-| GOAL-07 | Phase 8 | Pending |
-| BIBL-01 | Phase 9 | Pending |
-| BIBL-02 | Phase 9 | Pending |
-| BIBL-03 | Phase 9 | Pending |
-| BIBL-04 | Phase 9 | Pending |
-| BIBL-05 | Phase 9 | Pending |
-| BIBL-06 | Phase 9 | Pending |
-| PWA-01 | Phase 10 | Pending |
-| PWA-02 | Phase 10 | Pending |
-| PWA-03 | Phase 10 | Pending |
-| PWA-04 | Phase 10 | Pending |
-| PWA-05 | Phase 10 | Pending |
-| PWA-06 | Phase 10 | Pending |
+| DS-01 | — | Pending |
+| DS-02 | — | Pending |
+| DS-03 | — | Pending |
+| DS-04 | — | Pending |
+| CAUTH-01 | — | Pending |
+| CAUTH-02 | — | Pending |
+| CAUTH-03 | — | Pending |
+| CAUTH-04 | — | Pending |
+| CAUTH-05 | — | Pending |
+| GAUTH-01 | — | Pending |
+| GAUTH-02 | — | Pending |
+| GAUTH-03 | — | Pending |
+| GAUTH-04 | — | Pending |
+| GAUTH-05 | — | Pending |
+| GARD-01 | — | Pending |
+| GARD-02 | — | Pending |
+| GARD-03 | — | Pending |
+| GARD-04 | — | Pending |
+| GARD-05 | — | Pending |
+| GARD-06 | — | Pending |
+| GARD-07 | — | Pending |
+| GARD-08 | — | Pending |
+| GARD-09 | — | Pending |
+| GARD-10 | — | Pending |
+| CTASK-01 | — | Pending |
+| CTASK-02 | — | Pending |
+| CTASK-03 | — | Pending |
+| CTASK-04 | — | Pending |
+| CTASK-05 | — | Pending |
+| PTASK-01 | — | Pending |
+| PTASK-02 | — | Pending |
+| PTASK-03 | — | Pending |
+| PTASK-04 | — | Pending |
+| PTASK-05 | — | Pending |
+| PTASK-06 | — | Pending |
+| PTASK-07 | — | Pending |
+| PTASK-08 | — | Pending |
+| PTASK-09 | — | Pending |
+| PTASK-10 | — | Pending |
+| API-01 | — | Pending |
+| API-02 | — | Pending |
+| API-03 | — | Pending |
 
 **Coverage:**
-
-- v1 requirements: 53 total
-- Mapped to phases: 53
-- Unmapped: 0
-- Duplicate mappings: 0
+- v2.0 requirements: 40 total
+- Mapped to phases: 0 (aguardando roadmap)
+- Unmapped: 40 ⚠️
 
 ---
-*Requirements defined: 2026-06-04*
-*Last updated: 2026-06-08 after adding Dynamic Stewardship Garden requirements*
+*Requirements defined: 2026-06-20*
+*Last updated: 2026-06-20 — definição inicial do milestone v2.0*
