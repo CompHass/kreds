@@ -84,54 +84,54 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | — | Pending |
-| DS-02 | — | Pending |
-| DS-03 | — | Pending |
-| DS-04 | — | Pending |
-| CAUTH-01 | — | Pending |
-| CAUTH-02 | — | Pending |
-| CAUTH-03 | — | Pending |
-| CAUTH-04 | — | Pending |
-| CAUTH-05 | — | Pending |
-| GAUTH-01 | — | Pending |
-| GAUTH-02 | — | Pending |
-| GAUTH-03 | — | Pending |
-| GAUTH-04 | — | Pending |
-| GAUTH-05 | — | Pending |
-| GARD-01 | — | Pending |
-| GARD-02 | — | Pending |
-| GARD-03 | — | Pending |
-| GARD-04 | — | Pending |
-| GARD-05 | — | Pending |
-| GARD-06 | — | Pending |
-| GARD-07 | — | Pending |
-| GARD-08 | — | Pending |
-| GARD-09 | — | Pending |
-| GARD-10 | — | Pending |
-| CTASK-01 | — | Pending |
-| CTASK-02 | — | Pending |
-| CTASK-03 | — | Pending |
-| CTASK-04 | — | Pending |
-| CTASK-05 | — | Pending |
-| PTASK-01 | — | Pending |
-| PTASK-02 | — | Pending |
-| PTASK-03 | — | Pending |
-| PTASK-04 | — | Pending |
-| PTASK-05 | — | Pending |
-| PTASK-06 | — | Pending |
-| PTASK-07 | — | Pending |
-| PTASK-08 | — | Pending |
-| PTASK-09 | — | Pending |
-| PTASK-10 | — | Pending |
-| API-01 | — | Pending |
-| API-02 | — | Pending |
-| API-03 | — | Pending |
+| DS-01 | Phase 1 | Pending |
+| DS-02 | Phase 1 | Pending |
+| DS-03 | Phase 1 | Pending |
+| DS-04 | Phase 1 | Pending |
+| CAUTH-01 | Phase 2 | Pending |
+| CAUTH-02 | Phase 2 | Pending |
+| CAUTH-03 | Phase 2 | Pending |
+| CAUTH-04 | Phase 2 | Pending |
+| CAUTH-05 | Phase 2 | Pending |
+| GAUTH-01 | Phase 2 | Pending |
+| GAUTH-02 | Phase 2 | Pending |
+| GAUTH-03 | Phase 2 | Pending |
+| GAUTH-04 | Phase 2 | Pending |
+| GAUTH-05 | Phase 2 | Pending |
+| GARD-01 | Phase 3 | Pending |
+| GARD-02 | Phase 3 | Pending |
+| GARD-03 | Phase 3 | Pending |
+| GARD-04 | Phase 3 | Pending |
+| GARD-05 | Phase 3 | Pending |
+| GARD-06 | Phase 3 | Pending |
+| GARD-07 | Phase 3 | Pending |
+| GARD-08 | Phase 3 | Pending |
+| GARD-09 | Phase 3 | Pending |
+| GARD-10 | Phase 3 | Pending |
+| CTASK-01 | Phase 4 | Pending |
+| CTASK-02 | Phase 4 | Pending |
+| CTASK-03 | Phase 4 | Pending |
+| CTASK-04 | Phase 4 | Pending |
+| CTASK-05 | Phase 4 | Pending |
+| PTASK-01 | Phase 5 | Pending |
+| PTASK-02 | Phase 5 | Pending |
+| PTASK-03 | Phase 5 | Pending |
+| PTASK-04 | Phase 5 | Pending |
+| PTASK-05 | Phase 5 | Pending |
+| PTASK-06 | Phase 5 | Pending |
+| PTASK-07 | Phase 5 | Pending |
+| PTASK-08 | Phase 5 | Pending |
+| PTASK-09 | Phase 5 | Pending |
+| PTASK-10 | Phase 5 | Pending |
+| API-01 | Phase 6 | Pending |
+| API-02 | Phase 6 | Pending |
+| API-03 | Phase 6 | Pending |
 
 **Coverage:**
-- v2.0 requirements: 40 total
-- Mapped to phases: 0 (aguardando roadmap)
-- Unmapped: 40 ⚠️
+- v2.0 requirements: 42 total
+- Mapped to phases: 42/42 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-06-20*
-*Last updated: 2026-06-20 — definição inicial do milestone v2.0*
+*Last updated: 2026-06-20 — roadmap v2.0 criado, traceability completa*

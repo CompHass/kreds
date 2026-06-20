@@ -1,329 +1,112 @@
-# Roadmap: Kreds
+# Roadmap: Kreds — v2.0 Redesign Jardim Kreds
 
 ## Overview
 
-Kreds v1 moves from a privacy-safe delivery skeleton into family tenancy, a trustworthy Kreds Engine, weekly task earnings, wishlist and generosity allocations, gratitude reporting, and finally PWA/child-experience hardening. The roadmap follows the dependency order required for a trust-sensitive child and family finance product: protect family data before profiles, establish append-only ledger rules before earnings and giving, then layer biblical content and mobile polish after the core stewardship loop works.
+Rebuild completo do frontend com fidelidade total ao design handoff. Parte do design system e tokens (Fase 1), sobe para autenticação de criança e responsável (Fase 2), constrói o jardim gamificado (Fase 3), completa a área da criança com tarefas e navegação (Fase 4), entrega o painel desktop dos pais (Fase 5) e finaliza conectando toda a UI aos endpoints reais do backend com os ajustes de API necessários (Fase 6).
 
 ## Phases
 
 **Phase Numbering:**
-
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation, Privacy, and Delivery Skeleton** - Developers and maintainers can run, test, package, and review Kreds before child data exists.
-- [x] **Phase 2: Family Access, Tenancy, Roles, and Profiles** - Families can be created through ZITADEL-backed authentication with isolated memberships, guardians, children, roles, avatars, and identity audit history. (completed 2026-06-07)
-- [ ] **Phase 3: Kreds Engine Ledger and Audit Foundation** - Kreds movements are posted through integer, append-only, idempotent ledger transactions with firstfruits and correction rules. (4/4 plans complete; ready for verification)
-- [x] **Phase 4: Weekly Task Templates and Activity Cycles** - Parents can define weekly tasks whose Sunday-Saturday cycles and activation history are preserved. (completed 2026-06-08)
-- [ ] **Phase 5: Task Completion, Approval, and Earnings Slice** - Children complete tasks, parents approve them, and approved work posts Kreds earnings with visible status and history.
-- [ ] **Phase 6: Dynamic Stewardship Garden** - The family dashboard renders an empty garden when no missions exist and grows task-linked plants by weekly progress stage.
-- [ ] **Phase 7: Wishlist Goals and Progress** - Children can set wishlist goals and move available Kreds toward visible goal progress.
-- [ ] **Phase 8: Kreds do Bem Giving and Matching** - Families can record internal giving allocations with parent-approved targets, matching, and ledger-backed history.
-- [ ] **Phase 9: Biblical Content and Weekly Gratitude Reports** - Families receive immutable weekly reports with curated scripture and reflection prompts tied to stewardship activity.
-- [ ] **Phase 10: PWA Hardening and Child Experience Polish** - Parent and child flows are installable, responsive, accessible, safe on shared devices, and encouraging in tone.
+- [ ] **Phase 1: Foundation** - Design system tokens, tipografia, animações e scaffolding do app Next.js
+- [ ] **Phase 2: Authentication** - PIN screen da criança com animação portão e login OIDC do responsável
+- [ ] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração
+- [ ] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação
+- [ ] **Phase 5: Parent Panel** - Layout desktop dos pais com CRUD completo de tarefas
+- [ ] **Phase 6: API Integration** - Conectar toda a UI aos endpoints reais com os ajustes de campo necessários
 
 ## Phase Details
 
-### Phase 1: Foundation, Privacy, and Delivery Skeleton
-
-**Goal**: Developers and maintainers can safely bootstrap Kreds without collecting child profile data.
-**Mode:** mvp
+### Phase 1: Foundation
+**Goal**: O app tem estrutura Next.js funcional com design system completo — tokens, tipografia e animações prontos para todas as fases seguintes
 **Depends on**: Nothing (first phase)
-**Requirements**: FND-01, FND-02, FND-03, FND-04, FND-05
+**Requirements**: DS-01, DS-02, DS-03, DS-04
 **Success Criteria** (what must be TRUE):
-
-  1. Developer can run the Next.js TypeScript PWA shell locally against PostgreSQL-backed configuration.
-  2. Developer can run migrations and automated tests from documented commands and see deterministic pass/fail output.
-  3. Developer can build a Docker image suitable for the target Kubernetes delivery path.
-  4. Maintainer can review child-privacy data inventory before any child profile data is collected.
-  5. Maintainer can use canonical Kreds terminology for firstfruits, giving, tasks, and weekly reports.
-
-**Plans**: 4 plans**Plans:**
-**Wave 1**
-
-- [x] 01-01-PLAN.md — Base Next.js scaffold, package legitimacy gate, dependency install, health API endpoint
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 01-02-PLAN.md — PostgreSQL (Deployed on hasslab-k3s/kreds), Drizzle migration application, families API and DB-backed page proof
-- [x] 01-04-PLAN.md — Child privacy data inventory, canonical terminology glossary with TypeScript constants
-
-**Wave 3** *(blocked on Wave 2 completion)*
-
-- [x] 01-03-PLAN.md — Test infrastructure with passing migration integration test and Docker multi-stage build
-
+  1. Tokens de cor (verde `#3E6B4F`, fundos, bordas, estados) estão disponíveis como variáveis CSS e classes Tailwind em todo o app
+  2. Plus Jakarta Sans (pesos 400–800) é a fonte renderizada em todos os textos do app
+  3. Todas as animações nomeadas do design handoff (kredsBreath, kredsPop, kredsNew, kredsDrift, kredsSun, etc.) existem como keyframes CSS e podem ser aplicadas por classe
+  4. Border-radius, sombras e espaçamentos do design handoff existem como tokens reutilizáveis no Tailwind config
+**Plans**: TBD
 **UI hint**: yes
 
-### Phase 2: Family Access, Tenancy, Roles, and Profiles
-
-**Goal**: Parents can authenticate through ZITADEL and create isolated family accounts with guardians, children, roles, profile identifiers, and audit visibility.
-**Mode:** mvp
+### Phase 2: Authentication
+**Goal**: Criança consegue entrar com PIN de 4 dígitos com animação completa; responsável consegue fazer login via Zitadel OIDC e redefinir senha
 **Depends on**: Phase 1
-**Requirements**: FAM-01, FAM-02, FAM-03, FAM-04, FAM-05, FAM-06, FAM-07
+**Requirements**: CAUTH-01, CAUTH-02, CAUTH-03, CAUTH-04, CAUTH-05, GAUTH-01, GAUTH-02, GAUTH-03, GAUTH-04, GAUTH-05
 **Success Criteria** (what must be TRUE):
-
-  1. Parent can authenticate through ZITADEL, create a family account, and all family-scoped data is isolated by `family_id`.
-  2. Parent can invite or register another guardian and create child profiles without public child self-registration.
-  3. Parent can assign Kreds guardian or child roles stored in the domain model, and family members only see data from their own family.
-  4. Parent can customize child profiles with simple avatars or visual identifiers.
-  5. Parent can review an audit trail for identity, membership, and profile changes.
-  6. Unauthenticated visitor sees a branded Sylvan landing screen with ZITADEL sign-in CTA — no unstyled placeholder.
-
-**Plans**: 12 plans
-**Wave 0**
-
-- [x] 02-01-PLAN.md — Wave 0 validation scaffolds for authorization, tenancy, child profiles, invitations, and audit
-
-**Wave 1** *(blocked on Wave 0 completion)*
-
-- [x] 02-02-PLAN.md — Auth.js/ZITADEL package, env validation, and auth route foundation
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 02-03-PLAN.md — Family tenancy, memberships, invitations, child profiles, consent, audit schema, and blocking Drizzle push
-
-**Wave 3** *(blocked on Wave 2 completion)*
-
-- [x] 02-04-PLAN.md — Family authorization helpers, transactional family creation, guarded API, and onboarding redirect to first child setup
-
-**Wave 4** *(blocked on Wave 3 completion)*
-
-- [x] 02-05-PLAN.md — Guardian-managed child profiles with consent, Sylvan avatars, accent colors, and privacy inventory update
-- [x] 02-06-PLAN.md — Guardian invitation lifecycle with authenticated acceptance, copyable link behavior, and audit events
-
-**Wave 5** *(blocked on Wave 4 completion)*
-
-- [x] 02-07-PLAN.md — Guardian-readable audit timeline and cross-family isolation closure
-
-**Post-verification fix:**
-
-- [x] UI-01 — Tela de autenticação Sylvan: landing page com gradiente, símbolo Firstfruits, card glass e botão "Entrar com ZITADEL"; redirect automático para `/family/children` quando usuário já tem família
-
-**Wave 6** *(child PIN auth — added post-execution, D-28 through D-33)*
-
-- [x] 02-10-PLAN.md — Schema migration: pin_hash + last_accessed_at em child_profiles; PIN hashing commands; PIN input em /family/children; CHILD_SESSION_SECRET env var
-- [ ] 02-11-PLAN.md — Child access entry point /family/access/[familyId]; POST /api/families/[familyId]/child-auth com brute-force protection; child-session JWT cookie
-- [ ] 02-12-PLAN.md — requireChildSession middleware; child home page /child/home; guardian audit timeline com eventos de login e last_accessed_at
-
+  1. Criança vê tela de PIN com 4 dots, teclado numérico e plant hero animada; cada dot preenchido mostra SVG de brotinho com animação kredsSprout
+  2. PIN errado dispara shake nos dots e reseta automaticamente após 950ms
+  3. PIN correto abre animação de portão (dois painéis, cubic-bezier 1s) que revela o jardim
+  4. Link "Trocar perfil" reseta a tela de PIN completamente
+  5. Responsável consegue fazer login com e-mail/senha (Zitadel OIDC), com opções Google/Apple/Passkey, checkbox "Lembrar-me" funcional e spinner durante loading; consegue redefinir senha e ver confirmação com e-mail mascarado
+**Plans**: TBD
 **UI hint**: yes
 
-### Phase 3: Kreds Engine Ledger and Audit Foundation
-
-**Goal**: Families can trust balance changes because every Kreds movement is integer-based, append-only, explainable, and correction-safe.
-**Mode:** mvp
+### Phase 3: Child Garden
+**Goal**: A criança vê seu jardim vivo — planta em estágio correto, animações de sol e nuvens, feedback de rega ao concluir tarefa, e overlay de celebração ao colher
 **Depends on**: Phase 2
-**Requirements**: LEDG-01, LEDG-02, LEDG-03, LEDG-04, LEDG-05, LEDG-06, LEDG-07, LEDG-08
+**Requirements**: GARD-01, GARD-02, GARD-03, GARD-04, GARD-05, GARD-06, GARD-07, GARD-08, GARD-09, GARD-10
 **Success Criteria** (what must be TRUE):
-
-  1. System records every Kreds movement as append-only ledger transactions and lines using integer units.
-  2. System applies one documented rounding policy for 10% firstfruits and 10% donation matching.
-  3. System automatically withholds 10% of every positive earning into the Firstfruits Treasury before available balance changes.
-  4. Parent can record negative adjustments with reasons and optional restoration notes.
-  5. Parent and child can view activity history that explains balance changes, while mistakes are corrected through reversals or adjustments instead of historical edits.
-
-**Plans**: 4 plans
-
-**Wave 0** *(scaffolding de testes e contratos — nenhuma implementação real)*
-
-- [x] 03-01-PLAN.md — Schema Drizzle ledger_transactions+ledger_lines, calculateFirstfruits pura, tipos Zod de comando, testes RED para LEDG-01 a LEDG-08
-
-**Wave 1** *(bloqueado pela Wave 0)*
-
-- [x] 03-02-PLAN.md — Slice 1: postEarning + firstfruits split + getBalance + rota POST + página de saldo do child
-
-**Wave 2** *(bloqueado pela Wave 1 — planos 03 e 04 rodam em paralelo)*
-
-- [x] 03-03-PLAN.md — Slice 2: postNegativeAdjustment com reason obrigatório + rota POST + formulário guardian
-- [x] 03-04-PLAN.md — Slice 3+4: postReversal + queries de histórico diferenciadas + páginas de histórico guardian e child
-
+  1. Header exibe avatar com inicial, nome da criança, saudação e badge de moedas (SVG coin)
+  2. Hero 316px mostra céu gradiente com sol animado (kredsSun) e duas nuvens (kredsDrift1/2); planta exibida no estágio correto (plant-a→d) baseado em tarefas concluídas; badge de estação visível com dot colorido
+  3. Ao concluir tarefa, 5 drops animados (kredsDrop) disparam, planta faz kredsPop e o tracker de água avança (dot azul `#6E9BA0`)
+  4. Speech bubble contextual aparece com animação kredsBubble conforme estado do jardim
+  5. Botão "Colher" laranja com animação kredsFruit aparece apenas quando todas as tarefas estão concluídas; ao colher, overlay exibe 20 confetes, versículo bíblico e botão voltar; flores SVG decorativas aparecem ao separar dízimo
+**Plans**: TBD
 **UI hint**: yes
 
-### Phase 4: Weekly Task Templates and Activity Cycles
-
-**Goal**: Parents can define weekly responsibilities that preserve Sunday-Saturday timing and historical activation state.
-**Mode:** mvp
+### Phase 4: Child Tasks
+**Goal**: A criança consegue ver, marcar e interagir com todas as tarefas — incluindo card de dízimo, card de cofrinho e bottom nav funcional
 **Depends on**: Phase 3
-**Requirements**: ACT-01, ACT-02, ACT-03
+**Requirements**: CTASK-01, CTASK-02, CTASK-03, CTASK-04, CTASK-05
 **Success Criteria** (what must be TRUE):
-
-  1. Parent can create task templates with title, description, assigned child, Kreds value, and active period.
-  2. System computes each family activity cycle from Sunday through Saturday using the family timezone.
-  3. System preserves task activation and deactivation history for later weekly reporting.
-
-**Plans**: 3 plans
-
-**Wave 0** *(TDD — função pura getCycleForDate e schema Zod, testes RED-GREEN)*
-
-- [x] 04-01-PLAN.md — getCycleForDate pure function (ACT-02) + taskTemplateSchema Zod (ACT-01) com ciclo TDD completo
-
-**Wave 1** *(bloqueado pela Wave 0)*
-
-- [x] 04-02-PLAN.md — Schema Drizzle task_templates + migration + CRUD API (GET/POST) + página guardian /family/tasks
-
-**Wave 2** *(bloqueado pela Wave 1)*
-
-- [x] 04-03-PLAN.md — Toggle deactivate/reactivate (ACT-03) + página /family/tasks/current com ciclo timezone-aware
-
-**UI hint**: yes
-
-### Phase 11: Role Segregation: auth middleware, child nav, guardian share link, child tasks with completion, child dashboard, donations
-
-**Goal:** Rotas /child/* e /family/* são protegidas por papéis distintos via middleware Edge, filho tem experiência completa com dashboard, tarefas e sonhos, e guardião pode compartilhar o link de acesso com um toque.
-**Requirements**: D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11, D-12
-**Depends on:** Phase 4
-**Plans:** 7 plans
-
-**Wave 1** *(schema e migration — bloqueante)*
-
-- [x] 11-01-PLAN.md — Schema task_completions + donations + migration [BLOCKING]
-
-**Wave 2** *(bloqueado pela Wave 1)*
-
-- [x] 11-02-PLAN.md — src/middleware.ts com guard duplo Edge Runtime (child JWT + NextAuth)
-
-**Wave 3** *(bloqueado pela Wave 2 — planos 03, 04 e 05 rodam em paralelo)*
-
-- [x] 11-03-PLAN.md — ChildBottomNav + /child/[childId]/dashboard + redirect /child/home
-- [x] 11-04-PLAN.md — /child/[childId]/tasks + TaskToggleButton + POST /api/child/[childId]/tasks/[taskId]/toggle
-- [x] 11-05-PLAN.md — /child/[childId]/dreams + /child/[childId]/balance + /child/[childId]/donations + POST /api/child/[childId]/donations
-
-**Wave 4** *(bloqueado pela Wave 3 — planos 06 e 07 rodam em paralelo)*
-
-- [x] 11-06-PLAN.md — ShareLinkButton em /family/children + remoção link /child/*/balance + guards /(app)/* (D-04, D-11, D-12)
-- [x] 11-07-PLAN.md — /guardian/[childId]/balance com NextAuth session (D-11)
-
-**UI hint**: yes
-
-### Phase 5: Task Completion, Approval, and Earnings Slice
-
-**Goal**: Children can turn approved weekly responsibilities into earned Kreds through the parent-governed stewardship loop.
-**Mode:** mvp
-**Depends on**: Phase 4
-**Requirements**: ACT-04, ACT-05, ACT-06, ACT-07, ACT-08, ACT-09
-**Success Criteria** (what must be TRUE):
-
-  1. Child can submit task completions for specific occurrence dates and see submitted, approved, rejected, and earned statuses.
-  2. System blocks task completion submissions more than 72 hours after the occurrence date using server-side validation.
-  3. Parent can review pending approvals across children and approve or reject each submitted completion.
-  4. System posts task earnings only after parent approval and routes firstfruits through the Kreds Engine.
-  5. Parent and child can view current weekly tasks and earned Kreds for the active cycle.
-
-**Plans**: 3 plans
-
-**Wave 0** *(asset and mapping contracts — safe before UI integration)*
-
-- [ ] 06-01-PLAN.md — Garden asset manifest, stable slot map, and plant-stage progress contract
-
-**Wave 1** *(visual composition component)*
-
-- [ ] 06-02-PLAN.md — Reusable GardenCanvas rendering empty base plus layered plant stage assets
-
-**Wave 2** *(dashboard integration after Phase 5 progress data exists)*
-
-- [ ] 06-03-PLAN.md — Family dashboard garden state wired to active missions and weekly progress
-
-**UI hint**: yes
-
-### Phase 6: Dynamic Stewardship Garden
-
-**Goal**: Families can see the current stewardship garden reflect real mission state: an empty plot when no missions exist, and planted growth stages tied to task progress when missions are active.
-**Mode:** mvp
-**Depends on**: Phase 5
-**Requirements**: GARD-01, GARD-02, GARD-03, GARD-04, GARD-05
-**Success Criteria** (what must be TRUE):
-
-  1. Family dashboard shows an empty isometric garden base when the family has no active missions.
-  2. Family dashboard renders task-linked plants on top of the empty garden base when active missions exist.
-  3. Each rendered plant uses the configured plant template and growth-stage asset that matches the task's current weekly progress.
-  4. Garden composition remains responsive and visually coherent on mobile and desktop without relying on a single pre-composed full-garden image.
-  5. Empty, partial, and completed mission states are covered by automated tests or documented visual verification evidence.
-
+  1. Lista de task cards distingue visualmente tarefas pendentes (fundo branco) de concluídas (verde suave `#EEF3EA`)
+  2. Botão check 38×38px alterna entre desmarcado (borda `#D7DBCC`) e marcado (bg `#3E6B4F` + check branco)
+  3. Card de dízimo exibe ícone de flor, botão "Plantar" gradiente rosa, e muda para estado "Feito ✓" após clique
+  4. Card de cofrinho exibe meta, valor salvo e progress bar animada (`.6s cubic-bezier`)
+  5. Bottom nav fixo 80px com 4 ícones (Jardim, Tarefas, Cofrinho, Doar) navega entre seções; ícone ativo aparece em verde `#3E6B4F`
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 7: Wishlist Goals and Progress
-
-**Goal**: Children can direct available Kreds toward personal wishlist goals and see progress grow.
-**Mode:** mvp
-**Depends on**: Phase 6
-**Requirements**: GOAL-01, GOAL-02
+### Phase 5: Parent Panel
+**Goal**: O responsável consegue criar, editar, ativar/desativar e excluir tarefas pelo painel desktop com todas as opções de configuração
+**Depends on**: Phase 2
+**Requirements**: PTASK-01, PTASK-02, PTASK-03, PTASK-04, PTASK-05, PTASK-06, PTASK-07, PTASK-08, PTASK-09, PTASK-10
 **Success Criteria** (what must be TRUE):
-
-  1. Child can create wishlist goals with target amounts.
-  2. Child can allocate available Kreds toward a wishlist goal.
-  3. Child and parent can see wishlist progress indicators based on current allocations.
-
+  1. Layout 1180px renderiza sidebar 80px + área principal + painel direito fixo 336px; topbar 64px exibe breadcrumb com família em verde e badge do usuário logado
+  2. Filter chips mostram "Todas" e um chip por criança com mini avatar; chip selecionado aparece em verde
+  3. Task cards exibem ícone de categoria (5 categorias com cores distintas), toggle ativo/inativo 42×24px e botão lápis para editar
+  4. Painel direito permite criar/editar tarefa com título, categoria chips, stepper de recompensa (±), pills de recorrência D/S/T/Q/Q/S/S, atribuição, e campo de aprovação
+  5. Após salvar ou criar tarefa, o card recém-adicionado exibe flash kredsNew (glow ring verde 1.2s); botão excluir aparece somente em modo edição de tarefa existente
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 8: Kreds do Bem Giving and Matching
-
-**Goal**: Families can practice generosity through parent-approved internal giving allocations with transparent matching and history.
-**Mode:** mvp
-**Depends on**: Phase 7
-**Requirements**: GOAL-03, GOAL-04, GOAL-05, GOAL-06, GOAL-07
+### Phase 6: API Integration
+**Goal**: Toda a UI está conectada ao backend real — campo `approval` persiste, tasks retornam `category` e `days`, e o endpoint de colheita registra o evento no ledger
+**Depends on**: Phase 4, Phase 5
+**Requirements**: API-01, API-02, API-03
 **Success Criteria** (what must be TRUE):
-
-  1. Parent can define family-approved Kreds do Bem giving targets.
-  2. Child can allocate available Kreds toward a parent-approved giving target.
-  3. System clearly records Kreds do Bem as an internal family giving allocation, not a real-money charitable payment.
-  4. System posts a parent-funded 10% match when a voluntary giving allocation is approved.
-  5. Parent and child can view wishlist and giving history with ledger-backed totals.
-
+  1. Ao criar ou editar tarefa com campo aprovação marcado/desmarcado, o valor `approval` é persistido no banco e retornado nas respostas GET/PATCH de tasks
+  2. A lista de tarefas da criança e o painel dos pais recebem `category` e `days` (array de recorrência) no payload — filtros e pills de recorrência refletem os dados reais
+  3. Ao clicar "Colher" e confirmar, `POST /api/child/[childId]/harvest` é chamado e o evento de colheita aparece no histórico do ledger da criança
 **Plans**: TBD
-**UI hint**: yes
-
-### Phase 9: Biblical Content and Weekly Gratitude Reports
-
-**Goal**: Families can reflect on weekly stewardship with curated scripture prompts and immutable gratitude report snapshots.
-**Mode:** mvp
-**Depends on**: Phase 8
-**Requirements**: BIBL-01, BIBL-02, BIBL-03, BIBL-04, BIBL-05, BIBL-06
-**Success Criteria** (what must be TRUE):
-
-  1. Maintainer can manage a curated catalog of scripture references and reflection prompts.
-  2. System can show contextual scripture references for stewardship, diligence, generosity, and gratitude moments without unreviewed AI-generated Bible teaching.
-  3. Family can receive a weekly gratitude report at the end of each Sunday-Saturday cycle.
-  4. Weekly gratitude report summarizes tasks, earnings, firstfruits, wishlist progress, giving, and reflection prompts.
-  5. Weekly gratitude reports are saved as historical snapshots that do not drift after later task or content edits.
-
-**Plans**: TBD
-**UI hint**: yes
-
-### Phase 10: PWA Hardening and Child Experience Polish
-
-**Goal**: Parents and children can use Kreds safely and comfortably across mobile and desktop browsers, including shared-device scenarios.
-**Mode:** mvp
-**Depends on**: Phase 9
-**Requirements**: PWA-01, PWA-02, PWA-03, PWA-04, PWA-05, PWA-06
-**Success Criteria** (what must be TRUE):
-
-  1. Parent and child can use responsive dashboards on mobile and desktop browsers.
-  2. User can install the app as a PWA on supported devices.
-  3. System avoids caching sensitive child or ledger data for offline financial writes in v1.
-  4. User can log out and clear locally stored family-sensitive state on shared devices.
-  5. Child-facing screens use formative, encouraging language and core flows support keyboard navigation, labels, and readable contrast.
-
-**Plans**: TBD
-**UI hint**: yes
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 11 → 5 → 6 → 7 → 8 → 9 → 10
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+
+Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child garden/tasks) and Phase 5 (parent panel) can be built in parallel once Phase 2 is complete, but are sequenced here for single-developer execution.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | Complete | 2026-06-06 |
-| 2. Family Access, Tenancy, Roles, and Profiles | 10/12 | In Progress|  |
-| 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
-| 4. Weekly Task Templates and Activity Cycles | 3/3 | Complete   | 2026-06-08 |
-| 11. Role Segregation: auth middleware, child nav, guardian share link, child tasks with completion, child dashboard, donations | 7/7 | Complete | 2026-06-10 |
-| 5. Task Completion, Approval, and Earnings Slice | 0/TBD | Not started | - |
-| 6. Dynamic Stewardship Garden | 0/3 | Not started | - |
-| 7. Wishlist Goals and Progress | 0/TBD | Not started | - |
-| 8. Kreds do Bem Giving and Matching | 0/TBD | Not started | - |
-| 9. Biblical Content and Weekly Gratitude Reports | 0/TBD | Not started | - |
-| 10. PWA Hardening and Child Experience Polish | 0/TBD | Not started | - |
+| 1. Foundation | 0/TBD | Not started | - |
+| 2. Authentication | 0/TBD | Not started | - |
+| 3. Child Garden | 0/TBD | Not started | - |
+| 4. Child Tasks | 0/TBD | Not started | - |
+| 5. Parent Panel | 0/TBD | Not started | - |
+| 6. API Integration | 0/TBD | Not started | - |
