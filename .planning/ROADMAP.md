@@ -30,7 +30,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Plus Jakarta Sans (pesos 400–800) é a fonte renderizada em todos os textos do app
   3. Todas as animações nomeadas do design handoff (kredsBreath, kredsPop, kredsNew, kredsDrift, kredsSun, etc.) existem como keyframes CSS e podem ser aplicadas por classe
   4. Border-radius, sombras e espaçamentos do design handoff existem como tokens reutilizáveis no Tailwind config
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 01-01-PLAN.md — Design tokens em globals.css (@theme: cores, tipografia, radius, shadow, 15 animações + keyframes) e stub Serwist sw.ts
+- [ ] 01-02-PLAN.md — RootLayout com Plus Jakarta Sans, página placeholder e build de produção verde (checkpoint visual)
 **UI hint**: yes
 
 ### Phase 2: Authentication
@@ -104,7 +107,7 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/2 | Planned | - |
 | 2. Authentication | 0/TBD | Not started | - |
 | 3. Child Garden | 0/TBD | Not started | - |
 | 4. Child Tasks | 0/TBD | Not started | - |
