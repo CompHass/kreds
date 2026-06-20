@@ -15,5 +15,25 @@ services:
       timeout: 5s
       retries: 5
 
+  app:
+    build:
+      context: .
+      target: runner
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://kreds:kreds_dev@postgres:5432/kreds_dev
+      NODE_ENV: production
+      AUTH_SECRET: dev-secret-32-chars-minimum-here
+      CHILD_SESSION_SECRET: dev-child-session-secret-32chars!!
+      AUTH_ZITADEL_ID: dev-client-id
+      AUTH_ZITADEL_SECRET: dev-client-secret
+      AUTH_ZITADEL_ISSUER: https://auth.hasslab.pro
+      ZITADEL_ISSUER: https://auth.hasslab.pro
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pgdata:
