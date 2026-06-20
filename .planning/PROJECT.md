@@ -2,97 +2,94 @@
 
 ## What This Is
 
-Kreds is a Christian stewardship and allowance management app for families. It helps parents teach children financial responsibility through weekly activities, automatic tithe separation, generosity incentives, savings goals, and gratitude reflection grounded in biblical principles.
-
-The initial audience is Christian parents and guardians who want to educate children ages 6+ in both personal finance and character formation, with children using the product to track tasks, earnings, giving, and wishes.
+Kreds é um app cristão de educação financeira e mordomia para famílias. Pais criam tarefas com recompensas; filhos completam as tarefas e veem seu "jardim" crescer como metáfora visual do progresso. Duas interfaces distintas: painel web/desktop para os pais e app mobile/PWA com jardim interativo para as crianças.
 
 ## Core Value
 
-Children learn to steward money faithfully by separating firstfruits, completing responsibilities with integrity, practicing generosity, and seeing progress toward personal goals.
+A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
+
+## Current Milestone: v2.0 Redesign — Jardim Kreds
+
+**Goal:** Reconstruir o frontend completo do zero com o novo design system, cobrindo área dos pais e área das crianças em paralelo por fase.
+
+**Target features:**
+- Design system e tokens (cores, tipografia, animações do design handoff)
+- Login criança (PIN de 4 dígitos + animação portão) e pai (Zitadel OIDC)
+- Jardim interativo da criança (gamificação, estágios de planta, colheita)
+- Lista de tarefas da criança com feedback visual (rega, celebração, dízimo)
+- Painel de tarefas dos pais (criar, editar, ativar/desativar, filtrar por filho)
+- Ajustes de API onde o design exigir (ex: campo `approval` em tasks)
 
 ## Requirements
 
 ### Validated
 
-(None yet - ship to validate)
+(Nenhum ainda — milestone v2.0 iniciado)
 
 ### Active
 
-- [ ] Families can keep all data isolated by `family_id`.
-- [ ] Parents can register multiple guardians and children in the same family.
-- [ ] Family members can have customizable avatar profiles.
-- [ ] The activity cycle runs from Sunday through Saturday.
-- [ ] Tasks keep historical activation and deactivation state.
-- [ ] Children or parents cannot backfill task completion more than 72 hours after the occurrence date.
-- [ ] Children earn Kreds for completed tasks.
-- [ ] Parents can record negative adjustments for misaligned behaviors.
-- [ ] The financial engine automatically withholds 10% of all positive earnings into the Firstfruits Treasury.
-- [ ] Parents can apply a 10% matching bonus on voluntary donation amounts.
-- [ ] Children can create and track wishlist goals with progress indicators.
-- [ ] Children can donate through the Kreds do Bem social-impact module.
-- [ ] The app can show strategic Bible verses such as Malachi 3:10, Proverbs 22:6, and Colossians 3:23.
-- [ ] Families receive a weekly gratitude report at the end of each cycle.
-- [ ] The product ships as a web and mobile-capable PWA.
+- [ ] Design system implementado (tokens, tipografia Plus Jakarta Sans, animações)
+- [ ] Autenticação criança via PIN de 4 dígitos com animação portão
+- [ ] Autenticação responsável via Zitadel OIDC
+- [ ] Jardim interativo com 4 estágios de planta e feedback de rega
+- [ ] Lista de tarefas da criança com toggle e celebração ao completar todas
+- [ ] Card de dízimo com flores decorativas
+- [ ] Card de cofrinho (meta com progress bar)
+- [ ] Painel de tarefas dos pais com CRUD completo
+- [ ] Bottom nav mobile para crianças
+- [ ] Sidebar desktop para pais
 
 ### Out of Scope
 
-- Native mobile apps - PWA is the initial delivery target.
-- Non-family multi-tenant organizations - the product is scoped around family households first.
-- Full banking integrations - Kreds tracks allowance/stewardship internally rather than moving real money in v1.
-- Public charity marketplace - v1 can model causes or people selected by the family without needing a regulated donation marketplace.
-- Real-time chat or social networking - not required for stewardship, allowance, or family education value.
+| Feature | Reason |
+|---------|--------|
+| Fluxo de aprovação de tarefas | Campo `approval` existe no modelo mas fluxo não prototipado — alinhar com produto |
+| App nativo (React Native) | PWA/web-first por ora |
+| Notificações push | Fora do design handoff v2.0 |
+| Onboarding completo de família | Passo 2 não prototipado no handoff |
 
 ## Context
 
-Kreds is framed as discipleship rather than a generic allowance tracker. The product should reinforce Christian stewardship: everything belongs to God, children are managers of resources, tithing is treated as firstfruits, service reflects Christlike love, and the 72-hour rule encourages honesty and discipline.
-
-The PRD names the financial engine as the Kreds Engine. Positive earnings generate task credits, negative adjustments model behaviors that are out of alignment, tithe is mandatory at 10% of every positive gain, and voluntary giving can receive a parent-funded 10% match.
-
-The product includes a biblical content layer with strategic verses and a weekly gratitude report. These should be integrated naturally into the product experience without turning the core app into a content library.
-
-The provided technical direction is a React/Next.js web and mobile PWA, a Go or Node.js backend, PostgreSQL for relational auditability, and production infrastructure using Kubernetes, ArgoCD, Docker, and Harbor. There is also a separate Stitch design-system artifact in the repository that may inform later UI work.
+- **Design handoff completo** em `design_handoff_kreds/README.md` — tokens, animações, componentes e 3 protótipos interativos (`.dc.html`)
+- **Backend mantido em git** — APIs REST em `src/app/api/`, schema Drizzle, módulos de ledger, tasks, goals, família, auth
+- **src/ foi deletado** do working tree — rebuild total, não migração de código
+- **Duas superfícies:** crianças (mobile-first, 392px, jardim gamificado) e pais (desktop, 1180px, painel administrativo)
+- **Autenticação:** pais via Zitadel OIDC (next-auth v5), crianças via PIN de 4 dígitos com cookie JWT próprio
+- **Assets de planta** em `design_handoff_kreds/garden/plant-{a,b,c,d}.png`
 
 ## Constraints
 
-- **Language**: Planning docs, code, comments, identifiers, and commit messages are English - required by the active agent rules.
-- **Product language**: User-facing copy can be localized later, but the current planning artifacts are written in English for implementation consistency.
-- **Frontend**: React/Next.js PWA - requested by the PRD for web and mobile reach.
-- **Backend**: Node.js/TypeScript is recommended by research for v1; any backend choice must integrate with ZITADEL OIDC.
-- **Authentication**: ZITADEL is the authentication provider, with issuer `https://auth.hasslab.pro` discovered via OIDC metadata.
-- **Database**: PostgreSQL - required for relational financial records and auditability.
-- **Infrastructure**: Kubernetes, ArgoCD, Docker, and Harbor - requested target platform for deployment.
-- **Financial integrity**: All Kreds Engine transactions need an auditable model because the app teaches stewardship and must preserve trust.
-- **Family privacy**: Family data isolation by `family_id` is a core architectural requirement.
-- **Weekly cadence**: The activity period is Sunday through Saturday and shapes task validation, reports, and phase decomposition.
+- **Tech stack:** Next.js 16, pnpm, Tailwind CSS, Drizzle ORM, next-auth v5, PostgreSQL
+- **Tipografia:** Plus Jakarta Sans — pesos 400/500/600/700/800 (Google Fonts)
+- **Fidelidade:** Alta fidelidade ao design handoff — pixel a pixel nos tokens documentados
+- **Compatibilidade:** APIs existentes no git devem ser reaproveitadas sem quebra de schema
+- **Mobile-first:** Área das crianças projetada para 392×812px
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Build Kreds as a Christian stewardship app, not a generic allowance tracker | The PRD centers discipleship, firstfruits, generosity, and gratitude as the product identity | - Pending |
-| Use automatic 10% firstfruits withholding on all positive earnings | The Principle of Firstfruits is a core value and must be systemic rather than optional | - Pending |
-| Enforce a 72-hour task backfill limit | Encourages integrity and discipline in activity recording | - Pending |
-| Target a PWA first | The PRD requests web and mobile reach without native mobile scope | - Pending |
-| Use PostgreSQL for the financial ledger | Relational records support auditability for transactions and family data isolation | - Pending |
-| Resolve Go versus Node.js before implementation | The PRD leaves backend language open; choosing one affects stack, hiring assumptions, and architecture | - Pending |
-| Use ZITADEL for authentication | The project will use the HassLab ZITADEL instance as the OIDC identity provider | - Pending |
+| Rebuild total (não migração) | Design novo incompatível com estrutura anterior; código antigo deletado | — Pending |
+| Ambas superfícies em paralelo por fase | Evita divergência de tokens e componentes compartilhados | — Pending |
+| Frontend + ajustes de API quando necessário | Campo `approval` e outros campos do design precisam de suporte backend | — Pending |
+| PWA em vez de app nativo | Web-first mantém stack única; jardim funciona bem em PWA mobile | — Pending |
 
 ## Evolution
 
-This document evolves at phase transitions and milestone boundaries.
+Este documento evolui a cada transição de fase e milestone.
 
-**After each phase transition** (via `/gsd-transition`):
-1. Requirements invalidated? -> Move to Out of Scope with reason
-2. Requirements validated? -> Move to Validated with phase reference
-3. New requirements emerged? -> Add to Active
-4. Decisions to log? -> Add to Key Decisions
-5. "What This Is" still accurate? -> Update if drifted
+**Após cada fase** (via `/gsd-transition`):
+1. Requirements invalidados? → Mover para Out of Scope com motivo
+2. Requirements validados? → Mover para Validated com referência de fase
+3. Novos requirements? → Adicionar em Active
+4. Decisões? → Adicionar em Key Decisions
+5. "What This Is" ainda preciso? → Atualizar se mudou
 
-**After each milestone** (via `/gsd-complete-milestone`):
-1. Full review of all sections
-2. Core Value check - still the right priority?
-3. Audit Out of Scope - reasons still valid?
-4. Update Context with current state
+**Após cada milestone** (via `/gsd-complete-milestone`):
+1. Revisão completa de todas as seções
+2. Core Value check — ainda a prioridade certa?
+3. Auditar Out of Scope — motivos ainda válidos?
+4. Atualizar Context com estado atual
 
 ---
-*Last updated: 2026-06-05 after selecting ZITADEL authentication*
+*Last updated: 2026-06-20 — Milestone v2.0 iniciado*

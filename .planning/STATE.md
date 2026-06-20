@@ -1,105 +1,23 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: executing
-stopped_at: Phase 02 context updated — child PIN auth + Zitadel roles clarified
-last_updated: "2026-06-10T20:12:09.877Z"
-last_activity: 2026-06-08 -- Phase 04 execution started
+milestone: v2.0
+milestone_name: Redesign Jardim Kreds
+status: planning
+last_updated: "2026-06-20T13:10:21.325Z"
+last_activity: 2026-06-20
 progress:
-  total_phases: 11
-  completed_phases: 3
-  total_plans: 26
-  completed_plans: 21
-  percent: 33
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
-## Project Reference
-
-See: .planning/PROJECT.md (updated 2026-06-04)
-
-**Core value:** Children learn to steward money faithfully by separating firstfruits, completing responsibilities with integrity, practicing generosity, and seeing progress toward personal goals.
-**Current focus:** Phase 04 — weekly-task-templates-and-activity-cycles
-
 ## Current Position
 
-Phase: 04 (weekly-task-templates-and-activity-cycles) — EXECUTING
-Plan: 2 of 3
-Status: Ready to execute
-Last activity: 2026-06-08 -- Phase 04 execution started
-
-Progress: [▓▓░░░░░░░░] 11%
-
-## Performance Metrics
-
-**Velocity:**
-
-- Total plans completed: 4
-- Average duration: N/A
-- Total execution time: ~40 min (single session)
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 1. Foundation, Privacy, and Delivery Skeleton | 4/4 | ~40 min | ~10 min |
-| 2. Family Access, Tenancy, Roles, and Profiles | 7/7 | Complete | 2026-06-07 |
-| 3. Kreds Engine Ledger and Audit Foundation | 4/4 | Ready for verification | 2026-06-07 |
-| 4. Weekly Task Templates and Activity Cycles | 0/TBD | N/A | N/A |
-| 5. Task Completion, Approval, and Earnings Slice | 0/TBD | N/A | N/A |
-| 6. Dynamic Stewardship Garden | 0/3 | N/A | N/A |
-| 7. Wishlist Goals and Progress | 0/TBD | N/A | N/A |
-| 8. Kreds do Bem Giving and Matching | 0/TBD | N/A | N/A |
-| 9. Biblical Content and Weekly Gratitude Reports | 0/TBD | N/A | N/A |
-| 10. PWA Hardening and Child Experience Polish | 0/TBD | N/A | N/A |
-
-**Recent Trend:**
-
-- Last 5 plans: 01-04 ✅, 01-03 ✅, 01-02 ✅, 01-01 ✅
-- Trend: Phase 1 complete
-
-*Updated after each plan completion*
-| Phase 02-family-access-tenancy-roles-and-profiles P7 | 4min | 2 tasks | 4 files |
-
-## Accumulated Context
-
-### Roadmap Evolution
-
-- Phase 11 added: Role Segregation — auth middleware, child route guard, guardian share link, child tasks with completion, child dashboard with garden, donations schema and UI. Depends on Phase 4. Inserted before Phase 5 in execution order.
-
-### Decisions
-
-Decisions logged during Phase 1 execution:
-
-- [Infrastructure]: PostgreSQL deployed as StatefulSet in `hasslab-k3s` cluster, namespace `kreds`, instead of local Docker.
-- [Build]: Using Podman instead of Docker Desktop for image builds. Image built successfully: `localhost/kreds:test`.
-- [PNPM]: Pinned to v10.34.1 via `packageManager` field to avoid lockfile incompatibility with pnpm 11.
-- [Serwist]: Import path is `@serwist/next/react` (not `@serwist/next/clients` as in research).
-- [Migration]: `pnpm db:generate` and `pnpm db:migrate` work with port-forwarded cluster PostgreSQL.
-- [Phase 02-family-access-tenancy-roles-and-profiles]: Closed set of forbidden metadata keys (rawToken, tokenHash, rawDiff, fullIdentityPayload, token, hash) for audit sanitization — D-18 requires parent-readable timeline; these keys expose technical implementation details
-
-### Pending Todos
-
-None — Phase 1 complete.
-
-### Blockers/Concerns
-
-- [Phase 1 known limitation]: Integration test (Testcontainers) requires Docker daemon; Podman SSH tunnel not directly compatible.
-- [Phase 3]: Define exact integer rounding policy for firstfruits and matching before ledger postings ship.
-- [Phase 8]: Decide Bible translation/reference licensing before showing scripture text beyond references.
-
-## Deferred Items
-
-| Category | Item | Status | Deferred At |
-|----------|------|--------|-------------|
-| Notifications | Push/in-app reminders | Deferred to v2 unless promoted later | v1 roadmap |
-| Advanced Stewardship | Values tags, cooling-off flows, configurable allocations | Deferred to v2 | v1 roadmap |
-| Integrations | Real payments, charity marketplace, exports | Deferred to v2+ | v1 roadmap |
-
-## Session Continuity
-
-Last session: 2026-06-08T14:24:26.111Z
-Stopped at: Phase 02 context updated — child PIN auth + Zitadel roles clarified
-Resume file: .planning/phases/02-family-access-tenancy-roles-and-profiles/02-CONTEXT.md
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-06-20 — Milestone v2.0 started
