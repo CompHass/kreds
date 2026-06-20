@@ -9,10 +9,10 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 ### Design System
 
-- [ ] **DS-01**: Tokens de cor implementados como variáveis CSS/Tailwind (verde primário `#3E6B4F`, fundos, bordas, estados)
-- [ ] **DS-02**: Tipografia Plus Jakarta Sans importada e configurada com pesos 400/500/600/700/800
-- [ ] **DS-03**: Animações CSS nomeadas implementadas (kredsBreath, kredsPop, kredsNew, kredsDrift, kredsSun, etc.)
-- [ ] **DS-04**: Border-radius, sombras e espaçamentos como tokens reutilizáveis no Tailwind config
+- [x] **DS-01**: Tokens de cor implementados como variáveis CSS/Tailwind (verde primário `#3E6B4F`, fundos, bordas, estados)
+- [x] **DS-02**: Tipografia Plus Jakarta Sans importada e configurada com pesos 400/500/600/700/800
+- [x] **DS-03**: Animações CSS nomeadas implementadas (kredsBreath, kredsPop, kredsNew, kredsDrift, kredsSun, etc.)
+- [x] **DS-04**: Border-radius, sombras e espaçamentos como tokens reutilizáveis no Tailwind config
 
 ### Autenticação Criança
 
@@ -84,10 +84,10 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | Phase 1 | Pending |
-| DS-02 | Phase 1 | Pending |
-| DS-03 | Phase 1 | Pending |
-| DS-04 | Phase 1 | Pending |
+| DS-01 | Phase 1 | Complete |
+| DS-02 | Phase 1 | Complete |
+| DS-03 | Phase 1 | Complete |
+| DS-04 | Phase 1 | Complete |
 | CAUTH-01 | Phase 2 | Pending |
 | CAUTH-02 | Phase 2 | Pending |
 | CAUTH-03 | Phase 2 | Pending |
@@ -128,6 +128,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | API-03 | Phase 6 | Pending |
 
 **Coverage:**
+
 - v2.0 requirements: 42 total
 - Mapped to phases: 42/42 ✓
 - Unmapped: 0

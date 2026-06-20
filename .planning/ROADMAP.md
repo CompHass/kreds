@@ -13,7 +13,7 @@ Rebuild completo do frontend com fidelidade total ao design handoff. Parte do de
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Design system tokens, tipografia, animações e scaffolding do app Next.js
+- [x] **Phase 1: Foundation** - Design system tokens, tipografia, animações e scaffolding do app Next.js (completed 2026-06-20)
 - [ ] **Phase 2: Authentication** - PIN screen da criança com animação portão e login OIDC do responsável
 - [ ] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração
 - [ ] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação
@@ -37,11 +37,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plansPlans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Design tokens em globals.css (@theme: cores, tipografia, radius, shadow, 15 animações + keyframes) e stub Serwist sw.ts
+- [x] 01-01-PLAN.md — Design tokens em globals.css (@theme: cores, tipografia, radius, shadow, 15 animações + keyframes) e stub Serwist sw.ts
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — RootLayout com Plus Jakarta Sans, página placeholder e build de produção verde (checkpoint visual)
+- [x] 01-02-PLAN.md — RootLayout com Plus Jakarta Sans, página placeholder e build de produção verde (checkpoint visual)
 
 **UI hint**: yes
 
@@ -131,7 +131,7 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Planned | - |
+| 1. Foundation | 2/2 | Complete    | 2026-06-20 |
 | 2. Authentication | 0/TBD | Not started | - |
 | 3. Child Garden | 0/TBD | Not started | - |
 | 4. Child Tasks | 0/TBD | Not started | - |
