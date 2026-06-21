@@ -97,8 +97,8 @@ describe('src/middleware.ts', () => {
     })
   })
 
-  describe('Test 3: /child/* with expired JWT but decodable familyId → redirect to /family/access/[familyId]', () => {
-    it('should redirect to /family/access/[familyId] when token expired but familyId present', async () => {
+  describe('Test 3: /child/* with expired JWT → redirect to / (no trust of unverified payload)', () => {
+    it('should redirect to / when token is expired — CR-02: no decodeJwt on untrusted tokens', async () => {
       const token = await createExpiredChildJWT({
         childProfileId: 'child-123',
         familyId: 'fam-789',
@@ -109,7 +109,7 @@ describe('src/middleware.ts', () => {
       })
       const response = await middleware(request)
       expect(response.status).toBe(307)
-      expect(response.headers.get('location')).toContain('/family/access/fam-789')
+      expect(response.headers.get('location')).toBe('http://localhost:3000/')
     })
   })
 
