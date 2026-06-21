@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation'
+import { auth } from '@/auth'
 import { db } from '@/lib/db'
 import { childProfiles } from '@/lib/db/schema'
 import { and, eq } from 'drizzle-orm'
@@ -9,6 +11,9 @@ export default async function SelectProfilePage({
   params: Promise<{ familyId: string }>
 }) {
   const { familyId } = await params
+
+  const session = await auth()
+  if (!session) redirect('/login')
 
   const children = await db
     .select({
