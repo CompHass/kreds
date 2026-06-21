@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: checkpoint
-stopped_at: Completed 02-04-PLAN.md Tasks 1-2 — PinScreen + 5 componentes criados; Task 3 checkpoint humano pendente (animações CAUTH-01..05)
-last_updated: "2026-06-21T13:14:44Z"
-last_activity: 2026-06-21 -- Completed 02-04 Tasks 1-2 (pin-dot, pin-dots, numeric-keypad, gate-lock, pin-screen, child login page)
+status: executing
+stopped_at: Completed 02-04-PLAN.md Tasks 1-2 — PinScreen + componentes visuais do PIN; aguardando checkpoint visual (Task 3)
+last_updated: "2026-06-21T22:51:08.205Z"
+last_activity: 2026-06-21 -- Phase 02 execution started
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
-  percent: 17
+  completed_plans: 7
+  percent: 33
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 02 (authentication) — EXECUTING
-Plan: 5 of 5
-Status: Phase complete — ready for verification
-Last activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
+Plan: 1 of 5
+Status: Executing Phase 02
+Last activity: 2026-06-21 -- Phase 02 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
