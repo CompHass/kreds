@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { loginWithPasskey, loginWithProvider } from '@/app/actions/guardian-auth'
 
 /**
@@ -7,12 +8,47 @@ import { loginWithPasskey, loginWithProvider } from '@/app/actions/guardian-auth
  * Google/Apple: identity_provider hint. Passkey: signIn('zitadel') direto.
  */
 export function SocialAuthButtons() {
+  const [authError, setAuthError] = useState<string | null>(null)
+
+  async function handleProvider(idp: 'google' | 'apple') {
+    try {
+      setAuthError(null)
+      await loginWithProvider(idp)
+    } catch {
+      setAuthError('Falha ao entrar. Tente novamente.')
+    }
+  }
+
+  async function handlePasskey() {
+    try {
+      setAuthError(null)
+      await loginWithPasskey()
+    } catch {
+      setAuthError('Falha ao entrar. Tente novamente.')
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
+      {authError && (
+        <div
+          role="alert"
+          style={{
+            fontSize: '13px',
+            fontWeight: 500,
+            color: 'var(--color-kreds-error)',
+            backgroundColor: 'rgba(177,74,46,.08)',
+            borderRadius: '8px',
+            padding: '10px 12px',
+          }}
+        >
+          {authError}
+        </div>
+      )}
       {/* Botão Google */}
       <button
         type="button"
-        onClick={() => loginWithProvider('google')}
+        onClick={() => handleProvider('google')}
         style={{
           height: '44px',
           borderRadius: '13px',
@@ -54,7 +90,7 @@ export function SocialAuthButtons() {
       {/* Botão Apple */}
       <button
         type="button"
-        onClick={() => loginWithProvider('apple')}
+        onClick={() => handleProvider('apple')}
         style={{
           height: '44px',
           borderRadius: '13px',
@@ -84,7 +120,7 @@ export function SocialAuthButtons() {
       {/* Botão Passkey */}
       <button
         type="button"
-        onClick={() => loginWithPasskey()}
+        onClick={() => handlePasskey()}
         style={{
           height: '44px',
           borderRadius: '13px',
