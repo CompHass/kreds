@@ -17,31 +17,37 @@ export function PinScreen({ childId, familyId, displayName }: PinScreenProps) {
   const [pin, setPin] = useState('')
   const [error, setError] = useState(false)
   const [gateOpen, setGateOpen] = useState(false)
+  const [pending, setPending] = useState(false)
   const router = useRouter()
 
   async function handleDigit(d: string) {
-    if (error || gateOpen) return
+    if (error || gateOpen || pending) return
     if (pin.length >= 4) return
 
     const newPin = pin + d
 
     if (newPin.length === 4) {
       setPin(newPin)
-      const result = await verifyChildPin(childId, newPin)
+      setPending(true)
+      try {
+        const result = await verifyChildPin(childId, newPin)
 
-      if ('success' in result && result.success) {
-        // CAUTH-03: animação de portão + redirect após 1.1s
-        setGateOpen(true)
-        setTimeout(() => {
-          router.push(`/child/${childId}/garden`)
-        }, 1100)
-      } else {
-        // CAUTH-02: shake + reset após 950ms (SEM texto de erro — 02-UI-SPEC Copywriting)
-        setError(true)
-        setTimeout(() => {
-          setPin('')
-          setError(false)
-        }, 950)
+        if ('success' in result && result.success) {
+          // CAUTH-03: animação de portão + redirect após 1.1s
+          setGateOpen(true)
+          setTimeout(() => {
+            router.push(`/child/${childId}/garden`)
+          }, 1100)
+        } else {
+          // CAUTH-02: shake + reset após 950ms (SEM texto de erro — 02-UI-SPEC Copywriting)
+          setError(true)
+          setTimeout(() => {
+            setPin('')
+            setError(false)
+          }, 950)
+        }
+      } finally {
+        setPending(false)
       }
     } else {
       setPin(newPin)
@@ -49,7 +55,7 @@ export function PinScreen({ childId, familyId, displayName }: PinScreenProps) {
   }
 
   function handleBackspace() {
-    if (error || gateOpen) return
+    if (error || gateOpen || pending) return
     setPin((p) => p.slice(0, -1))
   }
 
