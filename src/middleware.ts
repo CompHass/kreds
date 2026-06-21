@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { jwtVerify, decodeJwt } from 'jose'
+import { jwtVerify } from 'jose'
 
 const CHILD_SESSION_COOKIE = 'child-session'
 
@@ -46,16 +46,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
       return NextResponse.next()
     } catch {
-      // Token expirado mas possivelmente decodificável — extrair familyId para redirect contextual
-      try {
-        const decoded = decodeJwt(cookieValue)
-        const familyId = (decoded as Record<string, unknown>).familyId as string | undefined
-        if (familyId) {
-          return NextResponse.redirect(new URL(`/family/access/${familyId}`, req.url))
-        }
-      } catch {
-        // Token malformado — não decodificável
-      }
+      // Não confiar em nenhum campo de um token expirado ou inválido
       return NextResponse.redirect(new URL('/', req.url))
     }
   }
