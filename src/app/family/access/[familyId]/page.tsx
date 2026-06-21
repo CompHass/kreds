@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { auth } from '@/auth'
+import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
 import { childProfiles } from '@/lib/db/schema'
 import { and, eq } from 'drizzle-orm'
