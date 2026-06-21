@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { childProfiles } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { ProfileCard } from '@/components/auth/profile-card'
 
 export default async function SelectProfilePage({
@@ -17,7 +17,7 @@ export default async function SelectProfilePage({
       accentColor: childProfiles.accentColor,
     })
     .from(childProfiles)
-    .where(eq(childProfiles.familyId, familyId))
+    .where(and(eq(childProfiles.familyId, familyId), eq(childProfiles.active, true)))
 
   return (
     <main

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import { childProfiles } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { PinScreen } from '@/components/auth/pin-screen'
 
 export default async function ChildLoginPage({
@@ -17,7 +17,7 @@ export default async function ChildLoginPage({
       familyId: childProfiles.familyId,
     })
     .from(childProfiles)
-    .where(eq(childProfiles.id, childId))
+    .where(and(eq(childProfiles.id, childId), eq(childProfiles.active, true)))
     .limit(1)
 
   if (!child) {
