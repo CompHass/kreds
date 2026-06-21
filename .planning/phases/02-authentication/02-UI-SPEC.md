@@ -22,7 +22,7 @@ created: 2026-06-20
 | Preset | not applicable |
 | Component library | none (componentes próprios) |
 | Icon library | SVGs inline — nenhuma biblioteca externa |
-| Font | Plus Jakarta Sans — pesos 400, 500, 600, 700, 800 |
+| Font | Plus Jakarta Sans — pesos canônicos 500 e 700 |
 
 **Fonte:** `globals.css` @theme + `design_handoff_kreds/README.md`
 
@@ -44,12 +44,13 @@ Declarado: escala 4-point. Todas as medidas do protótipo já mapeadas para a es
 | 2xl | 48px | Padding vertical da tela de PIN (topo/baixo) |
 | 3xl | 64px | Não usado nesta fase |
 
-Exceções:
-- Dots do PIN: 16px diâmetro, gap 12px entre dots (valor do protótipo, mantido literalmente)
-- Botões do teclado numérico: 62px altura × 62px largura (touch target > 44px mínimo — correto)
-- Inputs do responsável: 50px altura (exato do protótipo)
-- Botão Entrar: 52px altura (exato do protótipo)
-- Checkbox "Lembrar-me": 18×18px (exato do protótipo)
+Exceções (ajustadas para múltiplos de 4):
+- Dots do PIN: 16px diâmetro, gap 12px entre dots
+- Botões do teclado numérico: **64px** altura × **64px** largura (touch target > 44px mínimo — correto)
+- Inputs do responsável: **52px** altura
+- Botão Entrar: 52px altura (já é múltiplo de 4 — sem alteração)
+- Checkbox "Lembrar-me": **16px×16px**
+- Padding interno de inputs: **16px** horizontal
 
 **Fonte:** `design_handoff_kreds/README.md` §Frame A e §Frame B
 
@@ -61,14 +62,14 @@ Todos os tamanhos são em px, fonte Plus Jakarta Sans.
 
 | Role | Size | Weight | Line Height | Usage |
 |------|------|--------|-------------|-------|
-| Display | 24–26px | 800 | 1.2 | Título principal ("Olá, Ana!"), heading do form responsável |
-| Heading | 18–20px | 700 | 1.25 | Label de seção, título do card de redefinição de senha |
-| Body | 15px | 500 | 1.5 | Texto de inputs, copy de estados, copy do form |
-| Label | 12px | 600 | 1.4 | Captions, links ("Trocar perfil", "Esqueci minha senha"), labels de checkbox |
+| Display | 24–26px | 700 | 1.2 | Título principal ("Olá, Ana!"), heading do form responsável |
+| Heading | 18–20px | 700 | 1.25 | Label de seção, título do card de redefinição de senha, botões do teclado numérico |
+| Body | 15px | 500 | 1.5 | Texto de inputs, copy de estados, copy do form, wordmark "kreds" no logo |
+| Label | 12px | 500 | 1.4 | Captions, links ("Trocar perfil", "Esqueci minha senha"), labels de checkbox, rodapé, nomes de avatar, texto dos botões sociais |
+
+Pesos canônicos: **500** (body/regular) e **700** (headings/CTAs). Pesos adicionais (600, 800) são usados apenas para o wordmark e ênfases visuais específicas — não são entradas da escala tipográfica canônica.
 
 Letter-spacing para Display e Heading: `-0.01em`.
-
-Wordmark "kreds" no logo: 17px, weight 800.
 
 **Fonte:** `design_handoff_kreds/README.md` §Tipografia
 
@@ -120,7 +121,7 @@ Cores adicionais declaradas nesta fase:
 **Avatar card (por criança):**
 - Círculo 72px diâmetro, gradiente `#5A8A66 → #3E6B4F`, `border-radius: 50%`
 - Inicial do nome: 28px, weight 700, cor branco
-- Nome abaixo: 14px, weight 600, `--color-kreds-text`
+- Nome abaixo: Label (12px/500), `--color-kreds-text`
 - Gap entre cards: 16px
 - Grade: 2 colunas para ≥3 crianças; coluna única para 1-2
 
@@ -139,9 +140,9 @@ Cores adicionais declaradas nesta fase:
 **Layout:** fullscreen mobile (392×812px). Fundo: gradiente `radial-gradient(120% 100% at 50% 0%, #ECE7DB 0%, #E0DACB 100%)`. Coluna vertical centralizada.
 
 **Ordem dos elementos (top → bottom):**
-1. Logo (SVG folha bicolor + wordmark "kreds" 17px/800) — topo, 48px do topo
+1. Logo (SVG folha bicolor + wordmark "kreds" Body/15px) — topo, 48px do topo
 2. Plant hero SVG — 120px abaixo do logo — `animation: kredsBreath 5s ease-in-out infinite`
-3. Saudação "Olá, [Nome]!" — 24px, weight 800, `--color-kreds-text`
+3. Saudação "Olá, [Nome]!" — Display (24px/700), `--color-kreds-text`
 4. Dots container — 24px abaixo da saudação
 5. Teclado numérico — 32px abaixo dos dots
 6. Link "Trocar perfil" — 24px abaixo do teclado
@@ -156,9 +157,9 @@ Cores adicionais declaradas nesta fase:
 
 **Teclado numérico (grid 3×4):**
 - Colunas: 1, 2, 3 / 4, 5, 6 / 7, 8, 9 / *, 0, ⌫
-- Botões 1–9 e 0: 62×62px, `border-radius: 50%`, `bg #FBFAF5`, `box-shadow: 0 3px 0 #E6E1D4`, texto 22px/700
+- Botões 1–9 e 0: 64×64px, `border-radius: 50%`, `bg #FBFAF5`, `box-shadow: 0 3px 0 #E6E1D4`, texto Heading (20px/700)
 - Botão `*`: sem função visual (célula vazia, sem render)
-- Botão `⌫`: sem fundo, sem borda, ícone SVG backspace 22px, `--color-kreds-text`
+- Botão `⌫`: sem fundo, sem borda, ícone SVG backspace 20px, `--color-kreds-text`
 - Gap grid: 8px entre colunas, 12px entre linhas
 
 **Animação de portão (PIN correto — CAUTH-03):**
@@ -171,7 +172,7 @@ Cores adicionais declaradas nesta fase:
 - Sequência: PIN 4 → validação Server Action → sucesso → acionar classe `.open` nos painéis → redirect para `/child/[childId]/garden` após 1.1s
 
 **Link "Trocar perfil" (CAUTH-04):**
-- 12px, weight 600, cor `--color-kreds-hint` (`#9AA092`)
+- Label (12px/500), cor `--color-kreds-hint` (`#9AA092`)
 - Underline on hover
 - Ação: limpar state local do PIN + navegar para `/family/[familyId]/select-profile`
 
@@ -184,34 +185,34 @@ Cores adicionais declaradas nesta fase:
 **Layout:** fullscreen mobile (392×812px). Fundo `--color-kreds-bg`. Coluna com padding lateral 24px.
 
 **Ordem dos elementos:**
-1. Logo (SVG + wordmark) — topo, 48px do topo
-2. Título "Bem-vindo de volta" — 24px/800
-3. Subtítulo "Entre com sua conta familiar" — 15px/500, `--color-kreds-muted`
-4. Campo e-mail (50px)
-5. Campo senha (50px) com toggle olho
+1. Logo (SVG + wordmark "kreds" Body/15px) — topo, 48px do topo
+2. Título "Bem-vindo de volta" — Display (24px/700)
+3. Subtítulo "Entre com sua conta familiar" — Body (15px/500), `--color-kreds-muted`
+4. Campo e-mail (52px)
+5. Campo senha (52px) com toggle olho
 6. Linha: Checkbox "Lembrar-me" (esquerda) + Link "Esqueci minha senha" (direita)
 7. Botão "Entrar" (52px)
-8. Divisor "ou continue com" — linha `#ECE7DB` com texto 12px/600 `--color-kreds-muted` centralizado
+8. Divisor "ou continue com" — linha `#ECE7DB` com texto Label (12px/500) `--color-kreds-muted` centralizado
 9. Botão Google (44px)
 10. Botão Apple (44px)
 11. Botão Passkey (44px)
-12. Rodapé: "Não tem conta? Criar conta" — 13px/600
+12. Rodapé: "Não tem conta? Criar conta" — Label (12px/500)
 
 **Input e-mail e senha:**
-- Altura: 50px, `border-radius: 13px`, `border: 1.5px solid #E2DECF`, `bg #fff`
-- Padding: 14px horizontal (ícone à esquerda a 14px da borda interna)
+- Altura: 52px, `border-radius: 13px`, `border: 1.5px solid #E2DECF`, `bg #fff`
+- Padding: 16px horizontal (ícone à esquerda a 16px da borda interna)
 - Ícone SVG à esquerda: 16px, `--color-kreds-muted`
-- Placeholder: 15px/500, `--color-kreds-hint`
+- Placeholder: Body (15px/500), `--color-kreds-hint`
 - Focus: `border-color: #3E6B4F; box-shadow: 0 0 0 3px rgba(62,107,79,.13)`
-- Campo senha: ícone olho toggle à direita — clique alterna `type="password"` ↔ `type="text"`
+- Campo senha: ícone olho toggle à direita — clique alterna `type="password"` ↔ `type="text"` — `aria-label="Mostrar senha"` / `aria-label="Ocultar senha"` (alterna junto com o estado)
 
 **Checkbox "Lembrar-me" (GAUTH-03):**
-- 18×18px, `border-radius: 6px`, `border: 1.5px solid #E2DECF`
+- 16×16px, `border-radius: 4px`, `border: 1.5px solid #E2DECF`
 - Marcado: `bg #3E6B4F`, checkmark SVG branco inline
-- Label: 13px/600, `--color-kreds-text`
+- Label: Label (12px/500), `--color-kreds-text`
 
-**Botão "Entrar" (GAUTH-01, GAUTH-04):**
-- 52px altura, `border-radius: 13px`, `bg #3E6B4F`, texto 15px/700 branco
+**Botão "Entrar na conta" (GAUTH-01, GAUTH-04):**
+- 52px altura, `border-radius: 13px`, `bg #3E6B4F`, texto Body (15px/700) branco
 - `box-shadow: 0 12px 24px -12px rgba(62,107,79,.6)`
 - Loading (GAUTH-04): spinner CSS — `div 20×20px, border: 2.5px solid rgba(255,255,255,.3), border-top-color: #fff, border-radius: 50%, animation: kredsSpin 0.7s linear infinite`
 - Success: `bg #4F9B57` + banner verde de confirmação Zitadel aparece acima do botão (12px/600 branco, `bg #4F9B57`, `border-radius: 8px`, padding 8px 12px)
@@ -219,15 +220,15 @@ Cores adicionais declaradas nesta fase:
 
 **Botão Google:**
 - 44px, `border-radius: 13px`, `border: 1.5px solid #E2DECF`, `bg #fff`
-- Logo SVG Google à esquerda (20px), texto "Continuar com Google" 14px/600 `--color-kreds-text`
+- Logo SVG Google à esquerda (20px), texto "Continuar com Google" Label (12px/500) `--color-kreds-text`
 
 **Botão Apple:**
 - 44px, `border-radius: 13px`, `bg #23302A`, texto branco
-- Logo SVG Apple à esquerda (20px), texto "Continuar com Apple" 14px/600
+- Logo SVG Apple à esquerda (20px), texto "Continuar com Apple" Label (12px/500)
 
 **Botão Passkey:**
 - 44px, `border-radius: 13px`, `border: 1.5px solid #E2DECF`, `bg #FBFAF5`
-- Ícone chave SVG à esquerda (20px), texto "Entrar com Passkey" 14px/600 `--color-kreds-text`
+- Ícone chave SVG à esquerda (20px), texto "Entrar com Passkey" Label (12px/500) `--color-kreds-text`
 
 **Ações dos botões sociais (D-04, D-05, D-06):**
 - Google: `signIn('zitadel', {}, { identity_provider: 'google' })`
@@ -244,18 +245,18 @@ Cores adicionais declaradas nesta fase:
 
 **Estado 1 — Formulário:**
 - Seta voltar (topo esquerdo): 40×40px, `border-radius: 12px`, `border: 1.5px solid #E2DECF`, ícone ← SVG 16px
-- Título "Redefinir senha" — 24px/800
-- Subtítulo "Digite seu e-mail para receber o link" — 15px/500, `--color-kreds-muted`
-- Campo e-mail (50px) — mesmo estilo dos inputs do login
+- Título "Redefinir senha" — Display (24px/700)
+- Subtítulo "Digite seu e-mail para receber o link" — Body (15px/500), `--color-kreds-muted`
+- Campo e-mail (52px) — mesmo estilo dos inputs do login
 - Botão "Enviar link" (52px) — mesmo estilo do Botão "Entrar"
 
 **Estado 2 — Confirmação (após envio):**
 - Ícone check verde: círculo 56px `bg #E7EFE8`, checkmark SVG 24px `#3E6B4F`
-- Título "E-mail enviado!" — 24px/800
-- Copy: "Enviamos o link para [e-mail mascarado]" — 15px/500, `--color-kreds-muted`
+- Título "E-mail enviado!" — Display (24px/700)
+- Copy: "Enviamos o link para [e-mail mascarado]" — Body (15px/500), `--color-kreds-muted`
   - Mascaramento: `ana***@email.com` — manter 3 caracteres antes de `***`, domínio completo
-- Botão "Reenviar e-mail" — 52px, `border-radius: 13px`, `border: 1.5px solid #E2DECF`, `bg transparent`, texto `#3E6B4F`, 15px/600
-- Link "Voltar ao login" — 13px/600, `--color-kreds-hint`, underline on hover
+- Botão "Reenviar e-mail" — 52px, `border-radius: 13px`, `border: 1.5px solid #E2DECF`, `bg transparent`, texto `#3E6B4F`, Body (15px/500)
+- Link "Voltar ao login" — Label (12px/500), `--color-kreds-hint`, underline on hover
 
 **Transição entre estados:** troca de visibilidade (sem animação específica — apenas `display` ou condicional React)
 
@@ -273,7 +274,7 @@ Cores adicionais declaradas nesta fase:
 | PIN — erro | (sem texto — apenas shake visual + reset dots) | Child PIN |
 | Login — título | "Bem-vindo de volta" | Guardian Login |
 | Login — subtítulo | "Entre com sua conta familiar" | Guardian Login |
-| Login — CTA primário | "Entrar" | Guardian Login |
+| Login — CTA primário | "Entrar na conta" | Guardian Login |
 | Login — CTA Google | "Continuar com Google" | Guardian Login |
 | Login — CTA Apple | "Continuar com Apple" | Guardian Login |
 | Login — CTA Passkey | "Entrar com Passkey" | Guardian Login |
@@ -335,7 +336,7 @@ Componentes a criar nesta fase (todos em `src/components/auth/`):
 | `GateLock` | `gate-lock.tsx` | Overlay dos dois painéis do portão |
 | `GuardianLoginForm` | `guardian-login-form.tsx` | Form completo e-mail + senha + checkbox |
 | `SocialAuthButtons` | `social-auth-buttons.tsx` | Botões Google, Apple, Passkey |
-| `AuthInput` | `auth-input.tsx` | Input estilizado (50px, radius 13px, ícone, focus ring) |
+| `AuthInput` | `auth-input.tsx` | Input estilizado (52px, radius 13px, ícone, focus ring) |
 | `SpinnerButton` | `spinner-button.tsx` | Botão com estado loading (spinner CSS) |
 | `PasswordResetForm` | `password-reset-form.tsx` | Form redefinição + estado confirmação |
 
@@ -354,12 +355,13 @@ Nenhum registry externo utilizado. Todos os componentes são implementados do ze
 
 ## Accessibility Contract
 
-- Touch targets mínimos: 44px — todos os botões do teclado numérico (62px) e inputs (50px) atendem
+- Touch targets mínimos: 44px — todos os botões do teclado numérico (64px) e inputs (52px) atendem
 - Botão de backspace: `aria-label="Apagar"` obrigatório
 - Dots do PIN: `role="status"` no container, `aria-label="PIN: X de 4 dígitos preenchidos"`
 - Inputs do Guardian: `<label>` associado via `htmlFor`, não apenas placeholder
 - Botão Entrar em loading: `aria-busy="true"`, `disabled` durante requisição
 - Errors: `role="alert"` no container de erro de autenticação
+- Toggle de senha: `aria-label="Mostrar senha"` quando senha oculta; alterna para `aria-label="Ocultar senha"` quando senha visível
 
 ---
 
