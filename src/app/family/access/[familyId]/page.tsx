@@ -1,110 +1,94 @@
-import { and, asc, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import * as schema from '@/lib/db/schema'
-import ChildAccessForm from './ChildAccessForm'
+import { childProfiles } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
+import { ProfileCard } from '@/components/auth/profile-card'
 
-export const dynamic = 'force-dynamic'
-
-export default async function FamilyChildAccessPage({
+export default async function SelectProfilePage({
   params,
 }: {
   params: Promise<{ familyId: string }>
 }) {
   const { familyId } = await params
 
-  const [family] = await db
-    .select({ name: schema.families.name })
-    .from(schema.families)
-    .where(eq(schema.families.id, familyId))
-    .limit(1)
-
-  if (!family) {
-    return (
-      <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: '24px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ color: 'var(--color-primary, #154212)' }}>Family not found.</h1>
-        </div>
-      </main>
-    )
-  }
-
-  const activeProfiles = await db
+  const children = await db
     .select({
-      id: schema.childProfiles.id,
-      displayName: schema.childProfiles.displayName,
-      avatarPreset: schema.childProfiles.avatarPreset,
-      accentColor: schema.childProfiles.accentColor,
+      id: childProfiles.id,
+      displayName: childProfiles.displayName,
+      accentColor: childProfiles.accentColor,
     })
-    .from(schema.childProfiles)
-    .where(
-      and(
-        eq(schema.childProfiles.familyId, familyId),
-        eq(schema.childProfiles.active, true),
-      ),
-    )
-    .orderBy(asc(schema.childProfiles.displayName))
+    .from(childProfiles)
+    .where(eq(childProfiles.familyId, familyId))
 
   return (
     <main
-      style={{
-        minHeight: '100vh',
-        padding: '40px 20px 64px',
-        maxWidth: '520px',
-        margin: '0 auto',
-        display: 'grid',
-        gap: '24px',
-      }}
+      className="min-h-screen flex flex-col items-center bg-kreds-bg"
+      style={{ padding: '48px 24px 32px' }}
     >
-      <section
-        style={{
-          background: 'var(--color-card, rgba(255,255,255,0.64))',
-          border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
-          borderRadius: '24px',
-          boxShadow: 'var(--shadow-soft, 0 12px 32px rgba(45,90,39,0.10))',
-          backdropFilter: 'blur(12px)',
-          padding: '28px 22px',
-          display: 'grid',
-          gap: '24px',
-        }}
-      >
-        <header style={{ display: 'grid', gap: '10px', justifyItems: 'center', textAlign: 'center' }}>
-          <div
-            style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '20px',
-              display: 'grid',
-              placeItems: 'center',
-              fontSize: '28px',
-              background: 'radial-gradient(circle, #fff3b8, #d2a501 58%, #8b6a08)',
-            }}
-          >
-            🧺
-          </div>
-          <div style={{ display: 'grid', gap: '4px' }}>
-            <h1
-              style={{
-                margin: 0,
-                color: 'var(--color-primary, #154212)',
-                fontFamily: 'var(--font-heading, "Plus Jakarta Sans", system-ui, sans-serif)',
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-              }}
-            >
-              {family.name}
-            </h1>
-            <p style={{ margin: 0, color: 'var(--color-text-soft, #72796e)' }}>Select your profile</p>
-          </div>
-        </header>
+      {/* Logo */}
+      <div className="mb-8 flex items-center gap-2">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="14" fill="url(#logo-grad)" />
+          <path
+            d="M14 7c-1.2 3-4 4.5-4 7.5 0 2.2 1.8 4 4 4s4-1.8 4-4C18 11.5 15.2 10 14 7z"
+            fill="#fff"
+          />
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#5A8A66" />
+              <stop offset="1" stopColor="#3E6B4F" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span
+          className="text-[15px] font-medium"
+          style={{ color: 'var(--color-kreds-text)' }}
+        >
+          kreds
+        </span>
+      </div>
 
-        {activeProfiles.length === 0 ? (
-          <p style={{ margin: 0, textAlign: 'center', color: 'var(--color-text-soft, #72796e)' }}>
-            No active profiles found.
-          </p>
-        ) : (
-          <ChildAccessForm familyId={familyId} profiles={activeProfiles} />
-        )}
-      </section>
+      {/* Title */}
+      <h1
+        className="text-[24px] font-bold mb-8 tracking-[-0.01em]"
+        style={{ color: 'var(--color-kreds-text)' }}
+      >
+        Quem está aqui?
+      </h1>
+
+      {/* Profile grid */}
+      {children.length === 0 ? (
+        <p
+          className="text-[15px] font-medium text-center"
+          style={{ color: 'var(--color-kreds-muted)' }}
+        >
+          Nenhum perfil encontrado para esta família.
+        </p>
+      ) : (
+        <div
+          className={`grid gap-4 ${children.length >= 3 ? 'grid-cols-2' : 'grid-cols-1'}`}
+          style={{ justifyItems: 'center' }}
+        >
+          {children.map((child) => (
+            <ProfileCard
+              key={child.id}
+              childId={child.id}
+              displayName={child.displayName}
+              accentColor={child.accentColor}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Footer spacer */}
+      <div className="flex-1" />
+
+      {/* Footer */}
+      <p
+        className="text-[12px] font-medium text-center mt-8"
+        style={{ color: 'var(--color-kreds-hint)' }}
+      >
+        Kreds — Mordomia para famílias
+      </p>
     </main>
   )
 }
