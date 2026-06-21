@@ -9,12 +9,14 @@ import {
   resetAttempts,
   signChildSession,
 } from '@/lib/families/child-session'
-import { verifyPin } from '@/lib/families/child-pin'
+import { verifyPin, validatePinFormat } from '@/lib/families/child-pin'
 
 export async function verifyChildPin(
   childId: string,
   pin: string,
 ): Promise<{ success: true } | { error: 'blocked' | 'no-pin' | 'invalid' }> {
+  if (!validatePinFormat(pin)) return { error: 'invalid' as const }
+
   const bf = checkBruteForce(childId)
   if (bf.blocked) return { error: 'blocked' as const }
 
