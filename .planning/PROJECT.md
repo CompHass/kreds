@@ -24,13 +24,11 @@ A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o l
 
 ### Validated
 
-(Nenhum ainda — milestone v2.0 iniciado)
+- [x] Design system implementado (tokens, tipografia Plus Jakarta Sans, animações) — Validated in Phase 1: Foundation
+- [x] Autenticação criança via PIN de 4 dígitos com animação portão — Validated in Phase 2: Authentication
+- [x] Autenticação responsável via Zitadel OIDC — Validated in Phase 2: Authentication (GAUTH-02 redirect pendente Zitadel prod)
 
 ### Active
-
-- [ ] Design system implementado (tokens, tipografia Plus Jakarta Sans, animações)
-- [ ] Autenticação criança via PIN de 4 dígitos com animação portão
-- [ ] Autenticação responsável via Zitadel OIDC
 - [ ] Jardim interativo com 4 estágios de planta e feedback de rega
 - [ ] Lista de tarefas da criança com toggle e celebração ao completar todas
 - [ ] Card de dízimo com flores decorativas
@@ -92,4 +90,6 @@ Este documento evolui a cada transição de fase e milestone.
 4. Atualizar Context com estado atual
 
 ---
-*Last updated: 2026-06-20 — Milestone v2.0 iniciado*
+**Current State:** Phase 2 complete — autenticação criança (PIN+portão) e responsável (Zitadel OIDC) entregues
+
+*Last updated: 2026-06-21 — Phase 2: Authentication complete*
