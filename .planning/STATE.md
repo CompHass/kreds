@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: executing
-stopped_at: Phase 2 context gathered
-last_updated: "2026-06-21T00:43:51.802Z"
+status: planned
+stopped_at: Phase 2 planned — 5 plans in 3 waves
+last_updated: "2026-06-21T01:00:00.000Z"
 last_activity: 2026-06-20
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 2
+  total_plans: 7
   completed_plans: 2
   percent: 17
 ---
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 01 — foundation
+**Current focus:** Phase 02 — authentication
 
 ## Current Position
 
 Phase: 2
-Plan: Not started
-Status: Executing Phase 01
+Plan: Ready to execute
+Status: Phase 2 planned — 5 plans, 3 waves
 Last activity: 2026-06-20
 
 Progress: [░░░░░░░░░░] 0%
@@ -80,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-21T00:43:51.791Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-authentication/02-CONTEXT.md
+Last session: 2026-06-21T01:00:00.000Z
+Stopped at: Phase 2 planned (5 plans, 3 waves, 10/10 REQ-IDs + 14/14 decisions covered)
+Resume file: .planning/phases/02-authentication/02-01-PLAN.md

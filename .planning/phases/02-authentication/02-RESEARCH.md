@@ -610,17 +610,15 @@ export function GateLock({ open }: { open: boolean }) {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Discrepância de URL para seleção de perfil**
+1. **Discrepância de URL para seleção de perfil** — RESOLVED
    - O que sabemos: CONTEXT.md D-02 define `/family/[familyId]/select-profile` como URL pública. `middleware.test.ts` Test 10 define `/family/access/abc123` como rota pública (sem cookie). Tests 5 e 6 protegem `/family/*` genericamente.
-   - O que está incerto: Se a página real ficar em `/family/[familyId]/select-profile`, o middleware atual (baseado nos testes) vai redirecionar ela para `/api/auth/signin` — quebrando o fluxo kiosk.
-   - Recomendação: O planner deve escolher uma das opções: (a) colocar a página de seleção em `/family/access/[familyId]` para alinhar com os testes existentes, ou (b) adicionar `/family/[familyId]/select-profile` como exceção pública no middleware E adicionar um test case correspondente. Opção (a) é mais simples.
+   - **Resolução:** Adotar `/family/access/[familyId]` como URL canônica da tela de seleção de perfil — alinha com o contrato dos testes existentes. CONTEXT.md D-02 tem discrepância com os testes; os testes são o contrato de implementação. Planner anotou no ROADMAP. A página fica em `src/app/family/access/[familyId]/page.tsx`.
 
-2. **Redefinição de senha via Zitadel**
+2. **Redefinição de senha via Zitadel** — RESOLVED
    - O que sabemos: GAUTH-05 requer tela de reset com form de e-mail + estado de confirmação.
-   - O que está incerto: O Zitadel tem um endpoint nativo de reset de senha (`/action/authn/requests/passwordReset` ou similar). Não está claro se o projeto já tem credenciais/configuração para chamar a Management API do Zitadel diretamente, ou se é apenas um redirect para o Zitadel hosted UI.
-   - Recomendação: Implementar redirect para a tela de reset do Zitadel hospedada (via `signIn('zitadel')` com parâmetro `prompt`) ao invés de construir uma chamada customizada à API. O UI local (Frame E do protótipo) pode ser um wrapper visual para o flow do Zitadel.
+   - **Resolução:** Entregar dois estados UI locais (estado 1: form de e-mail; estado 2: confirmação com e-mail mascarado + botão "Reenviar e-mail"). A chamada ao Zitadel é um redirect externo — o deliverable verificável da Fase 2 é o UI de dois estados. Implementação de integração real com Zitadel password reset fica para fase de hardening. Verificação manual-only (VALIDATION.md registra isso).
 
 ---
 
