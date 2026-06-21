@@ -14,11 +14,14 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
   // Rotas públicas — pass-through sem verificação de sessão
   // ORDEM IMPORTA: /family/access/ deve ser avaliado ANTES de /family/
+  // /child/*/login é a tela de entrada do PIN — sem sessão ainda
   if (
     pathname === '/' ||
     pathname.startsWith('/api/auth/') ||
     pathname.startsWith('/api/child/') ||
-    pathname.startsWith('/family/access/')
+    pathname.startsWith('/family/access/') ||
+    pathname.startsWith('/login') ||
+    /^\/child\/[^/]+\/login$/.test(pathname)
   ) {
     return NextResponse.next()
   }
