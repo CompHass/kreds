@@ -25,10 +25,10 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 ### Autenticação Responsável
 
 - [x] **GAUTH-01**: Responsável vê tela de login com campo e-mail, senha e botão Entrar via Zitadel OIDC
-- [ ] **GAUTH-02**: Botões de login social (Google, Apple) e opção Passkey disponíveis
-- [ ] **GAUTH-03**: Checkbox "Lembrar-me" funcional com estilo customizado (verde `#3E6B4F`)
-- [ ] **GAUTH-04**: Botão de login exibe spinner CSS branco durante loading
-- [ ] **GAUTH-05**: Tela de redefinição de senha com form e estado de confirmação (e-mail mascarado + reenviar)
+- [x] **GAUTH-02**: Botões de login social (Google, Apple) e opção Passkey disponíveis
+- [x] **GAUTH-03**: Checkbox "Lembrar-me" funcional com estilo customizado (verde `#3E6B4F`)
+- [x] **GAUTH-04**: Botão de login exibe spinner CSS branco durante loading
+- [x] **GAUTH-05**: Tela de redefinição de senha com form e estado de confirmação (e-mail mascarado + reenviar)
 
 ### Jardim da Criança
 
@@ -94,10 +94,10 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | CAUTH-04 | Phase 2 | Complete |
 | CAUTH-05 | Phase 2 | Pending |
 | GAUTH-01 | Phase 2 | Complete |
-| GAUTH-02 | Phase 2 | Pending |
-| GAUTH-03 | Phase 2 | Pending |
-| GAUTH-04 | Phase 2 | Pending |
-| GAUTH-05 | Phase 2 | Pending |
+| GAUTH-02 | Phase 2 | Complete |
+| GAUTH-03 | Phase 2 | Complete |
+| GAUTH-04 | Phase 2 | Complete |
+| GAUTH-05 | Phase 2 | Complete |
 | GARD-01 | Phase 3 | Pending |
 | GARD-02 | Phase 3 | Pending |
 | GARD-03 | Phase 3 | Pending |
