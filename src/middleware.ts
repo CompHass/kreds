@@ -52,6 +52,10 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
   }
 
   // Branch /family/* e /guardian/* — verificação de cookie next-auth (cookie-check heurístico)
+  // AVISO DE SEGURANÇA: apenas a presença do cookie é verificada aqui, não a assinatura ou expiração.
+  // Cada Server Component sob /family/* e /guardian/* DEVE chamar auth() independentemente
+  // para re-validar a sessão. Esse check só evita roundtrips desnecessários para usuários
+  // sem cookie algum. Ver WR-05 no REVIEW.md para contexto.
   if (pathname.startsWith('/family/') || pathname.startsWith('/guardian/')) {
     const cookieName = nextAuthCookieName(url)
     const sessionToken = req.cookies.get(cookieName)?.value
