@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-02-PLAN.md — middleware.ts (16 testes) + route.ts commitados
-last_updated: "2026-06-21T12:25:27.063Z"
+stopped_at: Completed 02-03-PLAN.md — verifyChildPin Server Action + ProfileCard + /family/access/[familyId] page
+last_updated: "2026-06-21T12:31:24.488Z"
 last_activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
   percent: 17
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 02 (authentication) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
 
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 02-authentication P01 | 15min | 3 tasks | 3 files |
 | Phase 02-authentication P02 | 15min | - tasks | - files |
+| Phase 02-authentication P03 | 3min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,7 @@ Recent decisions affecting current work:
 - 02-01: verifyChildSession extrai campos explicitamente para filtrar iat/exp injetados pelo jose
 - [Phase ?]: 02-02: /family/access/[familyId] é URL canônica da seleção de perfil — middleware Test 10 é o contrato; D-02 do CONTEXT.md ajustado
 - [Phase ?]: 02-02: middleware cookie name dinâmico — HTTP usa authjs.session-token, HTTPS usa __Secure-authjs.session-token (nextAuthCookieName)
+- [Phase ?]: 02-03: verifyChildPin usa query única para pinHash + familyId (evita 2 DB roundtrips)
 
 ### Pending Todos
 
@@ -88,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-21T12:25:27.059Z
-Stopped at: Completed 02-02-PLAN.md — middleware.ts (16 testes) + route.ts commitados
-Resume file: .planning/phases/02-authentication/02-03-PLAN.md
+Last session: 2026-06-21T12:31:24.483Z
+Stopped at: Completed 02-03-PLAN.md — verifyChildPin Server Action + ProfileCard + /family/access/[familyId] page
+Resume file: .planning/phases/02-authentication/02-04-PLAN.md

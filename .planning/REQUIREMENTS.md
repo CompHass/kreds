@@ -19,7 +19,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 - [ ] **CAUTH-01**: Criança vê tela de PIN com 4 dots, teclado numérico 3×4, logo e plant hero animada
 - [ ] **CAUTH-02**: Erro de PIN dispara animação shake nos dots e reseta automaticamente após 950ms
 - [ ] **CAUTH-03**: PIN correto abre animação de portão (dois painéis + cubic-bezier 1s) revelando jardim
-- [ ] **CAUTH-04**: Link "Trocar perfil" reseta completamente a tela de PIN
+- [x] **CAUTH-04**: Link "Trocar perfil" reseta completamente a tela de PIN
 - [ ] **CAUTH-05**: Cada dot preenchido exibe SVG de brotinho com animação kredsSprout
 
 ### Autenticação Responsável
@@ -91,7 +91,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | CAUTH-01 | Phase 2 | Pending |
 | CAUTH-02 | Phase 2 | Pending |
 | CAUTH-03 | Phase 2 | Pending |
-| CAUTH-04 | Phase 2 | Pending |
+| CAUTH-04 | Phase 2 | Complete |
 | CAUTH-05 | Phase 2 | Pending |
 | GAUTH-01 | Phase 2 | Complete |
 | GAUTH-02 | Phase 2 | Pending |
