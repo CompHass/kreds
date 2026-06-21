@@ -58,7 +58,24 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Link "Trocar perfil" reseta a tela de PIN completamente
   5. Responsável consegue fazer login com e-mail/senha (Zitadel OIDC), com opções Google/Apple/Passkey, checkbox "Lembrar-me" funcional e spinner durante loading; consegue redefinir senha e ver confirmação com e-mail mascarado
 
-**Plans**: TBD
+**Plans**: 5 plans
+
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Módulos backend: child-pin (bcrypt), child-session (jose JWT + brute force) e child-guard (22 testes unitários)
+- [ ] 02-02-PLAN.md — Middleware único (proteção /child/* e /family/*+/guardian/*) e route handler next-auth (16 testes)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-03-PLAN.md — Server Action verifyChildPin + tela de seleção de perfil /family/access/[familyId] (SSR) *(depends_on 02-01)*
+- [ ] 02-05-PLAN.md — Fluxo do responsável: login (/login) + reset (/login/reset) com componentes e Zitadel federation (GAUTH-01..05) *(depends_on 02-02)*
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-04-PLAN.md — Tela de PIN da criança: dots+brotinho, teclado 3×4, portão, orquestrador PinScreen (CAUTH-01..05) *(depends_on 02-03)*
+
+**Decisão de URL canônica**: A tela de seleção de perfil fica em `/family/access/[familyId]` (alinhado com os 16 testes do middleware), ajustando D-02 que originalmente propunha `/family/[familyId]/select-profile`.
+
 **UI hint**: yes
 
 ### Phase 3: Child Garden
@@ -132,7 +149,7 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete    | 2026-06-20 |
-| 2. Authentication | 0/TBD | Not started | - |
+| 2. Authentication | 0/5 | Planned | - |
 | 3. Child Garden | 0/TBD | Not started | - |
 | 4. Child Tasks | 0/TBD | Not started | - |
 | 5. Parent Panel | 0/TBD | Not started | - |
