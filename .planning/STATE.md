@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: planned
-stopped_at: Phase 2 planned — 5 plans in 3 waves
-last_updated: "2026-06-21T01:00:00.000Z"
-last_activity: 2026-06-20
+status: executing
+stopped_at: Completed 02-01-PLAN.md — 3 módulos criados, 22 testes passando
+last_updated: "2026-06-21T01:46:39.469Z"
+last_activity: 2026-06-21 -- Phase 02 Plan 01 completed
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 2
+  completed_plans: 3
   percent: 17
 ---
 
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 ## Current Position
 
-Phase: 2
-Plan: Ready to execute
-Status: Phase 2 planned — 5 plans, 3 waves
-Last activity: 2026-06-20
+Phase: 02 (authentication) — EXECUTING
+Plan: 2 of 5
+Status: Executing Phase 02 (Plan 02 of 5 next)
+Last activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 02-authentication P01 | 15min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,10 @@ Recent decisions affecting current work:
 - Roadmap: Rebuild total (não migração) — design novo incompatível com estrutura anterior
 - Roadmap: CTASK-05 (bottom nav) mantida na Fase 4 com tarefas da criança (evita fase de 1 requisito)
 - Roadmap: Fase 5 (painel dos pais) depende de Fase 2 (auth), não de Fase 4 — pode ser executada em paralelo com Fases 3-4
+- 02-01: D-09 brute force in-memory Map 5 tentativas por childId (aceita reset em restart)
+- 02-01: D-10 bcrypt cost factor 10 para hash de PIN da criança
+- 02-01: D-11 JWT da criança assinado com CHILD_SESSION_SECRET via HS256 (jose), expiração 8h
+- 02-01: verifyChildSession extrai campos explicitamente para filtrar iat/exp injetados pelo jose
 
 ### Pending Todos
 
@@ -80,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-21T01:00:00.000Z
-Stopped at: Phase 2 planned (5 plans, 3 waves, 10/10 REQ-IDs + 14/14 decisions covered)
-Resume file: .planning/phases/02-authentication/02-01-PLAN.md
+Last session: 2026-06-21T01:46:39.465Z
+Stopped at: Completed 02-01 — fundação criptográfica da criança (22 testes passando)
+Resume file: .planning/phases/02-authentication/02-02-PLAN.md
