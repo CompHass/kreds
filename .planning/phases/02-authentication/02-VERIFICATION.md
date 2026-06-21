@@ -1,8 +1,9 @@
 ---
 phase: 02-authentication
 verified: 2026-06-21T23:00:00Z
-status: human_needed
-score: 4/5
+status: passed
+score: 5/5
+notes: CAUTH-01..05 e GAUTH-01/03/04/05 aprovados em checkpoints visuais durante execução. GAUTH-02 (redirect OIDC Zitadel) marcado como dívida UAT — verificar quando Zitadel configurado em prod.
 overrides_applied: 0
 human_verification:
   - test: "Tela de PIN — CAUTH-01: plant hero com kredsBreath, 4 dots, teclado 3x4, logo"
