@@ -96,6 +96,9 @@ export function PasswordResetForm() {
       // GAUTH-05/RESEARCH OQ2: endpoint de reset é [ASSUMED].
       // A UI dos 2 estados é o entregável verificável (threat model T-02-RESET-ASSUME: accept).
       // Em integração real: redirect para hosted reset do Zitadel ou chamada de API.
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Password reset not implemented — replace stub before deploying')
+      }
       await new Promise((resolve) => setTimeout(resolve, 600))
     } finally {
       setLoading(false)
