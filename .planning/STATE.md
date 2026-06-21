@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 02-03-PLAN.md — verifyChildPin Server Action + ProfileCard + /family/access/[familyId] page
-last_updated: "2026-06-21T13:10:07.758Z"
-last_activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
+status: checkpoint
+stopped_at: Completed 02-04-PLAN.md Tasks 1-2 — PinScreen + 5 componentes criados; Task 3 checkpoint humano pendente (animações CAUTH-01..05)
+last_updated: "2026-06-21T13:14:44Z"
+last_activity: 2026-06-21 -- Completed 02-04 Tasks 1-2 (pin-dot, pin-dots, numeric-keypad, gate-lock, pin-screen, child login page)
 progress:
   total_phases: 6
   completed_phases: 1
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-authentication P01 | 15min | 3 tasks | 3 files |
 | Phase 02-authentication P02 | 15min | - tasks | - files |
 | Phase 02-authentication P03 | 3min | 2 tasks | 3 files |
+| Phase 02-authentication P04 | 3min | 2 tasks | 6 files |
 | Phase 02-authentication P05 | 35min | 3 tasks | 8 files |
 
 ## Accumulated Context
@@ -91,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-21T13:10:07.752Z
-Stopped at: Completed 02-03-PLAN.md — verifyChildPin Server Action + ProfileCard + /family/access/[familyId] page
-Resume file: .planning/phases/02-authentication/02-04-PLAN.md
+Last session: 2026-06-21T13:14:44Z
+Stopped at: Completed 02-04-PLAN.md Tasks 1-2 — PinScreen + componentes visuais do PIN; aguardando checkpoint visual (Task 3)
+Resume file: .planning/phases/02-authentication/02-04-PLAN.md (Task 3 checkpoint)
