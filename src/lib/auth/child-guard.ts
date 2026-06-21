@@ -1,37 +1,24 @@
 import 'server-only'
 
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { getChildSession, type ChildSessionPayload } from '@/lib/families/child-session'
-
-export function validateChildSessionScope(
-  session: ChildSessionPayload | null,
-  childProfileId: string,
-): boolean {
-  return session !== null && session.role === 'child' && session.childProfileId === childProfileId
+interface ChildSession {
+  childProfileId: string
+  familyId: string
+  role: 'child'
 }
 
-export function extractChildProfileId(session: ChildSessionPayload): string {
+export function validateChildSessionScope(
+  session: ChildSession | null | { childProfileId: string; familyId: string; role: string },
+  requestedChildId: string,
+): boolean {
+  if (!session) return false
+  if (session.role !== 'child') return false
+  return session.childProfileId === requestedChildId
+}
+
+export function extractChildProfileId(session: ChildSession): string {
   return session.childProfileId
 }
 
-export function extractFamilyId(session: ChildSessionPayload): string {
+export function extractFamilyId(session: ChildSession): string {
   return session.familyId
-}
-
-/**
- * Child session scope is strictly limited to childProfileId. All child route DB
- * queries MUST use childProfileId (from the returned payload) as the primary
- * filter. Never use familyId from the child session to enumerate family-wide
- * data — use it only to confirm the child belongs to the correct family.
- */
-export async function requireChildSession(): Promise<ChildSessionPayload> {
-  const cookieStore = await cookies()
-  const session = await getChildSession(cookieStore)
-
-  if (!session) {
-    redirect('/')
-  }
-
-  return session
 }
