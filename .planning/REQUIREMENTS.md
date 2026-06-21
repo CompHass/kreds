@@ -24,7 +24,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 ### Autenticação Responsável
 
-- [ ] **GAUTH-01**: Responsável vê tela de login com campo e-mail, senha e botão Entrar via Zitadel OIDC
+- [x] **GAUTH-01**: Responsável vê tela de login com campo e-mail, senha e botão Entrar via Zitadel OIDC
 - [ ] **GAUTH-02**: Botões de login social (Google, Apple) e opção Passkey disponíveis
 - [ ] **GAUTH-03**: Checkbox "Lembrar-me" funcional com estilo customizado (verde `#3E6B4F`)
 - [ ] **GAUTH-04**: Botão de login exibe spinner CSS branco durante loading
@@ -93,7 +93,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | CAUTH-03 | Phase 2 | Pending |
 | CAUTH-04 | Phase 2 | Pending |
 | CAUTH-05 | Phase 2 | Pending |
-| GAUTH-01 | Phase 2 | Pending |
+| GAUTH-01 | Phase 2 | Complete |
 | GAUTH-02 | Phase 2 | Pending |
 | GAUTH-03 | Phase 2 | Pending |
 | GAUTH-04 | Phase 2 | Pending |

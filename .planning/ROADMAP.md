@@ -63,7 +63,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Wave 1**
 
 - [x] 02-01-PLAN.md — Módulos backend: child-pin (bcrypt), child-session (jose JWT + brute force) e child-guard (22 testes unitários)
-- [ ] 02-02-PLAN.md — Middleware único (proteção /child/* e /family/*+/guardian/*) e route handler next-auth (16 testes)
+- [x] 02-02-PLAN.md — Middleware único (proteção /child/* e /family/*+/guardian/*) e route handler next-auth (16 testes)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -149,7 +149,7 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete    | 2026-06-20 |
-| 2. Authentication | 1/5 | In Progress|  |
+| 2. Authentication | 2/5 | In Progress|  |
 | 3. Child Garden | 0/TBD | Not started | - |
 | 4. Child Tasks | 0/TBD | Not started | - |
 | 5. Parent Panel | 0/TBD | Not started | - |

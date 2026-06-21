@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md — 3 módulos criados, 22 testes passando
-last_updated: "2026-06-21T01:46:39.469Z"
-last_activity: 2026-06-21 -- Phase 02 Plan 01 completed
+stopped_at: Completed 02-02-PLAN.md — middleware.ts (16 testes) + route.ts commitados
+last_updated: "2026-06-21T12:25:27.063Z"
+last_activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 3
+  completed_plans: 4
   percent: 17
 ---
 
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 02 (authentication) — EXECUTING
-Plan: 2 of 5
-Status: Executing Phase 02 (Plan 02 of 5 next)
+Plan: 3 of 5
+Status: Ready to execute
 Last activity: 2026-06-21 -- Completed 02-01 (child-pin.ts, child-session.ts, child-guard.ts)
 
 Progress: [░░░░░░░░░░] 0%
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 02-authentication P01 | 15min | 3 tasks | 3 files |
+| Phase 02-authentication P02 | 15min | - tasks | - files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - 02-01: D-10 bcrypt cost factor 10 para hash de PIN da criança
 - 02-01: D-11 JWT da criança assinado com CHILD_SESSION_SECRET via HS256 (jose), expiração 8h
 - 02-01: verifyChildSession extrai campos explicitamente para filtrar iat/exp injetados pelo jose
+- [Phase ?]: 02-02: /family/access/[familyId] é URL canônica da seleção de perfil — middleware Test 10 é o contrato; D-02 do CONTEXT.md ajustado
+- [Phase ?]: 02-02: middleware cookie name dinâmico — HTTP usa authjs.session-token, HTTPS usa __Secure-authjs.session-token (nextAuthCookieName)
 
 ### Pending Todos
 
@@ -85,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-21T01:46:39.465Z
-Stopped at: Completed 02-01 — fundação criptográfica da criança (22 testes passando)
-Resume file: .planning/phases/02-authentication/02-02-PLAN.md
+Last session: 2026-06-21T12:25:27.059Z
+Stopped at: Completed 02-02-PLAN.md — middleware.ts (16 testes) + route.ts commitados
+Resume file: .planning/phases/02-authentication/02-03-PLAN.md
