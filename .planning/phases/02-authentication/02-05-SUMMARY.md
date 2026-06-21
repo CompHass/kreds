@@ -58,20 +58,20 @@ patterns-established:
 requirements-completed: [GAUTH-01, GAUTH-02, GAUTH-03, GAUTH-04, GAUTH-05]
 
 # Metrics
-duration: 25min
+duration: 35min
 completed: 2026-06-21
 ---
 
 # Phase 02 Plan 05: Guardian Login UI Summary
 
-**Tela de login do responsável com e-mail/senha, botões Google/Apple/Passkey via Zitadel federation, checkbox Lembrar-me custom verde, spinner kredsSpin, e tela de reset com 2 estados e e-mail mascarado**
+**Tela de login do responsável com e-mail/senha, botões Google/Apple/Passkey via Zitadel federation, checkbox Lembrar-me custom verde, spinner kredsSpin, e tela de reset com 2 estados e e-mail mascarado — GAUTH-01..05 aprovados em checkpoint visual**
 
 ## Performance
 
-- **Duration:** 25 min
+- **Duration:** 35 min
 - **Started:** 2026-06-21T12:35:00Z
-- **Completed:** 2026-06-21T13:00:00Z
-- **Tasks:** 2 completas + 1 checkpoint aguardando verificacao humana
+- **Completed:** 2026-06-21T13:10:00Z
+- **Tasks:** 3/3 completas (incluindo checkpoint visual aprovado)
 - **Files modified:** 8
 
 ## Accomplishments
@@ -85,6 +85,7 @@ completed: 2026-06-21
 
 1. **Task 1: Componentes base + guardian-auth Server Actions** - `bb82e80` (feat)
 2. **Task 2: GuardianLoginForm + PasswordResetForm + paginas login/reset** - `cf919b1` (feat)
+3. **Task 3: Checkpoint visual GAUTH-01..05** - aprovado pelo usuario ("approved") — sem commit de codigo
 
 ## Files Created/Modified
 
@@ -139,9 +140,9 @@ Nenhum — implementacao direta seguindo 02-UI-SPEC e PATTERNS.
 
 ## Next Phase Readiness
 
-- Componentes de auth do responsavel completos e prontos para verificacao visual (Task 3 checkpoint)
-- Apos aprovacao do checkpoint: GAUTH-01..05 locked, fase 2 completa para o fluxo do responsavel
-- Fase 5 (painel dos pais) pode ser executada com confianca que /login e /login/reset estao funcionais
+- GAUTH-01..05 locked — checkpoint visual aprovado pelo usuario
+- Fase 2 (authentication) completa: fluxo do responsavel (02-05) + fluxo da crianca (02-01..03) + middleware/route handler (02-02) + ProfileCard (02-03)
+- Fase 5 (painel dos pais) pode ser executada com confianca que /login e /login/reset estao funcionais e aprovados visualmente
 
 ---
 *Phase: 02-authentication*
