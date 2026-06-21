@@ -60,7 +60,9 @@ Exceções:
 | Display | 24px | 700 | 1.2 | Nome da criança no header, título do overlay de celebração |
 | Heading | 18px | 700 | 1.25 | Label do badge de moedas, título do card de versículo |
 | Body | 14px | 500 | 1.5 | Texto do speech bubble, labels de tracker de água, copy da celebração |
-| Label | 12px | 600 | 1.4 | Badge de estação, subtexto de header, link "Trocar perfil" (herdado) |
+| Label | 12px | 700 | 1.4 | Badge de estação, subtexto de header, link "Trocar perfil" (herdado), referência bíblica no overlay |
+
+Pesos em uso: **500** (Body) e **700** (Display, Heading, Label, CTAs). Peso `600` não utilizado nesta fase.
 
 Letter-spacing para Display e Heading: `-0.01em` (padrão do design handoff).
 
@@ -75,7 +77,7 @@ Letter-spacing para Display e Heading: `-0.01em` (padrão do design handoff).
 | Dominant (60%) | `#F2F0E7` / `var(--color-kreds-bg)` | Fundo da página, fundo do overlay de celebração (`rgba(244,241,232,.98)`) |
 | Secondary (30%) | `#FBFAF5` / `var(--color-kreds-card)` | Hero container, speech bubble, tracker pill, badges |
 | Accent (10%) | `#3E6B4F` / `var(--color-kreds-primary)` | Reservado para: dots de água preenchidos via `#6E9BA0`, estado ativo da planta (nenhum elemento direto nesta fase usa verde para CTA — o acento é aplicado como glow/highlight) |
-| Harvest CTA | `#B5623F` / `var(--color-kreds-orange)` | Botão "Colher" (gradiente `#C77F52→#B5623F`) — único CTA destrutivo/de ação forte nesta fase |
+| Harvest CTA | `#B5623F` / `var(--color-kreds-orange)` | Botão "Colher Frutos" (gradiente `#C77F52→#B5623F`) — único CTA destrutivo/de ação forte nesta fase |
 | Destructive | `#B14A2E` / `var(--color-kreds-error)` | Não usado nesta fase (sem ações destrutivas) |
 
 ### Paleta específica do jardim
@@ -200,9 +202,9 @@ drop 4: delay 320ms
 - **Drops de água:** 5 divs `position: absolute`, espalhados horizontalmente sobre a planta
 - **Flores dízimo:** SVG inline, `position: absolute`, visível quando `titheDone = true`
 - **Glow colheita:** div circle `position: absolute`, radial-gradient amarelo, `opacity: 0` → `1` quando `canHarvest = true`
-- **Botão Colher:** `position: absolute top-3 right-3` (quando visível, substitui tracker ou posição alternada — verificar no protótipo), gradiente `#C77F52 → #B5623F`, `border-radius: 999px`, `animation: var(--animate-kreds-fruit)`, somente quando `canHarvest = true`
+- **Botão "Colher Frutos":** `position: absolute top-3 right-3` (quando visível, substitui tracker ou posição alternada — verificar no protótipo), gradiente `#C77F52 → #B5623F`, `border-radius: 999px`, `animation: var(--animate-kreds-fruit)`, somente quando `canHarvest = true`
 
-> **Nota de posicionamento:** Verificar no `design_handoff_kreds/Kreds Kids Garden.dc.html` se o botão "Colher" substitui o tracker de água ou aparece em posição diferente quando `canHarvest = true`.
+> **Nota de posicionamento:** Verificar no `design_handoff_kreds/Kreds Kids Garden.dc.html` se o botão "Colher Frutos" substitui o tracker de água ou aparece em posição diferente quando `canHarvest = true`.
 
 ### Estágios da Planta (GARD-03)
 
@@ -239,8 +241,8 @@ Bubble visível em todos os estados exceto `harvested = true` (quando o overlay 
 - **Confetes:** 20 divs `position: absolute`, array estático de posições/delays/cores
 - **Card de versículo:** `bg #FBFAF5`, `border-radius: 20px`, `box-shadow: var(--shadow-card)`, padding 24px
   - Texto do versículo: Body/14/500, `color: var(--color-kreds-text)`
-  - Referência: Label/12/600, `color: var(--color-kreds-muted)`
-- **Botão "Voltar ao jardim":** 52px altura, `border-radius: 13px`, `bg var(--color-kreds-primary)`, texto branco 600, `box-shadow: var(--shadow-cta)`
+  - Referência: Label/12/700, `color: var(--color-kreds-muted)`
+- **Botão "Voltar ao jardim":** 52px altura, `border-radius: 13px`, `bg var(--color-kreds-primary)`, texto branco 700, `box-shadow: var(--shadow-cta)`
 
 ---
 
@@ -284,7 +286,7 @@ Seleção: `ORDER BY RANDOM() LIMIT 1` via Drizzle query simples.
 
 | Element | Copy |
 |---------|------|
-| Primary CTA | "Colher" (botão de colheita — único CTA de ação principal nesta fase) |
+| Primary CTA | "Colher Frutos" (botão de colheita — único CTA de ação principal nesta fase) |
 | Empty state heading | "Seu jardim está esperando por você!" |
 | Empty state body | "Complete uma tarefa para começar a regar sua planta." |
 | Post-harvest state | "Você colheu seu jardim! Novo ciclo começa em breve." |
@@ -321,7 +323,7 @@ Todos os componentes são implementações próprias. `lucide-react` (já no `pa
 ## Accessibility Notes
 
 - Planta (`<img>`): `alt="Planta no estágio [X] — [descrição do estágio]"`
-- Botão "Colher": `aria-label="Colher o jardim"` quando visível
+- Botão "Colher Frutos": `aria-label="Colher os frutos do jardim"` quando visível
 - Overlay de celebração: `role="dialog"`, `aria-modal="true"`, foco capturado no botão "Voltar ao jardim"
 - Tracker de água: `aria-label="Tracker de água: X de 4 tarefas concluídas"`
 - Confetes: `aria-hidden="true"`
