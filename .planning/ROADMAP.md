@@ -154,6 +154,41 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Plans**: TBD
 
+### Phase 12: Módulo de FX
+
+**Goal:** Guardian consegue analisar o impacto cambial de Purchase Orders em USD e EUR — comparando a taxa contratada (DI) com a cotação atual ou simulada — para decidir se vale pagar a PO agora ou aguardar uma taxa mais favorável antes do vencimento
+**Depends on:** Phase 2
+**Requirements**: FX-01, FX-02, FX-03, FX-04, FX-05, FX-06
+**Success Criteria** (what must be TRUE):
+
+  1. Página `/family/fx` carrega lista de POs com colunas: PO List, Due Date, Foreign Currency Amount, DI, BRL Amount, Current Tax, Current Value (BRL), Result, (%)
+  2. Campos USD e EUR são preenchidos automaticamente ao carregar a página via API de câmbio (open.er-api.com)
+  3. Toggle "Simulation Off/On" — quando ON: campos USD/EUR ficam editáveis, banner de aviso aparece, colunas Current Tax/Value/Result/% ficam destacadas em ciano
+  4. Cálculos corretos: BRL Amount = Foreign Amount × DI; Current Value = Foreign Amount × Current Tax; Result = BRL Amount − Current Value; (%) = Result / BRL Amount
+  5. Result positivo exibido em verde, negativo em vermelho; linha de totais no rodapé da tabela
+  6. Novo item de menu na área Guardian leva ao módulo FX
+
+**Plans**: 5 plans
+
+**Wave 1** *(paralelos — sem dependências)*
+
+- [ ] 12-01-PLAN.md — TDD: módulo de cálculos FX (toNumber, getBrlAmount, getCurrentValue, getResult, getResultPct, calculateTotals) com testes unitários completos
+- [ ] 12-02-PLAN.md — Fundação backend: schema Drizzle fx_purchase_orders, helper resolveGuardianFamilyId, Zod schema, queries server-only
+
+**Wave 2** *(blocked on Wave 1 — schema deve existir antes do push)*
+
+- [ ] 12-03-PLAN.md — [BLOCKING] drizzle-kit push + seed de 3 POs (PO-001/002/003) para verificação visual
+
+**Wave 3** *(blocked on Wave 2 — banco deve ter a tabela antes dos Route Handlers)*
+
+- [ ] 12-04-PLAN.md — Route Handlers: GET /api/fx/rates (proxy cambial) + GET/POST /api/fx/purchase-orders
+
+**Wave 4** *(blocked on Wave 1+3 — cálculos e API prontos antes da UI)*
+
+- [ ] 12-05-PLAN.md — SSR page /family/fx + FxAnalysisClient (tabela, toggle simulação, totais, link Guardian FX-06) + checkpoint visual
+
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
@@ -169,3 +204,5 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 0/TBD | Not started | - |
 | 6. API Integration | 0/TBD | Not started | - |
+| 12. Módulo de FX | 0/TBD | Not started | - |
+
