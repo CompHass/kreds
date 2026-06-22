@@ -81,6 +81,9 @@ export function BottomNav() {
     if (tasksEl) sectionMap.set(tasksEl, 'tasks')
     if (savingsEl) sectionMap.set(savingsEl, 'savings')
 
+    // rootMargin cria faixa de ~10% no centro da viewport.
+    // Só a seção que cruza o centro fica ativa — evita múltiplas
+    // seções visíveis simultaneamente em janelas grandes.
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -90,7 +93,7 @@ export function BottomNav() {
           }
         }
       },
-      { threshold: [0, 0.1] },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 },
     )
 
     sectionMap.forEach((_, el) => observer.observe(el))
