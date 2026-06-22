@@ -10,16 +10,17 @@ interface SavingsCardProps {
 }
 
 export function SavingsCard({ savings, goal }: SavingsCardProps) {
-  const [barWidth, setBarWidth] = useState(0)
+  const [animated, setAnimated] = useState(false)
   const targetWidth = Math.min(100, (savings / goal) * 100)
 
-  // Double requestAnimationFrame: garante que o browser renderiza width:0
-  // antes de iniciar a animação (Pitfall 3 — RESEARCH.md)
+  // Mantém barWidth em 0 até após o primeiro paint do browser,
+  // garantindo que a CSS transition parta de 0% visualmente.
+  // setTimeout(0) é necessário pois double-rAF em React 18 Strict Mode
+  // dispara antes do browser comitar o paint inicial, impedindo a animação.
   useEffect(() => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => setBarWidth(targetWidth))
-    })
-  }, [targetWidth])
+    const id = setTimeout(() => setAnimated(true), 0)
+    return () => clearTimeout(id)
+  }, [])
 
   return (
     <div style={{ padding: '0 16px' }}>
@@ -97,7 +98,7 @@ export function SavingsCard({ savings, goal }: SavingsCardProps) {
               height: '100%',
               borderRadius: 'var(--radius-pill)',
               background: 'linear-gradient(90deg, #5A8A66 0%, #3E6B4F 100%)',
-              width: `${barWidth}%`,
+              width: `${animated ? targetWidth : 0}%`,
               transition: 'width .6s cubic-bezier(.2,.8,.3,1)',
             }}
           />
