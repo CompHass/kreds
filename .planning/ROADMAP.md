@@ -117,7 +117,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Wave 2** *(blocked on Wave 1 completion)*
 
 - [ ] 04-02-PLAN.md — TaskCard (CTASK-01/02), TitheCard (CTASK-03), SavingsCard (CTASK-04) *(depends_on 04-01)*
-- [ ] 04-03-PLAN.md — BottomNav fixo com IntersectionObserver e scroll anchor (CTASK-05) *(depends_on 04-01)*
+- [x] 04-03-PLAN.md — BottomNav fixo com IntersectionObserver e scroll anchor (CTASK-05) *(depends_on 04-01)*
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -166,6 +166,6 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 1. Foundation | 2/2 | Complete    | 2026-06-20 |
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 2/3 | In Progress|  |
-| 4. Child Tasks | 1/4 | In Progress|  |
+| 4. Child Tasks | 3/4 | In Progress|  |
 | 5. Parent Panel | 0/TBD | Not started | - |
 | 6. API Integration | 0/TBD | Not started | - |

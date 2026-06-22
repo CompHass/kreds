@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 04 (child-tasks) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
-Last activity: 2026-06-22 -- Phase 04 Plan 02 complete (TaskCard, TitheCard, SavingsCard GREEN)
+Last activity: 2026-06-22 -- Phase 04 Plan 03 complete (BottomNav CTASK-05 GREEN)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -63,6 +63,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 03-child-garden P03 | 15min | 3 tasks | 6 files |
 | Phase 04-child-tasks P01 | 15min | 3 tasks | 4 files |
 | Phase 04-child-tasks P02 | 10min | 3 tasks | 3 files |
+| Phase 04-child-tasks P03 | 2min | 1 task | 1 file |
 
 ## Accumulated Context
 
@@ -91,6 +92,7 @@ Recent decisions affecting current work:
 - [Phase ?]: 03-02: droop prop em GardenHero é opcional (default false) para compatibilidade com garden-hero.test.tsx
 - 03-03: canHarvest passado ao GardenHero como harvested (não doneCount==total) para WaterTracker ficar visível em 4/4 antes da colheita
 - 03-03: aria-label HarvestButton = "Colher Frutos" (compatibilidade com regex /colher frutos/i do teste GARD-08)
+- 04-03: React importado explicitamente em bottom-nav.tsx para usar React.ReactElement — namespace JSX não disponível sem import no projeto
 
 ### Pending Todos
 
@@ -108,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-22T16:19:00.000Z
-Stopped at: Phase 04 Plan 02 complete — TaskCard, TitheCard, SavingsCard implementados (GREEN)
-Resume file: .planning/phases/04-child-tasks/04-03-PLAN.md
+Last session: 2026-06-22T16:23:07.000Z
+Stopped at: Phase 04 Plan 03 complete — BottomNav implementado (CTASK-05 GREEN)
+Resume file: .planning/phases/04-child-tasks/04-04-PLAN.md
