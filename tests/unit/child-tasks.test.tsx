@@ -16,42 +16,48 @@ const doneTask = SEED_STAGE_C.tasks.find((t) => t.done)!
 
 describe('TaskCard — render (CTASK-01)', () => {
   it('renderiza o título da tarefa', () => {
-    render(<TaskCard task={pendingTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={pendingTask} onToggle={vi.fn()} />)
     expect(screen.getByText(pendingTask.title)).toBeInTheDocument()
   })
 
   it('renderiza o emoji da tarefa', () => {
-    render(<TaskCard task={pendingTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={pendingTask} onToggle={vi.fn()} />)
     expect(screen.getByText(pendingTask.emoji)).toBeInTheDocument()
   })
 
   it('tarefa pendente NÃO tem aria-pressed="true"', () => {
-    render(<TaskCard task={pendingTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={pendingTask} onToggle={vi.fn()} />)
     // aria-pressed deve ser false (ou "false") para tarefa pendente
     const button = screen.getByRole('checkbox')
     expect(button).not.toHaveAttribute('aria-pressed', 'true')
   })
 
   it('tarefa concluída tem estado marcado (aria-pressed="true")', () => {
-    render(<TaskCard task={doneTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={doneTask} onToggle={vi.fn()} />)
     const button = screen.getByRole('checkbox')
     expect(button).toHaveAttribute('aria-pressed', 'true')
   })
 })
 
 describe('TaskCard — interação (CTASK-02)', () => {
-  it('clicar no check de tarefa pendente chama onComplete com task.id', () => {
-    const onComplete = vi.fn()
-    render(<TaskCard task={pendingTask} onComplete={onComplete} />)
+  it('clicar no check de tarefa pendente chama onToggle com task.id', () => {
+    const onToggle = vi.fn()
+    render(<TaskCard task={pendingTask} onToggle={onToggle} />)
     fireEvent.click(screen.getByRole('checkbox'))
-    expect(onComplete).toHaveBeenCalledWith(pendingTask.id)
+    expect(onToggle).toHaveBeenCalledWith(pendingTask.id)
   })
 
-  it('clicar em tarefa concluída NÃO chama onComplete (botão disabled)', () => {
-    const onComplete = vi.fn()
-    render(<TaskCard task={doneTask} onComplete={onComplete} />)
+  it('clicar em tarefa concluída chama onToggle com task.id (toggle bidirecional)', () => {
+    const onToggle = vi.fn()
+    render(<TaskCard task={doneTask} onToggle={onToggle} />)
     fireEvent.click(screen.getByRole('checkbox'))
-    expect(onComplete).not.toHaveBeenCalled()
+    expect(onToggle).toHaveBeenCalledWith(doneTask.id)
+  })
+
+  it('botão de tarefa concluída NÃO está disabled (permite uncheck)', () => {
+    render(<TaskCard task={doneTask} onToggle={vi.fn()} />)
+    const button = screen.getByRole('checkbox')
+    expect(button).not.toBeDisabled()
   })
 })
 
@@ -73,13 +79,34 @@ describe('TitheCard — render e interação (CTASK-03)', () => {
     expect(onPlant).toHaveBeenCalledTimes(1)
   })
 
-  it('com done=true exibe "Feito ✓" e o botão está desabilitado (aria-disabled)', () => {
-    render(<TitheCard done={true} onPlant={vi.fn()} />)
+  it('com done=true exibe "Feito ✓" e o botão NÃO está desabilitado (permite desfazer)', () => {
+    render(<TitheCard done={true} onPlant={vi.fn()} onUnplant={vi.fn()} />)
     const btn = screen.getByText('Feito ✓')
     expect(btn).toBeInTheDocument()
-    // O botão deve estar disabled ou ter aria-disabled
     const button = btn.closest('button')
-    expect(button).toBeDisabled()
+    expect(button).not.toBeDisabled()
+  })
+
+  it('com done=true o botão tem aria-label "Desfazer dízimo plantado"', () => {
+    render(<TitheCard done={true} onPlant={vi.fn()} onUnplant={vi.fn()} />)
+    expect(
+      screen.getByRole('button', { name: 'Desfazer dízimo plantado' }),
+    ).toBeInTheDocument()
+  })
+
+  it('clicar em "Feito ✓" chama onUnplant', () => {
+    const onUnplant = vi.fn()
+    render(<TitheCard done={true} onPlant={vi.fn()} onUnplant={onUnplant} />)
+    fireEvent.click(screen.getByText('Feito ✓'))
+    expect(onUnplant).toHaveBeenCalledTimes(1)
+  })
+
+  it('clicar em "Feito ✓" NÃO chama onPlant', () => {
+    const onPlant = vi.fn()
+    const onUnplant = vi.fn()
+    render(<TitheCard done={true} onPlant={onPlant} onUnplant={onUnplant} />)
+    fireEvent.click(screen.getByText('Feito ✓'))
+    expect(onPlant).not.toHaveBeenCalled()
   })
 })
 
