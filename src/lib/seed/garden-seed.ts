@@ -16,6 +16,8 @@ export interface GardenSeed {
   titheDone: boolean
   harvested: boolean
   season: 'primavera' | 'verao' | 'outono' | 'inverno'
+  savings: number
+  goal: number
 }
 
 const BASE_TASKS: GardenTask[] = [
@@ -34,6 +36,8 @@ export const SEED_STAGE_A: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'primavera',
+  savings: 25,
+  goal: 100,
 }
 
 // 1 tarefa concluída — planta no estágio 'b'
@@ -45,6 +49,8 @@ export const SEED_STAGE_B: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'primavera',
+  savings: 25,
+  goal: 100,
 }
 
 // 3 tarefas concluídas — planta no estágio 'c'
@@ -56,6 +62,8 @@ export const SEED_STAGE_C: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'verao',
+  savings: 25,
+  goal: 100,
 }
 
 // 4 tarefas concluídas, não colhida — planta no estágio 'd'
@@ -67,6 +75,8 @@ export const SEED_STAGE_D: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'verao',
+  savings: 25,
+  goal: 100,
 }
 
 // Todas concluídas, jardim colhido
@@ -78,6 +88,8 @@ export const SEED_HARVESTED: GardenSeed = {
   titheDone: false,
   harvested: true,
   season: 'verao',
+  savings: 25,
+  goal: 100,
 }
 
 // Dízimo marcado
@@ -89,6 +101,8 @@ export const SEED_TITHE: GardenSeed = {
   titheDone: true,
   harvested: false,
   season: 'primavera',
+  savings: 25,
+  goal: 100,
 }
 
 // Mapeamento doneCount → stage (GARD-03)
