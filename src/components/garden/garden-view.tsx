@@ -12,6 +12,11 @@ import {
   getPlantStage,
   getBubbleText,
 } from '@/lib/seed/garden-seed'
+// Fase 4 — componentes de tarefas, dízimo, cofrinho e navegação (CTASK-01..05)
+import { TaskCard } from '@/components/tasks/task-card'
+import { TitheCard } from '@/components/tasks/tithe-card'
+import { SavingsCard } from '@/components/tasks/savings-card'
+import { BottomNav } from '@/components/tasks/bottom-nav'
 
 interface Verse {
   id: string
@@ -33,6 +38,8 @@ export function GardenView({ seed, verse }: GardenViewProps) {
   const [showPop, setShowPop] = useState(false)
   const [harvested, setHarvested] = useState(seed.harvested)
   const [showOverlay, setShowOverlay] = useState(false)
+  // Fase 4 — titheDone elevado para state (Pitfall 1 / D-02 / CTASK-03)
+  const [titheDone, setTitheDone] = useState(seed.titheDone)
 
   // Derivados (recalculados no render)
   const doneCount = tasks.filter((t) => t.done).length
@@ -57,6 +64,11 @@ export function GardenView({ seed, verse }: GardenViewProps) {
     setShowOverlay(true)
   }
 
+  // Fase 4 — handler de dízimo (D-11, CTASK-03); sem fetch/POST (D-12)
+  function handleTithe() {
+    setTitheDone(true)
+  }
+
   // D-10: manter último estado ao fechar — NÃO resetar tasks nem harvested
   function handleCloseOverlay() {
     setShowOverlay(false)
@@ -69,7 +81,7 @@ export function GardenView({ seed, verse }: GardenViewProps) {
         background: 'var(--color-kreds-bg)',
         maxWidth: 392,
         margin: '0 auto',
-        paddingBottom: 80, // reservado para bottom nav Fase 4 (D-05)
+        paddingBottom: 80, // reservado para bottom nav Fase 4 (D-05) — NÃO remover (Pitfall 4)
         display: 'flex',
         flexDirection: 'column',
         gap: 16,
@@ -83,13 +95,13 @@ export function GardenView({ seed, verse }: GardenViewProps) {
         coins={seed.coins}
       />
 
-      {/* Hero do jardim com estado interativo */}
-      <div style={{ padding: '0 16px' }}>
+      {/* Hero do jardim com estado interativo — ancora #section-garden para BottomNav */}
+      <div id="section-garden" style={{ padding: '0 16px' }}>
         <GardenHero
           stage={stage}
           season={seed.season}
           waterCount={waterCount}
-          titheDone={seed.titheDone}
+          titheDone={titheDone}
           canHarvest={harvested}
           droop={hasPending}
           pop={showPop}
@@ -105,9 +117,13 @@ export function GardenView({ seed, verse }: GardenViewProps) {
         </GardenHero>
       </div>
 
-      {/* Lista de tarefas — UI mínima para disparar GARD-05 (task cards completos na Fase 4) */}
-      <div
+      {/* Lista de tarefas via TaskCard (CTASK-01, CTASK-02) — ancora #section-tasks para BottomNav */}
+      <ul
+        id="section-tasks"
+        aria-label="Lista de tarefas"
         style={{
+          listStyle: 'none',
+          margin: 0,
           padding: '0 16px',
           display: 'flex',
           flexDirection: 'column',
@@ -115,59 +131,22 @@ export function GardenView({ seed, verse }: GardenViewProps) {
         }}
       >
         {tasks.map((task) => (
-          <button
-            key={task.id}
-            onClick={() => !task.done && handleTaskComplete(task.id)}
-            disabled={task.done}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              padding: '12px 16px',
-              background: 'var(--color-kreds-card)',
-              border: '1px solid var(--color-kreds-border)',
-              borderRadius: 16,
-              cursor: task.done ? 'default' : 'pointer',
-              opacity: task.done ? 0.6 : 1,
-              textAlign: 'left',
-              width: '100%',
-            }}
-          >
-            {/* Checkbox visual */}
-            <span
-              aria-hidden="true"
-              style={{
-                flexShrink: 0,
-                width: 22,
-                height: 22,
-                borderRadius: '50%',
-                border: task.done
-                  ? 'none'
-                  : '2px solid var(--color-kreds-border)',
-                background: task.done ? 'var(--color-kreds-primary)' : 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 13,
-                color: '#fff',
-              }}
-            >
-              {task.done ? '✓' : ''}
-            </span>
-            <span style={{ fontSize: 20 }}>{task.emoji}</span>
-            <span
-              style={{
-                fontSize: 14,
-                fontWeight: 500,
-                color: 'var(--color-kreds-text)',
-                textDecoration: task.done ? 'line-through' : 'none',
-              }}
-            >
-              {task.title}
-            </span>
-          </button>
+          <li key={task.id}>
+            <TaskCard task={task} onComplete={handleTaskComplete} />
+          </li>
         ))}
+      </ul>
+
+      {/* Card de dízimo (CTASK-03) — titheDone state passado a GardenHero via handleTithe */}
+      <TitheCard done={titheDone} onPlant={handleTithe} />
+
+      {/* Card de cofrinho (CTASK-04) — ancora #section-savings para BottomNav */}
+      <div id="section-savings">
+        <SavingsCard savings={seed.savings} goal={seed.goal} />
       </div>
+
+      {/* BottomNav fixo 80px (CTASK-05) — consome #section-garden/#section-tasks/#section-savings */}
+      <BottomNav />
 
       {/* Overlay de celebração (GARD-10) */}
       <CelebrationOverlay
