@@ -43,55 +43,6 @@ export function GardenHero({
         background: 'linear-gradient(180deg, #CFE0D8 0%, #DCE6CC 50%, #CCD8AF 100%)',
       }}
     >
-      {/* Sol — kredsSun infinite */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 16,
-          right: 24,
-          width: 58,
-          height: 58,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, #F5D878 0%, #E8C43E 100%)',
-          animation: 'var(--animate-kreds-sun)',
-          boxShadow: '0 0 20px rgba(232,196,62,.5)',
-          zIndex: 1,
-        }}
-      />
-
-      {/* Nuvem 1 — kredsDrift1 */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 28,
-          left: 20,
-          width: 64,
-          height: 22,
-          borderRadius: 999,
-          background: 'rgba(255,255,255,0.85)',
-          animation: 'var(--animate-kreds-drift1)',
-          zIndex: 1,
-        }}
-      />
-
-      {/* Nuvem 2 — kredsDrift2 */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 50,
-          left: 60,
-          width: 44,
-          height: 16,
-          borderRadius: 999,
-          background: 'rgba(255,255,255,0.7)',
-          animation: 'var(--animate-kreds-drift2)',
-          zIndex: 1,
-        }}
-      />
-
       {/* Morro esquerdo */}
       <div
         aria-hidden="true"
@@ -131,6 +82,52 @@ export function GardenHero({
           height: 52,
           background: 'linear-gradient(180deg, #AFC289 0%, #96AB71 100%)',
           borderRadius: '999px 999px 0 0',
+        }}
+      />
+
+      {/* Sol — kredsSun infinite */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: 16,
+          right: 24,
+          width: 58,
+          height: 58,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, #F5D878 0%, #E8C43E 100%)',
+          animation: 'var(--animate-kreds-sun)',
+          boxShadow: '0 0 20px rgba(232,196,62,.5)',
+        }}
+      />
+
+      {/* Nuvem 1 — kredsDrift1 */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: 28,
+          left: 20,
+          width: 64,
+          height: 22,
+          borderRadius: 999,
+          background: 'rgba(255,255,255,0.85)',
+          animation: 'var(--animate-kreds-drift1)',
+        }}
+      />
+
+      {/* Nuvem 2 — kredsDrift2 */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: 50,
+          left: 60,
+          width: 44,
+          height: 16,
+          borderRadius: 999,
+          background: 'rgba(255,255,255,0.7)',
+          animation: 'var(--animate-kreds-drift2)',
         }}
       />
 
