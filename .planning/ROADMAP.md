@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Design system tokens, tipografia, animações e scaffolding do app Next.js (completed 2026-06-20)
 - [x] **Phase 2: Authentication** - PIN screen da criança com animação portão e login OIDC do responsável (completed 2026-06-21)
 - [x] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração *(complete 2026-06-22)*
-- [ ] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação
+- [x] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação (completed 2026-06-22)
 - [ ] **Phase 5: Parent Panel** - Layout desktop dos pais com CRUD completo de tarefas
 - [ ] **Phase 6: API Integration** - Conectar toda a UI aos endpoints reais com os ajustes de campo necessários
 
@@ -116,12 +116,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 04-02-PLAN.md — TaskCard (CTASK-01/02), TitheCard (CTASK-03), SavingsCard (CTASK-04) *(depends_on 04-01)*
+- [x] 04-02-PLAN.md — TaskCard (CTASK-01/02), TitheCard (CTASK-03), SavingsCard (CTASK-04) *(depends_on 04-01)*
 - [x] 04-03-PLAN.md — BottomNav fixo com IntersectionObserver e scroll anchor (CTASK-05) *(depends_on 04-01)*
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 04-04-PLAN.md — Integração no GardenView: titheDone interativo, lista de TaskCard, cards, BottomNav, anchors + checkpoint visual *(depends_on 04-02, 04-03)*
+- [x] 04-04-PLAN.md — Integração no GardenView: titheDone interativo, lista de TaskCard, cards, BottomNav, anchors + checkpoint visual *(depends_on 04-02, 04-03)*
 
 **UI hint**: yes
 
@@ -166,6 +166,6 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 1. Foundation | 2/2 | Complete    | 2026-06-20 |
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 2/3 | In Progress|  |
-| 4. Child Tasks | 3/4 | In Progress|  |
+| 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 0/TBD | Not started | - |
 | 6. API Integration | 0/TBD | Not started | - |
