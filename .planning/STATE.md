@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 04 Plan 03 complete — BottomNav implementado (CTASK-05 GREEN)
-last_updated: "2026-06-22T16:49:49.219Z"
-last_activity: 2026-06-22 -- Phase 04 Plan 03 complete (BottomNav CTASK-05 GREEN)
+status: active
+stopped_at: Phase 04 complete — UAT passou (2/4 pass, 1 resolved, 1 skipped-animação)
+last_updated: "2026-06-22T18:00:00Z"
+last_activity: 2026-06-22 -- Phase 04 COMPLETE (CTASK-01..05 verificado, UAT completo)
 progress:
   total_phases: 6
   completed_phases: 4
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 04 — child-tasks
+**Current focus:** Phase 05 — parent-panel
 
 ## Current Position
 
-Phase: 04 (child-tasks) — EXECUTING
-Plan: 4 of 4
-Status: Phase complete — ready for verification
-Last activity: 2026-06-22 -- Phase 04 Plan 03 complete (BottomNav CTASK-05 GREEN)
+Phase: 04 (child-tasks) — COMPLETE
+Phase: 05 (parent-panel) — NEXT
+Status: Ready to plan Phase 05
+Last activity: 2026-06-22 -- Phase 04 COMPLETE — CTASK-01..05 GREEN, UAT passed
 
 Progress: [░░░░░░░░░░] 0%
 
