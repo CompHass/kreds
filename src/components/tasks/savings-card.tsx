@@ -1,8 +1,8 @@
 'use client'
 
-// CTASK-04: SavingsCard — cofrinho com progress bar animada no mount
+// CTASK-04: SavingsCard — cofrinho com progress bar animada ao entrar na viewport
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 interface SavingsCardProps {
   savings: number
@@ -11,19 +11,38 @@ interface SavingsCardProps {
 
 export function SavingsCard({ savings, goal }: SavingsCardProps) {
   const [animated, setAnimated] = useState(false)
-  const targetWidth = Math.min(100, (savings / goal) * 100)
+  const targetWidth = Math.min(100, goal > 0 ? (savings / goal) * 100 : 0)
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  // Mantém barWidth em 0 até após o primeiro paint do browser,
-  // garantindo que a CSS transition parta de 0% visualmente.
-  // setTimeout(0) é necessário pois double-rAF em React 18 Strict Mode
-  // dispara antes do browser comitar o paint inicial, impedindo a animação.
+  // Dispara animação quando o card entra na viewport.
+  // double-rAF após IntersectionObserver garante que o browser pintou
+  // width:0% antes de aplicar width:targetWidth%.
   useEffect(() => {
-    const id = setTimeout(() => setAnimated(true), 0)
-    return () => clearTimeout(id)
+    const el = containerRef.current
+    if (!el) return
+    let raf1: number
+    let raf2: number
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          observer.disconnect()
+          raf1 = requestAnimationFrame(() => {
+            raf2 = requestAnimationFrame(() => setAnimated(true))
+          })
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => {
+      observer.disconnect()
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
+    }
   }, [])
 
   return (
-    <div style={{ padding: '0 16px' }}>
+    <div ref={containerRef} style={{ padding: '0 16px' }}>
       <div
         role="region"
         aria-label="Cofrinho"
