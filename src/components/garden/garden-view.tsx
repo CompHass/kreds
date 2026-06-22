@@ -133,6 +133,27 @@ export function GardenView({ seed, verse }: GardenViewProps) {
               width: '100%',
             }}
           >
+            {/* Checkbox visual */}
+            <span
+              aria-hidden="true"
+              style={{
+                flexShrink: 0,
+                width: 22,
+                height: 22,
+                borderRadius: '50%',
+                border: task.done
+                  ? 'none'
+                  : '2px solid var(--color-kreds-border)',
+                background: task.done ? 'var(--color-kreds-primary)' : 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 13,
+                color: '#fff',
+              }}
+            >
+              {task.done ? '✓' : ''}
+            </span>
             <span style={{ fontSize: 20 }}>{task.emoji}</span>
             <span
               style={{

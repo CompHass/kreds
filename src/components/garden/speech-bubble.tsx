@@ -22,7 +22,6 @@ export function SpeechBubble({ text, visible }: SpeechBubbleProps) {
         textAlign: 'center',
         animation: 'var(--animate-kreds-bubble)',
         boxShadow: 'var(--shadow-card)',
-        whiteSpace: 'nowrap',
         zIndex: 10,
       }}
     >
