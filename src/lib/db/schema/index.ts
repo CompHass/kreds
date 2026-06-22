@@ -283,3 +283,11 @@ export const donations = pgTable(
     amountCheck: check('donation_amount_positive', sql`${table.amountKreds} > 0`),
   }),
 )
+
+// Bible verses — seed data for celebration overlay (Phase 3, GARD-10, D-06, D-07)
+export const bibleVerses = pgTable('bible_verses', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  reference: text('reference').notNull(),
+  text: text('text').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
