@@ -50,13 +50,17 @@ export function GardenView({ seed, verse }: GardenViewProps) {
   const bubbleText = getBubbleText({ ...seed, tasks, harvested })
 
   // Handlers
-  function handleTaskComplete(taskId: string) {
+  function handleTaskToggle(taskId: string) {
     setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, done: true } : t)),
+      prev.map((t) => (t.id === taskId ? { ...t, done: !t.done } : t)),
     )
-    setWaterTick((tick) => tick + 1)
-    setShowPop(true)
-    setTimeout(() => setShowPop(false), 650)
+    const wasAlreadyDone = tasks.find((t) => t.id === taskId)?.done ?? false
+    if (!wasAlreadyDone) {
+      // marcando: anima gota e pop
+      setWaterTick((tick) => tick + 1)
+      setShowPop(true)
+      setTimeout(() => setShowPop(false), 650)
+    }
   }
 
   function handleHarvest() {
@@ -67,6 +71,11 @@ export function GardenView({ seed, verse }: GardenViewProps) {
   // Fase 4 — handler de dízimo (D-11, CTASK-03); sem fetch/POST (D-12)
   function handleTithe() {
     setTitheDone(true)
+  }
+
+  // Desfazer dízimo: reverte titheDone para false
+  function handleUntithe() {
+    setTitheDone(false)
   }
 
   // D-10: manter último estado ao fechar — NÃO resetar tasks nem harvested
@@ -132,13 +141,13 @@ export function GardenView({ seed, verse }: GardenViewProps) {
       >
         {tasks.map((task) => (
           <li key={task.id}>
-            <TaskCard task={task} onComplete={handleTaskComplete} />
+            <TaskCard task={task} onToggle={handleTaskToggle} />
           </li>
         ))}
       </ul>
 
-      {/* Card de dízimo (CTASK-03) — titheDone state passado a GardenHero via handleTithe */}
-      <TitheCard done={titheDone} onPlant={handleTithe} />
+      {/* Card de dízimo (CTASK-03) — titheDone state passado a GardenHero via handleTithe/handleUntithe */}
+      <TitheCard done={titheDone} onPlant={handleTithe} onUnplant={handleUntithe} />
 
       {/* Card de cofrinho (CTASK-04) — ancora #section-savings para BottomNav */}
       <div id="section-savings">
