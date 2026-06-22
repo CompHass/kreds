@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 3 UI-SPEC approved
-last_updated: "2026-06-22T10:47:46.967Z"
-last_activity: 2026-06-22 -- Phase 03 planning complete
+stopped_at: Phase 03 Plan 01 complete
+last_updated: "2026-06-22T11:02:03Z"
+last_activity: 2026-06-22 -- Phase 03 Plan 01 (garden data layer) complete
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 7
+  total_plans: 10
   completed_plans: 7
   percent: 33
 ---
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 02 — authentication
+**Current focus:** Phase 03 — child-garden
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-06-22 -- Phase 03 planning complete
+Phase: 03 (child-garden) — EXECUTING
+Plan: 2 of 3
+Status: Phase 03 Plan 01 complete — proceeding to Plan 02
+Last activity: 2026-06-22 -- Phase 03 Plan 01 (garden data layer) complete
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -58,6 +58,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-authentication P03 | 3min | 2 tasks | 3 files |
 | Phase 02-authentication P04 | 3min | 2 tasks | 6 files |
 | Phase 02-authentication P05 | 35min | 3 tasks | 8 files |
+| Phase 03-child-garden P01 | 6min | 3 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,11 @@ Recent decisions affecting current work:
 - [Phase ?]: 02-02: /family/access/[familyId] é URL canônica da seleção de perfil — middleware Test 10 é o contrato; D-02 do CONTEXT.md ajustado
 - [Phase ?]: 02-02: middleware cookie name dinâmico — HTTP usa authjs.session-token, HTTPS usa __Secure-authjs.session-token (nextAuthCookieName)
 - [Phase ?]: 02-03: verifyChildPin usa query única para pinHash + familyId (evita 2 DB roundtrips)
+- 03-01: getPlantStage mapping: 0→a, 1→b, 2..n-1→c, n→d (4 tarefas no seed)
+- 03-01: getBubbleText prioridade: harvested > titheDone > stage
+- 03-01: garden-season.test.ts separado em puro .ts (funções puras verde); SeasonBadge testado em garden-hero.test.tsx no Wave 1
+- 03-01: Seed SQL idempotente — DELETE FROM bible_verses antes do INSERT
+- 03-01: psql localizado em /opt/homebrew/Cellar/postgresql@16/16.14/bin/psql (não no PATH do agente)
 
 ### Pending Todos
 
@@ -93,6 +99,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-22T00:00:21.370Z
-Stopped at: Phase 3 UI-SPEC approved
-Resume file: .planning/phases/03-child-garden/03-UI-SPEC.md
+Last session: 2026-06-22T11:02:03Z
+Stopped at: Phase 03 Plan 01 complete
+Resume file: .planning/phases/03-child-garden/03-02-PLAN.md
