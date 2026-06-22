@@ -22,6 +22,7 @@ export function DecorativeFlowers({ visible }: DecorativeFlowersProps) {
         left: '50%',
         transform: 'translateX(-50%)',
         pointerEvents: 'none',
+        zIndex: 1,
       }}
     >
       {/* Flor esquerda */}
