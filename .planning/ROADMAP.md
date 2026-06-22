@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Design system tokens, tipografia, animações e scaffolding do app Next.js (completed 2026-06-20)
 - [x] **Phase 2: Authentication** - PIN screen da criança com animação portão e login OIDC do responsável (completed 2026-06-21)
-- [ ] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração
+- [x] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração *(complete 2026-06-22)*
 - [ ] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação
 - [ ] **Phase 5: Parent Panel** - Layout desktop dos pais com CRUD completo de tarefas
 - [ ] **Phase 6: API Integration** - Conectar toda a UI aos endpoints reais com os ajustes de campo necessários
@@ -91,7 +91,8 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Speech bubble contextual aparece com animação kredsBubble conforme estado do jardim
   5. Botão "Colher" laranja com animação kredsFruit aparece apenas quando todas as tarefas estão concluídas; ao colher, overlay exibe 20 confetes, versículo bíblico e botão voltar; flores SVG decorativas aparecem ao separar dízimo
 
-**Plans**: TBD
+**Plans**: 3 plans completed (03-01, 03-02, 03-03)
+**Status**: COMPLETE — 2026-06-22
 **UI hint**: yes
 
 ### Phase 4: Child Tasks

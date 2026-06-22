@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: completed
-stopped_at: Phase 03 Plan 02 complete
-last_updated: "2026-06-22T11:10:39.002Z"
-last_activity: 2026-06-22 -- Phase 03 Plan 01 (garden data layer) complete
+stopped_at: Phase 03 Plan 03 complete
+last_updated: "2026-06-22T08:27:00.000Z"
+last_activity: 2026-06-22 -- Phase 03 Plan 03 (interactive layer + garden page) complete
 progress:
   total_phases: 6
   completed_phases: 2
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 ## Current Position
 
-Phase: 03 (child-garden) — EXECUTING
-Plan: 3 of 3
-Status: Phase 03 Plan 01 complete — proceeding to Plan 02
-Last activity: 2026-06-22 -- Phase 03 Plan 01 (garden data layer) complete
+Phase: 03 (child-garden) — COMPLETE
+Plan: 3 of 3 (ALL PLANS COMPLETE)
+Status: Phase 03 Plan 03 complete — Fase 3 encerrada
+Last activity: 2026-06-22 -- Phase 03 Plan 03 (interactive layer + garden page) complete
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-authentication P05 | 35min | 3 tasks | 8 files |
 | Phase 03-child-garden P01 | 6min | 3 tasks | 15 files |
 | Phase 03 P02 | 10min | - tasks | - files |
+| Phase 03-child-garden P03 | 15min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase ?]: 03-02: DecorativeFlowers retorna null quando !visible — padrão consistente com queryByTestId
 - [Phase ?]: 03-02: GardenHero oculta WaterTracker quando canHarvest=true, slot children reservado para HarvestButton do Plano 03
 - [Phase ?]: 03-02: droop prop em GardenHero é opcional (default false) para compatibilidade com garden-hero.test.tsx
+- 03-03: canHarvest passado ao GardenHero como harvested (não doneCount==total) para WaterTracker ficar visível em 4/4 antes da colheita
+- 03-03: aria-label HarvestButton = "Colher Frutos" (compatibilidade com regex /colher frutos/i do teste GARD-08)
 
 ### Pending Todos
 
@@ -103,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-22T11:10:38.998Z
-Stopped at: Phase 03 Plan 02 complete
-Resume file: .planning/phases/03-child-garden/03-03-PLAN.md
+Last session: 2026-06-22T08:27:00.000Z
+Stopped at: Phase 03 Plan 03 complete
+Resume file: None — Fase 03 completa
