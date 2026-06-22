@@ -1,13 +1,22 @@
 'use client'
 
-// CTASK-03: TitheCard — card de dízimo com botão "Plantar" / estado "Feito ✓"
+// CTASK-03: TitheCard — card de dízimo com botão "Plantar" / estado "Feito ✓" / desfazer
 
 interface TitheCardProps {
   done: boolean
   onPlant: () => void
+  onUnplant?: () => void
 }
 
-export function TitheCard({ done, onPlant }: TitheCardProps) {
+export function TitheCard({ done, onPlant, onUnplant }: TitheCardProps) {
+  function handleClick() {
+    if (done) {
+      onUnplant?.()
+    } else {
+      onPlant()
+    }
+  }
+
   return (
     <div style={{ padding: '0 16px' }}>
       <div
@@ -52,12 +61,10 @@ export function TitheCard({ done, onPlant }: TitheCardProps) {
           </span>
         </div>
 
-        {/* Botão "Plantar" / "Feito ✓" (D-11) */}
+        {/* Botão "Plantar" / "Feito ✓" / "Desfazer" (D-11) */}
         <button
-          onClick={() => !done && onPlant()}
-          disabled={done}
-          aria-disabled={done}
-          aria-label={done ? 'Dízimo plantado' : 'Plantar dízimo'}
+          onClick={handleClick}
+          aria-label={done ? 'Desfazer dízimo plantado' : 'Plantar dízimo'}
           style={{
             border: 'none',
             borderRadius: 'var(--radius-card-sm)',
@@ -66,7 +73,7 @@ export function TitheCard({ done, onPlant }: TitheCardProps) {
             color: '#ffffff',
             fontWeight: 700,
             fontSize: 15,
-            cursor: done ? 'default' : 'pointer',
+            cursor: 'pointer',
             boxShadow: 'var(--shadow-cta)',
             transition: 'background .3s ease',
             background: done
