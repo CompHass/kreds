@@ -43,11 +43,14 @@ blocked: 0
 ## Gaps
 
 - truth: "DecorativeFlowers aparecem no GardenHero após clicar Plantar no TitheCard (titheDone=true propagado ao hero via state)"
-  status: failed
+  status: resolved
   reason: "User reported: As DecorativeFlowers não aparecem no GardenHero após clicar Plantar"
   severity: major
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "PlantStage usa filter:drop-shadow criando stacking context — DecorativeFlowers renderizava no DOM mas aparecia visualmente atrás da planta"
+  artifacts:
+    - path: "src/components/garden/decorative-flowers.tsx"
+      issue: "SVG sem zIndex — perdendo para stacking context do filter na planta"
+  missing:
+    - "zIndex: 1 no SVG do DecorativeFlowers"
+  debug_session: ".planning/debug/decorative-flowers-not-showing.md"
