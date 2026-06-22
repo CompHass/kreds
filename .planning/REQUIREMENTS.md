@@ -32,15 +32,15 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 ### Jardim da Criança
 
-- [ ] **GARD-01**: Header com avatar inicial, nome da criança, saudação e badge de moedas (SVG coin)
-- [ ] **GARD-02**: Hero jardim 316px com céu gradiente, sol animado (kredsSun), 2 nuvens (kredsDrift1/2)
-- [ ] **GARD-03**: Planta exibida em 4 estágios (plant-a→d) baseada na contagem de tarefas concluídas
-- [ ] **GARD-04**: Tracker de água com 4 dots (azul `#6E9BA0` se rega feita, branco semi-transparente se não)
+- [x] **GARD-01**: Header com avatar inicial, nome da criança, saudação e badge de moedas (SVG coin)
+- [x] **GARD-02**: Hero jardim 316px com céu gradiente, sol animado (kredsSun), 2 nuvens (kredsDrift1/2)
+- [x] **GARD-03**: Planta exibida em 4 estágios (plant-a→d) baseada na contagem de tarefas concluídas
+- [x] **GARD-04**: Tracker de água com 4 dots (azul `#6E9BA0` se rega feita, branco semi-transparente se não)
 - [ ] **GARD-05**: Ao concluir tarefa: 5 drops animados (kredsDrop) + pop na planta (kredsPop) + avanço de estágio
-- [ ] **GARD-06**: Badge de estação no hero com dot colorido e nome da estação
-- [ ] **GARD-07**: Speech bubble contextual aparece conforme estado do jardim (animação kredsBubble)
+- [x] **GARD-06**: Badge de estação no hero com dot colorido e nome da estação
+- [x] **GARD-07**: Speech bubble contextual aparece conforme estado do jardim (animação kredsBubble)
 - [ ] **GARD-08**: Botão "Colher" laranja com animação kredsFruit aparece somente quando todas tarefas concluídas
-- [ ] **GARD-09**: Flores decorativas SVG aparecem no jardim ao separar dízimo
+- [x] **GARD-09**: Flores decorativas SVG aparecem no jardim ao separar dízimo
 - [ ] **GARD-10**: Overlay de celebração com 20 confetes (kredsConfetti), card de versículo bíblico e botão voltar
 
 ### Tarefas da Criança
@@ -98,15 +98,15 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | GAUTH-03 | Phase 2 | Complete |
 | GAUTH-04 | Phase 2 | Complete |
 | GAUTH-05 | Phase 2 | Complete |
-| GARD-01 | Phase 3 | Pending |
-| GARD-02 | Phase 3 | Pending |
-| GARD-03 | Phase 3 | Pending |
-| GARD-04 | Phase 3 | Pending |
+| GARD-01 | Phase 3 | Complete |
+| GARD-02 | Phase 3 | Complete |
+| GARD-03 | Phase 3 | Complete |
+| GARD-04 | Phase 3 | Complete |
 | GARD-05 | Phase 3 | Pending |
-| GARD-06 | Phase 3 | Pending |
-| GARD-07 | Phase 3 | Pending |
+| GARD-06 | Phase 3 | Complete |
+| GARD-07 | Phase 3 | Complete |
 | GARD-08 | Phase 3 | Pending |
-| GARD-09 | Phase 3 | Pending |
+| GARD-09 | Phase 3 | Complete |
 | GARD-10 | Phase 3 | Pending |
 | CTASK-01 | Phase 4 | Pending |
 | CTASK-02 | Phase 4 | Pending |
