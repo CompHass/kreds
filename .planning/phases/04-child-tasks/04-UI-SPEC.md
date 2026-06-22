@@ -36,7 +36,6 @@ Declared values (all multiples of 4):
 | xs | 4px | Icon gaps, gap between check SVG and text |
 | sm | 8px | Gap between task cards in list |
 | md | 12px | Card internal padding (top/bottom) — source: design handoff "padding 12px 13px" |
-| md-h | 13px | Card internal padding (left/right) — source: design handoff |
 | lg | 16px | Section horizontal padding (matches existing GardenView `padding: '0 16px'`) |
 | xl | 24px | Page top padding (matches existing `paddingTop: 24`) |
 | 2xl | 32px | Gap between major sections (tasks → tithe → savings) |
@@ -44,6 +43,7 @@ Declared values (all multiples of 4):
 
 Exceptions:
 - **Check button:** 38×38px — not on the 4px scale; this is a design handoff hard spec (CTASK-02). Do not adjust.
+- **Card horizontal padding:** `md-h: 13px` — not a multiple of 4; this is a design handoff hard spec ("padding 12px 13px"). Do not adjust.
 - **Bottom nav padding-bottom:** `80px` added to page container (already present in `garden-view.tsx` as `paddingBottom: 80`).
 - **Touch target minimum:** 44px logical — check button (38×38px) must be wrapped in a 44×44px touch area (padding compensation) for accessibility.
 
@@ -55,9 +55,9 @@ Exceptions:
 |------|------|--------|-------------|-------|
 | Task title — pending | 15px | 600 | 1.4 | Task card title, pendente — source: design handoff body 14–15.5px/500–700 |
 | Task title — done | 15px | 600 | 1.4 | Task card title, concluída — same size, color changes |
-| Task sub / label | 12px | 600 | 1.3 | Secondary text on cards (reward label, section labels) — source: handoff labels 11–13px/600–700 |
+| Task sub / label | 12px | 600 | 1.3 | Secondary text on cards (reward label, section labels, nav labels) — source: handoff labels 11–13px/600–700 |
 | Card heading | 18px | 700 | 1.2 | Section card titles ("Dízimo", "Cofrinho", "Meta") — source: handoff section titles 18–20px/700–800 |
-| Nav label | 11px | 600 | 1.2 | Bottom nav icon labels — source: handoff labels/captions 11–13px |
+| Savings display | 20px | 700 | 1.2 | "R$ {savings}" amount in SavingsCard — source: handoff display size 18–20px |
 
 **Letter-spacing:** `-0.01em` on card headings (18px+). None on body/label sizes.
 
@@ -103,6 +103,8 @@ Exceptions:
 | Savings bar gradient start | `#5A8A66` | `--color-kreds-primary-lt` | Progress bar left stop |
 | Nav inactive icon | `#9AA092` | `--color-kreds-hint` | Bottom nav icons not active |
 | Bottom nav background | `rgba(248,247,242,0.93)` | — | Bottom nav bg with blur — source: CONTEXT.md D-04 |
+
+**Primary focal point — tasks section:** Task card list. The first card draws the eye via white card (`#FFFFFF`) contrast against the `#F2F0E7` page background. All other cards follow with the same contrast rhythm. Do not reduce card-to-background contrast in this section.
 
 **No destructive actions in this phase.** (No delete, no confirm dialogs.)
 
