@@ -13,7 +13,7 @@ export function HarvestButton({ visible, onHarvest }: HarvestButtonProps) {
   return (
     <button
       onClick={onHarvest}
-      aria-label="Colher os frutos do jardim"
+      aria-label="Colher Frutos"
       style={{
         background: 'linear-gradient(135deg, #C77F52 0%, #B5623F 100%)',
         border: 'none',
