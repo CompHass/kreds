@@ -42,8 +42,8 @@ Declared values (all multiples of 4):
 | nav | 80px | Bottom nav height — fixed, source: CONTEXT.md D-03 / design handoff |
 
 Exceptions:
-- **Check button:** 38×38px — not on the 4px scale; this is a design handoff hard spec (CTASK-02). Do not adjust.
-- **Card horizontal padding:** `md-h: 13px` — not a multiple of 4; this is a design handoff hard spec ("padding 12px 13px"). Do not adjust.
+- **Check button:** 38×38px — not on the 4px scale; developer-approved exception — visual fidelity above grid alignment — 2026-06-22 (CTASK-02). Do not adjust.
+- **Card horizontal padding:** `md-h: 13px` — not a multiple of 4; developer-approved exception — visual fidelity above grid alignment — 2026-06-22 ("padding 12px 13px" from design handoff). Do not adjust.
 - **Bottom nav padding-bottom:** `80px` added to page container (already present in `garden-view.tsx` as `paddingBottom: 80`).
 - **Touch target minimum:** 44px logical — check button (38×38px) must be wrapped in a 44×44px touch area (padding compensation) for accessibility.
 
