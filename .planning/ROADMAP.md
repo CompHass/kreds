@@ -108,7 +108,21 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Card de cofrinho exibe meta, valor salvo e progress bar animada (`.6s cubic-bezier`)
   5. Bottom nav fixo 80px com 4 ícones (Jardim, Tarefas, Cofrinho, Doar) navega entre seções; ícone ativo aparece em verde `#3E6B4F`
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — Fundação: estende GardenSeed com savings/goal (D-15), mock IntersectionObserver, testes RED de CTASK-01..05
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-02-PLAN.md — TaskCard (CTASK-01/02), TitheCard (CTASK-03), SavingsCard (CTASK-04) *(depends_on 04-01)*
+- [ ] 04-03-PLAN.md — BottomNav fixo com IntersectionObserver e scroll anchor (CTASK-05) *(depends_on 04-01)*
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 04-04-PLAN.md — Integração no GardenView: titheDone interativo, lista de TaskCard, cards, BottomNav, anchors + checkpoint visual *(depends_on 04-02, 04-03)*
+
 **UI hint**: yes
 
 ### Phase 5: Parent Panel
@@ -152,6 +166,6 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 1. Foundation | 2/2 | Complete    | 2026-06-20 |
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 2/3 | In Progress|  |
-| 4. Child Tasks | 0/TBD | Not started | - |
+| 4. Child Tasks | 0/4 | Not started | - |
 | 5. Parent Panel | 0/TBD | Not started | - |
 | 6. API Integration | 0/TBD | Not started | - |
