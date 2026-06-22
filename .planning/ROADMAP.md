@@ -112,7 +112,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1**
 
-- [ ] 04-01-PLAN.md — Fundação: estende GardenSeed com savings/goal (D-15), mock IntersectionObserver, testes RED de CTASK-01..05
+- [x] 04-01-PLAN.md — Fundação: estende GardenSeed com savings/goal (D-15), mock IntersectionObserver, testes RED de CTASK-01..05
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -166,6 +166,6 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 1. Foundation | 2/2 | Complete    | 2026-06-20 |
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 2/3 | In Progress|  |
-| 4. Child Tasks | 0/4 | Not started | - |
+| 4. Child Tasks | 1/4 | In Progress|  |
 | 5. Parent Panel | 0/TBD | Not started | - |
 | 6. API Integration | 0/TBD | Not started | - |
