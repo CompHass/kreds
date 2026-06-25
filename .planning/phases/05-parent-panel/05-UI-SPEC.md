@@ -45,8 +45,8 @@ Declarado com base no padrão existente nos componentes das Fases 1–4 (inspeci
 
 Exceções:
 - Touch targets de sidebar: 44×44px (ícones de nav) — **PTASK-01**, design handoff
-- Botão check da lista de tasks: 38×38px — padrão CTASK-02 replicado
-- Botão editar (lápis): 34×34px — design handoff §Painel Desktop
+- Botão check da lista de tasks: 40×40px — touch target adequado (múltiplo de 4)
+- Botão editar (lápis): 32×32px — design handoff §Painel Desktop
 - Topbar: altura fixa 64px — **PTASK-02**
 - Sidebar: largura fixa 80px — **PTASK-01**
 - Painel direito: largura fixa 336px — **PTASK-01**
@@ -60,16 +60,17 @@ Exceções:
 
 | Role | Size | Weight | Line Height | Color |
 |------|------|--------|-------------|-------|
-| Display / Título principal (painel) | 22px | 800 | 1.2 | `#27372C` |
+| Display / Título principal (painel) | 22px | 700 | 1.2 | `#27372C` |
 | Heading / Título de seção | 18px | 700 | 1.25 | `#27372C` |
 | Body / Nome de tarefa | 15px | 600 | 1.4 | `#27372C` (pendente) / `#4E6E3E` (ativa) |
-| Label / Caption chips e badges | 13px | 600 | 1.3 | varia por contexto (verde ativo, muted inativo) |
-| Micro / Labels de nav, sub-itens | 12px | 600 | 1.2 | `#9AA092` (inativo) / `#3E6B4F` (ativo) |
+| Micro / Labels de nav, chips, badges, pills | 13px | 600 | 1.3 | varia por contexto (verde ativo, muted inativo) |
+
+Pesos declarados: **600** (body, labels, micro — peso padrão) e **700** (headings, display, elementos de destaque). Pesos 400, 500 e 800 absorvidos nesses dois.
 
 Notas:
 - Letter-spacing em títulos: `-0.01em` (padrão garden-header.tsx)
 - Breadcrumb (família): 15px / 700 / `#3E6B4F` — **PTASK-02**
-- Valor de recompensa: 20px / 700 / `#27372C` (valor) ou `#3E6B4F` (Mordomia) — **PTASK-07**
+- Valor de recompensa: 18px / 700 / `#27372C` (valor) ou `#3E6B4F` (Mordomia) — **PTASK-07** (usa tamanho Heading)
 - Labels de pills de recorrência (D/S/T/Q/Q/S/S): 13px / 700 — **PTASK-08**
 
 **Fonte:** design handoff README.md §Tipografia, codebase task-card.tsx e garden-header.tsx, REQUIREMENTS.md PTASK-07/08.
@@ -138,14 +139,14 @@ Componentes novos a criar na Fase 5 (para o executor):
 - `ParentTaskCard` — border-radius 16px, border 1.5px `#ECE7DB`, bg branco, padding 13.5px 15px. Flex row: ícone categoria (44×44px, border-radius 13px) + conteúdo + ações. Props: `editing`, `inactive`, `justAdded`
 - `CategoryIcon` — SVG inline 44×44px com fundo suave da categoria e stroke da cor da categoria
 - `TaskToggle` — switch 42×24px, knob 18×18px branco, transição `left .2s ease`. bg: `#3E6B4F` (ativo) / `#D7DBCC` (inativo)
-- `EditButton` — 34×34px, border-radius 10px. Normal: border `#E2DECF`, bg `#FBFAF5`, stroke `#7C8676`. Editando: border `#3E6B4F`, bg `#EEF3EA`, stroke `#3E6B4F`
+- `EditButton` — 32×32px, border-radius 10px. Normal: border `#E2DECF`, bg `#FBFAF5`, stroke `#7C8676`. Editando: border `#3E6B4F`, bg `#EEF3EA`, stroke `#3E6B4F`
 
 ### Painel Direito (Form)
 - `TaskFormPanel` — card border-radius 20px, bg branco, padding 20px, shadow `0 16px 36px -26px rgba(40,55,45,.5)`. Props: `mode: 'idle' | 'create' | 'edit'`
 - `TaskFormHeader` — header dinâmico: modo idle → placeholder elegante; modo create → "+ Nova tarefa"; modo edit → ícone lápis + "Editar tarefa" + botão X (30×30px)
 - `TaskTitleInput` — 46px altura, border-radius 12px, bg `#FBFAF5`. Focus: border `#3E6B4F`, bg branco
 - `CategoryChips` — 5 chips de categoria, selecionado usa cor da categoria
-- `RewardStepper` — botões ± (38×38px), valor central. R$0 → "Mordomia" em `#3E6B4F`; valor > 0 → "R$ X" em `#27372C`
+- `RewardStepper` — botões ± (40×40px), valor central. R$0 → "Mordomia" em `#3E6B4F`; valor > 0 → "R$ X" em `#27372C`
 - `RecurrencePills` — 7 pills D/S/T/Q/Q/S/S + link "Todos os dias". Selecionado: bg `#3E6B4F`, texto branco
 - `AssigneeSelector` — lista de crianças como botões toggle. Selecionado: bg `#EEF3EA`, border `#3E6B4F`, checkmark verde. Avatar 32px por criança
 - `ApprovalToggle` — switch 42×24px (mesmo componente TaskToggle)
@@ -290,6 +291,8 @@ Labels de recorrência (pills D/S/T/Q/Q/S/S):
     │           ├── FormCTA
     │           └── DeleteButton  (somente modo edit)
 ```
+
+**Focal point primário:** painel direito (`TaskFormPanel`) em estado idle — presença visual que convida à interação. É o elemento âncora da tela: sempre visível, sempre ocupando 336px fixos, com shadow `0 16px 36px -26px rgba(40,55,45,.5)` que o destaca do fundo.
 
 **Fonte:** REQUIREMENTS.md PTASK-01, 05-CONTEXT.md §Phase Boundary, D-05..D-09, design handoff §Layout.
 
