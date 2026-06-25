@@ -549,17 +549,15 @@ Esta fase não é de rename/refactor. Sem runtime state inventory necessário.
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Nome da família para o breadcrumb**
-   - What we know: A tabela `families` tem coluna `name`. A page.tsx tem acesso ao `familyId`.
-   - What's unclear: O mock usa "Família Teste" — a page.tsx deve fazer uma query extra de `families.name`?
-   - Recommendation: Sim, adicionar `db.select({ name: families.name }).from(families).where(eq(families.id, familyId))` na page.tsx. É uma query simples e o breadcrumb com nome real é melhor UX.
+1. **Nome da família para o breadcrumb** — RESOLVED
+   - **Decision:** Sim, `page.tsx` faz query extra: `db.select({ name: families.name }).from(families).where(eq(families.id, familyId))`. Plano 05-04 Task 2 instrui explicitamente essa query.
+   - Rationale: Query simples, breadcrumb com nome real é UX necessário.
 
-2. **Formato de avatar nos filter chips (PTASK-03)**
-   - What we know: `childProfiles.avatarPreset` existe no banco (ex: `'sprout'`). `childProfiles.accentColor` fornece a cor.
-   - What's unclear: Os presets de avatar são arquivos de imagem, iniciais com fundo colorido, ou SVGs?
-   - Recommendation: Usar inicial do `displayName` com fundo da `accentColor` — padrão que já funciona nos profile cards da Fase 2. Confirmar com o design handoff visual.
+2. **Formato de avatar nos filter chips (PTASK-03)** — RESOLVED
+   - **Decision:** Usar inicial do `displayName` com fundo da `accentColor` — padrão existente dos profile cards da Fase 2. Plano 05-02 usa este padrão como fallback consistente.
+   - Rationale: `avatarPreset` é um slug de imagem sem componente de renderização definido nesta fase; inicial + accentColor já funciona e segue o padrão estabelecido.
 
 ---
 

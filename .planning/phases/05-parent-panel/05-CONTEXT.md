@@ -20,7 +20,7 @@ Rota nova: `/family/[familyId]/tasks` — responsável chega aqui após login Zi
 ### URL & Navegação
 
 - **D-01:** Rota do painel: `/family/[familyId]/tasks`. Usa `familyId` real na URL, contínuo com `/family/access/[familyId]` existente. SSR lê `familyId` dos params + resolve via `auth()` session.
-- **D-02:** Redirect pós-login: após autenticação Zitadel bem-sucedida, responsável é redirecionado para `/family/[familyId]/tasks`. Backend resolve `familyId` do guardian logado via `family_memberships` (schema existente).
+- **D-02:** Redirect pós-login: [deferred to Phase 6] — a rota `/family/[familyId]/tasks` existe nesta fase, mas o ajuste do `callbackUrl` pós-Zitadel para redirecionar automaticamente para o painel é responsabilidade da Fase 6 (integração completa). Nesta fase, o responsável acessa a rota manualmente ou via nav existente.
 
 ### Schema & Dados
 
