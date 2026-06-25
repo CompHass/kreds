@@ -138,7 +138,24 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Painel direito permite criar/editar tarefa com título, categoria chips, stepper de recompensa (±), pills de recorrência D/S/T/Q/Q/S/S, atribuição, e campo de aprovação
   5. Após salvar ou criar tarefa, o card recém-adicionado exibe flash kredsNew (glow ring verde 1.2s); botão excluir aparece somente em modo edição de tarefa existente
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+**Wave 1**
+
+- [ ] 05-01-PLAN.md — Fundação: schema (category/days/approval) + [BLOCKING] drizzle-kit push + seed mock parent-seed.ts + testes RED PTASK-01..10
+
+**Wave 2** *(blocked on Wave 1 — consome o contrato ParentTask)*
+
+- [ ] 05-02-PLAN.md — Shell + lista: ParentSidebar, ParentTopbar, FilterChips, CategoryIcon, TaskToggle, ParentTaskCard (PTASK-01..05, PTASK-09) *(depends_on 05-01)*
+
+**Wave 3** *(blocked on Wave 2 — reutiliza TaskToggle)*
+
+- [ ] 05-03-PLAN.md — Painel direito (form): TaskFormPanel idle/create/edit + CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, DeleteButton (PTASK-06..08, PTASK-10) *(depends_on 05-01, 05-02)*
+
+**Wave 4** *(blocked on Wave 3 — integração + checkpoint)*
+
+- [ ] 05-04-PLAN.md — Integração: ParentPanelView (CRUD otimista, D-09/D-10) + rota SSR /family/[familyId]/tasks + suite GREEN + checkpoint visual *(depends_on 05-01, 05-02, 05-03)*
+
 **UI hint**: yes
 
 ### Phase 6: API Integration
@@ -202,7 +219,7 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
-| 5. Parent Panel | 0/TBD | Not started | - |
+| 5. Parent Panel | 0/4 | Not started | - |
 | 6. API Integration | 0/TBD | Not started | - |
 | 12. Módulo de FX | 0/TBD | Not started | - |
 
