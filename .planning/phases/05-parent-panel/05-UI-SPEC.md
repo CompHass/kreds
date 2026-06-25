@@ -37,7 +37,7 @@ Declarado com base no padrão existente nos componentes das Fases 1–4 (inspeci
 |-------|-------|-------|
 | xs | 4px | Gaps de ícone, separadores internos de pill |
 | sm | 8px | Padding interno de badge, gap de itens inline |
-| md | 12px | Padding de task cards (padrão do projeto: 12px 13px) |
+| md | 12px | Padding de task cards (padrão do projeto: 12px 16px) |
 | lg | 16px | Padding horizontal de seções, gap entre itens de nav |
 | xl | 20px | Padding interno do painel direito |
 | 2xl | 24px | Gaps maiores entre grupos de elementos |
@@ -136,7 +136,7 @@ Componentes novos a criar na Fase 5 (para o executor):
 
 ### Lista de Tarefas
 - `FilterChips` — "Todas" + chip por criança (mini avatar 24px + nome). Selecionado: bg `#3E6B4F` texto branco. Inativo: bg `#FBFAF5` border `#E2DECF`
-- `ParentTaskCard` — border-radius 16px, border 1.5px `#ECE7DB`, bg branco, padding 13.5px 15px. Flex row: ícone categoria (44×44px, border-radius 13px) + conteúdo + ações. Props: `editing`, `inactive`, `justAdded`
+- `ParentTaskCard` — border-radius 16px, border 1.5px `#ECE7DB`, bg branco, padding 12px 16px. Flex row: ícone categoria (44×44px, border-radius 13px) + conteúdo + ações. Props: `editing`, `inactive`, `justAdded`
 - `CategoryIcon` — SVG inline 44×44px com fundo suave da categoria e stroke da cor da categoria
 - `TaskToggle` — switch 42×24px, knob 18×18px branco, transição `left .2s ease`. bg: `#3E6B4F` (ativo) / `#D7DBCC` (inativo)
 - `EditButton` — 32×32px, border-radius 10px. Normal: border `#E2DECF`, bg `#FBFAF5`, stroke `#7C8676`. Editando: border `#3E6B4F`, bg `#EEF3EA`, stroke `#3E6B4F`
@@ -228,7 +228,8 @@ Sem outras animações novas nesta fase.
 | Badge usuário | "{Nome do responsável}" + avatar |
 | Empty state tasks — heading | "Nenhuma tarefa ainda" |
 | Empty state tasks — body | "Clique em + Nova tarefa para criar a primeira tarefa desta família." |
-| Error genérico | "Algo deu errado. Tente novamente." |
+| Error — falha ao criar/salvar tarefa | "Não foi possível salvar a tarefa. Verifique sua conexão e tente novamente." |
+| Error — falha ao excluir tarefa | "Não foi possível excluir a tarefa. Tente novamente." |
 
 Labels de categoria:
 - `quarto` → "Quarto"
