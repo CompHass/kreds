@@ -45,11 +45,11 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 ### Tarefas da Criança
 
-- [ ] **CTASK-01**: Lista de task cards com visual distinto para pendente (branco) e concluído (verde suave `#EEF3EA`)
-- [ ] **CTASK-02**: Botão check circular 38×38px toggle — desmarcado (borda `#D7DBCC`) e marcado (bg `#3E6B4F` + check branco)
-- [ ] **CTASK-03**: Card de dízimo com ícone flor, botão "Plantar" gradiente rosa, estado "Feito ✓" após clicar
-- [ ] **CTASK-04**: Card de cofrinho com meta, valor salvo e progress bar animada (`.6s cubic-bezier`)
-- [ ] **CTASK-05**: Bottom nav fixo (80px) com 4 ícones: Jardim, Tarefas, Cofrinho, Doar — ativo verde `#3E6B4F`
+- [x] **CTASK-01**: Lista de task cards com visual distinto para pendente (branco) e concluído (verde suave `#EEF3EA`)
+- [x] **CTASK-02**: Botão check circular 38×38px toggle — desmarcado (borda `#D7DBCC`) e marcado (bg `#3E6B4F` + check branco)
+- [x] **CTASK-03**: Card de dízimo com ícone flor, botão "Plantar" gradiente rosa, estado "Feito ✓" após clicar
+- [x] **CTASK-04**: Card de cofrinho com meta, valor salvo e progress bar animada (`.6s cubic-bezier`)
+- [x] **CTASK-05**: Bottom nav fixo (80px) com 4 ícones: Jardim, Tarefas, Cofrinho, Doar — ativo verde `#3E6B4F`
 
 ### Painel de Tarefas dos Pais
 
@@ -57,10 +57,10 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 - [ ] **PTASK-02**: Topbar 64px com breadcrumb (família em verde), badge de usuário logado com nome e avatar
 - [ ] **PTASK-03**: Filter chips "Todas" + chip por criança com mini avatar — selecionado em verde, normal em off-white
 - [ ] **PTASK-04**: Task cards com ícone de categoria, toggle ativo/inativo (switch 42×24px), botão lápis editar
-- [ ] **PTASK-05**: 5 categorias com cores e ícones distintos (quarto, higiene, estudos, casa, espiritual)
+- [x] **PTASK-05**: 5 categorias com cores e ícones distintos (quarto, higiene, estudos, casa, espiritual)
 - [ ] **PTASK-06**: Painel direito com form criar/editar: título, categoria chips, recompensa, recorrência, atribuição, aprovação
-- [ ] **PTASK-07**: Stepper de recompensa com botões ± — valor zero mostra "Mordomia" em verde, valor > 0 mostra "R$ X"
-- [ ] **PTASK-08**: Pills de recorrência D/S/T/Q/Q/S/S + botão "Todos os dias" — selecionado em verde
+- [x] **PTASK-07**: Stepper de recompensa com botões ± — valor zero mostra "Mordomia" em verde, valor > 0 mostra "R$ X"
+- [x] **PTASK-08**: Pills de recorrência D/S/T/Q/Q/S/S + botão "Todos os dias" — selecionado em verde
 - [ ] **PTASK-09**: Flash kredsNew (glow ring verde 1.2s) no card após adicionar ou salvar tarefa
 - [ ] **PTASK-10**: Botão excluir (laranja/vermelho) aparece somente em modo edição de tarefa existente
 
@@ -108,19 +108,19 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | GARD-08 | Phase 3 | Pending |
 | GARD-09 | Phase 3 | Complete |
 | GARD-10 | Phase 3 | Pending |
-| CTASK-01 | Phase 4 | Pending |
-| CTASK-02 | Phase 4 | Pending |
-| CTASK-03 | Phase 4 | Pending |
-| CTASK-04 | Phase 4 | Pending |
-| CTASK-05 | Phase 4 | Pending |
+| CTASK-01 | Phase 4 | Complete |
+| CTASK-02 | Phase 4 | Complete |
+| CTASK-03 | Phase 4 | Complete |
+| CTASK-04 | Phase 4 | Complete |
+| CTASK-05 | Phase 4 | Complete |
 | PTASK-01 | Phase 5 | Pending |
 | PTASK-02 | Phase 5 | Pending |
 | PTASK-03 | Phase 5 | Pending |
 | PTASK-04 | Phase 5 | Pending |
-| PTASK-05 | Phase 5 | Pending |
+| PTASK-05 | Phase 5 | Complete |
 | PTASK-06 | Phase 5 | Pending |
-| PTASK-07 | Phase 5 | Pending |
-| PTASK-08 | Phase 5 | Pending |
+| PTASK-07 | Phase 5 | Complete |
+| PTASK-08 | Phase 5 | Complete |
 | PTASK-09 | Phase 5 | Pending |
 | PTASK-10 | Phase 5 | Pending |
 | API-01 | Phase 6 | Pending |

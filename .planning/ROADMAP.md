@@ -142,7 +142,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1**
 
-- [ ] 05-01-PLAN.md — Fundação: schema (category/days/approval) + [BLOCKING] drizzle-kit push + seed mock parent-seed.ts + testes RED PTASK-01..10
+- [x] 05-01-PLAN.md — Fundação: schema (category/days/approval) + [BLOCKING] drizzle-kit push + seed mock parent-seed.ts + testes RED PTASK-01..10
 
 **Wave 2** *(blocked on Wave 1 — consome o contrato ParentTask)*
 
@@ -219,7 +219,6 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
-| 5. Parent Panel | 0/4 | Not started | - |
+| 5. Parent Panel | 1/4 | In Progress|  |
 | 6. API Integration | 0/TBD | Not started | - |
 | 12. Módulo de FX | 0/TBD | Not started | - |
-

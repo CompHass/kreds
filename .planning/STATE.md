@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: planning
+status: executing
 stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-06-25T20:59:28.690Z"
-last_activity: 2026-06-22 -- Phase 04 COMPLETE — CTASK-01..05 GREEN, UAT passed
+last_updated: "2026-06-26T12:31:14.950Z"
+last_activity: 2026-06-26 -- Phase 05-01 completed (schema + seed + RED tests)
 progress:
   total_phases: 7
   completed_phases: 4
-  total_plans: 14
-  completed_plans: 14
+  total_plans: 18
+  completed_plans: 15
   percent: 57
 ---
 
@@ -25,12 +25,13 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 ## Current Position
 
-Phase: 04 (child-tasks) — COMPLETE
+Phase: 05 (parent-panel) — EXECUTING
+Plan: 2 of 4
 Phase: 05 (parent-panel) — NEXT
-Status: Ready to plan Phase 05
-Last activity: 2026-06-22 -- Phase 04 COMPLETE — CTASK-01..05 GREEN, UAT passed
+Status: Executing Phase 05
+Last activity: 2026-06-26 -- Phase 05-01 completed (schema + seed + RED tests)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [████████░░] 83%
 
 ## Performance Metrics
 
@@ -65,6 +66,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 04-child-tasks P02 | 10min | 3 tasks | 3 files |
 | Phase 04-child-tasks P03 | 2min | 1 task | 1 file |
 | Phase 04-child-tasks P04 | 15min | 2 tasks | 2 files |
+| Phase 05 P01 | 30min | 4 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -94,6 +96,9 @@ Recent decisions affecting current work:
 - 03-03: canHarvest passado ao GardenHero como harvested (não doneCount==total) para WaterTracker ficar visível em 4/4 antes da colheita
 - 03-03: aria-label HarvestButton = "Colher Frutos" (compatibilidade com regex /colher frutos/i do teste GARD-08)
 - 04-03: React importado explicitamente em bottom-nav.tsx para usar React.ReactElement — namespace JSX não disponível sem import no projeto
+- 05-01: D-03 columns category (nullable), days (jsonb nullable), approval (notNull default false) adicionados ao taskTemplates
+- 05-01: kreds_value_positive constraint preservado — conflito com reward=0 (Mordomia) adiado para Fase 6
+- 05-01: banco kreds_dev criado do zero (role kreds + CREATE DATABASE) — PostgreSQL não estava rodando
 
 ### Pending Todos
 
@@ -111,6 +116,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-25T10:40:05.318Z
+Last session: 2026-06-26T12:31:14.946Z
 Stopped at: Phase 5 UI-SPEC approved
 Resume file: .planning/phases/05-parent-panel/05-UI-SPEC.md
