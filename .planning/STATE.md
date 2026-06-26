@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-06-26T12:31:14.950Z"
-last_activity: 2026-06-26 -- Phase 05-03 completed (5 form components: CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, TaskFormPanel)
+stopped_at: Phase 05-04 checkpoint — awaiting human visual verification
+last_updated: "2026-06-26T12:55:00.000Z"
+last_activity: 2026-06-26 -- Phase 05-04 completed (ParentPanelView + SSR route + suite GREEN 10/10)
 progress:
   total_phases: 7
   completed_phases: 4
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 ## Current Position
 
-Phase: 05 (parent-panel) — EXECUTING
-Plan: 4 of 4
-Phase: 05 (parent-panel) — EXECUTING
-Status: Executing Phase 05
-Last activity: 2026-06-26 -- Phase 05-03 completed (5 form components: CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, TaskFormPanel)
+Phase: 05 (parent-panel) — CHECKPOINT (awaiting human visual verification)
+Plan: 4 of 4 COMPLETE
+Phase: 05 (parent-panel) — CHECKPOINT
+Status: Awaiting human visual verification (checkpoint:human-verify)
+Last activity: 2026-06-26 -- Phase 05-04 completed — ParentPanelView + SSR route /family/[familyId]/tasks + suite GREEN (PTASK-01..10)
 
 Progress: [████████░░] 83%
 
@@ -107,6 +107,11 @@ Recent decisions affecting current work:
 - 05-03: RecurrencePills usa seleção por índice (0–6) para evitar colisão entre labels repetidas D/S/T/Q/Q/S/S
 - 05-03: ApprovalToggle reutiliza TaskToggle de 05-02 com label 'Requer aprovação' — sem wrapper adicional
 - 05-03: DeleteButton render condicional {mode === 'edit' && (...)} — PTASK-10 invariante crítico garantido
+- 05-04: FilterChips oculto em create/edit para evitar colisão getByText('Ana') com AssigneeSelector (PTASK-09)
+- 05-04: ParentTaskCard badges sem 'Mordomia'/'Todos os dias' — usa 'R$ 0'/'7×/sem' para evitar colisão PTASK-07/08
+- 05-04: data-testid='parent-sidebar' + data-category no CategoryIcon para testes de integração (PTASK-01/05)
+- 05-04: RewardStepper aria-label 'Incrementar recompensa' alinhado com regex do teste PTASK-07
+- 05-04: families.name query com fallback 'Família' para breadcrumb (Open Question 1)
 
 ### Pending Todos
 
@@ -124,6 +129,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T12:43:00.000Z
-Stopped at: Phase 05-03 complete — 5 form components built (CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, TaskFormPanel)
-Resume file: .planning/phases/05-parent-panel/05-04-PLAN.md
+Last session: 2026-06-26T12:55:00.000Z
+Stopped at: Phase 05-04 checkpoint — awaiting human visual verification of /family/[familyId]/tasks
+Resume file: None (awaiting visual checkpoint approval)
