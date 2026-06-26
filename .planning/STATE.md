@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed Phase 06-01 — ledger domain modules + current-cycle.ts
-last_updated: "2026-06-26T20:44:50.000Z"
-last_activity: 2026-06-26 -- Phase 06-01 complete (17 tests GREEN)
+stopped_at: Completed Phase 06-02 — task CRUD route handlers + Server Actions
+last_updated: "2026-06-26T23:51:00.000Z"
+last_activity: 2026-06-26 -- Phase 06-02 complete (3 tasks, 4 files created)
 progress:
   total_phases: 7
   completed_phases: 5
@@ -26,10 +26,10 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 06 (api-integration) — EXECUTING
-Plan: 2 of 4
-Phase: 05 (parent-panel) — CHECKPOINT
-Status: Executing Phase 06 (Plan 01 complete)
-Last activity: 2026-06-26 -- Phase 06-01 complete (17 tests GREEN)
+Plan: 3 of 4
+Phase: 06 (api-integration) — EXECUTING
+Status: Executing Phase 06 (Plans 01-02 complete)
+Last activity: 2026-06-26 -- Phase 06-02 complete (task CRUD route handlers + Server Actions)
 
 Progress: [████████░░] 83%
 
@@ -70,6 +70,7 @@ Progress: [████████░░] 83%
 | Phase 05 P02 | 25min | 3 tasks | 7 files |
 | Phase 05 P03 | 25min | 2 tasks | 6 files |
 | Phase 06 P01 | 5min | 3 tasks | 5 files |
+| Phase 06 P02 | 15min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,9 @@ Recent decisions affecting current work:
 - 06-01: calculate.ts e queries.ts omitem import 'server-only' — testes unitários não têm mock; engine.ts mantém pois teste de integração tem vi.mock('server-only', () => ({}))
 - 06-01: postNegativeAdjustment verifica saldo disponível antes do insert — rejeita ajuste > saldo com 'Insufficient balance'
 - 06-01: getCurrentCycleStart usa UTC (getUTCDay/setUTCDate) para evitar drift de fuso horário
+- 06-02: auth.ts está na raiz do projeto (fora de src/), então @/auth falha — usar caminho relativo nas Route Handlers
+- 06-02: parent-seed.ts usa import+re-export para ParentTask/Category (não apenas export type) pois o mesmo arquivo ainda referencia esses nomes em CATEGORY_META e MOCK_PARENT_TASKS
+- 06-02: Server Actions retornam o row real do DB via .returning() para evitar desync de UUID otimista no ParentPanelView
 
 ### Pending Todos
 
@@ -133,6 +137,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T20:44:50.000Z
-Stopped at: Completed Phase 06-01 — ledger modules (calculate, queries, engine) + current-cycle.ts; 17 tests GREEN
-Resume file: None — proceed to Phase 06-02 (task route handlers)
+Last session: 2026-06-26T23:51:00.000Z
+Stopped at: Completed Phase 06-02 — task CRUD route handlers (GET/POST/PATCH/DELETE) + Server Actions (createTask/updateTask/toggleTaskActive/deactivateTask)
+Resume file: None — proceed to Phase 06-03
