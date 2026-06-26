@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Phase 5 UI-SPEC approved
 last_updated: "2026-06-26T12:31:14.950Z"
-last_activity: 2026-06-26 -- Phase 05-01 completed (schema + seed + RED tests)
+last_activity: 2026-06-26 -- Phase 05-03 completed (5 form components: CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, TaskFormPanel)
 progress:
   total_phases: 7
   completed_phases: 4
@@ -26,10 +26,10 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 05 (parent-panel) — EXECUTING
-Plan: 3 of 4
-Phase: 05 (parent-panel) — NEXT
+Plan: 4 of 4
+Phase: 05 (parent-panel) — EXECUTING
 Status: Executing Phase 05
-Last activity: 2026-06-26 -- Phase 05-02 completed (6 UI components: sidebar, topbar, filter chips, category icon, toggle, task card)
+Last activity: 2026-06-26 -- Phase 05-03 completed (5 form components: CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, TaskFormPanel)
 
 Progress: [████████░░] 83%
 
@@ -68,6 +68,7 @@ Progress: [████████░░] 83%
 | Phase 04-child-tasks P04 | 15min | 2 tasks | 2 files |
 | Phase 05 P01 | 30min | 4 tasks | 3 files |
 | Phase 05 P02 | 25min | 3 tasks | 7 files |
+| Phase 05 P03 | 25min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -103,6 +104,9 @@ Recent decisions affecting current work:
 - 05-02: CategoryIcon importa CATEGORY_META de @/lib/seed/parent-seed para obter color/softBg — sem duplicação de constantes
 - 05-02: ParentTaskCard tem data-testid='parent-task-card' para compatibilidade com PTASK-09 nos testes
 - 05-02: Teste RGB — React converte #3E6B4F para rgb(62, 107, 79) no DOM; matcher regex aceita ambos formatos
+- 05-03: RecurrencePills usa seleção por índice (0–6) para evitar colisão entre labels repetidas D/S/T/Q/Q/S/S
+- 05-03: ApprovalToggle reutiliza TaskToggle de 05-02 com label 'Requer aprovação' — sem wrapper adicional
+- 05-03: DeleteButton render condicional {mode === 'edit' && (...)} — PTASK-10 invariante crítico garantido
 
 ### Pending Todos
 
@@ -120,6 +124,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T14:00:00.000Z
-Stopped at: Phase 05-02 complete — 6 UI components built (shell + task card)
-Resume file: .planning/phases/05-parent-panel/05-03-PLAN.md
+Last session: 2026-06-26T12:43:00.000Z
+Stopped at: Phase 05-03 complete — 5 form components built (CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, TaskFormPanel)
+Resume file: .planning/phases/05-parent-panel/05-04-PLAN.md

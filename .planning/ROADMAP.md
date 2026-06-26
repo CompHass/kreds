@@ -150,7 +150,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 3** *(blocked on Wave 2 — reutiliza TaskToggle)*
 
-- [ ] 05-03-PLAN.md — Painel direito (form): TaskFormPanel idle/create/edit + CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, DeleteButton (PTASK-06..08, PTASK-10) *(depends_on 05-01, 05-02)*
+- [x] 05-03-PLAN.md — Painel direito (form): TaskFormPanel idle/create/edit + CategoryChips, RewardStepper, RecurrencePills, AssigneeSelector, DeleteButton (PTASK-06..08, PTASK-10) *(depends_on 05-01, 05-02)*
 
 **Wave 4** *(blocked on Wave 3 — integração + checkpoint)*
 
