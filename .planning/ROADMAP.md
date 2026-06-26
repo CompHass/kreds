@@ -146,7 +146,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 2** *(blocked on Wave 1 — consome o contrato ParentTask)*
 
-- [ ] 05-02-PLAN.md — Shell + lista: ParentSidebar, ParentTopbar, FilterChips, CategoryIcon, TaskToggle, ParentTaskCard (PTASK-01..05, PTASK-09) *(depends_on 05-01)*
+- [x] 05-02-PLAN.md — Shell + lista: ParentSidebar, ParentTopbar, FilterChips, CategoryIcon, TaskToggle, ParentTaskCard (PTASK-01..05, PTASK-09) *(depends_on 05-01)*
 
 **Wave 3** *(blocked on Wave 2 — reutiliza TaskToggle)*
 
@@ -219,6 +219,6 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
-| 5. Parent Panel | 1/4 | In Progress|  |
+| 5. Parent Panel | 2/4 | In Progress|  |
 | 6. API Integration | 0/TBD | Not started | - |
 | 12. Módulo de FX | 0/TBD | Not started | - |

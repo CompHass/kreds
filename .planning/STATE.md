@@ -26,10 +26,10 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 05 (parent-panel) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Phase: 05 (parent-panel) — NEXT
 Status: Executing Phase 05
-Last activity: 2026-06-26 -- Phase 05-01 completed (schema + seed + RED tests)
+Last activity: 2026-06-26 -- Phase 05-02 completed (6 UI components: sidebar, topbar, filter chips, category icon, toggle, task card)
 
 Progress: [████████░░] 83%
 
@@ -67,6 +67,7 @@ Progress: [████████░░] 83%
 | Phase 04-child-tasks P03 | 2min | 1 task | 1 file |
 | Phase 04-child-tasks P04 | 15min | 2 tasks | 2 files |
 | Phase 05 P01 | 30min | 4 tasks | 3 files |
+| Phase 05 P02 | 25min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,9 @@ Recent decisions affecting current work:
 - 05-01: D-03 columns category (nullable), days (jsonb nullable), approval (notNull default false) adicionados ao taskTemplates
 - 05-01: kreds_value_positive constraint preservado — conflito com reward=0 (Mordomia) adiado para Fase 6
 - 05-01: banco kreds_dev criado do zero (role kreds + CREATE DATABASE) — PostgreSQL não estava rodando
+- 05-02: CategoryIcon importa CATEGORY_META de @/lib/seed/parent-seed para obter color/softBg — sem duplicação de constantes
+- 05-02: ParentTaskCard tem data-testid='parent-task-card' para compatibilidade com PTASK-09 nos testes
+- 05-02: Teste RGB — React converte #3E6B4F para rgb(62, 107, 79) no DOM; matcher regex aceita ambos formatos
 
 ### Pending Todos
 
@@ -116,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T12:31:14.946Z
-Stopped at: Phase 5 UI-SPEC approved
-Resume file: .planning/phases/05-parent-panel/05-UI-SPEC.md
+Last session: 2026-06-26T14:00:00.000Z
+Stopped at: Phase 05-02 complete — 6 UI components built (shell + task card)
+Resume file: .planning/phases/05-parent-panel/05-03-PLAN.md
