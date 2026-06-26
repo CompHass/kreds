@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 05-04 checkpoint — awaiting human visual verification
-last_updated: "2026-06-26T12:55:00.000Z"
-last_activity: 2026-06-26 -- Phase 05-04 completed (ParentPanelView + SSR route + suite GREEN 10/10)
+stopped_at: Completed Phase 06-01 — ledger domain modules + current-cycle.ts
+last_updated: "2026-06-26T20:44:50.000Z"
+last_activity: 2026-06-26 -- Phase 06-01 complete (17 tests GREEN)
 progress:
   total_phases: 7
-  completed_phases: 4
-  total_plans: 18
-  completed_plans: 15
-  percent: 57
+  completed_phases: 5
+  total_plans: 22
+  completed_plans: 18
+  percent: 71
 ---
 
 # Project State
@@ -21,15 +21,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 05 — parent-panel
+**Current focus:** Phase 06 — api-integration
 
 ## Current Position
 
-Phase: 05 (parent-panel) — CHECKPOINT (awaiting human visual verification)
-Plan: 4 of 4 COMPLETE
+Phase: 06 (api-integration) — EXECUTING
+Plan: 2 of 4
 Phase: 05 (parent-panel) — CHECKPOINT
-Status: Awaiting human visual verification (checkpoint:human-verify)
-Last activity: 2026-06-26 -- Phase 05-04 completed — ParentPanelView + SSR route /family/[familyId]/tasks + suite GREEN (PTASK-01..10)
+Status: Executing Phase 06 (Plan 01 complete)
+Last activity: 2026-06-26 -- Phase 06-01 complete (17 tests GREEN)
 
 Progress: [████████░░] 83%
 
@@ -69,6 +69,7 @@ Progress: [████████░░] 83%
 | Phase 05 P01 | 30min | 4 tasks | 3 files |
 | Phase 05 P02 | 25min | 3 tasks | 7 files |
 | Phase 05 P03 | 25min | 2 tasks | 6 files |
+| Phase 06 P01 | 5min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -112,6 +113,9 @@ Recent decisions affecting current work:
 - 05-04: data-testid='parent-sidebar' + data-category no CategoryIcon para testes de integração (PTASK-01/05)
 - 05-04: RewardStepper aria-label 'Incrementar recompensa' alinhado com regex do teste PTASK-07
 - 05-04: families.name query com fallback 'Família' para breadcrumb (Open Question 1)
+- 06-01: calculate.ts e queries.ts omitem import 'server-only' — testes unitários não têm mock; engine.ts mantém pois teste de integração tem vi.mock('server-only', () => ({}))
+- 06-01: postNegativeAdjustment verifica saldo disponível antes do insert — rejeita ajuste > saldo com 'Insufficient balance'
+- 06-01: getCurrentCycleStart usa UTC (getUTCDay/setUTCDate) para evitar drift de fuso horário
 
 ### Pending Todos
 
@@ -129,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T12:55:00.000Z
-Stopped at: Phase 05-04 checkpoint — awaiting human visual verification of /family/[familyId]/tasks
-Resume file: None (awaiting visual checkpoint approval)
+Last session: 2026-06-26T20:44:50.000Z
+Stopped at: Completed Phase 06-01 — ledger modules (calculate, queries, engine) + current-cycle.ts; 17 tests GREEN
+Resume file: None — proceed to Phase 06-02 (task route handlers)

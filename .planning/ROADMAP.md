@@ -173,7 +173,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1** *(unblocks failing tests — ledger domain modules)*
 
-- [ ] 06-01-PLAN.md — Ledger domain modules (calculate.ts, engine.ts, queries.ts) + current-cycle.ts — unblocks 6 failing test categories
+- [x] 06-01-PLAN.md — Ledger domain modules (calculate.ts, engine.ts, queries.ts) + current-cycle.ts — 17 tests GREEN (completed 2026-06-26)
 
 **Wave 2** *(parallel — both blocked on Wave 1)*
 
@@ -233,5 +233,5 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 2/4 | In Progress|  |
-| 6. API Integration | 0/4 | Not started | - |
+| 6. API Integration | 1/4 | In Progress | - |
 | 12. Módulo de FX | 0/TBD | Not started | - |
