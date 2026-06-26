@@ -68,7 +68,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 
 - [ ] **API-01**: Campo `approval` em tasks persistido no banco e exposto via API (GET/POST/PATCH)
 - [ ] **API-02**: Endpoints de tasks retornam `category` e `days` (array de recorrência) no payload
-- [ ] **API-03**: Endpoint de colheita (`POST /api/child/[childId]/harvest`) registra evento de colheita no ledger
+- [x] **API-03**: Endpoint de colheita (`POST /api/child/[childId]/harvest`) registra evento de colheita no ledger
 
 ## Fora do Escopo (v2.0)
 
@@ -125,7 +125,7 @@ Requirements para o redesign completo do frontend. Cada um mapeia para fases do 
 | PTASK-10 | Phase 5 | Complete |
 | API-01 | Phase 6 | Pending |
 | API-02 | Phase 6 | Pending |
-| API-03 | Phase 6 | Pending |
+| API-03 | Phase 6 | Complete |
 
 **Coverage:**
 

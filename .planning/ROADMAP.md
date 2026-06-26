@@ -177,8 +177,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 2** *(parallel — both blocked on Wave 1)*
 
-- [ ] 06-02-PLAN.md — Task Route Handlers GET/POST/PATCH/DELETE + Server Actions (createTask, updateTask, toggleTaskActive, deactivateTask) + ParentTask type extraction
-- [ ] 06-03-PLAN.md — Harvest Route Handler POST /api/child/[childId]/harvest with idempotency (commandId 23505 → 409) and child session auth
+- [x] 06-02-PLAN.md — Task Route Handlers GET/POST/PATCH/DELETE + Server Actions (createTask, updateTask, toggleTaskActive, deactivateTask) + ParentTask type extraction (completed 2026-06-26)
+- [x] 06-03-PLAN.md — Harvest Route Handler POST /api/child/[childId]/harvest with idempotency (commandId 23505 → 409) and child session auth (completed 2026-06-26)
 
 **Wave 3** *(blocked on Wave 2 — route handlers and actions must exist before UI wiring)*
 
@@ -233,5 +233,5 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 2/4 | In Progress|  |
-| 6. API Integration | 1/4 | In Progress | - |
+| 6. API Integration | 3/4 | In Progress | - |
 | 12. Módulo de FX | 0/TBD | Not started | - |
