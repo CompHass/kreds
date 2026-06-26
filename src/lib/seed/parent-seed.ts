@@ -2,18 +2,9 @@
 // Constantes cobrindo todas as categorias e estados-chave do painel dos pais.
 // Sem chamadas ao backend — Fase 6 conecta a API real.
 
-export interface ParentTask {
-  id: string
-  title: string
-  category: 'quarto' | 'higiene' | 'estudos' | 'casa' | 'espiritual'
-  reward: number       // inteiro em R$; 0 = mordomia
-  days: string[]       // subset de ['D','S','T','Q','Q','S','S']
-  assigned: string[]   // childProfile ids (page.tsx popula com ids reais)
-  active: boolean
-  approval: boolean
-}
-
-export type Category = ParentTask['category']
+// Types moved to @/types/task — single source of truth shared with Route Handlers.
+import type { ParentTask, Category } from '@/types/task'
+export type { ParentTask, Category }
 
 // Metadados de categoria com tokens de cor do design handoff (PTASK-05)
 export const CATEGORY_META: Record<Category, { label: string; color: string; softBg: string }> = {
@@ -22,6 +13,7 @@ export const CATEGORY_META: Record<Category, { label: string; color: string; sof
   estudos: { label: 'Estudos', color: '#B5623F', softBg: '#F4E7E0' },
   casa: { label: 'Casa', color: '#8A6BB0', softBg: '#EEE8F3' },
   espiritual: { label: 'Espiritual', color: '#3E6B4F', softBg: '#E7EFE8' },
+  pet: { label: 'Pet', color: '#B07B2F', softBg: '#F4EDE0' },
 }
 
 // Labels de recorrência — D/S/T/Q/Q/S/S (PTASK-08)
@@ -42,7 +34,7 @@ export const MOCK_PARENT_TASKS: ParentTask[] = [
     title: 'Arrumar o quarto',
     category: 'quarto',
     reward: 5,
-    days: ['S', 'T', 'Q', 'Q', 'S'],   // Segunda a Sexta
+    days: [1, 2, 3, 4, 5],              // Segunda a Sexta
     assigned: [],
     active: true,
     approval: false,
@@ -52,9 +44,9 @@ export const MOCK_PARENT_TASKS: ParentTask[] = [
     title: 'Escovar os dentes',
     category: 'higiene',
     reward: 2,
-    days: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],  // Todos os dias
+    days: [0, 1, 2, 3, 4, 5, 6],        // Todos os dias
     assigned: [],
-    active: false,                        // tarefa inativa — cobre estado inactive
+    active: false,
     approval: false,
   },
   {
@@ -62,17 +54,17 @@ export const MOCK_PARENT_TASKS: ParentTask[] = [
     title: 'Estudar 30 minutos',
     category: 'estudos',
     reward: 10,
-    days: ['S', 'T', 'Q', 'Q', 'S'],   // Segunda a Sexta
+    days: [1, 2, 3, 4, 5],              // Segunda a Sexta
     assigned: [],
     active: true,
-    approval: true,                      // requer aprovação — cobre estado approval
+    approval: true,
   },
   {
     id: 'pt4',
     title: 'Ajudar na limpeza da casa',
     category: 'casa',
-    reward: 0,                           // mordomia — reward = 0
-    days: ['S', 'S'],                    // Fins de semana
+    reward: 0,
+    days: [0, 6],                        // Fins de semana (Dom + Sáb)
     assigned: [],
     active: true,
     approval: false,
@@ -82,7 +74,7 @@ export const MOCK_PARENT_TASKS: ParentTask[] = [
     title: 'Ler a Bíblia',
     category: 'espiritual',
     reward: 3,
-    days: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],  // Todos os dias
+    days: [0, 1, 2, 3, 4, 5, 6],        // Todos os dias
     assigned: [],
     active: true,
     approval: false,
@@ -92,9 +84,19 @@ export const MOCK_PARENT_TASKS: ParentTask[] = [
     title: 'Organizar a mochila',
     category: 'estudos',
     reward: 2,
-    days: ['S', 'T', 'Q', 'Q', 'S'],
+    days: [1, 2, 3, 4, 5],              // Segunda a Sexta
     assigned: [],
     active: true,
-    approval: true,                      // segunda tarefa com aprovação
+    approval: true,
+  },
+  {
+    id: 'pt7',
+    title: 'Alimentar o Charlie',
+    category: 'pet',
+    reward: 2,
+    days: [0, 1, 2, 3, 4, 5, 6],        // Todos os dias
+    assigned: [],
+    active: true,
+    approval: false,
   },
 ]

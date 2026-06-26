@@ -11,7 +11,7 @@ import { ParentTopbar } from './parent-topbar'
 import { FilterChips } from './filter-chips'
 import { ParentTaskCard } from './parent-task-card'
 import { TaskFormPanel, type TaskFormData, EMPTY_FORM, taskToFormData } from './task-form-panel'
-import { type ParentTask } from '@/lib/seed/parent-seed'
+import { type ParentTask } from '@/types/task'
 
 interface ParentPanelViewProps {
   familyId: string
