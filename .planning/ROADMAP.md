@@ -169,7 +169,20 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. A lista de tarefas da criança e o painel dos pais recebem `category` e `days` (array de recorrência) no payload — filtros e pills de recorrência refletem os dados reais
   3. Ao clicar "Colher" e confirmar, `POST /api/child/[childId]/harvest` é chamado e o evento de colheita aparece no histórico do ledger da criança
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+**Wave 1** *(unblocks failing tests — ledger domain modules)*
+
+- [ ] 06-01-PLAN.md — Ledger domain modules (calculate.ts, engine.ts, queries.ts) + current-cycle.ts — unblocks 6 failing test categories
+
+**Wave 2** *(parallel — both blocked on Wave 1)*
+
+- [ ] 06-02-PLAN.md — Task Route Handlers GET/POST/PATCH/DELETE + Server Actions (createTask, updateTask, toggleTaskActive, deactivateTask) + ParentTask type extraction
+- [ ] 06-03-PLAN.md — Harvest Route Handler POST /api/child/[childId]/harvest with idempotency (commandId 23505 → 409) and child session auth
+
+**Wave 3** *(blocked on Wave 2 — route handlers and actions must exist before UI wiring)*
+
+- [ ] 06-04-PLAN.md — Connect UI to real API: replace MOCK_PARENT_TASKS and SEED_STAGE_C with DB queries; wire Server Actions in ParentPanelView; wire harvest fetch in GardenView + checkpoint visual
 
 ### Phase 12: Módulo de FX
 
@@ -220,5 +233,5 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 2/4 | In Progress|  |
-| 6. API Integration | 0/TBD | Not started | - |
+| 6. API Integration | 0/4 | Not started | - |
 | 12. Módulo de FX | 0/TBD | Not started | - |
