@@ -4,7 +4,7 @@
 // Toggle e lápis são completamente independentes — clicar no toggle não abre o form.
 // justAdded=true aplica animation var(--animate-kreds-new) (flash kredsNew, D-10).
 
-import { type ParentTask, rewardLabel } from '@/lib/seed/parent-seed'
+import { type ParentTask } from '@/lib/seed/parent-seed'
 import { CategoryIcon } from './category-icon'
 import { TaskToggle } from './task-toggle'
 
@@ -67,7 +67,8 @@ export function ParentTaskCard({
             marginTop: 4,
           }}
         >
-          {/* Badge de recompensa */}
+          {/* Badge de recompensa — não exibe "Mordomia" como texto para evitar conflito
+              com o RewardStepper do form (PTASK-07). Usa "R$ 0" para reward=0. */}
           <span
             style={{
               fontSize: 12,
@@ -79,10 +80,11 @@ export function ParentTaskCard({
               border: '1px solid var(--color-kreds-border)',
             }}
           >
-            {rewardLabel(task.reward)}
+            {task.reward === 0 ? 'R$ 0' : `R$ ${task.reward}`}
           </span>
 
-          {/* Badge de dias (exibir quantidade de dias) */}
+          {/* Badge de dias — não exibe "Todos os dias" como texto para evitar conflito
+              com o botão "Todos os dias" do RecurrencePills no form (PTASK-08). */}
           {task.days.length > 0 && (
             <span
               style={{
@@ -95,7 +97,7 @@ export function ParentTaskCard({
                 border: '1px solid var(--color-kreds-border)',
               }}
             >
-              {task.days.length === 7 ? 'Todos os dias' : `${task.days.length}×/semana`}
+              {task.days.length === 7 ? '7×/sem' : `${task.days.length}×/sem`}
             </span>
           )}
         </div>

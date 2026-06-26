@@ -72,7 +72,7 @@ export function RewardStepper({ value, onChange }: RewardStepperProps) {
 
       {/* Botão + */}
       <button
-        aria-label="Aumentar recompensa"
+        aria-label="Incrementar recompensa"
         onClick={handleIncrement}
         style={{
           width: 40,

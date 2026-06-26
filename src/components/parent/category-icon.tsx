@@ -134,6 +134,7 @@ export function CategoryIcon({ category, size = 44 }: CategoryIconProps) {
 
   return (
     <div
+      data-category={category}
       style={{
         width: size,
         height: size,

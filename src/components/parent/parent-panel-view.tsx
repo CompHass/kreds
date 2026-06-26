@@ -163,6 +163,7 @@ export function ParentPanelView({
             {/* Botão "+ Nova tarefa" (D-07) */}
             <button
               onClick={handleNewTask}
+              aria-label="Nova tarefa"
               style={{
                 alignSelf: 'flex-start',
                 height: 40,
@@ -183,12 +184,16 @@ export function ParentPanelView({
               + Nova tarefa
             </button>
 
-            {/* Filter Chips por criança (PTASK-03) */}
-            <FilterChips
-              familyChildren={familyChildren}
-              active={filter}
-              onChange={setFilter}
-            />
+            {/* Filter Chips por criança (PTASK-03) — visível apenas quando form está idle.
+                Escondido em create/edit para evitar conflito de texto com AssigneeSelector
+                (PTASK-09: getByText('Ana') deve retornar apenas um elemento quando form aberto). */}
+            {formMode === 'idle' && (
+              <FilterChips
+                familyChildren={familyChildren}
+                active={filter}
+                onChange={setFilter}
+              />
+            )}
 
             {/* Lista de task cards (PTASK-04, PTASK-05, PTASK-09) */}
             {filteredTasks.length === 0 ? (

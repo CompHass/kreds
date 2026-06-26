@@ -6,6 +6,7 @@
 export function ParentSidebar() {
   return (
     <aside
+      data-testid="parent-sidebar"
       style={{
         width: 80,
         minHeight: '100vh',
