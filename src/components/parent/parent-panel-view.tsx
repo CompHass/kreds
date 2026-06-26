@@ -4,6 +4,7 @@
 // Gerencia todo o estado do CRUD com useState (padrão garden-view.tsx).
 // Derivados calculados no render — sem useEffect para estado derivado.
 // editingId: null=idle, 'new'=create, '<taskId>'=edit (Pitfall 6 — sem boolean isCreating separado).
+// API-01, API-02: Mutations chamam Server Actions; create usa UUID real do servidor (Pitfall 6).
 
 import { useState } from 'react'
 import { ParentSidebar } from './parent-sidebar'
@@ -12,6 +13,7 @@ import { FilterChips } from './filter-chips'
 import { ParentTaskCard } from './parent-task-card'
 import { TaskFormPanel, type TaskFormData, EMPTY_FORM, taskToFormData } from './task-form-panel'
 import { type ParentTask } from '@/types/task'
+import { createTask, updateTask, deactivateTask, toggleTaskActive } from '@/app/actions/tasks'
 
 interface ParentPanelViewProps {
   familyId: string
@@ -59,11 +61,18 @@ export function ParentPanelView({
     setTimeout(() => setNewTaskId(null), 1200)
   }
 
-  // Handlers de mutação otimista (D-09)
+  // Handlers de mutação otimista (D-09) + Server Actions (API-01, API-02)
   function handleToggle(taskId: string) {
+    const currentTask = tasks.find((t) => t.id === taskId)
+    if (!currentTask) return
+    // Otimista: atualiza UI imediatamente
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, active: !t.active } : t)),
     )
+    // Fire-and-forget — falha silenciosa aceitável para toggle (T-06-19)
+    toggleTaskActive(taskId, _familyId, !currentTask.active).catch((err) => {
+      console.error('toggleTaskActive failed', err)
+    })
     // toggle é completamente independente do editingId — não altera o form
   }
 
@@ -79,23 +88,37 @@ export function ParentPanelView({
     setFormData(taskToFormData(task))
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (formMode === 'create') {
-      const newId = crypto.randomUUID()
-      const newTask: ParentTask = {
-        id: newId,
-        title: formData.title,
-        category: formData.category ?? 'quarto',
-        reward: formData.reward,
-        days: formData.days,
-        assigned: formData.assigned,
-        active: true,
-        approval: formData.approval,
+      try {
+        // Pitfall 6: usar UUID real retornado pelo servidor (não crypto.randomUUID() local)
+        const saved = await createTask({
+          title: formData.title,
+          familyId: _familyId,
+          assignedChildId: formData.assigned[0] ?? '',
+          kredsValue: formData.reward,
+          days: formData.days,
+          category: formData.category ?? undefined,
+          approval: formData.approval,
+        })
+        const newTask: ParentTask = {
+          id: saved.id,          // UUID real do banco (T-06-19 mitigado)
+          title: saved.title,
+          category: (saved.category ?? 'quarto') as ParentTask['category'],
+          reward: saved.kredsValue,
+          days: (saved.days ?? []) as number[],
+          assigned: [saved.assignedChildId],
+          active: saved.isActive,
+          approval: saved.approval,
+        }
+        setTasks((prev) => [...prev, newTask])
+        flashNew(saved.id)
+      } catch (err) {
+        console.error('createTask failed', err)
       }
-      setTasks((prev) => [...prev, newTask])
-      flashNew(newId)
       setEditingId(null)
     } else if (formMode === 'edit' && editingId !== null && editingId !== 'new') {
+      // Otimista: atualiza UI antes da confirmação do servidor
       setTasks((prev) =>
         prev.map((t) =>
           t.id === editingId
@@ -113,14 +136,36 @@ export function ParentPanelView({
       )
       flashNew(editingId)
       setEditingId(null)
+      // Persistência ao banco em background
+      try {
+        await updateTask(editingId, _familyId, {
+          title: formData.title,
+          kredsValue: formData.reward,
+          days: formData.days,
+          category: formData.category ?? undefined,
+          approval: formData.approval,
+        })
+      } catch (err) {
+        console.error('updateTask failed', err)
+      }
     }
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (editingId !== null && editingId !== 'new') {
-      setTasks((prev) => prev.filter((t) => t.id !== editingId))
+      const taskIdToDelete = editingId
+      // Otimista: remove da UI antes da confirmação
+      setTasks((prev) => prev.filter((t) => t.id !== taskIdToDelete))
+      setEditingId(null)
+      // Soft-delete no banco (deactivatedAt=now(), isActive=false)
+      try {
+        await deactivateTask(taskIdToDelete, _familyId)
+      } catch (err) {
+        console.error('deactivateTask failed', err)
+      }
+    } else {
+      setEditingId(null)
     }
-    setEditingId(null)
   }
 
   function handleCancel() {

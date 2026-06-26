@@ -1,15 +1,15 @@
 // PTASK-01, PTASK-02: Rota SSR /family/[familyId]/tasks
 // Server Component — auth() + redirect('/login') sem sessão (D-01, T-05-08 mitigado).
-// Query de childProfiles incluindo avatarPreset (necessário para FilterChips e AssigneeSelector).
-// Sem lookup de familyMemberships (Pitfall 5 — banco dev sem memberships; verificação Fase 6).
+// API-01, API-02: Query real de taskTemplates do banco (sem MOCK_PARENT_TASKS).
+// T-06-15: familyId isolado em todas as queries — nenhum dado vaza entre famílias.
 
 import { redirect } from 'next/navigation'
 import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
-import { childProfiles, families } from '@/lib/db/schema'
+import { childProfiles, families, taskTemplates } from '@/lib/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { ParentPanelView } from '@/components/parent/parent-panel-view'
-import { MOCK_PARENT_TASKS } from '@/lib/seed/parent-seed'
+import type { ParentTask, Category } from '@/types/task'
 
 export default async function ParentTasksPage({
   params,
@@ -23,37 +23,42 @@ export default async function ParentTasksPage({
   const session = await auth()
   if (!session) redirect('/login')
 
-  // Query de childProfiles ativos (avatarPreset incluído para FilterChips)
-  // Sem lookup de familyMemberships (Pitfall 5 — banco dev sem memberships)
-  const children = await db
-    .select({
-      id: childProfiles.id,
-      displayName: childProfiles.displayName,
-      accentColor: childProfiles.accentColor,
-      avatarPreset: childProfiles.avatarPreset,
-    })
-    .from(childProfiles)
-    .where(and(eq(childProfiles.familyId, familyId), eq(childProfiles.active, true)))
+  // Queries paralelas: childProfiles, taskTemplates e nome da família (API-01, API-02)
+  // T-06-15: todas as queries filtradas por familyId do URL (scoping por família)
+  const [children, tasks, familyResult] = await Promise.all([
+    db
+      .select({
+        id: childProfiles.id,
+        displayName: childProfiles.displayName,
+        accentColor: childProfiles.accentColor,
+        avatarPreset: childProfiles.avatarPreset,
+      })
+      .from(childProfiles)
+      .where(and(eq(childProfiles.familyId, familyId), eq(childProfiles.active, true))),
 
-  // Query opcional do nome da família para o breadcrumb (Open Question 1)
-  // Fallback 'Família Teste' se nenhum resultado (T-05-09: Drizzle usa queries parametrizadas)
-  const familyResult = await db
-    .select({ name: families.name })
-    .from(families)
-    .where(eq(families.id, familyId))
+    db
+      .select()
+      .from(taskTemplates)
+      .where(and(eq(taskTemplates.familyId, familyId), eq(taskTemplates.isActive, true))),
+
+    db
+      .select({ name: families.name })
+      .from(families)
+      .where(eq(families.id, familyId)),
+  ])
 
   const familyName = familyResult[0]?.name ?? 'Família'
 
-  // Atribuir o primeiro childId ao mock para que FilterChips funcione na demo
-  // (MOCK_PARENT_TASKS tem assigned:[] — atribuir children[0]?.id quando disponível)
-  const firstChildId = children[0]?.id ?? null
-  const tasksWithAssignees = MOCK_PARENT_TASKS.map((task, index) => ({
-    ...task,
-    // Alternamos a atribuição entre children[0] e children[1] para demonstrar o filtro
-    assigned:
-      firstChildId !== null
-        ? [children[index % children.length]?.id ?? firstChildId]
-        : [],
+  // Mapear rows do banco para o shape ParentTask (API-02)
+  const mappedTasks: ParentTask[] = tasks.map((t) => ({
+    id: t.id,
+    title: t.title,
+    category: (t.category ?? 'quarto') as Category,
+    reward: t.kredsValue,
+    days: (t.days ?? []) as number[],
+    assigned: [t.assignedChildId],
+    active: t.isActive,
+    approval: t.approval,
   }))
 
   return (
@@ -62,7 +67,7 @@ export default async function ParentTasksPage({
       familyName={familyName}
       currentUserName={session.user?.name ?? ''}
       familyChildren={children}          // ATENÇÃO: NÃO usar 'children' como prop name (Pitfall 2)
-      initialTasks={tasksWithAssignees}
+      initialTasks={mappedTasks}
     />
   )
 }
