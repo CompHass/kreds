@@ -135,7 +135,8 @@ describe('ParentTaskCard — PTASK-04, PTASK-05, PTASK-09', () => {
     )
 
     const editingStyle = card.getAttribute('style') ?? ''
-    expect(editingStyle).toMatch(/#3E6B4F/i)
+    // React converte hex para rgb() no DOM, então verificar ambos formatos
+    expect(editingStyle).toMatch(/#3E6B4F|rgb\(62,\s*107,\s*79\)/i)
   })
 
   it('exibe título da tarefa e badge de recompensa (rewardLabel)', () => {
