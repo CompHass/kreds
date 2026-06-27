@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed Phase 06-03 — Harvest Route Handler (POST /api/child/[childId]/harvest)
-last_updated: "2026-06-26T23:59:00.000Z"
-last_activity: 2026-06-26 -- Phase 06-03 complete (1 task, 1 file created)
+status: verifying
+stopped_at: Completed Phase 06-04 — UI-to-API wiring complete (MOCK data removed, Server Actions + harvest POST connected)
+last_updated: "2026-06-27T00:03:05.959Z"
+last_activity: 2026-06-26 -- Phase 06-03 complete (Harvest Route Handler — POST /api/child/[childId]/harvest)
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 22
-  completed_plans: 18
-  percent: 71
+  completed_plans: 22
+  percent: 86
 ---
 
 # Project State
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 Phase: 06 (api-integration) — EXECUTING
 Plan: 4 of 4
 Phase: 06 (api-integration) — EXECUTING
-Status: Executing Phase 06 (Plans 01-03 complete)
+Status: Phase complete — ready for verification
 Last activity: 2026-06-26 -- Phase 06-03 complete (Harvest Route Handler — POST /api/child/[childId]/harvest)
 
 Progress: [████████░░] 83%
@@ -72,6 +72,7 @@ Progress: [████████░░] 83%
 | Phase 06 P01 | 5min | 3 tasks | 5 files |
 | Phase 06 P02 | 15min | 3 tasks | 6 files |
 | Phase 06 P03 | 8min | 1 task | 1 file |
+| Phase 06-api-integration P04 | 8min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -124,6 +125,9 @@ Recent decisions affecting current work:
 - 06-03: 23505 caught outside db.transaction() — catching inside the callback silently swallows unique violations after txn abort
 - 06-03: session.familyId used for ledger insert (not body.familyId) — signed JWT prevents cross-family forgery (T-06-13)
 - 06-03: validateChildSessionScope() also rejects session.role !== 'child' — prevents guardian token type confusion on child routes
+- [Phase ?]: 06-04: handleSave (create) usa UUID real do DB (saved.id) — sem crypto.randomUUID() local (Pitfall 6, T-06-19)
+- [Phase ?]: 06-04: handleHarvest 409 tratado como sucesso idempotente — overlay aparece para 200 e 409
+- [Phase ?]: 06-04: harvest body.familyId = '' — servidor lê familyId do JWT assinado (T-06-13)
 
 ### Pending Todos
 
@@ -141,6 +145,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T23:59:00.000Z
-Stopped at: Completed Phase 06-03 — Harvest Route Handler POST /api/child/[childId]/harvest with child-session auth, Zod validation, atomic ledger write, and 23505 idempotency guard
-Resume file: None — proceed to Phase 06-04
+Last session: 2026-06-27T00:03:05.955Z
+Stopped at: Completed Phase 06-04 — UI-to-API wiring complete (MOCK data removed, Server Actions + harvest POST connected)
+Resume file: None — checkpoint human-verify for Phase 06-04

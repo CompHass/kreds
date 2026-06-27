@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração *(complete 2026-06-22)*
 - [x] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação (completed 2026-06-22)
 - [ ] **Phase 5: Parent Panel** - Layout desktop dos pais com CRUD completo de tarefas
-- [ ] **Phase 6: API Integration** - Conectar toda a UI aos endpoints reais com os ajustes de campo necessários
+- [x] **Phase 6: API Integration** - Conectar toda a UI aos endpoints reais com os ajustes de campo necessários (completed 2026-06-27)
 
 ## Phase Details
 
@@ -182,7 +182,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 3** *(blocked on Wave 2 — route handlers and actions must exist before UI wiring)*
 
-- [ ] 06-04-PLAN.md — Connect UI to real API: replace MOCK_PARENT_TASKS and SEED_STAGE_C with DB queries; wire Server Actions in ParentPanelView; wire harvest fetch in GardenView + checkpoint visual
+- [x] 06-04-PLAN.md — Connect UI to real API: replace MOCK_PARENT_TASKS and SEED_STAGE_C with DB queries; wire Server Actions in ParentPanelView; wire harvest fetch in GardenView + checkpoint visual
 
 ### Phase 12: Módulo de FX
 
@@ -233,5 +233,5 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 2/4 | In Progress|  |
-| 6. API Integration | 3/4 | In Progress | - |
+| 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 12. Módulo de FX | 0/TBD | Not started | - |
