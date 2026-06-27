@@ -1,6 +1,7 @@
 'use client'
 
 // GARD-05, GARD-08, GARD-10: Client Component raiz que orquestra o jardim interativo
+// API-03: handleHarvest chama POST /api/child/[childId]/harvest com commandId estável (idempotência)
 import { useState } from 'react'
 import { GardenHeader } from './garden-header'
 import { GardenHero } from './garden-hero'
@@ -31,7 +32,7 @@ interface GardenViewProps {
   verse: Verse | null
 }
 
-export function GardenView({ seed, verse }: GardenViewProps) {
+export function GardenView({ childId, seed, verse }: GardenViewProps) {
   // Estado interativo
   const [tasks, setTasks] = useState(seed.tasks)
   const [waterTick, setWaterTick] = useState(0)
@@ -40,6 +41,9 @@ export function GardenView({ seed, verse }: GardenViewProps) {
   const [showOverlay, setShowOverlay] = useState(false)
   // Fase 4 — titheDone elevado para state (Pitfall 1 / D-02 / CTASK-03)
   const [titheDone, setTitheDone] = useState(seed.titheDone)
+  // API-03: commandId estável entre re-renders para idempotência (mesmo UUID em caso de retry)
+  const [harvestCommandId] = useState(() => crypto.randomUUID())
+  const [harvestPending, setHarvestPending] = useState(false)
 
   // Derivados (recalculados no render)
   const doneCount = tasks.filter((t) => t.done).length
@@ -63,9 +67,39 @@ export function GardenView({ seed, verse }: GardenViewProps) {
     }
   }
 
-  function handleHarvest() {
-    setHarvested(true)
-    setShowOverlay(true)
+  // API-03: chama POST /api/child/[childId]/harvest com commandId estável (idempotência)
+  // 409 = já colheu este ciclo — ainda mostra overlay (sucesso idempotente)
+  async function handleHarvest() {
+    if (harvestPending) return
+    setHarvestPending(true)
+
+    const totalAmount = tasks
+      .filter((t) => t.done)
+      .reduce((sum, t) => sum + (t.kredsValue ?? 0), 0)
+
+    try {
+      const res = await fetch(`/api/child/${childId}/harvest`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          commandId: harvestCommandId,
+          totalAmount,
+          familyId: '',   // servidor usa familyId da sessão JWT (T-06-13 mitigado)
+        }),
+      })
+
+      if (res.ok || res.status === 409) {
+        // 200 = colheita registrada; 409 = já colhida (idempotente) — ambos mostram overlay
+        setHarvested(true)
+        setShowOverlay(true)
+      } else {
+        console.error('Harvest failed', res.status)
+      }
+    } catch (e) {
+      console.error('Harvest network error', e)
+    } finally {
+      setHarvestPending(false)
+    }
   }
 
   // Fase 4 — handler de dízimo (D-11, CTASK-03); sem fetch/POST (D-12)

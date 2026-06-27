@@ -6,6 +6,7 @@ export interface GardenTask {
   title: string
   emoji: string
   done: boolean
+  kredsValue?: number   // valor da tarefa em Kreds — usado em handleHarvest para somar o total (API-03)
 }
 
 export interface GardenSeed {
