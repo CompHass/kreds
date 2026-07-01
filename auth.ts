@@ -27,6 +27,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (profile?.sub) {
         token.sub = profile.sub
 
+        // Persist email from OIDC profile claim (resolves Open Question 2 / Assumption A2).
+        // next-auth with strategy:'jwt' may not propagate session.user.email by default
+        // because the session callback only receives token fields, not the original profile.
+        // Storing it explicitly here makes email stable across token refreshes.
+        if (typeof profile.email === 'string') {
+          token.email = profile.email
+        }
+
         // Persist system_owner role from Zitadel grant claims.
         // Zitadel returns roles via urn:zitadel:iam:org:project:roles (native scope)
         // OR via custom Action that sets a 'roles' claim directly.
@@ -76,6 +84,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       if (token.systemRoles) {
         session.user.systemRoles = token.systemRoles as string[]
+      }
+      // Propagate email explicitly from token (T-07-04 mitigated: passed server-side,
+      // not in URL/querystring/localStorage; is the logged-in user's own email only).
+      if (token.email && session.user) {
+        session.user.email = token.email as string
       }
       return session
     },

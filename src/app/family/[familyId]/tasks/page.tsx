@@ -66,6 +66,7 @@ export default async function ParentTasksPage({
       familyId={familyId}
       familyName={familyName}
       currentUserName={session.user?.name ?? ''}
+      guardianEmail={session.user?.email ?? ''}
       familyChildren={children}          // ATENÇÃO: NÃO usar 'children' como prop name (Pitfall 2)
       initialTasks={mappedTasks}
     />
