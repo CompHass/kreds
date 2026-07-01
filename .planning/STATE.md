@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 7 Plan 1 complete — GuardianProfileDrawer component and tests
-last_updated: "2026-07-01T15:06:00.000Z"
-last_activity: 2026-07-01 -- Phase 07-01 completed (GuardianProfileDrawer + RED suite)
+stopped_at: Phase 07-02 Task 4 checkpoint — Tasks 1-3 complete, awaiting human visual verification
+last_updated: "2026-07-01T15:18:00.000Z"
+last_activity: 2026-07-01 -- Phase 07-02 Tasks 1-3 complete (email propagation, drawer wiring, tests)
 progress:
   total_phases: 11
   completed_phases: 6
@@ -131,6 +131,10 @@ Recent decisions affecting current work:
 - 07-01: GuardianProfileDrawer recebe guardianName + guardianEmail via props (não useSession) — padrão SSR→props
 - 07-01: signOut({ redirectTo: '/login' }) — parâmetro correto em next-auth v5 (não callbackUrl de v4)
 - 07-01: autoFocus no botão Sair para foco acessível ao abrir drawer (Pitfall 5)
+- 07-02: token.email explicitamente persistido no jwt callback — remove dependência do comportamento default do next-auth
+- 07-02: vi.mock('next-auth') necessário no parent-panel test — NextAuth inicializa e importa next/server (não disponível em jsdom)
+- 07-02: PTASK-02 corrigido com getAllByText + within(header) — drawer sempre no DOM causa colisão em getByText('João')
+- 07-02: PTASK-09 corrigido com waitFor — createTask é async, atualização de estado ocorre após a promise
 
 ### Pending Todos
 
@@ -148,6 +152,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-01T15:06:00.000Z
-Stopped at: Phase 7 Plan 01 complete — GuardianProfileDrawer component and tests
+Last session: 2026-07-01T15:18:00.000Z
+Stopped at: Phase 07-02 Task 4 (visual checkpoint) — awaiting human verification in browser
 Resume file: .planning/phases/07-guardian-profile/07-02-PLAN.md
