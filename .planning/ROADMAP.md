@@ -198,7 +198,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 1**
 
-- [ ] 07-01-PLAN.md — GuardianProfileDrawer (drawer slide read-only: nome+email, logout signOut) + suite RED
+- [x] 07-01-PLAN.md — GuardianProfileDrawer (drawer slide read-only: nome+email, logout signOut) + suite RED (completed 2026-07-01)
 
 **Wave 2** *(blocked on Wave 1 — consome o componente do drawer)*
 
@@ -258,7 +258,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
-| 7. Guardian Profile | 0/2 | Planned | - |
+| 7. Guardian Profile | 1/2 | Executing | 2026-07-01 |
 | 8. Child Management | 0/TBD | Not started | - |
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |

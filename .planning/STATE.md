@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 7 context gathered
-last_updated: "2026-07-01T15:00:58.221Z"
-last_activity: 2026-06-26 -- Phase 06-03 complete (Harvest Route Handler — POST /api/child/[childId]/harvest)
+stopped_at: Phase 7 Plan 1 complete — GuardianProfileDrawer component and tests
+last_updated: "2026-07-01T15:06:00.000Z"
+last_activity: 2026-07-01 -- Phase 07-01 completed (GuardianProfileDrawer + RED suite)
 progress:
   total_phases: 11
   completed_phases: 6
-  total_plans: 22
+  total_plans: 24
   completed_plans: 22
   percent: 55
 ---
@@ -21,15 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 06 — api-integration
+**Current focus:** Phase 07 — guardian-profile
 
 ## Current Position
 
-Phase: 06 (api-integration) — EXECUTING
-Plan: 4 of 4
-Phase: 06 (api-integration) — EXECUTING
-Status: Ready to execute
-Last activity: 2026-06-26 -- Phase 06-03 complete (Harvest Route Handler — POST /api/child/[childId]/harvest)
+Phase: 07 (guardian-profile) — EXECUTING
+Plan: 2 of 2
+Status: Executing Phase 07 (Plan 01 complete)
+Last activity: 2026-07-01 -- Phase 07 execution started
 
 Progress: [████████░░] 83%
 
@@ -128,6 +127,10 @@ Recent decisions affecting current work:
 - [Phase ?]: 06-04: handleSave (create) usa UUID real do DB (saved.id) — sem crypto.randomUUID() local (Pitfall 6, T-06-19)
 - [Phase ?]: 06-04: handleHarvest 409 tratado como sucesso idempotente — overlay aparece para 200 e 409
 - [Phase ?]: 06-04: harvest body.familyId = '' — servidor lê familyId do JWT assinado (T-06-13)
+- 07-01: vi.hoisted() usado no mock de signOut — vi.mock hoist para topo mas const declarado depois está em TDZ
+- 07-01: GuardianProfileDrawer recebe guardianName + guardianEmail via props (não useSession) — padrão SSR→props
+- 07-01: signOut({ redirectTo: '/login' }) — parâmetro correto em next-auth v5 (não callbackUrl de v4)
+- 07-01: autoFocus no botão Sair para foco acessível ao abrir drawer (Pitfall 5)
 
 ### Pending Todos
 
@@ -145,6 +148,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-01T13:22:06.124Z
-Stopped at: Phase 7 context gathered
-Resume file: .planning/phases/07-guardian-profile/07-CONTEXT.md
+Last session: 2026-07-01T15:06:00.000Z
+Stopped at: Phase 7 Plan 01 complete — GuardianProfileDrawer component and tests
+Resume file: .planning/phases/07-guardian-profile/07-02-PLAN.md
