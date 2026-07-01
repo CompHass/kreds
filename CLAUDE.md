@@ -224,6 +224,17 @@ The app runs via **Docker Compose**, not `pnpm dev` or npm locally.
 - **Login UI:** V2 at `/ui/v2/login` (separate `zitadel-login` service)
 - **Service Account secret:** `iam-admin` in `zitadel` namespace
 
+### Deploy Strategy
+
+GitOps via CI job, **not** `argocd-image-updater`.
+
+- On push to `main` (or a `v*.*.*` tag), `.github/workflows/build-push-harbor.yml`:
+  1. `build-scan-push` — builds `docker.io/eduhass/kreds` and `kreds-migrate` images, tags them `0.1.0-${GITHUB_RUN_NUMBER}` (or the git tag version), pushes to Docker Hub after a Trivy scan gate.
+  2. `update-manifests` — checks out `CompHass/iac`, uses `yq` to set `images[].newTag` in `manifests/kreds/kustomization.yaml` to that same tag, commits `[skip ci]`, and pushes to `iac` main.
+- ArgoCD (`kreds` Application, auto-sync + self-heal) picks up the `iac` commit and rolls out the new tag. No image polling, no separate write-back controller.
+- `argocd-image-updater` is deployed in-cluster (`hasslab-k3s/argocd-image-updater/` in `iac`) but is **not wired to the `kreds` Application** — its annotations were removed 2026-07-01. Do not re-add `argocd-image-updater.argoproj.io/*` annotations to `kreds-application.yaml`; the CI job is the single source of truth for image tags.
+- **Known footgun:** the `TAG` env var in the `update-manifests` step must be `export`ed (or set via the step's `env:` block) — `yq`'s `strenv(TAG)` reads only exported env vars. An unexported shell var silently yields `newTag: ""`, which kustomize ignores, leaving the deployment pinned to a stale tag while CI still reports success.
+
 <!-- GSD:infrastructure-end -->
 
 <!-- GSD:architecture-start source:ARCHITECTURE.md -->
