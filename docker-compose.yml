@@ -10,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kreds"]
+      test: ["CMD-SHELL", "pg_isready -U kreds -d kreds_dev"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -26,8 +26,9 @@ services:
       NODE_ENV: production
       AUTH_SECRET: dev-secret-32-chars-minimum-here
       CHILD_SESSION_SECRET: dev-child-session-secret-32chars!!
-      AUTH_ZITADEL_ID: dev-client-id
-      AUTH_ZITADEL_SECRET: dev-client-secret
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+      AUTH_ZITADEL_ID: ${AUTH_ZITADEL_ID:-dev-client-id}
+      AUTH_ZITADEL_SECRET: ${AUTH_ZITADEL_SECRET:-dev-client-secret}
       AUTH_ZITADEL_ISSUER: https://auth.hasslab.pro
       ZITADEL_ISSUER: https://auth.hasslab.pro
       NEXT_PUBLIC_APP_URL: http://localhost:3000

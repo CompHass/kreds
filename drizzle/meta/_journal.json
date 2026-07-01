@@ -57,6 +57,13 @@
       "when": 1781131952674,
       "tag": "0007_tidy_cerise",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1782523047167,
+      "tag": "0008_quick_blue_shield",
+      "breakpoints": true
     }
   ]
 }

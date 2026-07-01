@@ -189,7 +189,7 @@ export const taskTemplates = pgTable(
     kredsValue: integer('kreds_value').notNull(),
     isActive: boolean('is_active').notNull().default(true),
     category: text('category'),
-    days: jsonb('days').$type<string[]>(),
+    days: jsonb('days').$type<number[]>(),
     approval: boolean('approval').notNull().default(false),
     deactivatedAt: timestamp('deactivated_at'), // nullable — D-06: history preserved on row
     createdAt: timestamp('created_at').defaultNow().notNull(),

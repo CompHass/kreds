@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  .kreds-plant{transition:transform .5s cubic-bezier(.2,.85,.3,1.25);transform-origin:50% 94%}
+  .kreds-droop{transform:rotate(-2.5deg)}
+  .kreds-pop{animation:kredsPop .6s ease}
+  @keyframes kredsPop{0%{transform:scale(1)}28%{transform:scale(1.09) translateY(-5px)}60%{transform:scale(.98)}100%{transform:scale(1)}}
+  @keyframes kredsSun{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  @keyframes kredsDrift1{0%{transform:translateX(0)}100%{transform:translateX(34px)}}
+  @keyframes kredsDrift2{0%{transform:translateX(0)}100%{transform:translateX(-26px)}}
+  @keyframes kredsFlutter{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(4deg)}}
+  @keyframes kredsFruit{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  @keyframes kredsDrop{0%{transform:translateY(-12px) scale(.8);opacity:0}25%{opacity:1}100%{transform:translateY(78px) scale(.55);opacity:0}}
+  @keyframes kredsConfetti{0%{transform:translateY(-30px) rotate(0);opacity:0}12%{opacity:1}100%{transform:translateY(540px) rotate(560deg);opacity:0}}
+  @keyframes kredsCele{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes kredsBubble{0%{transform:translateY(6px) scale(.9);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 100% at 50% 0%,#ECE7DB 0%,#E0DACB 100%);font-family:'Plus Jakarta Sans',system-ui,sans-serif;padding:28px 0">
+
+  <!-- device -->
+  <div style="position:relative;width:392px;height:812px;border-radius:52px;background:#23302A;padding:11px;box-shadow:0 34px 70px -22px rgba(40,55,45,.5),0 0 0 1px rgba(0,0,0,.04)">
+    <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#F2F0E7">
+
+      <!-- status bar -->
+      <div style="position:absolute;top:0;left:0;right:0;height:46px;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-weight:700;font-size:14px;color:#3A4A3F">
+        <span>9:41</span>
+        <div style="display:flex;align-items:center;gap:5px">
+          <div style="display:flex;gap:2px;align-items:flex-end;height:11px">
+            <span style="width:3px;height:5px;background:#3A4A3F;border-radius:1px"></span>
+            <span style="width:3px;height:7px;background:#3A4A3F;border-radius:1px"></span>
+            <span style="width:3px;height:9px;background:#3A4A3F;border-radius:1px"></span>
+            <span style="width:3px;height:11px;background:#3A4A3F;border-radius:1px"></span>
+          </div>
+          <div style="width:22px;height:11px;border:1.6px solid #3A4A3F;border-radius:3px;position:relative;padding:1.5px"><div style="width:72%;height:100%;background:#3A4A3F;border-radius:1px"></div></div>
+        </div>
+      </div>
+
+      <!-- scroll area -->
+      <div style="position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:56px 18px 96px">
+
+        <!-- header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:46px;height:46px;border-radius:15px;background:linear-gradient(140deg,#5A8A66,#3E6B4F);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#fff;box-shadow:0 8px 16px -6px rgba(62,107,79,.55)">{{ initial }}</div>
+            <div>
+              <div style="font-weight:800;font-size:20px;color:#27372C;line-height:1.05;letter-spacing:-.01em">Olá, {{ childName }}</div>
+              <div style="font-size:13px;font-weight:500;color:#8A9384;margin-top:2px">Seu jardim está crescendo</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;background:#fff;border-radius:999px;padding:7px 13px 7px 8px;box-shadow:0 6px 16px -10px rgba(80,90,70,.4)">
+            <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="#E3C57C"/><circle cx="11" cy="11" r="8.5" fill="none" stroke="#C99A3F" stroke-width="1.4"/><circle cx="11" cy="11" r="5" fill="none" stroke="#B8862F" stroke-width="1.2"/></svg>
+            <span style="font-weight:800;font-size:15px;color:#9A7320">{{ coinsLabel }}</span>
+          </div>
+        </div>
+
+        <!-- GARDEN HERO -->
+        <div style="position:relative;height:316px;border-radius:28px;overflow:hidden;box-shadow:0 18px 36px -18px rgba(50,70,50,.5),inset 0 0 0 1px rgba(255,255,255,.35)">
+          <!-- sky -->
+          <div style="position:absolute;inset:0;background:linear-gradient(185deg,#CFE0D8 0%,#DCE6CC 52%,#CCD8AF 100%)"></div>
+          <!-- season tint -->
+          <div style="position:absolute;inset:0;background:{{ seasonTint }};transition:background .6s ease"></div>
+          <!-- sun -->
+          <div style="position:absolute;top:20px;right:26px;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 40% 38%,#F3E7BD,#E3C97E 72%);box-shadow:0 0 34px 6px rgba(227,201,126,.4);animation:kredsSun 5s ease-in-out infinite"></div>
+          <!-- clouds -->
+          <div style="position:absolute;top:42px;left:32px;width:58px;height:18px;border-radius:999px;background:rgba(248,248,240,.82);animation:kredsDrift1 16s ease-in-out infinite alternate"></div>
+          <div style="position:absolute;top:76px;left:120px;width:42px;height:14px;border-radius:999px;background:rgba(248,248,240,.62);animation:kredsDrift2 20s ease-in-out infinite alternate"></div>
+          <!-- hills -->
+          <div style="position:absolute;bottom:36px;left:-28px;width:150px;height:118px;border-radius:50%;background:#BBCB9E"></div>
+          <div style="position:absolute;bottom:36px;right:-32px;width:172px;height:108px;border-radius:50%;background:#A9BA8B"></div>
+          <!-- ground -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:52px;background:linear-gradient(180deg,#AFC289 0%,#96AB71 100%);border-top-left-radius:46% 72%;border-top-right-radius:46% 72%"></div>
+          <div style="position:absolute;bottom:38px;left:0;right:0;height:10px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0))"></div>
+          <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:138px;height:20px;border-radius:50%;background:rgba(55,72,40,.18);filter:blur(3px)"></div>
+
+          <!-- season badge -->
+          <div style="position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.9);border-radius:999px;padding:6px 13px;box-shadow:0 6px 14px -8px rgba(50,70,50,.45)">
+            <span style="width:7px;height:7px;border-radius:50%;background:{{ seasonDot }}"></span>
+            <span style="font-weight:700;font-size:13px;color:#3E6B4F">{{ season }}</span>
+          </div>
+
+          <!-- water tracker -->
+          <div style="position:absolute;top:54px;left:16px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.82);border-radius:999px;padding:5px 12px 5px 9px">
+            <svg width="12" height="15" viewBox="0 0 13 16"><path d="M6.5 0 C 6.5 0 12 7 12 11 A 5.5 5.5 0 0 1 1 11 C 1 7 6.5 0 6.5 0 Z" fill="#6E9BA0"/></svg>
+            <div style="display:flex;gap:4px">
+              <sc-for list="{{ waterDots }}" as="dot" hint-placeholder-count="4">
+                <span style="width:7px;height:7px;border-radius:50%;background:{{ dot.color }}"></span>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- speech bubble -->
+          <sc-if value="{{ bubbleShow }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;top:98px;left:50%;transform:translateX(-50%);background:#fff;border-radius:14px;padding:8px 15px;font-weight:700;font-size:13px;color:#3E6B4F;box-shadow:0 8px 18px -10px rgba(50,70,50,.5);white-space:nowrap;animation:kredsBubble .4s ease;z-index:12">
+              {{ bubbleText }}
+              <span style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:#fff;border-radius:2px"></span>
+            </div>
+          </sc-if>
+
+          <!-- harvest glow -->
+          <sc-if value="{{ canHarvest }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;bottom:58px;left:50%;transform:translateX(-50%);width:184px;height:184px;border-radius:50%;background:radial-gradient(circle,rgba(245,206,118,.55),rgba(245,206,118,0) 68%);z-index:7;animation:kredsSun 2.6s ease-in-out infinite;pointer-events:none"></div>
+          </sc-if>
+          <!-- generosity flowers -->
+          {{ flowersEl }}
+          <!-- plant -->
+          <div class="kreds-plant {{ plantClass }}" style="position:absolute;left:0;right:0;bottom:30px;height:230px;z-index:10;display:flex;align-items:flex-end;justify-content:center;pointer-events:none">
+            {{ plantImgEl }}
+          </div>
+          {{ splashEl }}
+
+          <!-- harvest button -->
+          <sc-if value="{{ canHarvest }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ harvest }}" style="position:absolute;top:122px;right:24px;display:flex;align-items:center;gap:7px;border:none;cursor:pointer;background:linear-gradient(140deg,#C77F52,#B5623F);color:#fff;font-weight:800;font-size:14px;border-radius:999px;padding:10px 16px;box-shadow:0 10px 20px -8px rgba(181,98,63,.7);animation:kredsFruit 1.4s ease-in-out infinite;z-index:14">
+              <span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span> Colher
+            </button>
+          </sc-if>
+        </div>
+
+        <!-- TASKS -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:24px 4px 13px">
+          <h2 style="margin:0;font-weight:700;font-size:18px;color:#27372C;letter-spacing:-.01em">Tarefas de hoje</h2>
+          <span style="font-size:12.5px;font-weight:700;color:#3E6B4F;background:#E7EFE8;border-radius:999px;padding:5px 12px">{{ doneCount }} de {{ total }}</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ tasks }}" as="task" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:13px;background:{{ task.cardBg }};border:1px solid {{ task.cardBorder }};border-radius:18px;padding:12px 13px;transition:background .3s ease,border-color .3s ease">
+              <div style="flex:none;width:44px;height:44px;border-radius:13px;background:{{ task.chipBg }};display:flex;align-items:center;justify-content:center;font-size:20px">{{ task.emoji }}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:700;font-size:15.5px;color:{{ task.titleColor }};line-height:1.15">{{ task.title }}</div>
+                <div style="font-size:12.5px;font-weight:600;color:{{ task.subColor }};margin-top:2px">{{ task.sub }}</div>
+              </div>
+              <button onClick="{{ task.onToggle }}" style="flex:none;width:38px;height:38px;border-radius:50%;cursor:pointer;border:2px solid {{ task.checkBorder }};background:{{ task.checkBg }};display:flex;align-items:center;justify-content:center;transition:all .2s ease">
+                <svg width="18" height="18" viewBox="0 0 18 18" style="opacity:{{ task.checkOpacity }}"><path d="M3.5 9.5 L7.5 13 L14.5 4.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- TITHE / generosity -->
+        <div style="margin-top:14px;display:flex;align-items:center;gap:13px;background:{{ titheBg }};border:1px solid {{ titheBorder }};border-radius:18px;padding:13px;transition:all .3s ease">
+          <div style="flex:none;width:46px;height:46px;border-radius:13px;background:#F3E7EC;display:flex;align-items:center;justify-content:center">
+            <svg width="26" height="26" viewBox="0 0 26 26">
+              <g>
+                <ellipse cx="13" cy="8" rx="3.4" ry="5" fill="#C98AA0"/>
+                <ellipse cx="18" cy="13" rx="5" ry="3.4" fill="#B57088"/>
+                <ellipse cx="13" cy="18" rx="3.4" ry="5" fill="#C98AA0"/>
+                <ellipse cx="8" cy="13" rx="5" ry="3.4" fill="#B57088"/>
+                <circle cx="13" cy="13" r="3.4" fill="#D8B25C"/>
+              </g>
+            </svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:15.5px;color:#8A5269;line-height:1.15">Separar meu dízimo</div>
+            <div style="font-size:12.5px;font-weight:600;color:#B07E91;margin-top:2px">{{ titheSub }}</div>
+          </div>
+          <button onClick="{{ doTithe }}" style="flex:none;cursor:pointer;border:none;border-radius:999px;padding:10px 15px;font-weight:700;font-size:13px;color:#fff;background:{{ titheBtnBg }};box-shadow:0 8px 16px -8px rgba(176,112,136,.6);transition:all .2s ease">{{ titheBtnLabel }}</button>
+        </div>
+
+        <!-- COFRINHO / savings goal -->
+        <div style="margin-top:14px;background:#fff;border:1px solid #EDE9DF;border-radius:18px;padding:16px;box-shadow:0 10px 24px -18px rgba(50,70,50,.5)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:38px;height:38px;border-radius:11px;background:#F0EEE4;display:flex;align-items:center;justify-content:center">
+                <svg width="20" height="20" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8.5" fill="#E3C57C"/><circle cx="11" cy="11" r="8.5" fill="none" stroke="#C99A3F" stroke-width="1.4"/><circle cx="11" cy="11" r="5" fill="none" stroke="#B8862F" stroke-width="1.2"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:15px;color:#27372C;line-height:1.1">Meta: {{ savingsGoal }}</div>
+                <div style="font-size:12.5px;font-weight:600;color:#8A9384;margin-top:1px">{{ savedLabel }} de {{ goalLabel }}</div>
+              </div>
+            </div>
+            <span style="font-weight:800;font-size:15px;color:#3E6B4F">{{ goalPct }}%</span>
+          </div>
+          <div style="height:12px;border-radius:999px;background:#ECEAE0;overflow:hidden">
+            <div style="height:100%;width:{{ goalPctStr }};border-radius:999px;background:linear-gradient(90deg,#5A8A66,#3E6B4F);transition:width .6s cubic-bezier(.2,.8,.3,1)"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- bottom nav -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:rgba(248,247,242,.93);backdrop-filter:blur(8px);border-top:1px solid #E7E2D6;display:flex;align-items:flex-start;justify-content:space-around;padding:13px 18px 0;z-index:25">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+          <svg width="23" height="23" viewBox="0 0 24 24"><path d="M12 4 C 12 4 20 12 20 17 A 8 8 0 0 1 4 17 C 4 12 12 4 12 4 Z" fill="#3E6B4F"/><path d="M12 9 L12 18 M12 13 L8.5 11 M12 14 L15.5 12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+          <span style="font-weight:700;font-size:11px;color:#3E6B4F">Jardim</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.5">
+          <svg width="23" height="23" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#7C8676" stroke-width="2"/><path d="M8 12 L11 15 L16 9" fill="none" stroke="#7C8676" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-weight:700;font-size:11px;color:#7C8676">Tarefas</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.5">
+          <svg width="23" height="23" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#7C8676" stroke-width="2"/><path d="M12 8 L12 16 M9.5 10 L14.5 10" stroke="#7C8676" stroke-width="2" stroke-linecap="round"/></svg>
+          <span style="font-weight:700;font-size:11px;color:#7C8676">Cofrinho</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:5px;opacity:.5">
+          <svg width="23" height="23" viewBox="0 0 24 24"><g><ellipse cx="12" cy="7.5" rx="2.6" ry="3.8" fill="#A79BB0"/><ellipse cx="16" cy="12" rx="3.8" ry="2.6" fill="#A79BB0"/><ellipse cx="12" cy="16.5" rx="2.6" ry="3.8" fill="#A79BB0"/><ellipse cx="8" cy="12" rx="3.8" ry="2.6" fill="#A79BB0"/><circle cx="12" cy="12" r="2.6" fill="#C9A04A"/></g></svg>
+          <span style="font-weight:700;font-size:11px;color:#7C8676">Doar</span>
+        </div>
+      </div>
+
+      <!-- CELEBRATION overlay -->
+      <sc-if value="{{ showCelebration }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;background:radial-gradient(120% 80% at 50% 30%,rgba(244,241,232,.98),rgba(228,222,205,.98))">
+          {{ confettiEl }}
+          <div style="text-align:center;animation:kredsCele .5s cubic-bezier(.2,.85,.3,1.3)">
+            <div style="width:124px;height:124px;margin:0 auto 20px;position:relative">
+              <svg width="124" height="124" viewBox="0 0 128 128">
+                <ellipse cx="64" cy="118" rx="40" ry="7" fill="rgba(45,55,40,.1)"/>
+                <circle cx="64" cy="72" r="42" fill="#B5623F"/>
+                <ellipse cx="49" cy="58" rx="13" ry="8" fill="rgba(255,255,255,.4)"/>
+                <rect x="61" y="24" width="6" height="15" rx="3" fill="#6B4A2B"/>
+                <ellipse cx="78" cy="31" rx="13" ry="7" fill="#6F8C57" transform="rotate(28 78 31)"/>
+              </svg>
+            </div>
+            <div style="font-weight:700;font-size:13px;color:#A06A45;letter-spacing:.14em;text-transform:uppercase">Você colheu sua recompensa</div>
+            <div style="font-weight:800;font-size:50px;color:#B5623F;line-height:1.1;margin:4px 0 6px;letter-spacing:-.01em">{{ rewardValue }}</div>
+            <div style="font-size:14px;font-weight:600;color:#7C8676;margin-bottom:20px">Guardado no cofrinho · aprovado pela mamãe</div>
+            <div style="background:#fff;border:1px solid #EDE9DF;border-radius:16px;padding:16px 20px;box-shadow:0 12px 28px -18px rgba(50,70,50,.5);max-width:290px;margin:0 auto 24px">
+              <div style="font-weight:600;font-size:14.5px;color:#3E6B4F;line-height:1.4">“Tudo o que fizerem, façam de todo o coração.”</div>
+              <div style="font-size:12.5px;font-weight:600;color:#A7B3A6;margin-top:7px">Colossenses 3:23</div>
+            </div>
+            <button onClick="{{ closeCelebration }}" style="border:none;cursor:pointer;background:#3E6B4F;color:#fff;font-weight:700;font-size:15.5px;border-radius:999px;padding:14px 32px;box-shadow:0 12px 24px -10px rgba(62,107,79,.6)">Voltar ao jardim</button>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 480, &quot;height&quot;: 880 },
+  &quot;childName&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Sofia&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;season&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;Primavera&quot;, &quot;options&quot;: [&quot;Primavera&quot;, &quot;Verão&quot;, &quot;Outono&quot;, &quot;Inverno&quot;], &quot;tsType&quot;: &quot;string&quot; },
+  &quot;savingsGoal&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Patins novos&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;rewardValue&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;R$ 20&quot;, &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    tasks: [
+      { id: 1, emoji: "🛏️", title: "Arrumar a cama", done: true,  chipBg: "#E6EBEF" },
+      { id: 2, emoji: "🪥", title: "Escovar os dentes", done: true,  chipBg: "#E4EDE9" },
+      { id: 3, emoji: "📚", title: "Ler 10 minutos", done: false, chipBg: "#F1ECE1" },
+      { id: 4, emoji: "🧺", title: "Guardar os brinquedos", done: false, chipBg: "#ECE9F1" }
+    ],
+    titheDone: false,
+    harvested: false,
+    showCelebration: false,
+    coins: 18,
+    saved: 64,
+    waterTick: 0,
+    splashOn: false,
+    pop: false
+  };
+
+  themes() {
+    return {
+      "Primavera": { tint: "rgba(255,255,255,0)",     dot: "#7BA06A", leaf: "#6F8C57", leafDark: "#4E6E3E", leafLight: "#86A268", blossom: "#D7A9B4", blossomLt: "#ECD6DC" },
+      "Verão":     { tint: "rgba(214,194,110,0.10)",  dot: "#C9A24A", leaf: "#5E7E45", leafDark: "#45662F", leafLight: "#7C9A5C", blossom: "#D7A9B4", blossomLt: "#ECD6DC" },
+      "Outono":    { tint: "rgba(176,118,60,0.16)",   dot: "#B07F3C", leaf: "#A77E3C", leafDark: "#8A5E29", leafLight: "#C39E58", blossom: "#C98AA0", blossomLt: "#E7CDD5" },
+      "Inverno":   { tint: "rgba(150,180,195,0.18)",  dot: "#88A8B0", leaf: "#8AA890", leafDark: "#6C8C76", leafLight: "#B4CABA", blossom: "#C6D3DA", blossomLt: "#E3EAEE" }
+    };
+  }
+
+  // ---- SVG helpers ----
+  leaf(cx, cy, rot, color) {
+    return `<ellipse cx="${cx}" cy="${cy}" rx="21" ry="10.5" fill="${color}" transform="rotate(${rot} ${cx} ${cy})"/>`;
+  }
+  stem(topY, color) {
+    const mid = (204 + topY) / 2;
+    return `<path d="M110 204 C 104 ${mid}, 116 ${mid}, 110 ${topY}" stroke="${color}" stroke-width="9" fill="none" stroke-linecap="round"/>`;
+  }
+  flower(cx, cy, color, s, center) {
+    s = s || 1; center = center || "#D8B25C";
+    const petals = [0, 72, 144, 216, 288].map(a =>
+      `<ellipse cx="${cx}" cy="${cy - 12 * s}" rx="${7 * s}" ry="${11 * s}" fill="${color}" transform="rotate(${a} ${cx} ${cy})"/>`
+    ).join("");
+    return `<g>${petals}<circle cx="${cx}" cy="${cy}" r="${6 * s}" fill="${center}"/></g>`;
+  }
+  fruitC(cx, cy) {
+    return `<g><circle cx="${cx}" cy="${cy}" r="13" fill="#B5623F"/><ellipse cx="${cx - 4}" cy="${cy - 4}" rx="4" ry="3" fill="rgba(255,255,255,.4)"/><rect x="${cx - 1.2}" y="${cy - 19}" width="2.6" height="8" rx="1.3" fill="#6B4A2B"/></g>`;
+  }
+  butterfly(cx, cy) {
+    return `<g style="transform-origin:${cx}px ${cy}px;animation:kredsFlutter 3s ease-in-out infinite">
+      <ellipse cx="${cx-5}" cy="${cy-2}" rx="7" ry="9" fill="#C98AA0" transform="rotate(-25 ${cx-5} ${cy-2})"/>
+      <ellipse cx="${cx+7}" cy="${cy-2}" rx="7" ry="9" fill="#A892C4" transform="rotate(25 ${cx+7} ${cy-2})"/>
+      <ellipse cx="${cx-4}" cy="${cy+6}" rx="5" ry="6" fill="#DCB8C6" transform="rotate(-15 ${cx-4} ${cy+6})"/>
+      <ellipse cx="${cx+6}" cy="${cy+6}" rx="5" ry="6" fill="#CBBBDE" transform="rotate(15 ${cx+6} ${cy+6})"/>
+      <line x1="${cx+1}" y1="${cy-8}" x2="${cx+1}" y2="${cy+10}" stroke="#5A4A52" stroke-width="2.4" stroke-linecap="round"/>
+    </g>`;
+  }
+
+  buildPlant(theme, stage, titheDone, fruitReady, harvested) {
+    const L = theme.leaf, D = theme.leafDark, Lt = theme.leafLight, B = theme.blossom, Bl = theme.blossomLt;
+    let body = "";
+    if (stage <= 0) {
+      body = `<ellipse cx="110" cy="201" rx="13" ry="9" fill="#7A5230"/>` +
+             `<path d="M110 197 q2 -12 1 -20" stroke="${L}" stroke-width="5" fill="none" stroke-linecap="round"/>` +
+             this.leaf(120, 182, 35, L);
+    } else if (stage === 1) {
+      body = this.stem(150, D) + this.leaf(92, 172, -38, L) + this.leaf(128, 172, 38, D);
+    } else if (stage === 2) {
+      body = this.stem(116, D) +
+             this.leaf(86, 170, -42, L) + this.leaf(134, 170, 42, D) +
+             this.leaf(90, 134, -30, L) + this.leaf(130, 134, 30, D);
+    } else if (stage === 3) {
+      body = this.stem(102, D) +
+             this.leaf(84, 172, -42, L) + this.leaf(136, 172, 42, D) +
+             this.leaf(88, 138, -30, L) + this.leaf(132, 138, 30, D) +
+             this.flower(110, 96, B, 1.05, Bl) + this.flower(86, 112, Bl, .8, B) + this.flower(134, 112, B, .8, Bl);
+    } else {
+      const trunk = `<path d="M101 200 L104 130 Q110 122 116 130 L119 200 Z" fill="#8A5A3A"/>`;
+      const canopy = `<circle cx="110" cy="92" r="40" fill="${L}"/>` +
+                     `<circle cx="78" cy="106" r="27" fill="${D}"/>` +
+                     `<circle cx="142" cy="106" r="27" fill="${D}"/>` +
+                     `<circle cx="110" cy="72" r="30" fill="${Lt}"/>`;
+      let fruit = "";
+      if (!harvested) {
+        const glow = fruitReady ? ` style="transform-origin:110px 100px;animation:kredsFruit 1.6s ease-in-out infinite"` : "";
+        fruit = `<g${glow}>` + this.fruitC(85, 98) + this.fruitC(133, 92) + this.fruitC(112, 118) + `</g>`;
+      } else {
+        fruit = this.flower(96, 84, B, .7, Bl) + this.flower(128, 98, Bl, .7, B);
+      }
+      body = trunk + canopy + fruit;
+    }
+    let extras = "";
+    if (titheDone) {
+      extras = this.flower(40, 200, "#C98AA0", 1, "#D8B25C") + this.flower(182, 198, "#A892C4", .95, "#D8B25C") +
+               this.flower(64, 207, "#D7A9B4", .75, "#D8B25C") + this.flower(158, 208, "#D8B25C", .7, "#B5623F") +
+               this.butterfly();
+    }
+    return `<svg viewBox="0 0 220 220" width="100%" height="100%" style="overflow:visible;display:block">${body}${extras}</svg>`;
+  }
+
+  // ---- interaction ----
+  water() {
+    clearTimeout(this._t);
+    this.setState({ waterTick: this.state.waterTick + 1, splashOn: true, pop: true });
+    this._t = setTimeout(() => this.setState({ splashOn: false, pop: false }), 720);
+  }
+  toggleTask(id) {
+    let nowDone = false;
+    const tasks = this.state.tasks.map(t => {
+      if (t.id === id) { nowDone = !t.done; return { ...t, done: !t.done }; }
+      return t;
+    });
+    this.setState({ tasks });
+    if (nowDone) this.water();
+  }
+  doTithe() {
+    const on = !this.state.titheDone;
+    this.setState({ titheDone: on });
+    if (on) this.water();
+  }
+  harvest() {
+    const reward = parseInt(String(this.props.rewardValue || "R$ 20").replace(/\D/g, "")) || 20;
+    this.setState({ harvested: true, showCelebration: true, coins: this.state.coins + reward, saved: this.state.saved + reward });
+  }
+  closeCelebration() { this.setState({ showCelebration: false }); }
+
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  renderVals() {
+    const childName = this.props.childName || "Sofia";
+    const season = this.props.season || "Primavera";
+    const savingsGoal = this.props.savingsGoal || "Patins novos";
+    const rewardValue = this.props.rewardValue || "R$ 20";
+    const theme = this.themes()[season] || this.themes()["Primavera"];
+
+    const tasks = this.state.tasks;
+    const total = tasks.length;
+    const doneCount = tasks.filter(t => t.done).length;
+    const stage = doneCount;
+    const allDone = doneCount === total;
+    const pending = total - doneCount;
+    const fruitReady = allDone && !this.state.harvested;
+    const canHarvest = fruitReady;
+    const droopy = pending > 0;
+
+    const waterDots = tasks.map((t) => ({ color: t.done ? "#6E9BA0" : "rgba(255,255,255,.65)" }));
+
+    const taskVals = tasks.map(t => ({
+      ...t,
+      sub: t.done ? "Regado 💧" : "Rega o seu jardim",
+      cardBg: t.done ? "#EEF3EA" : "#FFFFFF",
+      cardBorder: t.done ? "#D6E2CC" : "#EDE9DF",
+      titleColor: t.done ? "#4E6E3E" : "#27372C",
+      subColor: t.done ? "#7A9A6C" : "#A7AD9C",
+      checkBg: t.done ? "#3E6B4F" : "#FFFFFF",
+      checkBorder: t.done ? "#3E6B4F" : "#D7DBCC",
+      checkOpacity: t.done ? 1 : 0,
+      onToggle: () => this.toggleTask(t.id)
+    }));
+
+    let bubbleText = "", bubbleShow = true;
+    if (this.state.harvested) bubbleText = "Obrigada! 💛";
+    else if (allDone) bubbleText = "Floresci! Vamos colher 🌿";
+    else if (droopy) bubbleText = "Tenho sede! Vamos regar? 💧";
+    else bubbleShow = false;
+
+    const sprite = ["a", "a", "b", "c", "d"][stage] || "a";
+    let plantImg = "garden/plant-" + sprite + ".png";
+    let plantH = { a: "150px", b: "186px", c: "196px", d: "224px" }[sprite];
+    if (this.state.harvested) { plantImg = "garden/plant-c.png"; plantH = "196px"; }
+    const plantImgEl = React.createElement("img", { src: plantImg, alt: "", style: { height: plantH, width: "auto", display: "block", transition: "height .45s cubic-bezier(.2,.8,.3,1)", filter: "drop-shadow(0 9px 9px rgba(45,55,35,.22))" } });
+    const plantClass = (this.state.pop ? "kreds-pop " : "") + (droopy && !this.state.pop ? "kreds-droop" : "");
+    let flowersEl = null;
+    if (this.state.titheDone) {
+      const f = this.flower(40, 54, "#C98AA0", 1, "#D8B25C") + this.flower(74, 60, "#D7A9B4", .78, "#D8B25C")
+              + this.flower(300, 56, "#A892C4", 1, "#D8B25C") + this.flower(326, 62, "#D8B25C", .72, "#B5623F")
+              + this.butterfly(252, 18);
+      flowersEl = React.createElement("div", { style: { position: "absolute", left: 0, right: 0, bottom: "20px", height: "82px", zIndex: 11, pointerEvents: "none" }, dangerouslySetInnerHTML: { __html: `<svg viewBox="0 0 356 82" width="100%" height="100%" style="overflow:visible">${f}</svg>` } });
+    }
+
+    let splashEl = null;
+    if (this.state.splashOn) {
+      const drops = [0, 1, 2, 3, 4].map(i =>
+        React.createElement("div", {
+          key: i,
+          style: {
+            position: "absolute", left: (i * 22) + "px", top: 0, width: "9px", height: "13px",
+            borderRadius: "50% 50% 50% 50% / 62% 62% 40% 40%", background: "#6E9BA0", opacity: 0,
+            animation: `kredsDrop .72s ${i * 0.06}s ease-in forwards`
+          }
+        })
+      );
+      splashEl = React.createElement("div", {
+        key: this.state.waterTick,
+        style: { position: "absolute", bottom: "150px", left: "50%", marginLeft: "-55px", width: "110px", height: "90px", pointerEvents: "none", zIndex: 13 }
+      }, drops);
+    }
+
+    let confettiEl = null;
+    if (this.state.showCelebration) {
+      const palette = ["#4E6E3E", "#C99A3F", "#B5623F", "#C98AA0", "#A892C4", "#8AA890"];
+      const pieces = Array.from({ length: 20 }).map((_, i) =>
+        React.createElement("div", {
+          key: i,
+          style: {
+            position: "absolute", top: "-20px", left: (5 + (i * 4.6) % 92) + "%",
+            width: (6 + (i % 3) * 2) + "px", height: (10 + (i % 2) * 4) + "px",
+            background: palette[i % palette.length], borderRadius: "2px",
+            animation: `kredsConfetti ${2.4 + (i % 4) * 0.4}s ${(i % 6) * 0.18}s linear infinite`
+          }
+        })
+      );
+      confettiEl = React.createElement("div", { style: { position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" } }, pieces);
+    }
+
+    const goalTarget = 80;
+    const saved = this.state.saved;
+    const goalPct = Math.min(100, Math.round((saved / goalTarget) * 100));
+
+    return {
+      childName, season, savingsGoal, rewardValue,
+      initial: String(childName).trim().charAt(0).toUpperCase() || "S",
+      coinsLabel: "R$ " + this.state.coins,
+      seasonTint: theme.tint, seasonDot: theme.dot,
+      tasks: taskVals, total, doneCount, waterDots,
+      bubbleText, bubbleShow,
+      plantImgEl, plantClass, flowersEl, splashEl,
+      canHarvest,
+      titheBg: this.state.titheDone ? "#F8ECF0" : "#FFFFFF",
+      titheBorder: this.state.titheDone ? "#EBD6DE" : "#EDE9DF",
+      titheSub: this.state.titheDone ? "Flores da generosidade no jardim 🌸" : "Devolva as primícias com alegria",
+      titheBtnLabel: this.state.titheDone ? "Feito ✓" : "Plantar",
+      titheBtnBg: this.state.titheDone ? "#B07E91" : "linear-gradient(140deg,#C98AA0,#A55E76)",
+      doTithe: () => this.doTithe(),
+      harvest: () => this.harvest(),
+      closeCelebration: () => this.closeCelebration(),
+      showCelebration: this.state.showCelebration,
+      confettiEl,
+      savedLabel: "R$ " + saved, goalLabel: "R$ " + goalTarget,
+      goalPct, goalPctStr: goalPct + "%"
+    };
+  }
+}
+</script>
+</body>
+</html>

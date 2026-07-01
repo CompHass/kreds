@@ -183,7 +183,6 @@ The app runs via **Docker Compose**, not `pnpm dev` or npm locally.
 - Do NOT suggest `pnpm dev`, `npm run dev`, or local Node.js commands for running the app
 - Database queries must use `docker exec kreds-postgres-1 psql -U kreds -d kreds_dev` — not a local `psql` install
 - `localhost:3000` is the Docker container, not a local dev server
-
 <!-- GSD:conventions-end -->
 
 <!-- GSD:infrastructure-start -->

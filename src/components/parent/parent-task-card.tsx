@@ -16,6 +16,35 @@ interface ParentTaskCardProps {
   onEdit: (id: string) => void
 }
 
+const ALL_LABELS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+
+function DayPills({ days }: { days: number[] }) {
+  return (
+    <div style={{ display: 'flex', gap: 3 }}>
+      {ALL_LABELS.map((label, i) => (
+        <span
+          key={i}
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 10,
+            fontWeight: 700,
+            background: days.includes(i) ? '#3E6B4F' : 'transparent',
+            color: days.includes(i) ? '#fff' : '#C5BFA8',
+            border: days.includes(i) ? 'none' : '1.5px solid #E2DECF',
+          }}
+        >
+          {label}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 export function ParentTaskCard({
   task,
   justAdded,
@@ -83,21 +112,26 @@ export function ParentTaskCard({
             {task.reward === 0 ? 'R$ 0' : `R$ ${task.reward}`}
           </span>
 
-          {/* Badge de dias — não exibe "Todos os dias" como texto para evitar conflito
-              com o botão "Todos os dias" do RecurrencePills no form (PTASK-08). */}
+          {/* Pills de dias — D S T Q Q S S com highlight nos selecionados */}
           {task.days.length > 0 && (
+            <DayPills days={task.days} />
+          )}
+
+          {/* Badge de aprovação — após os dias */}
+          {task.approval && (
             <span
               style={{
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: 600,
-                color: 'var(--color-kreds-muted)',
-                background: 'var(--color-kreds-bg)',
+                color: '#7C5C2E',
+                background: '#FDF3E3',
                 borderRadius: 8,
-                padding: '2px 8px',
-                border: '1px solid var(--color-kreds-border)',
+                padding: '2px 7px',
+                border: '1px solid #F0D9B0',
+                whiteSpace: 'nowrap',
               }}
             >
-              {task.days.length === 7 ? '7×/sem' : `${task.days.length}×/sem`}
+              ✓ aprovação
             </span>
           )}
         </div>

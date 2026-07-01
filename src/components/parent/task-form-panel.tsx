@@ -16,7 +16,7 @@ export interface TaskFormData {
   title: string
   category: Category | null
   reward: number
-  days: string[]
+  days: number[]
   assigned: string[]
   approval: boolean
 }

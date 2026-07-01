@@ -35,6 +35,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.email = profile.email
         }
 
+        // Persist name from OIDC profile claim, same pattern as email above.
+        // Zitadel only includes name/preferred_username in the ID token when the
+        // client has "User Info inside ID Token" enabled — see .planning/debug/guardian-drawer-empty.md.
+        if (typeof profile.name === 'string') {
+          token.name = profile.name
+        } else if (typeof profile.preferred_username === 'string') {
+          token.name = profile.preferred_username
+        }
+
         // Persist system_owner role from Zitadel grant claims.
         // Zitadel returns roles via urn:zitadel:iam:org:project:roles (native scope)
         // OR via custom Action that sets a 'roles' claim directly.
@@ -89,6 +98,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // not in URL/querystring/localStorage; is the logged-in user's own email only).
       if (token.email && session.user) {
         session.user.email = token.email as string
+      }
+      if (token.name && session.user) {
+        session.user.name = token.name as string
       }
       return session
     },
