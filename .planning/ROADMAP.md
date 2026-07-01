@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Authentication** - PIN screen da criança com animação portão e login OIDC do responsável (completed 2026-06-21)
 - [x] **Phase 3: Child Garden** - Jardim interativo com estágios de planta, animações e overlay de celebração *(complete 2026-06-22)*
 - [x] **Phase 4: Child Tasks** - Lista de tarefas, cards especiais (dízimo/cofrinho), bottom nav e gamificação (completed 2026-06-22)
-- [ ] **Phase 5: Parent Panel** - Layout desktop dos pais com CRUD completo de tarefas
+- [x] **Phase 5: Parent Panel** - Layout desktop dos pais com CRUD completo de tarefas
 - [x] **Phase 6: API Integration** - Conectar toda a UI aos endpoints reais com os ajustes de campo necessários (completed 2026-06-27)
 
 ## Phase Details
@@ -184,47 +184,71 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] 06-04-PLAN.md — Connect UI to real API: replace MOCK_PARENT_TASKS and SEED_STAGE_C with DB queries; wire Server Actions in ParentPanelView; wire harvest fetch in GardenView + checkpoint visual
 
-### Phase 12: Módulo de FX
 
-**Goal:** Guardian consegue analisar o impacto cambial de Purchase Orders em USD e EUR — comparando a taxa contratada (DI) com a cotação atual ou simulada — para decidir se vale pagar a PO agora ou aguardar uma taxa mais favorável antes do vencimento
+### Phase 7: Guardian Profile
+
+**Goal:** Guardian consegue ver e editar seu perfil, e fazer logout
 **Depends on:** Phase 2
-**Requirements**: FX-01, FX-02, FX-03, FX-04, FX-05, FX-06
-**Success Criteria** (what must be TRUE):
+**Success Criteria:**
+  1. Botão "P" (sidebar inferior) e avatar (canto superior direito) abrem página/modal de perfil
+  2. Perfil exibe nome, email do guardian
+  3. Botão de logout encerra sessão e redireciona para /login
 
-  1. Página `/family/fx` carrega lista de POs com colunas: PO List, Due Date, Foreign Currency Amount, DI, BRL Amount, Current Tax, Current Value (BRL), Result, (%)
-  2. Campos USD e EUR são preenchidos automaticamente ao carregar a página via API de câmbio (open.er-api.com)
-  3. Toggle "Simulation Off/On" — quando ON: campos USD/EUR ficam editáveis, banner de aviso aparece, colunas Current Tax/Value/Result/% ficam destacadas em ciano
-  4. Cálculos corretos: BRL Amount = Foreign Amount × DI; Current Value = Foreign Amount × Current Tax; Result = BRL Amount − Current Value; (%) = Result / BRL Amount
-  5. Result positivo exibido em verde, negativo em vermelho; linha de totais no rodapé da tabela
-  6. Novo item de menu na área Guardian leva ao módulo FX
+**Plans:** 2 plans
 
-**Plans**: 5 plans
+**Wave 1**
 
-**Wave 1** *(paralelos — sem dependências)*
+- [ ] 07-01-PLAN.md — GuardianProfileDrawer (drawer slide read-only: nome+email, logout signOut) + suite RED
 
-- [ ] 12-01-PLAN.md — TDD: módulo de cálculos FX (toNumber, getBrlAmount, getCurrentValue, getResult, getResultPct, calculateTotals) com testes unitários completos
-- [ ] 12-02-PLAN.md — Fundação backend: schema Drizzle fx_purchase_orders, helper resolveGuardianFamilyId, Zod schema, queries server-only
+**Wave 2** *(blocked on Wave 1 — consome o componente do drawer)*
 
-**Wave 2** *(blocked on Wave 1 — schema deve existir antes do push)*
-
-- [ ] 12-03-PLAN.md — [BLOCKING] drizzle-kit push + seed de 3 POs (PO-001/002/003) para verificação visual
-
-**Wave 3** *(blocked on Wave 2 — banco deve ter a tabela antes dos Route Handlers)*
-
-- [ ] 12-04-PLAN.md — Route Handlers: GET /api/fx/rates (proxy cambial) + GET/POST /api/fx/purchase-orders
-
-**Wave 4** *(blocked on Wave 1+3 — cálculos e API prontos antes da UI)*
-
-- [ ] 12-05-PLAN.md — SSR page /family/fx + FxAnalysisClient (tabela, toggle simulação, totais, link Guardian FX-06) + checkpoint visual
+- [ ] 07-02-PLAN.md — Integração: guardianEmail SSR + profileOpen state + acionadores sidebar/topbar + testes + checkpoint visual *(depends_on 07-01)*
 
 **UI hint**: yes
+
+### Phase 8: Child Management
+
+**Goal:** Guardian consegue cadastrar filhos, definir PIN e gerenciar perfis
+**Depends on:** Phase 2, Phase 7
+**Success Criteria:**
+  1. Ícone pessoa na sidebar abre lista de filhos da família
+  2. Formulário para adicionar novo filho (nome, avatar/cor)
+  3. Definir e trocar PIN de 4 dígitos por filho
+  4. Desativar/reativar filho
+
+### Phase 9: Reports
+
+**Goal:** Guardian consegue ver relatórios semanais de Kreds por filho
+**Depends on:** Phase 6, Phase 8
+**Success Criteria:**
+  1. Ícone gráfico de barras abre página de relatórios
+  2. Resumo semanal por filho: tarefas concluídas, Kreds ganhos, dízimo separado, poupança
+  3. Histórico de ciclos anteriores navegável
+
+### Phase 10: Settings
+
+**Goal:** Guardian consegue configurar preferências da família
+**Depends on:** Phase 7
+**Success Criteria:**
+  1. Engrenagem abre página de configurações
+  2. Editar nome da família
+  3. Configurar dia de início do ciclo semanal
+  4. Gerenciar notificações
+
+### Phase 11: Goals & Savings
+
+**Goal:** Filho consegue definir e acompanhar metas de poupança
+**Depends on:** Phase 6, Phase 8
+**Success Criteria:**
+  1. Ícone pin na sidebar abre módulo de metas
+  2. Guardian cria meta com nome, valor e prazo
+  3. Filho vê progresso visual da meta no jardim
+  4. Kreds alocados para poupança contam para a meta
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
-
-Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child garden/tasks) and Phase 5 (parent panel) can be built in parallel once Phase 2 is complete, but are sequenced here for single-developer execution.
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -232,6 +256,10 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 2. Authentication | 5/5 | Complete    | 2026-06-21 |
 | 3. Child Garden | 3/3 | Complete    | 2026-06-22 |
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
-| 5. Parent Panel | 2/4 | In Progress|  |
+| 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
-| 12. Módulo de FX | 0/TBD | Not started | - |
+| 7. Guardian Profile | 0/2 | Planned | - |
+| 8. Child Management | 0/TBD | Not started | - |
+| 9. Reports | 0/TBD | Not started | - |
+| 10. Settings | 0/TBD | Not started | - |
+| 11. Goals & Savings | 0/TBD | Not started | - |
