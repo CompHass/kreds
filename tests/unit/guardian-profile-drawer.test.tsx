@@ -5,8 +5,8 @@ import { render, screen, fireEvent } from '@testing-library/react'
 // GuardianProfileDrawer ainda não existe — import falhará até a Task 2 implementar o componente (RED)
 import { GuardianProfileDrawer } from '../../src/components/parent/guardian-profile-drawer'
 
-// Mock next-auth/react para capturar chamadas de signOut
-const mockSignOut = vi.fn()
+// Mock next-auth/react — vi.hoisted evita problema de hoisting do vi.mock
+const { mockSignOut } = vi.hoisted(() => ({ mockSignOut: vi.fn() }))
 vi.mock('next-auth/react', () => ({
   signOut: mockSignOut,
 }))
