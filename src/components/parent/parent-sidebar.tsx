@@ -2,8 +2,14 @@
 
 // PTASK-01: Sidebar fixa 80px com logo, 5 nav icons SVG inline e avatar no rodapé.
 // Ícones com aria-label obrigatório (sem texto visível). Primeiro ícone (tarefas) ativo.
+// D-08: Botão circular no rodapé com inicial dinâmica abre o drawer de perfil (onOpenProfile).
 
-export function ParentSidebar() {
+interface ParentSidebarProps {
+  guardianInitial: string
+  onOpenProfile: () => void
+}
+
+export function ParentSidebar({ guardianInitial, onOpenProfile }: ParentSidebarProps) {
   return (
     <aside
       data-testid="parent-sidebar"
@@ -231,8 +237,10 @@ export function ParentSidebar() {
         </button>
       </div>
 
-      {/* Avatar 38px no rodapé */}
-      <div
+      {/* D-08: Botão de perfil 38px no rodapé — inicial dinâmica + abre drawer ao clicar */}
+      <button
+        aria-label="Abrir perfil"
+        onClick={onOpenProfile}
         style={{
           marginTop: 'auto',
           width: 38,
@@ -246,10 +254,12 @@ export function ParentSidebar() {
           fontWeight: 700,
           color: '#ffffff',
           flexShrink: 0,
+          border: 'none',
+          cursor: 'pointer',
         }}
       >
-        P
-      </div>
+        {guardianInitial}
+      </button>
     </aside>
   )
 }

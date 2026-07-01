@@ -12,6 +12,7 @@ import { ParentTopbar } from './parent-topbar'
 import { FilterChips } from './filter-chips'
 import { ParentTaskCard } from './parent-task-card'
 import { TaskFormPanel, type TaskFormData, EMPTY_FORM, taskToFormData } from './task-form-panel'
+import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import { type ParentTask } from '@/types/task'
 import { createTask, updateTask, deactivateTask, toggleTaskActive } from '@/app/actions/tasks'
 
@@ -19,6 +20,7 @@ interface ParentPanelViewProps {
   familyId: string
   familyName: string
   currentUserName: string
+  guardianEmail: string
   familyChildren: Array<{    // ATENÇÃO: não usar 'children' — conflito com prop reservada do React (Pitfall 2)
     id: string
     displayName: string
@@ -32,6 +34,7 @@ export function ParentPanelView({
   familyId: _familyId,
   familyName,
   currentUserName,
+  guardianEmail,
   familyChildren,
   initialTasks,
 }: ParentPanelViewProps) {
@@ -42,6 +45,10 @@ export function ParentPanelView({
   const [editingId, setEditingId] = useState<string | 'new' | null>(null)
   const [newTaskId, setNewTaskId] = useState<string | null>(null)
   const [formData, setFormData] = useState<TaskFormData>(EMPTY_FORM)
+  // D-03: estado de abertura do drawer de perfil do guardian
+  const [profileOpen, setProfileOpen] = useState(false)
+  // Inicial derivada do nome — exibida no rodapé da sidebar (D-08) e usada internamente
+  const guardianInitial = currentUserName.charAt(0).toUpperCase()
 
   // Derivados no render — sem estado separado (anti-pattern: usar boolean isCreating)
   const formMode: 'idle' | 'create' | 'edit' = editingId === 'new'
@@ -182,7 +189,10 @@ export function ParentPanelView({
       }}
     >
       {/* Sidebar esquerda 80px fixa (PTASK-01) */}
-      <ParentSidebar />
+      <ParentSidebar
+        guardianInitial={guardianInitial}
+        onOpenProfile={() => setProfileOpen(true)}
+      />
 
       {/* Main: topbar + conteúdo flex-row */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -190,6 +200,7 @@ export function ParentPanelView({
         <ParentTopbar
           familyName={familyName}
           currentUserName={currentUserName}
+          onOpenProfile={() => setProfileOpen(true)}
         />
 
         {/* Área de conteúdo: lista de tarefas + painel direito */}
@@ -304,6 +315,16 @@ export function ParentPanelView({
           </div>
         </div>
       </main>
+
+      {/* D-01/D-02: Drawer de perfil do guardian — position:fixed, sem transform no ancestral (Pitfall 2 ok)
+          D-03: controlado por profileOpen; D-04/D-05: nome e email da sessão SSR
+          D-06/D-07: signOut via GuardianProfileDrawer */}
+      <GuardianProfileDrawer
+        open={profileOpen}
+        guardianName={currentUserName}
+        guardianEmail={guardianEmail}
+        onClose={() => setProfileOpen(false)}
+      />
     </div>
   )
 }

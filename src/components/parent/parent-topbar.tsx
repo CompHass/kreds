@@ -1,13 +1,15 @@
 'use client'
 
 // PTASK-02: Topbar 64px com breadcrumb do nome da família em verde + badge do usuário.
+// D-09: Badge clicável abre o drawer de perfil do guardian via onOpenProfile.
 
 interface ParentTopbarProps {
   familyName: string
   currentUserName: string
+  onOpenProfile: () => void
 }
 
-export function ParentTopbar({ familyName, currentUserName }: ParentTopbarProps) {
+export function ParentTopbar({ familyName, currentUserName, onOpenProfile }: ParentTopbarProps) {
   return (
     <header
       style={{
@@ -34,9 +36,15 @@ export function ParentTopbar({ familyName, currentUserName }: ParentTopbarProps)
       {/* Spacer */}
       <div style={{ flex: 1 }} />
 
-      {/* Badge do usuário logado */}
+      {/* D-09: Badge do usuário logado — clicável para abrir drawer de perfil */}
       <div
+        onClick={onOpenProfile}
+        role="button"
+        aria-label="Abrir perfil"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && onOpenProfile()}
         style={{
+          cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           gap: 8,
