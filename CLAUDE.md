@@ -224,6 +224,8 @@ The app runs via **Docker Compose**, not `pnpm dev` or npm locally.
 - **Login UI:** V2 at `/ui/v2/login` (separate `zitadel-login` service)
 - **Service Account secret:** `iam-admin` in `zitadel` namespace
 
+**Rule — always check live config before login/auth work:** Before implementing, debugging, or changing anything related to login/auth (OIDC flow, redirect URIs, scopes, session/callback handling, roles, login UI), query the live Zitadel API for the current project configuration first — do not assume the values above are still accurate. Config drifts (redirect URIs, apps, roles get added/changed directly in Zitadel). Use the `iam-admin` service account secret (namespace `zitadel`) to authenticate against `https://auth.hasslab.pro`'s management API and confirm project/app/OIDC settings before making changes.
+
 ### Deploy Strategy
 
 GitOps via CI job, **not** `argocd-image-updater`.
