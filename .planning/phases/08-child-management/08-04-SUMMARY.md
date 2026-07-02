@@ -116,3 +116,7 @@ No new threat surface beyond what was declared in the plan's `<threat_model>`. T
 - [x] `tests/unit/child-form-panel.test.tsx` — FOUND, 4/4 tests GREEN
 - [x] `package.json` — FOUND, `"radix-ui": "^1.6.1"` present
 - [x] Commits: f6bef7e, 9dc8942, 881f8ce — all verified in `git log`
+
+## Self-Check: PASSED (post-write verification)
+
+All 8 claimed files confirmed present on disk; all 4 commit hashes (f6bef7e, 9dc8942, 881f8ce, 2c44186) confirmed in `git log --oneline --all`.
