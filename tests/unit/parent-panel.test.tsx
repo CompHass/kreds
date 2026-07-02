@@ -7,6 +7,11 @@ import { MOCK_PARENT_TASKS } from '../../src/lib/seed/parent-seed'
 // ParentPanelView ainda não existe — import falhará até o Plano 05-02
 import { ParentPanelView } from '../../src/components/parent/parent-panel-view'
 
+// Mock next/navigation — ParentSidebar usa useRouter (08-02) que não está disponível em jsdom.
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}))
+
 // Mock next-auth/react — necessário porque GuardianProfileDrawer chama signOut (07-02)
 // vi.mock hoist para o topo; usar vi.hoisted() para evitar TDZ (decisão 07-01)
 vi.mock('next-auth/react', () => ({ signOut: vi.fn() }))

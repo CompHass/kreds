@@ -2,14 +2,21 @@
 
 // PTASK-01: Sidebar fixa 80px com logo, 5 nav icons SVG inline e avatar no rodapé.
 // Ícones com aria-label obrigatório (sem texto visível). Primeiro ícone (tarefas) ativo.
+// D-05 (08-02): ParentSidebar agora aceita familyId + activeRoute para navegação e estado ativo condicional.
 // D-08: Botão circular no rodapé com inicial dinâmica abre o drawer de perfil (onOpenProfile).
+
+import { useRouter } from 'next/navigation'
 
 interface ParentSidebarProps {
   guardianInitial: string
   onOpenProfile: () => void
+  familyId: string
+  activeRoute: 'tasks' | 'children'
 }
 
-export function ParentSidebar({ guardianInitial, onOpenProfile }: ParentSidebarProps) {
+export function ParentSidebar({ guardianInitial, onOpenProfile, familyId, activeRoute }: ParentSidebarProps) {
+  const router = useRouter()
+
   return (
     <aside
       data-testid="parent-sidebar"
@@ -72,14 +79,15 @@ export function ParentSidebar({ guardianInitial, onOpenProfile }: ParentSidebarP
           gap: 8,
         }}
       >
-        {/* 1. Tarefas — ativo */}
+        {/* 1. Tarefas — ativo quando activeRoute === 'tasks' */}
         <button
           aria-label="Tarefas"
+          onClick={() => router.push(`/family/${familyId}/tasks`)}
           style={{
             width: 44,
             height: 44,
             borderRadius: 12,
-            background: '#E7EFE8',
+            background: activeRoute === 'tasks' ? '#E7EFE8' : 'none',
             border: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -93,7 +101,7 @@ export function ParentSidebar({ guardianInitial, onOpenProfile }: ParentSidebarP
             height="22"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#3E6B4F"
+            stroke={activeRoute === 'tasks' ? '#3E6B4F' : '#9AA092'}
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -106,14 +114,15 @@ export function ParentSidebar({ guardianInitial, onOpenProfile }: ParentSidebarP
           </svg>
         </button>
 
-        {/* 2. Crianças */}
+        {/* 2. Crianças — ativo quando activeRoute === 'children' */}
         <button
           aria-label="Crianças"
+          onClick={() => router.push(`/family/${familyId}/children`)}
           style={{
             width: 44,
             height: 44,
             borderRadius: 12,
-            background: 'none',
+            background: activeRoute === 'children' ? '#E7EFE8' : 'none',
             border: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -127,7 +136,7 @@ export function ParentSidebar({ guardianInitial, onOpenProfile }: ParentSidebarP
             height="22"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#9AA092"
+            stroke={activeRoute === 'children' ? '#3E6B4F' : '#9AA092'}
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"

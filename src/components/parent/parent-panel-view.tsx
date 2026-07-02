@@ -188,10 +188,12 @@ export function ParentPanelView({
         flexDirection: 'row',
       }}
     >
-      {/* Sidebar esquerda 80px fixa (PTASK-01) */}
+      {/* Sidebar esquerda 80px fixa (PTASK-01) — D-05 (08-02): activeRoute + familyId para navegação */}
       <ParentSidebar
         guardianInitial={guardianInitial}
         onOpenProfile={() => setProfileOpen(true)}
+        familyId={_familyId}
+        activeRoute="tasks"
       />
 
       {/* Main: topbar + conteúdo flex-row */}
