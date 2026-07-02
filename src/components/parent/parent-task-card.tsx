@@ -7,6 +7,7 @@
 import { type ParentTask } from '@/lib/seed/parent-seed'
 import { CategoryIcon } from './category-icon'
 import { TaskToggle } from './task-toggle'
+import { DayPills } from './recurrence-pills'
 
 interface ParentTaskCardProps {
   task: ParentTask
@@ -83,23 +84,9 @@ export function ParentTaskCard({
             {task.reward === 0 ? 'R$ 0' : `R$ ${task.reward}`}
           </span>
 
-          {/* Badge de dias — não exibe "Todos os dias" como texto para evitar conflito
-              com o botão "Todos os dias" do RecurrencePills no form (PTASK-08). */}
-          {task.days.length > 0 && (
-            <span
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                color: 'var(--color-kreds-muted)',
-                background: 'var(--color-kreds-bg)',
-                borderRadius: 8,
-                padding: '2px 8px',
-                border: '1px solid var(--color-kreds-border)',
-              }}
-            >
-              {task.days.length === 7 ? '7×/sem' : `${task.days.length}×/sem`}
-            </span>
-          )}
+          {/* Indicador de dias — mesmos círculos D/S/T/Q/Q/S/S do form de edição
+              (RecurrencePills), em versão somente-leitura e compacta (DayPills). */}
+          {task.days.length > 0 && <DayPills days={task.days} />}
         </div>
       </div>
 

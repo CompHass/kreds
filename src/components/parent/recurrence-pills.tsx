@@ -95,6 +95,48 @@ export function labelsToDayIndices(labels: string[]): number[] {
   }, [])
 }
 
+interface DayPillsProps {
+  days: number[]
+}
+
+// Versão somente-leitura e compacta dos pills de recorrência, usada no card
+// da listagem (ParentTaskCard) — mesmos labels/paleta do form de edição,
+// porém sem interatividade (sem onClick/onChange) e em tamanho reduzido.
+export function DayPills({ days }: DayPillsProps) {
+  const selectedSet = new Set(days)
+
+  return (
+    <div style={{ display: 'flex', gap: 3 }} aria-label="Dias de recorrência">
+      {WEEKDAY_LABELS.map((label, index) => {
+        const isSelected = selectedSet.has(index)
+        return (
+          <span
+            key={index}
+            aria-hidden="true"
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 'var(--radius-pill)',
+              border: `1px solid ${isSelected ? '#3E6B4F' : '#E2DECF'}`,
+              background: isSelected ? '#3E6B4F' : 'var(--color-kreds-card)',
+              color: isSelected ? '#ffffff' : 'var(--color-kreds-muted)',
+              fontSize: 9,
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              lineHeight: 1,
+              flexShrink: 0,
+            }}
+          >
+            {label}
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
 export function RecurrencePills({ value, onChange }: RecurrencePillsProps) {
   const selected = valueToSelected(value)
 
