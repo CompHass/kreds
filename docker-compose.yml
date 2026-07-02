@@ -26,6 +26,7 @@ services:
       NODE_ENV: production
       AUTH_SECRET: dev-secret-32-chars-minimum-here
       CHILD_SESSION_SECRET: dev-child-session-secret-32chars!!
+      PIN_ENCRYPTION_KEY: dhA/bC7ugD4I5gx4omcLQOivxxwDWe8tDJa/710JQRE=
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       AUTH_ZITADEL_ID: ${AUTH_ZITADEL_ID:-dev-client-id}
       AUTH_ZITADEL_SECRET: ${AUTH_ZITADEL_SECRET:-dev-client-secret}
