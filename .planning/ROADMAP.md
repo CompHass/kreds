@@ -184,12 +184,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] 06-04-PLAN.md — Connect UI to real API: replace MOCK_PARENT_TASKS and SEED_STAGE_C with DB queries; wire Server Actions in ParentPanelView; wire harvest fetch in GardenView + checkpoint visual
 
-
 ### Phase 7: Guardian Profile
 
 **Goal:** Guardian consegue ver e editar seu perfil, e fazer logout
 **Depends on:** Phase 2
 **Success Criteria:**
+
   1. Botão "P" (sidebar inferior) e avatar (canto superior direito) abrem página/modal de perfil
   2. Perfil exibe nome, email do guardian
   3. Botão de logout encerra sessão e redireciona para /login
@@ -211,16 +211,17 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal:** Guardian consegue cadastrar filhos, definir PIN e gerenciar perfis
 **Depends on:** Phase 2, Phase 7
 **Success Criteria:**
+
   1. Ícone pessoa na sidebar abre lista de filhos da família
   2. Formulário para adicionar novo filho (nome, avatar/cor)
   3. Definir e trocar PIN de 4 dígitos por filho
   4. Desativar/reativar filho
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 **Wave 1**
 
-- [ ] 08-01-PLAN.md — Fundação: coluna pin_encrypted + [BLOCKING] migration 0009, cipher AES-256-GCM (pin-cipher.ts) + env PIN_ENCRYPTION_KEY, child-profiles domain lib (satisfaz scaffold RED)
+- [x] 08-01-PLAN.md — Fundação: coluna pin_encrypted + [BLOCKING] migration 0009, cipher AES-256-GCM (pin-cipher.ts) + env PIN_ENCRYPTION_KEY, child-profiles domain lib (satisfaz scaffold RED)
 
 **Wave 2** *(02 e 03 em paralelo — sem overlap de arquivos)*
 
@@ -242,6 +243,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal:** Guardian consegue ver relatórios semanais de Kreds por filho
 **Depends on:** Phase 6, Phase 8
 **Success Criteria:**
+
   1. Ícone gráfico de barras abre página de relatórios
   2. Resumo semanal por filho: tarefas concluídas, Kreds ganhos, dízimo separado, poupança
   3. Histórico de ciclos anteriores navegável
@@ -251,6 +253,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal:** Guardian consegue configurar preferências da família
 **Depends on:** Phase 7
 **Success Criteria:**
+
   1. Engrenagem abre página de configurações
   2. Editar nome da família
   3. Configurar dia de início do ciclo semanal
@@ -261,6 +264,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal:** Filho consegue definir e acompanhar metas de poupança
 **Depends on:** Phase 6, Phase 8
 **Success Criteria:**
+
   1. Ícone pin na sidebar abre módulo de metas
   2. Guardian cria meta com nome, valor e prazo
   3. Filho vê progresso visual da meta no jardim
@@ -280,7 +284,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 7. Guardian Profile | 1/2 | Executing | 2026-07-01 |
-| 8. Child Management | 0/5 | Not started | - |
+| 8. Child Management | 1/5 | In Progress|  |
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |

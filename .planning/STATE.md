@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 08 UI-SPEC approved
-last_updated: "2026-07-02T02:57:11.157Z"
-last_activity: 2026-07-01 -- Phase 07 execution started
+stopped_at: Completed 08-01-PLAN.md
+last_updated: "2026-07-02T03:19:17.661Z"
+last_activity: 2026-07-02 -- Phase 08 execution started
 progress:
   total_phases: 11
   completed_phases: 7
-  total_plans: 24
-  completed_plans: 24
+  total_plans: 29
+  completed_plans: 25
   percent: 64
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 07 — guardian-profile
+**Current focus:** Phase 08 — child-management
 
 ## Current Position
 
-Phase: 07 (guardian-profile) — EXECUTING
-Plan: 2 of 2
+Phase: 08 (child-management) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-07-01 -- Phase 07 execution started
+Last activity: 2026-07-02 -- Phase 08 execution started
 
 Progress: [████████░░] 83%
 
@@ -72,6 +72,7 @@ Progress: [████████░░] 83%
 | Phase 06 P02 | 15min | 3 tasks | 6 files |
 | Phase 06 P03 | 8min | 1 task | 1 file |
 | Phase 06-api-integration P04 | 8min | 2 tasks | 5 files |
+| Phase 08 P01 | 8min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -135,6 +136,8 @@ Recent decisions affecting current work:
 - 07-02: vi.mock('next-auth') necessário no parent-panel test — NextAuth inicializa e importa next/server (não disponível em jsdom)
 - 07-02: PTASK-02 corrigido com getAllByText + within(header) — drawer sempre no DOM causa colisão em getByText('João')
 - 07-02: PTASK-09 corrigido com waitFor — createTask é async, atualização de estado ocorre após a promise
+- [Phase ?]: 08-01: AES-256-GCM with authTagLength=16 explicit on both cipher/decipher (Node v22+ requirement)
+- [Phase ?]: 08-01: pin_encrypted nullable no default — existing child (Ana) has pinHash but no recoverable plaintext for backfill
 
 ### Pending Todos
 
@@ -152,6 +155,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-02T02:27:16.630Z
-Stopped at: Phase 08 UI-SPEC approved
+Last session: 2026-07-02T03:19:17.656Z
+Stopped at: Completed 08-01-PLAN.md
 Resume file: .planning/phases/08-child-management/08-UI-SPEC.md
