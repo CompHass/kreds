@@ -1,8 +1,8 @@
 ---
-status: investigating
+status: resolved
 trigger: "Checkpoint visual Plano 07-02 Task 4: passos 2, 3 e 7 falharam. Drawer abre vazio (sem nome/email), como mostrado em screenshot do usuário."
 created: 2026-07-01T00:00:00Z
-updated: 2026-07-01T00:45:00Z
+updated: 2026-07-01T13:00:00Z
 ---
 
 ## Current Focus
@@ -127,7 +127,14 @@ reproduction: "docker compose up, autenticar como guardian, ir para /family/[fam
 
 ## Resolution
 
-root_cause: ""
-fix: ""
-verification: ""
-files_changed: []
+root_cause: |
+  auth.ts's jwt()/session() callbacks mirrored token.sub/email/systemRoles propagation but never
+  set token.name / session.user.name, even though @auth/core's defaultProfile() (used because the
+  built-in Zitadel provider has no custom profile() mapping) already derives name from
+  profile.name/preferred_username on the initial OAuth sign-in. Downstream, tasks/page.tsx and
+  GuardianProfileDrawer do a direct passthrough of session.user.name/email with no fallback text,
+  so the missing field rendered as a visually empty avatar letter and blank name/email lines.
+fix: "Commit 46f54f2 added explicit token.name / session.user.name propagation in auth.ts, mirroring the existing email pattern."
+verification: "User confirmed via screenshot that the GuardianProfileDrawer now shows the real guardian name and email (Admin User / admin@hasslab.pro) after a fresh login."
+files_changed:
+  - auth.ts
