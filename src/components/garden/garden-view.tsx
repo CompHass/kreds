@@ -175,7 +175,7 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
       >
         {tasks.map((task) => (
           <li key={task.id}>
-            <TaskCard task={task} onToggle={handleTaskToggle} />
+            <TaskCard task={task} onComplete={handleTaskToggle} />
           </li>
         ))}
       </ul>

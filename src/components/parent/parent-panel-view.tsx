@@ -12,6 +12,7 @@ import { ParentTopbar } from './parent-topbar'
 import { FilterChips } from './filter-chips'
 import { ParentTaskCard } from './parent-task-card'
 import { TaskFormPanel, type TaskFormData, EMPTY_FORM, taskToFormData } from './task-form-panel'
+import { labelsToDayIndices } from './recurrence-pills'
 import { type ParentTask } from '@/types/task'
 import { createTask, updateTask, deactivateTask, toggleTaskActive } from '@/app/actions/tasks'
 
@@ -97,7 +98,7 @@ export function ParentPanelView({
           familyId: _familyId,
           assignedChildId: formData.assigned[0] ?? '',
           kredsValue: formData.reward,
-          days: formData.days,
+          days: labelsToDayIndices(formData.days),
           category: formData.category ?? undefined,
           approval: formData.approval,
         })
@@ -106,7 +107,7 @@ export function ParentPanelView({
           title: saved.title,
           category: (saved.category ?? 'quarto') as ParentTask['category'],
           reward: saved.kredsValue,
-          days: (saved.days ?? []) as number[],
+          days: saved.days ?? [],
           assigned: [saved.assignedChildId],
           active: saved.isActive,
           approval: saved.approval,
@@ -127,7 +128,7 @@ export function ParentPanelView({
                 title: formData.title,
                 category: formData.category ?? t.category,
                 reward: formData.reward,
-                days: formData.days,
+                days: labelsToDayIndices(formData.days),
                 assigned: formData.assigned,
                 approval: formData.approval,
               }
@@ -141,7 +142,7 @@ export function ParentPanelView({
         await updateTask(editingId, _familyId, {
           title: formData.title,
           kredsValue: formData.reward,
-          days: formData.days,
+          days: labelsToDayIndices(formData.days),
           category: formData.category ?? undefined,
           approval: formData.approval,
         })

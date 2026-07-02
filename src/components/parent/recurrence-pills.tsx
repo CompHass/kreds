@@ -16,7 +16,7 @@ interface RecurrencePillsProps {
 // value pode ter duplicatas (ex: 'S' para Segunda, Sexta, Sábado).
 // ALL_DAYS = WEEKDAY_LABELS na ordem exata — usamos comprimento do value para cada posição.
 // Para seleção robusta: comparamos o value contra ALL_DAYS posição-a-posição.
-function valueToSelected(value: string[]): boolean[] {
+export function valueToSelected(value: string[]): boolean[] {
   // O value é um subset ordenado de ALL_DAYS (mantendo a ordem da semana).
   // Para cada posição i, verificamos se ALL_DAYS[i] está presente na posição correspondente.
   // Como labels se repetem, a única forma segura é checar se o comprimento do value
@@ -73,8 +73,26 @@ function valueToSelected(value: string[]): boolean[] {
 }
 
 // Converte array de booleans de seleção para array de strings no padrão ALL_DAYS.
-function selectedToValue(selected: boolean[]): string[] {
+export function selectedToValue(selected: boolean[]): string[] {
   return ALL_DAYS.filter((_, i) => selected[i])
+}
+
+// Converte índices de dia (0-6, formato ParentTask.days) para labels (formato TaskFormData.days).
+export function dayIndicesToLabels(indices: number[]): string[] {
+  const selected = new Array(7).fill(false)
+  indices.forEach((i) => {
+    selected[i] = true
+  })
+  return selectedToValue(selected)
+}
+
+// Converte labels (formato TaskFormData.days) para índices de dia (0-6, formato ParentTask.days).
+export function labelsToDayIndices(labels: string[]): number[] {
+  const selected = valueToSelected(labels)
+  return selected.reduce<number[]>((acc, isSelected, i) => {
+    if (isSelected) acc.push(i)
+    return acc
+  }, [])
 }
 
 export function RecurrencePills({ value, onChange }: RecurrencePillsProps) {

@@ -118,12 +118,35 @@ function IconEspiritual({ stroke }: { stroke: string }) {
   )
 }
 
+function IconPet({ stroke }: { stroke: string }) {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={stroke}
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {/* Pata de animal */}
+      <circle cx="12" cy="16" r="4" />
+      <circle cx="6" cy="8" r="2" />
+      <circle cx="12" cy="5" r="2" />
+      <circle cx="18" cy="8" r="2" />
+    </svg>
+  )
+}
+
 const CATEGORY_ICONS: Record<Category, (props: { stroke: string }) => React.ReactElement> = {
   quarto: IconQuarto,
   higiene: IconHigiene,
   estudos: IconEstudos,
   casa: IconCasa,
   espiritual: IconEspiritual,
+  pet: IconPet,
 }
 
 import React from 'react'

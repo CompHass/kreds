@@ -6,7 +6,7 @@
 
 import { CategoryChips } from './category-chips'
 import { RewardStepper } from './reward-stepper'
-import { RecurrencePills } from './recurrence-pills'
+import { RecurrencePills, dayIndicesToLabels } from './recurrence-pills'
 import { AssigneeSelector } from './assignee-selector'
 import { TaskToggle } from './task-toggle'
 import type { ParentTask, Category } from '@/lib/seed/parent-seed'
@@ -36,7 +36,7 @@ export function taskToFormData(task: ParentTask): TaskFormData {
     title: task.title,
     category: task.category,
     reward: task.reward,
-    days: task.days,
+    days: dayIndicesToLabels(task.days),
     assigned: task.assigned,
     approval: task.approval,
   }
