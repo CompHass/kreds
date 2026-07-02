@@ -1,5 +1,6 @@
 import 'server-only'
 import { SignJWT, jwtVerify, decodeJwt } from 'jose'
+import type { cookies } from 'next/headers'
 
 const secret = new TextEncoder().encode(process.env.CHILD_SESSION_SECRET!)
 
@@ -25,6 +26,18 @@ export async function verifyChildSession(token: string): Promise<{
     childProfileId: payload['childProfileId'] as string,
     familyId: payload['familyId'] as string,
     role: payload['role'] as 'child',
+  }
+}
+
+export async function getChildSession(
+  cookieStore: Awaited<ReturnType<typeof cookies>>,
+): Promise<{ childProfileId: string; familyId: string; role: 'child' } | null> {
+  const token = cookieStore.get('child-session')?.value
+  if (!token) return null
+  try {
+    return await verifyChildSession(token)
+  } catch {
+    return null
   }
 }
 
