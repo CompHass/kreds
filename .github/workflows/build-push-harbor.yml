@@ -204,8 +204,9 @@ jobs:
           chmod +x /usr/local/bin/yq
 
       - name: Update kustomization image tags
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          TAG="${{ steps.version.outputs.tag }}"
           FILE="manifests/kreds/kustomization.yaml"
 
           yq -i '(.images[] | select(.name == "docker.io/eduhass/kreds")).newTag = strenv(TAG)' "$FILE"
