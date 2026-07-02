@@ -64,6 +64,13 @@
       "when": 1782523047167,
       "tag": "0008_quick_blue_shield",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1782962068656,
+      "tag": "0009_tricky_living_mummy",
+      "breakpoints": true
     }
   ]
 }
