@@ -65,3 +65,32 @@ describe('child session guard helpers', () => {
     ).toBe(false)
   })
 })
+
+describe('D-15 deactivation boundary — guard is intentionally unchanged', () => {
+  it('a child session issued before deactivation still passes the guard', () => {
+    // D-15: deactivation does NOT revoke a live JWT; child-guard.ts intentionally
+    // never checks `active` (accepted risk, CONTEXT.md line 129). The guard
+    // receives no `active` flag by design — this is the same
+    // { childProfileId, familyId, role: 'child' } payload the JWT carries for
+    // an ALREADY-DEACTIVATED child, proving the pre-existing session still
+    // passes scope validation until the JWT naturally expires (8h).
+    const deactivatedChildSession = {
+      childProfileId: 'c-1',
+      familyId: 'f-1',
+      role: 'child' as const,
+    }
+
+    expect(
+      validateChildSessionScope(deactivatedChildSession, deactivatedChildSession.childProfileId),
+    ).toBe(true)
+  })
+
+  it('the guard exposes no surface that would block a deactivated child\'s live session', () => {
+    // New-login rejection for `active=false` lives in the DB query of
+    // `verifyChildPin` (src/app/actions/child-auth.ts), NOT in the guard —
+    // out of scope per D-11/D-15. validateChildSessionScope takes only
+    // (session, requestedChildId) — arity 2 — with no third `active`/DB
+    // parameter through which deactivation could reach the live session.
+    expect(validateChildSessionScope.length).toBe(2)
+  })
+})
