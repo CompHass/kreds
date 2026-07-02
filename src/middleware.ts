@@ -57,6 +57,26 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
   // para re-validar a sessão. Esse check só evita roundtrips desnecessários para usuários
   // sem cookie algum. Ver WR-05 no REVIEW.md para contexto.
   if (pathname.startsWith('/family/') || pathname.startsWith('/guardian/')) {
+    // T-PR6-01/02: child-session guard roda ANTES do check de presença do next-auth.
+    // Um child-session verificado (role=child) tem precedência mesmo com cookie next-auth
+    // presente no mesmo dispositivo — impede escalonamento de privilégio. Tokens não
+    // verificáveis (expirados/malformados) NUNCA são confiados e caem no fluxo existente.
+    const childSessionValue = req.cookies.get(CHILD_SESSION_COOKIE)?.value
+
+    if (childSessionValue) {
+      try {
+        const secret = new TextEncoder().encode(process.env.CHILD_SESSION_SECRET!)
+        const { payload } = await jwtVerify(childSessionValue, secret)
+
+        if (payload.role === 'child') {
+          const familyId = (payload as Record<string, unknown>).familyId as string
+          return NextResponse.redirect(new URL(`/family/access/${familyId}`, req.url))
+        }
+      } catch {
+        // Não confiar em nenhum campo de um token expirado ou inválido — cair no check next-auth
+      }
+    }
+
     const cookieName = nextAuthCookieName(url)
     const sessionToken = req.cookies.get(cookieName)?.value
 
