@@ -172,4 +172,78 @@ describe('ParentTaskCard — PTASK-04, PTASK-05, PTASK-09', () => {
     // Recompensa (task.reward = 5 → "R$ 5")
     expect(screen.getByText('R$ 5')).toBeInTheDocument()
   })
+
+  it('MTA-01: exibe indicador de responsável quando task.assigned tem 1 criança correspondente', () => {
+    const onToggle = vi.fn()
+    const onEdit = vi.fn()
+    const assignedTask = { ...task, assigned: ['c1'] }
+
+    render(
+      <ParentTaskCard
+        task={assignedTask}
+        justAdded={false}
+        editing={false}
+        onToggle={onToggle}
+        onEdit={onEdit}
+        familyChildren={familyChildren}
+      />,
+    )
+
+    const indicator = screen.getByLabelText(/atribuída a/i)
+    expect(indicator).toBeInTheDocument()
+    expect(indicator).toHaveAccessibleName(/ana/i)
+  })
+
+  it('MTA-01: exibe indicador para TODAS as crianças quando múltiplos assignees, sem truncar', () => {
+    const onToggle = vi.fn()
+    const onEdit = vi.fn()
+    const assignedTask = { ...task, assigned: ['c1', 'c2'] }
+
+    render(
+      <ParentTaskCard
+        task={assignedTask}
+        justAdded={false}
+        editing={false}
+        onToggle={onToggle}
+        onEdit={onEdit}
+        familyChildren={familyChildren}
+      />,
+    )
+
+    const indicator = screen.getByLabelText(/atribuída a/i)
+    expect(indicator).toHaveAccessibleName(/ana/i)
+    expect(indicator).toHaveAccessibleName(/beto/i)
+  })
+
+  it('MTA-01: não exibe indicador quando assigned vazio ou ids não correspondem a familyChildren', () => {
+    const onToggle = vi.fn()
+    const onEdit = vi.fn()
+
+    const { rerender } = render(
+      <ParentTaskCard
+        task={{ ...task, assigned: [] }}
+        justAdded={false}
+        editing={false}
+        onToggle={onToggle}
+        onEdit={onEdit}
+        familyChildren={familyChildren}
+      />,
+    )
+
+    expect(screen.queryByLabelText(/atribuída a/i)).not.toBeInTheDocument()
+
+    // Id não presente em familyChildren (ex: criança desativada)
+    rerender(
+      <ParentTaskCard
+        task={{ ...task, assigned: ['deactivated-child-id'] }}
+        justAdded={false}
+        editing={false}
+        onToggle={onToggle}
+        onEdit={onEdit}
+        familyChildren={familyChildren}
+      />,
+    )
+
+    expect(screen.queryByLabelText(/atribuída a/i)).not.toBeInTheDocument()
+  })
 })
