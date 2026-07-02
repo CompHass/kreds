@@ -297,6 +297,7 @@ export function ParentPanelView({
                     editing={editingId === task.id}
                     onToggle={handleToggle}
                     onEdit={handleEditTask}
+                    familyChildren={familyChildren}
                   />
                 ))}
               </div>
