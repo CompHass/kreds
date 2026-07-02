@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 08-04-PLAN.md
-last_updated: "2026-07-02T11:30:25.867Z"
+status: verifying
+stopped_at: 08-05 code-complete; checkpoint human-verify pendente pos-deploy (kreds.hasslab.pro)
+last_updated: "2026-07-02T13:10:30.161Z"
 last_activity: 2026-07-02 -- Phase 08 execution started
 progress:
   total_phases: 11
-  completed_phases: 7
+  completed_phases: 8
   total_plans: 29
-  completed_plans: 28
-  percent: 64
+  completed_plans: 29
+  percent: 73
 ---
 
 # Project State
@@ -27,10 +27,14 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 Phase: 08 (child-management) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
+Note: All 5 plans code-complete and committed, but 08-05 Task 3 is a
+blocking human-verify checkpoint that has NOT been approved yet. The
+`progress` counters below count SUMMARY.md files on disk (implementation
+completeness) and should not be read as "Phase 8 fully verified/done."
 Last activity: 2026-07-02 -- Phase 08 execution started
 
-Progress: [████████░░] 83%
+Progress: [███████░░░] 73%
 
 ## Performance Metrics
 
@@ -75,6 +79,7 @@ Progress: [████████░░] 83%
 | Phase 08 P01 | 8min | 3 tasks | 11 files |
 | Phase 08 P03 | 20min | 4 tasks | 6 files |
 | Phase 08 P04 | 25min | 3 tasks | 9 files |
+| Phase 08 P05 | 35min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -147,6 +152,8 @@ Recent decisions affecting current work:
 - [Phase ?]: 08-04: @hookform/resolvers upgraded 5.0.1 -> 5.4.0 (Rule 3) — installed 5.0.1's zodResolver reads legacy ZodError.errors, but Zod 4.4.3 exposes .issues, silently swallowing validation errors
 - [Phase ?]: 08-04: ChildFormPanel test assertions use onSave.mock.calls[0][0] instead of toHaveBeenCalledWith — RHF's handleSubmit(onSave) invokes onSave(data, event) with two args
 - [Phase ?]: 08-04: ChildCard renders deactivated children at reduced opacity (0.55) rather than hiding — D-14 requires deactivated children still appear in the list
+- [Phase 08]: 08-05: PIN_ENCRYPTION_KEY adicionado ao docker-compose.yml (Rule 3) — precondicao do proprio checkpoint dependia dele
+- [Phase 08]: 08-05: checkpoint human-verify (Task 3) verificacao adiada para pos-deploy contra https://kreds.hasslab.pro — nova preferencia do usuario, verificacao local via docker compose nao se comportou como esperado
 
 ### Pending Todos
 
@@ -154,7 +161,7 @@ None yet.
 
 ### Blockers/Concerns
 
-None yet.
+- 08-05 Task 3 (checkpoint:human-verify, gate=blocking): implementacao completa e commitada, mas verificacao visual/funcional NAO aprovada. Usuario ira verificar contra https://kreds.hasslab.pro apos deploy via GitOps CI. Nao avancar para Fase 09 ate confirmacao.
 
 ## Deferred Items
 
@@ -164,6 +171,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-02T11:30:25.863Z
-Stopped at: Completed 08-04-PLAN.md
+Last session: 2026-07-02T13:10:30.157Z
+Stopped at: 08-05 code-complete; checkpoint human-verify pendente pos-deploy (kreds.hasslab.pro)
 Resume file: None
