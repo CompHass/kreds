@@ -217,7 +217,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Definir e trocar PIN de 4 dígitos por filho
   4. Desativar/reativar filho
 
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 
 **Wave 1**
 
@@ -230,7 +230,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 3** *(blocked on Wave 2)*
 
-- [ ] 08-04-PLAN.md — Componentes UI: ConfirmDeactivateDialog (1º Radix AlertDialog) + ChildFormPanel (RHF+Zod) + ChildCard (Frame C) + ChildPinResetPanel (keypad) *(depends_on 08-03)*
+- [x] 08-04-PLAN.md — Componentes UI: ConfirmDeactivateDialog (1º Radix AlertDialog) + ChildFormPanel (RHF+Zod) + ChildCard (Frame C) + ChildPinResetPanel (keypad) *(depends_on 08-03)*
 
 **Wave 4** *(blocked on Wave 3 — integração + checkpoint)*
 
@@ -284,7 +284,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 7. Guardian Profile | 1/2 | Executing | 2026-07-01 |
-| 8. Child Management | 3/5 | In Progress|  |
+| 8. Child Management | 4/5 | In Progress|  |
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |

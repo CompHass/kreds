@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-07-02T11:18:55.887Z"
+stopped_at: Completed 08-04-PLAN.md
+last_updated: "2026-07-02T11:30:25.867Z"
 last_activity: 2026-07-02 -- Phase 08 execution started
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 29
-  completed_plans: 27
+  completed_plans: 28
   percent: 64
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 08 (child-management) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-07-02 -- Phase 08 execution started
 
@@ -74,6 +74,7 @@ Progress: [████████░░] 83%
 | Phase 06-api-integration P04 | 8min | 2 tasks | 5 files |
 | Phase 08 P01 | 8min | 3 tasks | 11 files |
 | Phase 08 P03 | 20min | 4 tasks | 6 files |
+| Phase 08 P04 | 25min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -142,6 +143,10 @@ Recent decisions affecting current work:
 - [Phase ?]: 08-03: ResetPinActionSchema in PATCH [childId] handler reuses ResetPinSchema.shape.pin (single source of truth, no duplication)
 - [Phase ?]: 08-03: integration test replicates Server Action DB writes directly against schema, avoiding auth()/Next runtime deps in Testcontainers tests
 - [Phase ?]: 08-03: tests run via local npx vitest run — app container is production runner image with no npm/devDependencies
+- [Phase ?]: 08-04: radix-ui installed via pnpm (project packageManager), not npm — docker compose exec app has no npm/devDependencies (production runner image)
+- [Phase ?]: 08-04: @hookform/resolvers upgraded 5.0.1 -> 5.4.0 (Rule 3) — installed 5.0.1's zodResolver reads legacy ZodError.errors, but Zod 4.4.3 exposes .issues, silently swallowing validation errors
+- [Phase ?]: 08-04: ChildFormPanel test assertions use onSave.mock.calls[0][0] instead of toHaveBeenCalledWith — RHF's handleSubmit(onSave) invokes onSave(data, event) with two args
+- [Phase ?]: 08-04: ChildCard renders deactivated children at reduced opacity (0.55) rather than hiding — D-14 requires deactivated children still appear in the list
 
 ### Pending Todos
 
@@ -159,6 +164,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-02T11:18:55.882Z
-Stopped at: Completed 08-03-PLAN.md
+Last session: 2026-07-02T11:30:25.863Z
+Stopped at: Completed 08-04-PLAN.md
 Resume file: None
