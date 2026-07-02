@@ -3,6 +3,8 @@
 // GARD-05, GARD-08, GARD-10: Client Component raiz que orquestra o jardim interativo
 // API-03: handleHarvest chama POST /api/child/[childId]/harvest com commandId estável (idempotência)
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { exitChildProfile } from '@/app/actions/child-auth'
 import { GardenHeader } from './garden-header'
 import { GardenHero } from './garden-hero'
 import { WaterDrops } from './water-drops'
@@ -33,6 +35,7 @@ interface GardenViewProps {
 }
 
 export function GardenView({ childId, seed, verse }: GardenViewProps) {
+  const router = useRouter()
   // Estado interativo
   const [tasks, setTasks] = useState(seed.tasks)
   const [waterTick, setWaterTick] = useState(0)
@@ -117,6 +120,12 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
     setShowOverlay(false)
   }
 
+  // PR6: guardião sai do perfil da criança — limpa child-session e volta à raiz
+  async function handleExitChildProfile() {
+    await exitChildProfile()
+    router.push('/')
+  }
+
   return (
     <div
       style={{
@@ -137,6 +146,25 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
         initial={seed.initial}
         coins={seed.coins}
       />
+
+      {/* PR6: trigger discreto para o guardião sair do perfil da criança */}
+      <div style={{ padding: '0 16px', textAlign: 'right' }}>
+        <button
+          type="button"
+          onClick={handleExitChildProfile}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            fontSize: 12,
+            color: 'var(--color-kreds-muted, #6b7280)',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+          }}
+        >
+          Sair do perfil da criança
+        </button>
+      </div>
 
       {/* Hero do jardim com estado interativo — ancora #section-garden para BottomNav */}
       <div id="section-garden" style={{ padding: '0 16px' }}>
