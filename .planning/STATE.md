@@ -32,7 +32,7 @@ Note: All 5 plans code-complete and committed, but 08-05 Task 3 is a
 blocking human-verify checkpoint that has NOT been approved yet. The
 `progress` counters below count SUMMARY.md files on disk (implementation
 completeness) and should not be read as "Phase 8 fully verified/done."
-Last activity: 2026-07-02 -- Phase 08 execution started
+Last activity: 2026-07-02 - Completed quick task 260702-mta: Adicionar indicador visual no card de tarefa mostrando quais criancas estao associadas, sem usar filtros
 
 Progress: [███████░░░] 73%
 
@@ -162,6 +162,12 @@ None yet.
 ### Blockers/Concerns
 
 - 08-05 Task 3 (checkpoint:human-verify, gate=blocking): implementacao completa e commitada, mas verificacao visual/funcional NAO aprovada. Usuario ira verificar contra https://kreds.hasslab.pro apos deploy via GitOps CI. Nao avancar para Fase 09 ate confirmacao.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260702-mta | Adicionar indicador visual no card de tarefa mostrando quais criancas estao associadas, sem usar filtros | 2026-07-02 | cc24511 | [260702-mta-adicionar-indicador-visual-no-card-de-ta](./quick/260702-mta-adicionar-indicador-visual-no-card-de-ta/) |
 
 ## Deferred Items
 
