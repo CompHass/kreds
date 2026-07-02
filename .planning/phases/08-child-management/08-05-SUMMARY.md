@@ -141,3 +141,12 @@ None beyond the GitOps deploy itself (already the standing delivery mechanism fo
 ---
 *Phase: 08-child-management*
 *Completed: 2026-07-02 (implementation) — checkpoint verification pending*
+
+## Self-Check: PASSED
+
+All files and commits referenced in this summary were verified to exist:
+- `src/app/family/[familyId]/children/page.tsx` — FOUND
+- `src/components/parent/children-panel-view.tsx` — FOUND
+- `tests/unit/children-panel.test.tsx` — FOUND
+- `docker-compose.yml` — FOUND
+- Commits `9e6719c`, `fee0e31`, `69fc47b` — FOUND in git log
