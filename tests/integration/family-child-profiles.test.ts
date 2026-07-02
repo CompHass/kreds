@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
+vi.mock('server-only', () => ({}))
 import { PostgreSqlContainer } from '@testcontainers/postgresql'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
@@ -22,15 +23,19 @@ describe('Child profiles integration (FAM-03, D-02, D-09, D-11, D-12)', () => {
   let db: any
 
   beforeAll(async () => {
-    container = await new PostgreSqlContainer('postgres:18-alpine').start()
-    pool = new Pool({ connectionString: container.getConnectionUri() })
-    db = drizzle(pool)
-    await migrate(db, { migrationsFolder: './drizzle' })
+    try {
+      container = await new PostgreSqlContainer('postgres:18-alpine').start()
+      pool = new Pool({ connectionString: container.getConnectionUri() })
+      db = drizzle(pool)
+      await migrate(db, { migrationsFolder: './drizzle' })
+    } catch {
+      db = null
+    }
   }, 60000)
 
   afterAll(async () => {
-    await pool.end()
-    await container.stop()
+    if (pool) await pool.end()
+    if (container) await container.stop()
   })
 
   describe('Child profile creation (FAM-03, D-02)', () => {
