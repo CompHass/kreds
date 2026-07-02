@@ -57,12 +57,12 @@ Pre-populated from existing component inspection (`task-form-panel.tsx`, `parent
 
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
-| Body | 14px | 500 (regular-weight body text: form labels, descriptions, PIN-hidden dots) — also reused for primary button/CTA label text (`"Adicionar filho"`, `"Redefinir PIN"`, `"Desativar"`) at weight 600, keeping the CTA label on the Body size token rather than introducing a 5th size | 1.5 |
-| Label | 13px | 600 (semibold — field labels: "Título", "Categoria", drawer section labels) — also reused for small badge text (PIN masked dots row context, `ParentTaskCard`-style reward badge), keeping badges on the Label size token rather than introducing a 6th size | 1.3 |
+| Body | 14px | 500 (regular-weight body text: form labels, descriptions, PIN-hidden dots) — also reused for primary button/CTA label text (`"Adicionar filho"`, `"Redefinir PIN"`, `"Desativar"`) at the same weight 500, keeping the CTA label on the Body size token rather than introducing a 5th size | 1.5 |
+| Label | 13px | 500 (field labels: "Título", "Categoria", drawer section labels) — also reused for small badge text (PIN masked dots row context, `ParentTaskCard`-style reward badge), keeping badges on the Label size token rather than introducing a 6th size | 1.3 |
 | Heading | 18px | 700 (panel/drawer headers: "Nova tarefa", "Editar tarefa" → phase 8 equivalents "Adicionar filho", "Perfil do responsável") | 1.2 |
 | Display | 24px | 700 (dialog title in `ConfirmDeactivateDialog` — new this phase, matches `guardian-profile-drawer.tsx` avatar-adjacent name text size scaled up for dialog emphasis) | 1.2 |
 
-Only 4 sizes used (14/13/18/24px), only 2 weights used across the phase's primary roles (500/700), with 600 permitted only as the existing semibold accent already established by `Label` (13px/600) and now shared by the CTA label (14px/600 — Body size, semibold weight, not a new size). Do not introduce a 5th font size or a 3rd distinct weight family for this phase. `TaskFormPanel`'s original CTA button and `ParentTaskCard`'s original badge (both pre-existing components, unchanged) keep their own historical sizing; this remap applies to Phase 8's new components (`ChildFormPanel`, `ChildCard`, `ChildPinResetPanel`) only.
+Only 4 sizes used (14/13/18/24px), only 2 weights used across the entire phase (500/700). Body and Label both sit at weight 500 (legible, non-heading weight — appropriate for a Christian family finance app's body copy, form labels, and CTA text), while Heading and Display both sit at weight 700 (reserved exclusively for headers and the dialog title). Do not introduce a 5th font size or a 3rd distinct weight for this phase. `TaskFormPanel`'s original CTA button and `ParentTaskCard`'s original badge (both pre-existing components, unchanged) keep their own historical sizing; this remap applies to Phase 8's new components (`ChildFormPanel`, `ChildCard`, `ChildPinResetPanel`) only.
 
 ---
 
