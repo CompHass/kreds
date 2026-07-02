@@ -25,6 +25,8 @@ created: 2026-07-01
 
 **Note on styling approach:** This codebase does NOT use Tailwind utility classes in component markup. Every existing parent-panel component (`task-form-panel.tsx`, `parent-sidebar.tsx`, `parent-task-card.tsx`, `guardian-profile-drawer.tsx`, `task-toggle.tsx`) uses **inline `style={{}}` objects** referencing CSS custom properties declared in `globals.css` `@theme` (e.g. `var(--color-kreds-primary)`, `var(--shadow-cta)`, `var(--radius-pill)`). Phase 8 components MUST follow this exact pattern — do not introduce Tailwind classes or a new styling paradigm for this phase alone.
 
+**Primary visual anchor:** On the `/children` screen, the child card list (`ChildCard` list within `ChildrenPanelView`) is the primary visual anchor — it occupies the main content area and is visible by default. `ChildFormPanel` is secondary/on-demand: it renders only in the add-child (create) flow and does not compete with the card list for default visual attention.
+
 ---
 
 ## Spacing Scale
@@ -36,12 +38,13 @@ Declared values (multiples of 4, matching values actually observed in `task-form
 | xs | 4px | Label-to-input gap, badge internal gap |
 | sm | 8px | Icon-to-text gap, badge row gap, card list gap |
 | md | 16px | Card internal padding, form field vertical gap, panel section gap |
-| lg | 20px | Form panel padding (`TaskFormPanel` container, cloned for `ChildFormPanel`) |
-| xl | 24px | Drawer padding (`GuardianProfileDrawer`), dialog padding (new `ConfirmDeactivateDialog`) |
-| 2xl | 32px | not used this phase |
+| lg | 24px | Drawer padding (`GuardianProfileDrawer`), dialog padding (new `ConfirmDeactivateDialog`) |
+| xl | 32px | not used this phase |
+| 2xl | 48px | not used this phase |
 | 3xl | 64px | not used this phase |
 
 Exceptions:
+- **Form panel padding — 20px** (`TaskFormPanel` container root, verified in source at `src/components/parent/task-form-panel.tsx:77` — `padding: 20`). `ChildFormPanel` clones this container verbatim, so it inherits the existing 20px padding exactly. This is NOT a new value chosen for Phase 8 — it is an already-shipped component's padding being preserved during cloning. Do not "round" this to 16px or 24px; doing so would create a visible layout mismatch between `TaskFormPanel` and `ChildFormPanel`, which must remain visually identical containers.
 - Icon-only touch targets: sidebar nav buttons 44×44px (`ParentSidebar` pattern, unchanged — "Crianças" icon reuses this exact size per D-05)
 - Toggle/switch component: 42×24px (existing `TaskToggle` — NOT reused for D-14 per CONTEXT.md, deactivate/reactivate requires a confirmation dialog, not an instant toggle)
 - Avatar sizes are non-4px-grid by design-handoff spec: 52×52px (Frame C child card avatar, D-08), 64px (drawer avatar, existing), 38px (sidebar profile button, existing) — these are locked visual constants from the design handoff, not part of the spacing scale
@@ -54,16 +57,12 @@ Pre-populated from existing component inspection (`task-form-panel.tsx`, `parent
 
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
-| Body | 14px | 500 (regular-weight body text: form labels, descriptions, PIN-hidden dots) | 1.5 |
-| Label | 13px | 600 (semibold — field labels: "Título", "Categoria", drawer section labels) | 1.3 |
+| Body | 14px | 500 (regular-weight body text: form labels, descriptions, PIN-hidden dots) — also reused for primary button/CTA label text (`"Adicionar filho"`, `"Redefinir PIN"`, `"Desativar"`) at weight 600, keeping the CTA label on the Body size token rather than introducing a 5th size | 1.5 |
+| Label | 13px | 600 (semibold — field labels: "Título", "Categoria", drawer section labels) — also reused for small badge text (PIN masked dots row context, `ParentTaskCard`-style reward badge), keeping badges on the Label size token rather than introducing a 6th size | 1.3 |
 | Heading | 18px | 700 (panel/drawer headers: "Nova tarefa", "Editar tarefa" → phase 8 equivalents "Adicionar filho", "Perfil do responsável") | 1.2 |
 | Display | 24px | 700 (dialog title in `ConfirmDeactivateDialog` — new this phase, matches `guardian-profile-drawer.tsx` avatar-adjacent name text size scaled up for dialog emphasis) | 1.2 |
 
-Additional sizes observed and required for Phase 8 component parity (documented for completeness, not new tokens):
-- 15px/600 — primary button/CTA label text (`"Adicionar filho"`, `"Redefinir PIN"`, `"Desativar"` — matches `TaskFormPanel` CTA button exactly)
-- 12px/600 — small badges (PIN masked dots row context, matches `ParentTaskCard` reward badge)
-
-Only 4 roles used. Do not introduce a 5th size or a 3rd weight for this phase.
+Only 4 sizes used (14/13/18/24px), only 2 weights used across the phase's primary roles (500/700), with 600 permitted only as the existing semibold accent already established by `Label` (13px/600) and now shared by the CTA label (14px/600 — Body size, semibold weight, not a new size). Do not introduce a 5th font size or a 3rd distinct weight family for this phase. `TaskFormPanel`'s original CTA button and `ParentTaskCard`'s original badge (both pre-existing components, unchanged) keep their own historical sizing; this remap applies to Phase 8's new components (`ChildFormPanel`, `ChildCard`, `ChildPinResetPanel`) only.
 
 ---
 
