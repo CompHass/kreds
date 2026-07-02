@@ -1,7 +1,7 @@
 ---
 phase: 8
 slug: child-management
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-07-01
@@ -145,11 +145,11 @@ Additive detail beyond the template — for planner/executor traceability agains
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS (user-approved 3-weight exception — see Typography section)
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-07-01 (Dimension 4 approved via user override after 2 revision iterations — see Typography section exception rationale)
