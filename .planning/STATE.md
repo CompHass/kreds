@@ -32,7 +32,7 @@ Note: All 5 plans code-complete and committed, but 08-05 Task 3 is a
 blocking human-verify checkpoint that has NOT been approved yet. The
 `progress` counters below count SUMMARY.md files on disk (implementation
 completeness) and should not be read as "Phase 8 fully verified/done."
-Last activity: 2026-07-02 - Completed quick task 260702-mta: Adicionar indicador visual no card de tarefa mostrando quais criancas estao associadas, sem usar filtros
+Last activity: 2026-07-02 - Completed quick task 260702-pr6: Fix privilege-escalation gap: child-session cookie coexists with parent's next-auth session, allowing child to navigate to guardian panel
 
 Progress: [███████░░░] 73%
 
@@ -168,6 +168,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260702-mta | Adicionar indicador visual no card de tarefa mostrando quais criancas estao associadas, sem usar filtros | 2026-07-02 | cc24511 | [260702-mta-adicionar-indicador-visual-no-card-de-ta](./quick/260702-mta-adicionar-indicador-visual-no-card-de-ta/) |
+| 260702-pr6 | Fix privilege-escalation gap: child-session cookie coexists with parent's next-auth session, allowing child to navigate to guardian panel | 2026-07-02 | 420052b | [260702-pr6-fix-privilege-escalation-gap-child-sessi](./quick/260702-pr6-fix-privilege-escalation-gap-child-sessi/) |
 
 ## Deferred Items
 
