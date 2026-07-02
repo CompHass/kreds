@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 08-01-PLAN.md
-last_updated: "2026-07-02T03:26:49.008Z"
+stopped_at: Completed 08-03-PLAN.md
+last_updated: "2026-07-02T11:18:55.887Z"
 last_activity: 2026-07-02 -- Phase 08 execution started
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 29
-  completed_plans: 26
+  completed_plans: 27
   percent: 64
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 ## Current Position
 
 Phase: 08 (child-management) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-07-02 -- Phase 08 execution started
 
@@ -73,6 +73,7 @@ Progress: [████████░░] 83%
 | Phase 06 P03 | 8min | 1 task | 1 file |
 | Phase 06-api-integration P04 | 8min | 2 tasks | 5 files |
 | Phase 08 P01 | 8min | 3 tasks | 11 files |
+| Phase 08 P03 | 20min | 4 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -138,6 +139,9 @@ Recent decisions affecting current work:
 - 07-02: PTASK-09 corrigido com waitFor — createTask é async, atualização de estado ocorre após a promise
 - [Phase ?]: 08-01: AES-256-GCM with authTagLength=16 explicit on both cipher/decipher (Node v22+ requirement)
 - [Phase ?]: 08-01: pin_encrypted nullable no default — existing child (Ana) has pinHash but no recoverable plaintext for backfill
+- [Phase ?]: 08-03: ResetPinActionSchema in PATCH [childId] handler reuses ResetPinSchema.shape.pin (single source of truth, no duplication)
+- [Phase ?]: 08-03: integration test replicates Server Action DB writes directly against schema, avoiding auth()/Next runtime deps in Testcontainers tests
+- [Phase ?]: 08-03: tests run via local npx vitest run — app container is production runner image with no npm/devDependencies
 
 ### Pending Todos
 
@@ -155,6 +159,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-02T03:26:49.003Z
-Stopped at: Completed 08-01-PLAN.md
-Resume file: .planning/phases/08-child-management/08-UI-SPEC.md
+Last session: 2026-07-02T11:18:55.882Z
+Stopped at: Completed 08-03-PLAN.md
+Resume file: None

@@ -217,7 +217,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Definir e trocar PIN de 4 dígitos por filho
   4. Desativar/reativar filho
 
-**Plans:** 2/5 plans executed
+**Plans:** 3/5 plans executed
 
 **Wave 1**
 
@@ -226,7 +226,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Wave 2** *(02 e 03 em paralelo — sem overlap de arquivos)*
 
 - [x] 08-02-PLAN.md — Refactor de layout: layout.tsx compartilhado (auth gate) + ParentSidebar route-aware (D-05) + /tasks sem regressão
-- [ ] 08-03-PLAN.md — Backend: types/child.ts + Server Actions (createChild/resetChildPin/revealChildPin/toggleChildActive) + Route Handlers children *(depends_on 08-01)*
+- [x] 08-03-PLAN.md — Backend: types/child.ts + Server Actions (createChild/resetChildPin/revealChildPin/toggleChildActive) + Route Handlers children *(depends_on 08-01)*
 
 **Wave 3** *(blocked on Wave 2)*
 
@@ -284,7 +284,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 7. Guardian Profile | 1/2 | Executing | 2026-07-01 |
-| 8. Child Management | 2/5 | In Progress|  |
+| 8. Child Management | 3/5 | In Progress|  |
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |
