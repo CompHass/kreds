@@ -26,9 +26,10 @@ FROM node:${NODE_VERSION} AS migration
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY drizzle.config.ts ./
+COPY drizzle ./drizzle
 RUN corepack enable pnpm
-CMD ["pnpm", "db:push"]
+CMD ["pnpm", "db:migrate"]
 
 FROM node:${NODE_VERSION} AS runner
 WORKDIR /app

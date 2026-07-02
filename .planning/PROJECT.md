@@ -71,6 +71,7 @@ A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o l
 | Ambas superfícies em paralelo por fase | Evita divergência de tokens e componentes compartilhados | — Pending |
 | Frontend + ajustes de API quando necessário | Campo `approval` e outros campos do design precisam de suporte backend | — Pending |
 | PWA em vez de app nativo | Web-first mantém stack única; jardim funciona bem em PWA mobile | — Pending |
+| Migration image usa `drizzle-kit migrate` em vez de `drizzle-kit push` | `db:push` fazia introspecção completa do schema a cada deploy (lento, não incremental); `db:migrate` aplica só migrations pendentes do journal em `drizzle/` | Done — [Dockerfile:25-31](../Dockerfile) |
 
 ## Evolution
 

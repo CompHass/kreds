@@ -128,6 +128,7 @@ Recent decisions affecting current work:
 - [Phase ?]: 06-04: handleSave (create) usa UUID real do DB (saved.id) — sem crypto.randomUUID() local (Pitfall 6, T-06-19)
 - [Phase ?]: 06-04: handleHarvest 409 tratado como sucesso idempotente — overlay aparece para 200 e 409
 - [Phase ?]: 06-04: harvest body.familyId = '' — servidor lê familyId do JWT assinado (T-06-13)
+- [Infra] Dockerfile stage `migration` trocado de `pnpm db:push` (drizzle-kit push, introspecção full a cada deploy) para `pnpm db:migrate` (aplica só migrations pendentes de drizzle/journal) — job kreds-db-push no ArgoCD ficando mais rápido; stage também não copia mais app inteiro, só drizzle.config.ts + drizzle/
 
 ### Pending Todos
 
