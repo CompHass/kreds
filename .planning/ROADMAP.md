@@ -216,6 +216,27 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Definir e trocar PIN de 4 dígitos por filho
   4. Desativar/reativar filho
 
+**Plans:** 5 plans
+
+**Wave 1**
+
+- [ ] 08-01-PLAN.md — Fundação: coluna pin_encrypted + [BLOCKING] migration 0009, cipher AES-256-GCM (pin-cipher.ts) + env PIN_ENCRYPTION_KEY, child-profiles domain lib (satisfaz scaffold RED)
+
+**Wave 2** *(02 e 03 em paralelo — sem overlap de arquivos)*
+
+- [ ] 08-02-PLAN.md — Refactor de layout: layout.tsx compartilhado (auth gate) + ParentSidebar route-aware (D-05) + /tasks sem regressão
+- [ ] 08-03-PLAN.md — Backend: types/child.ts + Server Actions (createChild/resetChildPin/revealChildPin/toggleChildActive) + Route Handlers children *(depends_on 08-01)*
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 08-04-PLAN.md — Componentes UI: ConfirmDeactivateDialog (1º Radix AlertDialog) + ChildFormPanel (RHF+Zod) + ChildCard (Frame C) + ChildPinResetPanel (keypad) *(depends_on 08-03)*
+
+**Wave 4** *(blocked on Wave 3 — integração + checkpoint)*
+
+- [ ] 08-05-PLAN.md — Integração: ChildrenPanelView + rota SSR /children + suite verde + checkpoint visual *(depends_on 08-02, 08-03, 08-04)*
+
+**UI hint**: yes
+
 ### Phase 9: Reports
 
 **Goal:** Guardian consegue ver relatórios semanais de Kreds por filho
@@ -259,7 +280,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 7. Guardian Profile | 1/2 | Executing | 2026-07-01 |
-| 8. Child Management | 0/TBD | Not started | - |
+| 8. Child Management | 0/5 | Not started | - |
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |
