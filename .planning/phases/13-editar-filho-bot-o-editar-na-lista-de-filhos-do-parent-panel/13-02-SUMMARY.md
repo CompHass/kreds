@@ -44,13 +44,13 @@ completed: 2026-07-03
 
 # Phase 13 Plan 02: Edit-Child UI (form, page, list link) Summary
 
-**New /family/children/[childId]/edit SSR route with ownership/active guard, a pre-filled EditChildForm client component wired to Wave 1's updateChildAction, and an Editar link added to every active child card — end-to-end edit flow built, human verification pending.**
+**New /family/children/[childId]/edit SSR route with ownership/active guard, a pre-filled EditChildForm client component wired to Wave 1's updateChildAction, and an Editar link added to every active child card — end-to-end edit flow built, verification deferred to production per project convention.**
 
 ## Performance
 
-- **Duration:** 18 min (Tasks 1-2; Task 3 is a human-verify checkpoint, not yet executed)
+- **Duration:** 18 min (Tasks 1-2; Task 3 is a human-verify checkpoint, closed via deferred approval)
 - **Started:** 2026-07-03
-- **Tasks:** 2 of 3 completed (Task 3 is checkpoint:human-verify — paused, awaiting human)
+- **Tasks:** 3 of 3 completed (Task 3 closed with verification deferred to user's post-deploy check)
 - **Files modified:** 3 (2 created, 1 modified)
 
 ## Accomplishments
@@ -65,7 +65,7 @@ Each task was committed atomically:
 
 1. **Task 1: EditChildForm component (contract-first)** - `5ff5c5b` (feat)
 2. **Task 2: Edit SSR page with ownership/active guard + Editar link on list** - `26b6a38` (feat)
-3. **Task 3: Verify edit-child flow end-to-end** - PAUSED (checkpoint:human-verify, not yet executed)
+3. **Task 3: Verify edit-child flow end-to-end** - CLOSED (checkpoint:human-verify — verification deferred to user's post-deploy check on kreds.hasslab.pro, per established project convention; see "Checkpoint Resolution" below)
 
 ## Files Created/Modified
 
@@ -99,19 +99,29 @@ None of the automated task acceptance issues were caused by incorrect code — b
 
 **Docker Compose unavailable in this environment (blocks Task 3 automation):** Per project CLAUDE.md conventions, the app runs via `docker compose up`, not `pnpm dev`. In this worktree/agent environment, `docker compose` is not a recognized command (`docker: unknown command: docker compose`) and the fallback `docker-compose`/`docker ps` fails with `unable to resolve docker endpoint: context "lima-docker": context not found`. Per user memory (`feedback_testing_after_deploy.md`), the user verifies GSD checkpoints against production (`kreds.hasslab.pro`), not local Docker — so this environment limitation does not block the intended verification path, but it does mean Task 3 cannot be automated/pre-verified from this agent session. The checkpoint is returned to the user for verification on their own terms (local Docker or prod).
 
+## Checkpoint Resolution
+
+**Task 3 (checkpoint:human-verify) closed with verification deferred to production.**
+
+- **Environment constraint:** Docker Compose is not available in this agent/worktree environment (`docker compose` unrecognized, `docker-compose` fails to resolve its context) — see "Issues Encountered" above. The executor could not start a local server to walk through the 7-step verification script itself.
+- **User decision:** When presented with the checkpoint, the project owner responded "Eu testo no prod depois do deploy" (I will test on prod after deploy). This is their established, documented workflow for this project (see user memory `feedback_testing_after_deploy.md`: verify GSD checkpoints against `kreds.hasslab.pro` after deploy, not local Docker).
+- **Resolution:** This response is treated as explicit approval to close Task 3 and complete the plan, with the 7-step verification script in `13-02-PLAN.md` deferred to the user's own post-deploy check on `kreds.hasslab.pro`. This is not a claim that the executor personally verified the flow in a browser — verification responsibility is explicitly deferred to the user, per their approval.
+- **If the user finds a mismatch during their post-deploy check:** fixes should land in `EditChildForm.tsx` / `edit/page.tsx` / `page.tsx` as follow-up work; this plan's code is otherwise complete and passes `tsc --noEmit` with zero new errors.
+
 ## User Setup Required
 
-None — no external service configuration required. The human-verify checkpoint (Task 3) requires the user to either start their local Docker Compose stack or verify against `kreds.hasslab.pro` after deploy, and manually walk through the 7-step verification script in `13-02-PLAN.md`.
+None — no external service configuration required. Verification of the human-facing flow (Task 3's 7-step script in `13-02-PLAN.md`) is deferred to the user's post-deploy check on `kreds.hasslab.pro`, per their explicit instruction and established project convention.
 
 ## Next Phase Readiness
 
 - Both UI pieces (`EditChildForm`, `edit/page.tsx`) and the list-link change are code-complete and pass `tsc --noEmit` with zero new errors
-- Task 3 (human-verify checkpoint) is the only remaining step in this plan — blocks phase completion until the user confirms the flow end-to-end
-- No architectural blockers identified; if the human-verify step surfaces a mismatch, fixes should land in `EditChildForm.tsx` / `edit/page.tsx` / `page.tsx` before re-attempting the checkpoint
+- Task 3 (human-verify checkpoint) is closed — verification deferred to the user's post-deploy check on `kreds.hasslab.pro`, per explicit user approval
+- No architectural blockers identified; if the deferred verification surfaces a mismatch, fixes should land in `EditChildForm.tsx` / `edit/page.tsx` / `page.tsx`
+- Phase 13 is now complete pending the user's own post-deploy confirmation
 
 ---
 *Phase: 13-editar-filho-bot-o-editar-na-lista-de-filhos-do-parent-panel*
-*Status: Tasks 1-2 complete, Task 3 (human-verify) pending*
+*Status: Complete — Task 3 verification deferred to user's post-deploy check on kreds.hasslab.pro*
 
 ## Self-Check: PASSED
 
