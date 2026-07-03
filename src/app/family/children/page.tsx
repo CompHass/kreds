@@ -322,6 +322,21 @@ export default async function FamilyChildrenPage({
                   >
                     PIN
                   </Link>
+                  <Link
+                    href={`/family/children/${child.id}/edit`}
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--color-primary, #154212)',
+                      background: 'rgba(45,90,39,0.08)',
+                      border: '1px solid var(--color-border, rgba(45,90,39,0.16))',
+                      borderRadius: '99px',
+                      padding: '4px 10px',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Editar
+                  </Link>
                   <form action={deactivateChildAction}>
                     <input type="hidden" name="childProfileId" value={child.id} />
                     <button
