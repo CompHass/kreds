@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 13 context gathered
-last_updated: "2026-07-03T13:45:11.844Z"
-last_activity: 2026-06-26 -- Phase 06-03 complete (Harvest Route Handler — POST /api/child/[childId]/harvest)
+stopped_at: Completed 13-01-PLAN.md
+last_updated: "2026-07-03T13:50:30.767Z"
+last_activity: 2026-07-03 -- Phase 13 execution started
 progress:
   total_phases: 8
   completed_phases: 5
-  total_plans: 33
-  completed_plans: 25
+  total_plans: 35
+  completed_plans: 26
   percent: 63
 ---
 
@@ -21,15 +21,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-20)
 
 **Core value:** A criança completa tarefas, vê seu jardim florescer e aprende mordomia — o loop de engajamento gamificado deve funcionar sem fricção.
-**Current focus:** Phase 06 — api-integration
+**Current focus:** Phase 13 — editar-filho-bot-o-editar-na-lista-de-filhos-do-parent-panel
 
 ## Current Position
 
-Phase: 06 (api-integration) — EXECUTING
-Plan: 4 of 4
+Phase: 13 (editar-filho-bot-o-editar-na-lista-de-filhos-do-parent-panel) — EXECUTING
+Plan: 2 of 2
 Phase: 06 (api-integration) — EXECUTING
 Status: Ready to execute
-Last activity: 2026-06-26 -- Phase 06-03 complete (Harvest Route Handler — POST /api/child/[childId]/harvest)
+Last activity: 2026-07-03 -- Phase 13 execution started
 
 Progress: [████████░░] 83%
 
@@ -73,6 +73,7 @@ Progress: [████████░░] 83%
 | Phase 06 P02 | 15min | 3 tasks | 6 files |
 | Phase 06 P03 | 8min | 1 task | 1 file |
 | Phase 06-api-integration P04 | 8min | 2 tasks | 5 files |
+| Phase 13 P01 | 12min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -129,6 +130,9 @@ Recent decisions affecting current work:
 - [Phase ?]: 06-04: handleHarvest 409 tratado como sucesso idempotente — overlay aparece para 200 e 409
 - [Phase ?]: 06-04: harvest body.familyId = '' — servidor lê familyId do JWT assinado (T-06-13)
 - [Infra] Dockerfile stage `migration` trocado de `pnpm db:push` (drizzle-kit push, introspecção full a cada deploy) para `pnpm db:migrate` (aplica só migrations pendentes de drizzle/journal) — job kreds-db-push no ArgoCD ficando mais rápido; stage também não copia mais app inteiro, só drizzle.config.ts + drizzle/
+- [Phase ?]: 13-01: ageYears validation placed before updates/changes accumulation block, so invalid age throws before any mutation (T-13-04)
+- [Phase ?]: 13-01: updateChildAction excludes pin/consentGiven fields per D-01 — edit flow is visuals+age only
+- [Phase ?]: 13-01: updateChildAction redirects to plain /family/children (no ?success=1), reserved for addChildAction decision screen
 
 ### Roadmap Evolution
 
@@ -150,6 +154,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-03T13:26:41.753Z
-Stopped at: Phase 13 context gathered
-Resume file: .planning/phases/13-editar-filho-bot-o-editar-na-lista-de-filhos-do-parent-panel/13-CONTEXT.md
+Last session: 2026-07-03T13:50:30.763Z
+Stopped at: Completed 13-01-PLAN.md
+Resume file: None

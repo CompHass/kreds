@@ -241,11 +241,11 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 **Goal:** Um responsável ativo consegue clicar em "Editar" na lista de filhos (`/family/children`), abrir um formulário pré-preenchido em `/family/children/[childId]/edit`, alterar nome/idade/avatar/cor de destaque de um filho ativo, e salvar — os dados persistidos no banco refletem imediatamente na lista.
 **Requirements**: SPEC-1, SPEC-2, SPEC-3, SPEC-4, SPEC-5 (see 13-SPEC.md)
 **Depends on:** Phase 12
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 **Wave 1**
 
-- [ ] 13-01-PLAN.md — Backend: updateChildProfile aceita ageYears + updateChildAction Server Action
+- [x] 13-01-PLAN.md — Backend: updateChildProfile aceita ageYears + updateChildAction Server Action
 
 **Wave 2** *(blocked on Wave 1 — consome updateChildAction)*
 
