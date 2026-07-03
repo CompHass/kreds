@@ -32,7 +32,7 @@ Note: All 5 plans code-complete and committed, but 08-05 Task 3 is a
 blocking human-verify checkpoint that has NOT been approved yet. The
 `progress` counters below count SUMMARY.md files on disk (implementation
 completeness) and should not be read as "Phase 8 fully verified/done."
-Last activity: 2026-07-02 - Completed quick task 260702-pr6: Fix privilege-escalation gap: child-session cookie coexists with parent's next-auth session, allowing child to navigate to guardian panel
+Last activity: 2026-07-03 - Quick task 260703-cq0 code-complete (root / auth redirect), pending human-verify checkpoint against kreds.hasslab.pro
 
 Progress: [███████░░░] 73%
 
@@ -162,6 +162,7 @@ None yet.
 ### Blockers/Concerns
 
 - 08-05 Task 3 (checkpoint:human-verify, gate=blocking): implementacao completa e commitada, mas verificacao visual/funcional NAO aprovada. Usuario ira verificar contra https://kreds.hasslab.pro apos deploy via GitOps CI. Nao avancar para Fase 09 ate confirmacao.
+- 260703-cq0 Task 2 (checkpoint:human-verify, gate=blocking): root `/` auth redirect implementado e commitado (4cb1f3d), mas verificacao contra https://kreds.hasslab.pro (logout->/login, login->/family/{familyId}/tasks, sem loop) ainda NAO aprovada pelo usuario.
 
 ### Quick Tasks Completed
 
@@ -169,6 +170,7 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 260702-mta | Adicionar indicador visual no card de tarefa mostrando quais criancas estao associadas, sem usar filtros | 2026-07-02 | cc24511 | [260702-mta-adicionar-indicador-visual-no-card-de-ta](./quick/260702-mta-adicionar-indicador-visual-no-card-de-ta/) |
 | 260702-pr6 | Fix privilege-escalation gap: child-session cookie coexists with parent's next-auth session, allowing child to navigate to guardian panel | 2026-07-02 | 420052b | [260702-pr6-fix-privilege-escalation-gap-child-sessi](./quick/260702-pr6-fix-privilege-escalation-gap-child-sessi/) |
+| 260703-cq0 | Redirect root / based on auth: authenticated guardian goes to family tasks dashboard, unauthenticated goes to /login | 2026-07-03 | 4cb1f3d | [260703-cq0-redirect-root-based-on-auth-authenticate](./quick/260703-cq0-redirect-root-based-on-auth-authenticate/) |
 
 ## Deferred Items
 
