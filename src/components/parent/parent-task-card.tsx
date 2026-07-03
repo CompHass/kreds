@@ -9,12 +9,70 @@ import { CategoryIcon } from './category-icon'
 import { TaskToggle } from './task-toggle'
 import { DayPills } from './recurrence-pills'
 
+interface FamilyChild {
+  id: string
+  displayName: string
+  accentColor: string
+  avatarPreset: string
+}
+
 interface ParentTaskCardProps {
   task: ParentTask
   justAdded: boolean
   editing: boolean
   onToggle: (id: string) => void
   onEdit: (id: string) => void
+  familyChildren: FamilyChild[]
+}
+
+// MTA-01: indicador visual de responsável(is) — resolve task.assigned contra
+// familyChildren e renderiza um chip por criança encontrada (sem truncar).
+// Ids sem correspondência (ex: criança desativada) são filtrados silenciosamente.
+function AssigneeAvatars({
+  assignedIds,
+  familyChildren,
+}: {
+  assignedIds: string[]
+  familyChildren: FamilyChild[]
+}) {
+  const resolved = assignedIds
+    .map((id) => familyChildren.find((c) => c.id === id))
+    .filter((c): c is FamilyChild => c !== undefined)
+
+  if (resolved.length === 0) return null
+
+  const names = resolved.map((c) => c.displayName).join(', ')
+
+  return (
+    <div
+      aria-label={`Atribuída a: ${names}`}
+      style={{ display: 'flex', alignItems: 'center' }}
+    >
+      {resolved.map((child, i) => (
+        <span
+          key={child.id}
+          aria-hidden="true"
+          style={{
+            width: 19,
+            height: 19,
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 9,
+            fontWeight: 700,
+            color: '#ffffff',
+            background: child.accentColor,
+            border: '1.5px solid #FBFAF5',
+            marginLeft: i === 0 ? 0 : -6,
+            flexShrink: 0,
+          }}
+        >
+          {child.displayName.charAt(0).toUpperCase()}
+        </span>
+      ))}
+    </div>
+  )
 }
 
 export function ParentTaskCard({
@@ -23,6 +81,7 @@ export function ParentTaskCard({
   editing,
   onToggle,
   onEdit,
+  familyChildren,
 }: ParentTaskCardProps) {
   return (
     <div
@@ -87,6 +146,29 @@ export function ParentTaskCard({
           {/* Indicador de dias — mesmos círculos D/S/T/Q/Q/S/S do form de edição
               (RecurrencePills), em versão somente-leitura e compacta (DayPills). */}
           {task.days.length > 0 && <DayPills days={task.days} />}
+
+          {/* MTA-01: avatares de responsável(is) — logo após os dias, antes da aprovação */}
+          {task.assigned.length > 0 && (
+            <AssigneeAvatars assignedIds={task.assigned} familyChildren={familyChildren} />
+          )}
+
+          {/* Badge de aprovação — após os dias */}
+          {task.approval && (
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: '#7C5C2E',
+                background: '#FDF3E3',
+                borderRadius: 8,
+                padding: '2px 7px',
+                border: '1px solid #F0D9B0',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              ✓ aprovação
+            </span>
+          )}
         </div>
       </div>
 

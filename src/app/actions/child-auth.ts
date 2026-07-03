@@ -52,3 +52,11 @@ export async function verifyChildPin(
 
   return { success: true as const }
 }
+
+// PR6: permite ao guardião sair do perfil da criança e retomar o dispositivo
+// sem precisar reautenticar via Zitadel. Não chama redirect() — o caller decide a navegação.
+export async function exitChildProfile(): Promise<{ success: true }> {
+  const cookieStore = await cookies()
+  cookieStore.delete('child-session')
+  return { success: true as const }
+}

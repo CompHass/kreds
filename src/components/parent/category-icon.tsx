@@ -131,11 +131,12 @@ function IconPet({ stroke }: { stroke: string }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {/* Pata de animal */}
-      <circle cx="12" cy="16" r="4" />
-      <circle cx="6" cy="8" r="2" />
-      <circle cx="12" cy="5" r="2" />
-      <circle cx="18" cy="8" r="2" />
+      {/* Patinha */}
+      <circle cx="7" cy="6" r="1.5" />
+      <circle cx="12" cy="4.5" r="1.5" />
+      <circle cx="17" cy="6" r="1.5" />
+      <circle cx="5" cy="11" r="1.5" />
+      <path d="M12 22c-3.5 0-6-2-6-5 0-2.5 2-4 4-5.5.7-.5 1.3-1 2-1s1.3.5 2 1c2 1.5 4 3 4 5.5 0 3-2.5 5-6 5z" />
     </svg>
   )
 }

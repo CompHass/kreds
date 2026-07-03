@@ -1,11 +1,49 @@
-// Parent Panel tests — Phase 5 (PTASK-01..10)
+// Parent Panel tests — Phase 5 (PTASK-01..10) + Phase 7 (D-03/D-05/D-08/D-09)
 // Suite RED: componente ParentPanelView ainda não implementado (Wave 0).
 // Estes testes DEVEM falhar até o Plano 05-02 implementar o componente.
-import { describe, it, expect } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react'
 import { MOCK_PARENT_TASKS } from '../../src/lib/seed/parent-seed'
 // ParentPanelView ainda não existe — import falhará até o Plano 05-02
 import { ParentPanelView } from '../../src/components/parent/parent-panel-view'
+
+// Mock next/navigation — ParentSidebar usa useRouter (08-02) que não está disponível em jsdom.
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}))
+
+// Mock next-auth/react — necessário porque GuardianProfileDrawer chama signOut (07-02)
+// vi.mock hoist para o topo; usar vi.hoisted() para evitar TDZ (decisão 07-01)
+vi.mock('next-auth/react', () => ({ signOut: vi.fn() }))
+
+// Mock next-auth (sem /react) — NextAuth tenta importar next/server que não existe em jsdom.
+// O auth.ts inicializa NextAuth e é importado transitivamente via @/app/actions/tasks.
+vi.mock('next-auth', () => ({
+  default: vi.fn(() => ({
+    handlers: {},
+    auth: vi.fn(),
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+  })),
+}))
+
+// Mock server actions — tasks.ts usa 'use server' + auth() que requer next/server em jsdom.
+// Os testes PTASK não testam persistência; o mock retorna um objeto mínimo para createTask.
+vi.mock('@/app/actions/tasks', () => ({
+  createTask: vi.fn().mockResolvedValue({
+    id: 'mock-task-id',
+    title: 'Tarefa Nova',
+    category: 'quarto',
+    kredsValue: 0,
+    days: [],
+    assignedChildId: 'c1',
+    isActive: true,
+    approval: false,
+  }),
+  updateTask: vi.fn().mockResolvedValue(undefined),
+  deactivateTask: vi.fn().mockResolvedValue(undefined),
+  toggleTaskActive: vi.fn().mockResolvedValue(undefined),
+}))
 
 const FAMILY_CHILDREN = [
   { id: 'c1', displayName: 'Ana', accentColor: '#3E6B4F', avatarPreset: 'sprout' },
@@ -18,6 +56,7 @@ function renderPanel() {
       familyId="fam1"
       familyName="Família Teste"
       currentUserName="João"
+      guardianEmail="joao@exemplo.com"
       familyChildren={FAMILY_CHILDREN}
       initialTasks={MOCK_PARENT_TASKS}
     />,
@@ -42,8 +81,14 @@ describe('ParentPanelView — PTASK-01..10', () => {
     renderPanel()
     // Breadcrumb com nome da família
     expect(screen.getByText('Família Teste')).toBeInTheDocument()
-    // Badge com nome do usuário
-    expect(screen.getByText('João')).toBeInTheDocument()
+    // Badge com nome do usuário — usar getAllByText pois o drawer (sempre no DOM) também exibe 'João'
+    // O topbar badge é o primeiro elemento com 'João' renderizado; getByRole não funciona para span
+    const joaoElements = screen.getAllByText('João')
+    expect(joaoElements.length).toBeGreaterThanOrEqual(1)
+    // O topbar deve estar dentro do header
+    const header = document.querySelector('header')
+    expect(header).not.toBeNull()
+    expect(header!.textContent).toContain('João')
   })
 
   it('PTASK-03: filter chips renderizam "Todas" mais um chip por criança da família', () => {
@@ -127,7 +172,7 @@ describe('ParentPanelView — PTASK-01..10', () => {
     expect(pressedPills.length).toBe(7)
   })
 
-  it('PTASK-09: após criar tarefa, o card recebe animation contendo kreds-new', () => {
+  it('PTASK-09: após criar tarefa, o card recebe animation contendo kreds-new', async () => {
     renderPanel()
     // Abrir form de nova tarefa
     const newTaskBtn = screen.getByText(/\+ nova tarefa/i)
@@ -141,10 +186,14 @@ describe('ParentPanelView — PTASK-01..10', () => {
     // Clicar em "Adicionar tarefa"
     const addBtn = screen.getByRole('button', { name: /adicionar tarefa/i })
     fireEvent.click(addBtn)
-    // Card recém-adicionado deve ter animação kredsNew
-    const newCard = screen.getByText('Tarefa Nova').closest('[data-testid="parent-task-card"]')
-    const style = newCard?.getAttribute('style') ?? ''
-    const className = newCard?.getAttribute('class') ?? ''
+    // createTask é async — aguardar o card aparecer no DOM após a promessa resolver
+    const newCard = await waitFor(() => {
+      const card = screen.getByText('Tarefa Nova').closest('[data-testid="parent-task-card"]')
+      expect(card).not.toBeNull()
+      return card!
+    })
+    const style = newCard.getAttribute('style') ?? ''
+    const className = newCard.getAttribute('class') ?? ''
     expect(style + className).toMatch(/kreds-new|kredsNew|animate-kreds-new/)
   })
 
@@ -160,5 +209,43 @@ describe('ParentPanelView — PTASK-01..10', () => {
     fireEvent.click(editButtons[0])
     // Agora o botão "Excluir tarefa" deve aparecer
     expect(screen.getByText('Excluir tarefa')).toBeInTheDocument()
+  })
+
+  // D-08/D-03: botão circular do rodapé da sidebar abre o drawer de perfil
+  it('D-08/D-03: clicar no botão de perfil da sidebar abre o drawer', () => {
+    renderPanel()
+    // Pode haver 2 elementos com aria-label 'Abrir perfil' (sidebar + topbar)
+    // index [0] = sidebar (renderizado primeiro no DOM)
+    const sidebarProfileBtn = screen.getAllByLabelText('Abrir perfil')[0]
+    fireEvent.click(sidebarProfileBtn)
+    // Drawer deve ser visível com role="dialog"
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toBeInTheDocument()
+    // Conteúdo escopo ao drawer para evitar match com topbar badge
+    expect(within(dialog).getByText('João')).toBeInTheDocument()
+    expect(within(dialog).getByText('joao@exemplo.com')).toBeInTheDocument()
+  })
+
+  // D-09/D-03: badge do topbar abre o mesmo drawer
+  it('D-09/D-03: clicar no badge do topbar abre o mesmo drawer', () => {
+    renderPanel()
+    // index [1] = topbar badge (segundo no DOM)
+    const topbarBadge = screen.getAllByLabelText('Abrir perfil')[1]
+    fireEvent.click(topbarBadge)
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toBeInTheDocument()
+    expect(within(dialog).getByText('joao@exemplo.com')).toBeInTheDocument()
+  })
+
+  // D-05: drawer exibe nome + email corretos do guardian após abertura
+  it('D-05: drawer exibe nome + email do guardian após abrir', () => {
+    renderPanel()
+    // Abrir via sidebar (qualquer acionador serve para este caso)
+    const sidebarProfileBtn = screen.getAllByLabelText('Abrir perfil')[0]
+    fireEvent.click(sidebarProfileBtn)
+    const dialog = screen.getByRole('dialog')
+    // Verificar nome e email dentro do drawer (escopado para evitar múltiplos matches)
+    expect(within(dialog).getByText('João')).toBeInTheDocument()
+    expect(within(dialog).getByText('joao@exemplo.com')).toBeInTheDocument()
   })
 })

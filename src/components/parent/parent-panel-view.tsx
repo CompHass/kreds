@@ -13,6 +13,7 @@ import { FilterChips } from './filter-chips'
 import { ParentTaskCard } from './parent-task-card'
 import { TaskFormPanel, type TaskFormData, EMPTY_FORM, taskToFormData } from './task-form-panel'
 import { labelsToDayIndices } from './recurrence-pills'
+import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import { type ParentTask } from '@/types/task'
 import { createTask, updateTask, deactivateTask, toggleTaskActive } from '@/app/actions/tasks'
 
@@ -20,6 +21,7 @@ interface ParentPanelViewProps {
   familyId: string
   familyName: string
   currentUserName: string
+  guardianEmail: string
   familyChildren: Array<{    // ATENÇÃO: não usar 'children' — conflito com prop reservada do React (Pitfall 2)
     id: string
     displayName: string
@@ -30,14 +32,13 @@ interface ParentPanelViewProps {
 }
 
 export function ParentPanelView({
-  familyId,
+  familyId: _familyId,
   familyName,
   currentUserName,
+  guardianEmail,
   familyChildren,
   initialTasks,
 }: ParentPanelViewProps) {
-  // familyId agora é usado diretamente por handlers de mutação e pela sidebar (navegação).
-  const _familyId = familyId
   // Estado raiz — padrão garden-view.tsx
   const [tasks, setTasks] = useState<ParentTask[]>(initialTasks)
   const [filter, setFilter] = useState<'all' | string>('all')
@@ -45,6 +46,10 @@ export function ParentPanelView({
   const [editingId, setEditingId] = useState<string | 'new' | null>(null)
   const [newTaskId, setNewTaskId] = useState<string | null>(null)
   const [formData, setFormData] = useState<TaskFormData>(EMPTY_FORM)
+  // D-03: estado de abertura do drawer de perfil do guardian
+  const [profileOpen, setProfileOpen] = useState(false)
+  // Inicial derivada do nome — exibida no rodapé da sidebar (D-08) e usada internamente
+  const guardianInitial = currentUserName.charAt(0).toUpperCase()
 
   // Derivados no render — sem estado separado (anti-pattern: usar boolean isCreating)
   const formMode: 'idle' | 'create' | 'edit' = editingId === 'new'
@@ -184,8 +189,13 @@ export function ParentPanelView({
         flexDirection: 'row',
       }}
     >
-      {/* Sidebar esquerda 80px fixa (PTASK-01) */}
-      <ParentSidebar familyId={familyId} />
+      {/* Sidebar esquerda 80px fixa (PTASK-01) — D-05 (08-02): activeRoute + familyId para navegação */}
+      <ParentSidebar
+        guardianInitial={guardianInitial}
+        onOpenProfile={() => setProfileOpen(true)}
+        familyId={_familyId}
+        activeRoute="tasks"
+      />
 
       {/* Main: topbar + conteúdo flex-row */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
@@ -193,6 +203,7 @@ export function ParentPanelView({
         <ParentTopbar
           familyName={familyName}
           currentUserName={currentUserName}
+          onOpenProfile={() => setProfileOpen(true)}
         />
 
         {/* Área de conteúdo: lista de tarefas + painel direito */}
@@ -287,6 +298,7 @@ export function ParentPanelView({
                     editing={editingId === task.id}
                     onToggle={handleToggle}
                     onEdit={handleEditTask}
+                    familyChildren={familyChildren}
                   />
                 ))}
               </div>
@@ -307,6 +319,16 @@ export function ParentPanelView({
           </div>
         </div>
       </main>
+
+      {/* D-01/D-02: Drawer de perfil do guardian — position:fixed, sem transform no ancestral (Pitfall 2 ok)
+          D-03: controlado por profileOpen; D-04/D-05: nome e email da sessão SSR
+          D-06/D-07: signOut via GuardianProfileDrawer */}
+      <GuardianProfileDrawer
+        open={profileOpen}
+        guardianName={currentUserName}
+        guardianEmail={guardianEmail}
+        onClose={() => setProfileOpen(false)}
+      />
     </div>
   )
 }

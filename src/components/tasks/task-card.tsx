@@ -1,25 +1,24 @@
 'use client'
 
 // CTASK-01: Visual de tarefa pendente (bg #ffffff) / concluída (bg #EEF3EA)
-// CTASK-02: Check button 38×38px — onComplete(task.id) ao clicar; disabled quando done
+// CTASK-02: Check button 38×38px — onToggle(task.id) ao clicar; toggle bidirecional
 
 import type { GardenTask } from '@/lib/seed/garden-seed'
 
 interface TaskCardProps {
   task: GardenTask
-  onComplete: (taskId: string) => void
+  onToggle: (taskId: string) => void
 }
 
-export function TaskCard({ task, onComplete }: TaskCardProps) {
+export function TaskCard({ task, onToggle }: TaskCardProps) {
   return (
     <button
       role="checkbox"
-      onClick={() => !task.done && onComplete(task.id)}
-      disabled={task.done}
+      onClick={() => onToggle(task.id)}
       aria-pressed={task.done}
       aria-label={
         task.done
-          ? `Tarefa concluída: ${task.title}`
+          ? `Desmarcar tarefa: ${task.title}`
           : `Marcar tarefa: ${task.title}`
       }
       style={{
@@ -30,7 +29,7 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
         borderRadius: 18,
         width: '100%',
         textAlign: 'left',
-        cursor: task.done ? 'default' : 'pointer',
+        cursor: 'pointer',
         transition: 'background .3s ease, border-color .3s ease',
         background: task.done ? '#EEF3EA' : '#ffffff',
         border: `1px solid ${task.done ? '#D6E2CC' : '#EDE9DF'}`,
