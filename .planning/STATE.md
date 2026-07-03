@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 13-01-PLAN.md
-last_updated: "2026-07-03T13:50:30.767Z"
-last_activity: 2026-07-03 -- Phase 13 execution started
+stopped_at: Paused at 13-02 Task 3 (checkpoint:human-verify)
+last_updated: "2026-07-03T14:08:00.000Z"
+last_activity: 2026-07-03 -- Phase 13 Plan 02 Tasks 1-2 committed, awaiting human verification
 progress:
   total_phases: 8
   completed_phases: 5
@@ -27,9 +27,8 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 Phase: 13 (editar-filho-bot-o-editar-na-lista-de-filhos-do-parent-panel) — EXECUTING
 Plan: 2 of 2
-Phase: 06 (api-integration) — EXECUTING
-Status: Ready to execute
-Last activity: 2026-07-03 -- Phase 13 execution started
+Status: Paused at checkpoint:human-verify (Task 3 of 13-02-PLAN.md) — Tasks 1-2 committed
+Last activity: 2026-07-03 -- Phase 13 Plan 02 Tasks 1-2 committed, awaiting human verification
 
 Progress: [████████░░] 83%
 
@@ -133,6 +132,9 @@ Recent decisions affecting current work:
 - [Phase ?]: 13-01: ageYears validation placed before updates/changes accumulation block, so invalid age throws before any mutation (T-13-04)
 - [Phase ?]: 13-01: updateChildAction excludes pin/consentGiven fields per D-01 — edit flow is visuals+age only
 - [Phase ?]: 13-01: updateChildAction redirects to plain /family/children (no ?success=1), reserved for addChildAction decision screen
+- [Phase ?]: 13-02: EditChildForm is a new component (not parametrized ChildrenForm) per D-01 — pickers copied verbatim, useState pre-seeded with initial values instead of empty string
+- [Phase ?]: 13-02: edit/page.tsx guard — single query filters by both childId and familyId, redirects to /family/children before rendering any data if missing or inactive (T-13-05/T-13-06)
+- [Phase ?]: 13-02: Editar link positioned between PIN and Desativar in the action-button row on /family/children
 
 ### Roadmap Evolution
 
@@ -154,6 +156,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-03T13:50:30.763Z
-Stopped at: Completed 13-01-PLAN.md
-Resume file: None
+Last session: 2026-07-03T14:08:00.000Z
+Stopped at: Paused at 13-02 Task 3 (checkpoint:human-verify) — Tasks 1-2 committed (5ff5c5b, 26b6a38)
+Resume file: 13-02-PLAN.md
