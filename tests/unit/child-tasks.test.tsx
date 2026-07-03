@@ -16,24 +16,24 @@ const doneTask = SEED_STAGE_C.tasks.find((t) => t.done)!
 
 describe('TaskCard — render (CTASK-01)', () => {
   it('renderiza o título da tarefa', () => {
-    render(<TaskCard task={pendingTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={pendingTask} onToggle={vi.fn()} />)
     expect(screen.getByText(pendingTask.title)).toBeInTheDocument()
   })
 
   it('renderiza o emoji da tarefa', () => {
-    render(<TaskCard task={pendingTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={pendingTask} onToggle={vi.fn()} />)
     expect(screen.getByText(pendingTask.emoji)).toBeInTheDocument()
   })
 
   it('tarefa pendente NÃO tem aria-pressed="true"', () => {
-    render(<TaskCard task={pendingTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={pendingTask} onToggle={vi.fn()} />)
     // aria-pressed deve ser false (ou "false") para tarefa pendente
     const button = screen.getByRole('checkbox')
     expect(button).not.toHaveAttribute('aria-pressed', 'true')
   })
 
   it('tarefa concluída tem estado marcado (aria-pressed="true")', () => {
-    render(<TaskCard task={doneTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={doneTask} onToggle={vi.fn()} />)
     const button = screen.getByRole('checkbox')
     expect(button).toHaveAttribute('aria-pressed', 'true')
   })
@@ -42,20 +42,20 @@ describe('TaskCard — render (CTASK-01)', () => {
 describe('TaskCard — interação (CTASK-02)', () => {
   it('clicar no check de tarefa pendente chama onToggle com task.id', () => {
     const onToggle = vi.fn()
-    render(<TaskCard task={pendingTask} onComplete={onToggle} />)
+    render(<TaskCard task={pendingTask} onToggle={onToggle} />)
     fireEvent.click(screen.getByRole('checkbox'))
     expect(onToggle).toHaveBeenCalledWith(pendingTask.id)
   })
 
   it('clicar em tarefa concluída chama onToggle com task.id (toggle bidirecional)', () => {
     const onToggle = vi.fn()
-    render(<TaskCard task={doneTask} onComplete={onToggle} />)
+    render(<TaskCard task={doneTask} onToggle={onToggle} />)
     fireEvent.click(screen.getByRole('checkbox'))
     expect(onToggle).toHaveBeenCalledWith(doneTask.id)
   })
 
   it('botão de tarefa concluída NÃO está disabled (permite uncheck)', () => {
-    render(<TaskCard task={doneTask} onComplete={vi.fn()} />)
+    render(<TaskCard task={doneTask} onToggle={vi.fn()} />)
     const button = screen.getByRole('checkbox')
     expect(button).not.toBeDisabled()
   })
