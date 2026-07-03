@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation'
 import { auth } from '../../../../auth'
 import { requireAuthenticatedIdentity, resolveKredsIdentityId } from '@/lib/auth/authorization'
-import { createChildProfile, deactivateChildProfile } from '@/lib/families/child-profiles'
+import { createChildProfile, deactivateChildProfile, updateChildProfile } from '@/lib/families/child-profiles'
 import { validatePinFormat } from '@/lib/families/child-pin'
 import { listActiveChildProfiles } from '@/lib/families/child-profiles'
 import { db } from '@/lib/db'
@@ -81,6 +81,67 @@ export async function addChildAction(
   }
 
   redirect('/family/children?success=1')
+}
+
+export async function updateChildAction(
+  _prevState: { error?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const session = await auth()
+
+  let identity
+  try {
+    identity = requireAuthenticatedIdentity(session)
+  } catch {
+    redirect('/api/auth/signin')
+  }
+
+  let kredsIdentityId: string
+  try {
+    kredsIdentityId = await resolveKredsIdentityId(identity.zitadelSub)
+  } catch {
+    redirect('/family/onboarding')
+  }
+
+  const [membership] = await db
+    .select({ familyId: schema.familyMemberships.familyId })
+    .from(schema.familyMemberships)
+    .where(eq(schema.familyMemberships.identityId, kredsIdentityId))
+    .limit(1)
+
+  if (!membership) redirect('/family/onboarding')
+
+  const childProfileId = formData.get('childProfileId')?.toString()
+  const displayName = formData.get('displayName')?.toString()?.trim()
+  const ageYearsRaw = formData.get('ageYears')?.toString()
+  const avatarPreset = formData.get('avatarPreset')?.toString()
+  const accentColor = formData.get('accentColor')?.toString()
+
+  if (!childProfileId || !displayName || !ageYearsRaw || !avatarPreset || !accentColor) {
+    return { error: 'Todos os campos são obrigatórios.' }
+  }
+
+  const ageYears = parseInt(ageYearsRaw, 10)
+  if (isNaN(ageYears)) {
+    return { error: 'Idade inválida.' }
+  }
+
+  try {
+    await updateChildProfile({
+      childProfileId,
+      familyId: membership.familyId,
+      guardianIdentityId: kredsIdentityId,
+      displayName,
+      ageYears,
+      avatarPreset,
+      accentColor,
+    })
+  } catch (err) {
+    console.error('[updateChildAction] error:', err)
+    return { error: 'Não foi possível salvar as alterações. Tente novamente.' }
+  }
+
+  redirect('/family/children')
 }
 
 export async function deactivateChildAction(formData: FormData): Promise<void> {
