@@ -23,6 +23,7 @@ export interface UpdateChildProfileVisualsInput {
   familyId: string
   guardianIdentityId: string
   displayName?: string
+  ageYears?: number
   avatarPreset?: string
   accentColor?: string
   pin?: string
@@ -215,6 +216,12 @@ export async function updateChildProfile(
     if (input.pin !== undefined && !validatePinFormat(input.pin)) {
       throw new Error('PIN must have 4 to 6 numeric digits')
     }
+    if (
+      input.ageYears !== undefined &&
+      (!Number.isInteger(input.ageYears) || input.ageYears < 0 || input.ageYears > 120)
+    ) {
+      throw new Error('Age in years must be a valid integer between 0 and 120 (D-09)')
+    }
 
     const updates: Record<string, unknown> = {}
     const changes: string[] = []
@@ -222,6 +229,10 @@ export async function updateChildProfile(
     if (input.displayName !== undefined && input.displayName.trim()) {
       updates.displayName = input.displayName.trim()
       changes.push(`display_name: "${existing.displayName}" → "${input.displayName.trim()}"`)
+    }
+    if (input.ageYears !== undefined) {
+      updates.ageYears = input.ageYears
+      changes.push(`age: ${existing.ageYears} → ${input.ageYears}`)
     }
     if (input.avatarPreset !== undefined) {
       updates.avatarPreset = input.avatarPreset
