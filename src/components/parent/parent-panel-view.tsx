@@ -30,12 +30,14 @@ interface ParentPanelViewProps {
 }
 
 export function ParentPanelView({
-  familyId: _familyId,
+  familyId,
   familyName,
   currentUserName,
   familyChildren,
   initialTasks,
 }: ParentPanelViewProps) {
+  // familyId agora é usado diretamente por handlers de mutação e pela sidebar (navegação).
+  const _familyId = familyId
   // Estado raiz — padrão garden-view.tsx
   const [tasks, setTasks] = useState<ParentTask[]>(initialTasks)
   const [filter, setFilter] = useState<'all' | string>('all')
@@ -183,7 +185,7 @@ export function ParentPanelView({
       }}
     >
       {/* Sidebar esquerda 80px fixa (PTASK-01) */}
-      <ParentSidebar />
+      <ParentSidebar familyId={familyId} />
 
       {/* Main: topbar + conteúdo flex-row */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
