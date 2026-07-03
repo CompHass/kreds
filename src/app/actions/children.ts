@@ -49,6 +49,40 @@ export async function createChild(
   return child
 }
 
+// ─── updateChild ──────────────────────────────────────────────────────────────
+// Edits displayName/ageYears/accentColor for an existing child (D-06 follow-up —
+// Phase 8 deferred edit; this closes that gap). Avatar stays derived from
+// displayName initial + accentColor (D-08) — no avatarPreset field to update.
+
+export async function updateChild(
+  childId: string,
+  familyId: string,
+  data: z.infer<typeof CreateChildSchema>,
+): Promise<typeof childProfiles.$inferSelect> {
+  const session = await auth()
+  if (!session) throw new Error('Unauthorized')
+
+  // Validate — throws ZodError if invalid
+  CreateChildSchema.parse(data)
+
+  const [child] = await db
+    .update(childProfiles)
+    .set({
+      displayName: data.displayName,
+      ageYears: data.ageYears,
+      accentColor: data.accentColor,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(childProfiles.id, childId), eq(childProfiles.familyId, familyId)))
+    .returning()
+
+  if (!child) throw new Error('Child profile not found or not in this family')
+
+  revalidatePath(`/family/${familyId}/children`)
+
+  return child
+}
+
 // ─── resetChildPin ───────────────────────────────────────────────────────────
 // Dual-writes bcrypt pinHash (login auth, unchanged path per D-11) and AES-GCM
 // pinEncrypted (reveal-only, D-12) together in one UPDATE (D-13 — kept in sync).

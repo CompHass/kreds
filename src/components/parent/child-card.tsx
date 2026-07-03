@@ -3,8 +3,9 @@
 // Phase 8, Plan 04 (D-08, D-12, D-14): ChildCard — Frame C list-row.
 // Avatar-by-initial + accentColor (D-08), masked/reveal PIN gated by
 // hasEncryptedPin (Pitfall 6 — pre-existing children have no encrypted PIN),
-// Redefinir PIN + Desativar/Reativar controls. The activity-history control
-// (Frame C's other action) is deferred to Phase 9 and intentionally absent here.
+// Editar (name/age/color, D-06 gap closed post-Phase-8) + Redefinir PIN +
+// Desativar/Reativar controls. The activity-history control (Frame C's other
+// action) is deferred to Phase 9 and intentionally absent here.
 
 import type { ChildProfileView } from '@/types/child'
 
@@ -14,6 +15,7 @@ interface ChildCardProps {
   onToggleReveal: () => void
   onResetPin: () => void
   onToggleActive: () => void
+  onEdit: () => void
 }
 
 export function ChildCard({
@@ -22,6 +24,7 @@ export function ChildCard({
   onToggleReveal,
   onResetPin,
   onToggleActive,
+  onEdit,
 }: ChildCardProps) {
   return (
     <div
@@ -98,6 +101,27 @@ export function ChildCard({
           </span>
         )}
       </div>
+
+      {/* Editar — nome/idade/cor (D-06 gap closed post-Phase-8) */}
+      <button
+        type="button"
+        onClick={onEdit}
+        aria-label={`Editar filho: ${child.displayName}`}
+        style={{
+          height: 36,
+          padding: '0 14px',
+          borderRadius: 10,
+          border: '1.5px solid #E2DECF',
+          background: '#ffffff',
+          color: 'var(--color-kreds-text)',
+          fontSize: 13,
+          fontWeight: 600,
+          cursor: 'pointer',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        Editar
+      </button>
 
       {/* Redefinir PIN */}
       <button

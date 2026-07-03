@@ -2,8 +2,9 @@
 
 // CTASK-04 area / Phase 8, Plan 04 (D-06, D-07, D-09): ChildFormPanel — right-side
 // add-child panel cloned from TaskFormPanel's shell (336px, 20px padding, borderRadius
-// 20, same boxShadow, minHeight 400). NOT a modal (D-09). No edit mode (D-06 — no
-// update-name flow), no delete button. Uses react-hook-form + zodResolver(CreateChildSchema)
+// 20, same boxShadow, minHeight 400). NOT a modal (D-09). Edit mode added post-Phase-8
+// to close the D-06 gap (name/age/color only — avatar stays derived, D-08). No delete
+// button (deactivate lives on ChildCard). Uses react-hook-form + zodResolver(CreateChildSchema)
 // (D-07's native color picker is exactly the RHF register use case).
 
 import { useForm } from 'react-hook-form'
@@ -24,19 +25,20 @@ export const EMPTY_CHILD_FORM: ChildFormData = {
 }
 
 interface ChildFormPanelProps {
-  mode: 'idle' | 'create'
+  mode: 'idle' | 'create' | 'edit'
+  initialData?: ChildFormData
   onSave: (data: ChildFormData) => void
   onCancel: () => void
 }
 
-export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) {
+export function ChildFormPanel({ mode, initialData, onSave, onCancel }: ChildFormPanelProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ChildFormData>({
     resolver: zodResolver(CreateChildSchema),
-    defaultValues: EMPTY_CHILD_FORM,
+    defaultValues: initialData ?? EMPTY_CHILD_FORM,
   })
 
   // Container base — clonado verbatim de TaskFormPanel (largura fixa 336px, padding
@@ -111,7 +113,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
               letterSpacing: '-0.01em',
             }}
           >
-            Adicionar filho
+            {mode === 'edit' ? 'Editar filho' : 'Adicionar filho'}
           </h3>
           <button
             type="button"
@@ -232,7 +234,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
           )}
         </div>
 
-        {/* CTA — Adicionar filho */}
+        {/* CTA — Adicionar/Salvar filho */}
         <button
           type="submit"
           style={{
@@ -249,7 +251,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
             width: '100%',
           }}
         >
-          Adicionar filho
+          {mode === 'edit' ? 'Salvar alterações' : 'Adicionar filho'}
         </button>
       </form>
     </aside>

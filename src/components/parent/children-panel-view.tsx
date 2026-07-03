@@ -1,10 +1,10 @@
 'use client'
 
 // D-01, D-04, D-08, D-09, D-12, D-13, D-14, D-15: Client Component raiz que orquestra
-// o painel /children — clone de parent-panel-view.tsx. Gerencia lista + add + reset PIN +
-// reveal PIN + deactivate/reactivate via Server Actions com otimista + fire-and-forget
-// (mesmo padrão de handleToggle em ParentPanelView).
-// editingId: null=idle, 'new'=create — sem modo edit (D-06, sem update-name flow).
+// o painel /children — clone de parent-panel-view.tsx. Gerencia lista + add + edit +
+// reset PIN + reveal PIN + deactivate/reactivate via Server Actions com otimista +
+// fire-and-forget (mesmo padrão de handleToggle em ParentPanelView).
+// editingId: null=idle, 'new'=create, '<childId>'=edit (D-06 gap closed post-Phase-8).
 // confirmTargetId: qual criança tem o dialog de confirmação de deactivate/reactivate aberto (D-14).
 // resetTargetId: qual criança tem o painel de reset de PIN aberto.
 // revealedPins: cache client-side de PINs já decifrados via revealChildPin (D-12).
@@ -14,13 +14,14 @@ import { useState } from 'react'
 import { ParentSidebar } from './parent-sidebar'
 import { ParentTopbar } from './parent-topbar'
 import { ChildCard } from './child-card'
-import { ChildFormPanel, type ChildFormData, EMPTY_CHILD_FORM } from './child-form-panel'
+import { ChildFormPanel, type ChildFormData } from './child-form-panel'
 import { ChildPinResetPanel } from './child-pin-reset-panel'
 import { ConfirmDeactivateDialog } from './confirm-deactivate-dialog'
 import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import type { ChildProfileView } from '@/types/child'
 import {
   createChild,
+  updateChild,
   resetChildPin,
   revealChildPin,
   toggleChildActive,
@@ -43,7 +44,7 @@ export function ChildrenPanelView({
 }: ChildrenPanelViewProps) {
   // Estado raiz — padrão parent-panel-view.tsx
   const [children, setChildren] = useState<ChildProfileView[]>(initialChildren)
-  // editingId sentinela: null=idle, 'new'=create — sem modo edit (D-06)
+  // editingId sentinela: null=idle, 'new'=create, '<childId>'=edit (D-09, Pitfall 6)
   const [editingId, setEditingId] = useState<string | 'new' | null>(null)
   // D-04: estado de abertura do drawer de perfil — page-local, não compartilhado com /tasks
   const [profileOpen, setProfileOpen] = useState(false)
@@ -75,6 +76,32 @@ export function ChildrenPanelView({
       console.error('createChild failed', err)
     }
     setEditingId(null)
+  }
+
+  async function handleEditChild(data: ChildFormData) {
+    if (editingId === null || editingId === 'new') return
+    const targetId = editingId
+    try {
+      const saved = await updateChild(targetId, familyId, data)
+      setChildren((prev) =>
+        prev.map((c) =>
+          c.id === targetId
+            ? { ...c, displayName: saved.displayName, ageYears: saved.ageYears, accentColor: saved.accentColor }
+            : c,
+        ),
+      )
+    } catch (err) {
+      console.error('updateChild failed', err)
+    }
+    setEditingId(null)
+  }
+
+  function handleSaveChild(data: ChildFormData) {
+    if (editingId === 'new') {
+      handleAddChild(data)
+    } else if (editingId !== null) {
+      handleEditChild(data)
+    }
   }
 
   async function handleResetPin(pin: string) {
@@ -131,12 +158,22 @@ export function ChildrenPanelView({
     setEditingId('new')
   }
 
+  function handleEditClick(childId: string) {
+    setEditingId(childId)
+  }
+
   function handleCancelForm() {
     setEditingId(null)
   }
 
   const confirmTargetChild = children.find((c) => c.id === confirmTargetId)
   const resetTargetChild = children.find((c) => c.id === resetTargetId)
+  const editingChild =
+    editingId !== null && editingId !== 'new'
+      ? children.find((c) => c.id === editingId)
+      : undefined
+  const formMode: 'idle' | 'create' | 'edit' =
+    editingId === 'new' ? 'create' : editingChild ? 'edit' : 'idle'
 
   return (
     <div
@@ -236,6 +273,7 @@ export function ChildrenPanelView({
                     onToggleReveal={() => handleToggleReveal(child.id)}
                     onResetPin={() => setResetTargetId(child.id)}
                     onToggleActive={() => setConfirmTargetId(child.id)}
+                    onEdit={() => handleEditClick(child.id)}
                   />
                 ))}
               </div>
@@ -252,8 +290,18 @@ export function ChildrenPanelView({
               />
             ) : (
               <ChildFormPanel
-                mode={editingId === 'new' ? 'create' : 'idle'}
-                onSave={handleAddChild}
+                key={editingId ?? 'idle'}
+                mode={formMode}
+                initialData={
+                  editingChild
+                    ? {
+                        displayName: editingChild.displayName,
+                        ageYears: editingChild.ageYears,
+                        accentColor: editingChild.accentColor,
+                      }
+                    : undefined
+                }
+                onSave={handleSaveChild}
                 onCancel={handleCancelForm}
               />
             )}
