@@ -105,8 +105,13 @@ export function GuardianLoginForm() {
       formData.set('email', email)
       formData.set('password', password)
       await loginWithCredentials(formData)
-    } catch {
-      setError('E-mail ou senha incorretos. Tente novamente.')
+    } catch (e) {
+      // signIn() throws NEXT_REDIRECT to trigger navigation — must re-throw
+      if (e && typeof e === 'object' && 'digest' in e && String((e as { digest: unknown }).digest).startsWith('NEXT_REDIRECT')) {
+        throw e
+      }
+      const msg = e instanceof Error ? e.message : String(e ?? 'Erro ao fazer login')
+      setError(msg)
     } finally {
       setLoading(false)
     }

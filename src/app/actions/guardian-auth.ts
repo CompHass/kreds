@@ -3,14 +3,11 @@ import { signIn } from '../../../auth'
 
 /**
  * Login do responsável via Zitadel OIDC (e-mail/senha).
- * GAUTH-01: redireciona para /family/dashboard após autenticação bem-sucedida.
- * D-02 (05-CONTEXT.md / 05-RESEARCH.md): callbackUrl pós-Zitadel deve levar ao painel do
- * responsável — /family/dashboard resolve família/membership/onboarding sem precisar de
- * familyId na URL. Bare "/family" não é uma rota válida (404) — corrigido aqui.
+ * GAUTH-01: redireciona para /family após autenticação bem-sucedida.
  * D-04: provider único Zitadel — auth.ts não modificado.
  */
 export async function loginWithCredentials(_formData: FormData): Promise<void> {
-  await signIn('zitadel', { redirectTo: '/family/dashboard' })
+  await signIn('zitadel', { redirectTo: '/family' })
 }
 
 /**

@@ -1,7 +1,19 @@
 // GARD-05, GARD-08: Verifica GardenView — interatividade de tarefas e HarvestButton
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SEED_STAGE_C, SEED_STAGE_D } from '../../src/lib/seed/garden-seed'
+
+// PR6: GardenView importa exitChildProfile de child-auth.ts, que importa
+// child-session.ts ('server-only'). Sem mock, o import quebra em ambiente jsdom
+// (convenção já usada em 06-01 para engine.ts).
+vi.mock('server-only', () => ({}))
+vi.mock('@/app/actions/child-auth', () => ({
+  exitChildProfile: vi.fn().mockResolvedValue({ success: true }),
+}))
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}))
+
 // GardenView ainda não implementado — Wave 0 (RED)
 // Este import falhará até o Plano 02 implementar o componente
 import { GardenView } from '../../src/components/garden/garden-view'

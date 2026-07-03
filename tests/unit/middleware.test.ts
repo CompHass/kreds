@@ -212,6 +212,83 @@ describe('src/middleware.ts', () => {
     })
   })
 
+  describe('Test 13: /family/* with valid child-session (role=child) AND valid next-auth cookie → redirect to /family/access/{familyId}', () => {
+    it('should redirect to /family/access/{familyId} even when next-auth cookie is also present', async () => {
+      const token = await createValidChildJWT({
+        childProfileId: 'child-123',
+        familyId: 'fam-456',
+        role: 'child',
+      })
+      const request = createMockRequest('/family/dashboard', 'http://localhost:3000/family/dashboard', {
+        'child-session': token,
+        'authjs.session-token': 'valid-nextauth-token',
+      })
+      const response = await middleware(request)
+      expect(response.status).toBe(307)
+      expect(response.headers.get('location')).toContain('/family/access/fam-456')
+    })
+  })
+
+  describe('Test 14: /guardian/* with valid child-session (role=child) AND valid next-auth cookie → redirect to /family/access/{familyId}', () => {
+    it('should redirect to /family/access/{familyId} even when next-auth cookie is also present', async () => {
+      const token = await createValidChildJWT({
+        childProfileId: 'child-123',
+        familyId: 'fam-456',
+        role: 'child',
+      })
+      const request = createMockRequest('/guardian/child-123/balance', 'http://localhost:3000/guardian/child-123/balance', {
+        'child-session': token,
+        'authjs.session-token': 'valid-nextauth-token',
+      })
+      const response = await middleware(request)
+      expect(response.status).toBe(307)
+      expect(response.headers.get('location')).toContain('/family/access/fam-456')
+    })
+  })
+
+  describe('Test 15: /family/* with valid child-session (role=child) and NO next-auth cookie → redirect to /family/access/{familyId}', () => {
+    it('should redirect to /family/access/{familyId} without a next-auth cookie', async () => {
+      const token = await createValidChildJWT({
+        childProfileId: 'child-123',
+        familyId: 'fam-789',
+        role: 'child',
+      })
+      const request = createMockRequest('/family/dashboard', 'http://localhost:3000/family/dashboard', {
+        'child-session': token,
+      })
+      const response = await middleware(request)
+      expect(response.status).toBe(307)
+      expect(response.headers.get('location')).toContain('/family/access/fam-789')
+    })
+  })
+
+  describe('Test 16: /family/* with EXPIRED child-session but valid next-auth cookie → falls through to pass-through', () => {
+    it('should not trust an expired child-session token and should fall through to next-auth check', async () => {
+      const token = await createExpiredChildJWT({
+        childProfileId: 'child-123',
+        familyId: 'fam-456',
+        role: 'child',
+      })
+      const request = createMockRequest('/family/dashboard', 'http://localhost:3000/family/dashboard', {
+        'child-session': token,
+        'authjs.session-token': 'valid-nextauth-token',
+      })
+      const response = await middleware(request)
+      expect(response.status).toBe(200)
+    })
+  })
+
+  describe('Test 17: /family/* with MALFORMED child-session but valid next-auth cookie → falls through to pass-through', () => {
+    it('should not trust a malformed child-session token and should fall through to next-auth check', async () => {
+      const request = createMockRequest('/family/dashboard', 'http://localhost:3000/family/dashboard', {
+        'child-session': 'not-a-jwt-token',
+        'authjs.session-token': 'valid-nextauth-token',
+      })
+      const response = await middleware(request)
+      expect(response.status).toBe(200)
+    })
+  })
+
   describe('Invalid child session role', () => {
     it('should reject token with role != "child"', async () => {
       const secret = new TextEncoder().encode(process.env.CHILD_SESSION_SECRET!)
