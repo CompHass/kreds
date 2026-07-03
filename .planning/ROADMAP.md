@@ -235,3 +235,14 @@ Note: Phase 5 depends on Phase 2 (auth), not Phase 4. Phases 3 and 4 (child gard
 | 5. Parent Panel | 2/4 | In Progress|  |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 12. Módulo de FX | 0/TBD | Not started | - |
+
+### Phase 13: Editar Filho — botão editar na lista de filhos do parent panel, permitindo alterar nome, idade, avatar e cor de destaque de um filho já cadastrado
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 12
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 13 to break down)

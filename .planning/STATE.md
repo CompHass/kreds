@@ -130,6 +130,10 @@ Recent decisions affecting current work:
 - [Phase ?]: 06-04: harvest body.familyId = '' — servidor lê familyId do JWT assinado (T-06-13)
 - [Infra] Dockerfile stage `migration` trocado de `pnpm db:push` (drizzle-kit push, introspecção full a cada deploy) para `pnpm db:migrate` (aplica só migrations pendentes de drizzle/journal) — job kreds-db-push no ArgoCD ficando mais rápido; stage também não copia mais app inteiro, só drizzle.config.ts + drizzle/
 
+### Roadmap Evolution
+
+- Phase 13 added: Editar Filho — botão editar na lista de filhos do parent panel, permitindo alterar nome, idade, avatar e cor de destaque de um filho já cadastrado
+
 ### Pending Todos
 
 None yet.
