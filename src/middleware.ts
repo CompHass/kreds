@@ -4,13 +4,25 @@ import { jwtVerify } from 'jose'
 const CHILD_SESSION_COOKIE = 'child-session'
 
 // HTTP vs HTTPS — next-auth v5 usa __Secure- prefix em HTTPS
-function nextAuthCookieName(url: string): string {
-  return url.startsWith('https') ? '__Secure-authjs.session-token' : 'authjs.session-token'
+//
+// NÃO usar apenas `url.startsWith('https')`: atrás do nginx-ingress (TLS terminado
+// no ingress, force-ssl-redirect:true, tráfego ingress->pod em HTTP puro), o
+// NextRequest.url visto pelo processo Next.js (output:'standalone') reflete o
+// esquema da CONEXÃO INTERNA (http://), não o esquema real usado pelo browser.
+// Isso é comportamento documentado do Next.js: não existe "trust proxy" nativo
+// para middleware/proxy — ver vercel/next.js#54450, #59904, nextauthjs/next-auth#13377.
+// Auth.js resolve isso corretamente (via trustHost + x-forwarded-proto) e por isso
+// SEMPRE emite cookies com prefixo __Secure-/__Host- em produção. O middleware deve
+// usar o mesmo sinal (x-forwarded-proto), com fallback para o esquema de req.url
+// apenas quando o header não estiver presente (dev local sem proxy).
+function nextAuthCookieName(req: NextRequest): string {
+  const forwardedProto = req.headers.get('x-forwarded-proto')
+  const isHttps = forwardedProto ? forwardedProto.split(',')[0].trim() === 'https' : req.url.startsWith('https')
+  return isHttps ? '__Secure-authjs.session-token' : 'authjs.session-token'
 }
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
   const { pathname } = req.nextUrl
-  const url = req.url
 
   // Rotas públicas — pass-through sem verificação de sessão
   // ORDEM IMPORTA: /family/access/ deve ser avaliado ANTES de /family/
@@ -77,7 +89,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
       }
     }
 
-    const cookieName = nextAuthCookieName(url)
+    const cookieName = nextAuthCookieName(req)
     const sessionToken = req.cookies.get(cookieName)?.value
 
     if (!sessionToken) {

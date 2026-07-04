@@ -17,7 +17,12 @@ beforeAll(async () => {
 })
 
 // Helper to create mock NextRequest
-function createMockRequest(pathname: string, url: string, cookies: Record<string, string> = {}): any {
+function createMockRequest(
+  pathname: string,
+  url: string,
+  cookies: Record<string, string> = {},
+  headers: Record<string, string> = {}
+): any {
   return {
     nextUrl: { pathname },
     url,
@@ -26,6 +31,9 @@ function createMockRequest(pathname: string, url: string, cookies: Record<string
         const value = cookies[name]
         return value ? { value } : undefined
       },
+    },
+    headers: {
+      get: (name: string) => headers[name.toLowerCase()] ?? null,
     },
   }
 }
@@ -195,7 +203,7 @@ describe('src/middleware.ts', () => {
   })
 
   describe('HTTPS cookie name switching', () => {
-    it('should use __Secure-authjs.session-token for HTTPS /family/* requests', async () => {
+    it('should use __Secure-authjs.session-token for HTTPS /family/* requests (req.url scheme, no proxy)', async () => {
       const request = createMockRequest('/family/dashboard', 'https://localhost:3000/family/dashboard', {
         '__Secure-authjs.session-token': 'valid-nextauth-token',
       })
@@ -203,9 +211,45 @@ describe('src/middleware.ts', () => {
       expect(response.status).toBe(200)
     })
 
-    it('should use __Secure-authjs.session-token for HTTPS /guardian/* requests', async () => {
+    it('should use __Secure-authjs.session-token for HTTPS /guardian/* requests (req.url scheme, no proxy)', async () => {
       const request = createMockRequest('/guardian/child-123/balance', 'https://localhost:3000/guardian/child-123/balance', {
         '__Secure-authjs.session-token': 'valid-nextauth-token',
+      })
+      const response = await middleware(request)
+      expect(response.status).toBe(200)
+    })
+
+    // Regression test for login-stuck-after-zitadel: behind nginx-ingress (TLS terminated
+    // at the ingress, force-ssl-redirect:true, plain HTTP ingress->pod on output:'standalone'),
+    // req.url is http://... even though the browser-facing connection is https:// and
+    // Auth.js sets __Secure-authjs.session-token. Middleware MUST trust x-forwarded-proto
+    // over the raw req.url scheme, or it always misses a valid session cookie.
+    it('should use __Secure-authjs.session-token when x-forwarded-proto is https even though req.url is http (reverse proxy / TLS terminated at ingress)', async () => {
+      const request = createMockRequest(
+        '/family/dashboard',
+        'http://10.42.0.252:3000/family/dashboard',
+        { '__Secure-authjs.session-token': 'valid-nextauth-token' },
+        { 'x-forwarded-proto': 'https' }
+      )
+      const response = await middleware(request)
+      expect(response.status).toBe(200)
+    })
+
+    it('should redirect to /api/auth/signin when x-forwarded-proto is https but only the bare cookie name is present', async () => {
+      const request = createMockRequest(
+        '/family/dashboard',
+        'http://10.42.0.252:3000/family/dashboard',
+        { 'authjs.session-token': 'valid-nextauth-token' },
+        { 'x-forwarded-proto': 'https' }
+      )
+      const response = await middleware(request)
+      expect(response.status).toBe(307)
+      expect(response.headers.get('location')).toContain('/api/auth/signin')
+    })
+
+    it('should fall back to the bare cookie name for plain HTTP requests with no x-forwarded-proto header (local dev)', async () => {
+      const request = createMockRequest('/family/dashboard', 'http://localhost:3000/family/dashboard', {
+        'authjs.session-token': 'valid-nextauth-token',
       })
       const response = await middleware(request)
       expect(response.status).toBe(200)
