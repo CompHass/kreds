@@ -291,7 +291,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 ### Phase 12: Native Guardian Login
 
-**Goal:** Replace the OIDC hosted-login redirect with a native email/password login inside Kreds, using Zitadel Session API v2 (create session + password check driven by a next-auth Credentials provider), so guardians authenticate entirely within the Kreds UI and never see the Zitadel hosted login screen.
+**Goal:** Replace the OIDC hosted-login redirect with native email/password auth inside Kreds — both **login** (Zitadel Session API v2: create session + password check via a next-auth Credentials provider) and **signup** (create a new Zitadel human user via the Management API) — so guardians authenticate and register entirely within the Kreds UI and never see the Zitadel hosted login/registration screens.
 **Requirements**: TBD (define in SPEC)
 **Depends on:** Phase 2 (Authentication)
 **UI hint:** yes
@@ -302,7 +302,12 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 - **Roles:** the OIDC `urn:zitadel:iam:org:project:roles` claim is no longer available on the Session-API path — `session.user.systemRoles` must be repopulated by fetching user grants via the Management API. This is the trickiest part to preserve.
 - **Account states** the org may enforce must be handled explicitly (the hosted UI did these for free): email-not-verified (already loop-fixed separately in the OIDC path, must be surfaced here too), password-change-required, account lockout, and MFA if enabled. Determine which the org actually enforces during SPEC.
 - **Security:** the guardian's plaintext password now transits the Kreds backend (TLS only, never logged). A new `IAM_LOGIN_CLIENT` service-account secret becomes a runtime dependency of the app (previously ops-only) — needs a k8s Secret. Warrants a security review.
-- **Wiring:** `src/components/auth/guardian-login-form.tsx` already collects email/password but `src/app/actions/guardian-auth.ts` currently discards them and does `signIn('zitadel')` (OIDC redirect). This phase makes those credentials actually authenticate.
+- **Wiring:** `src/components/auth/guardian-login-form.tsx` already collects email/password but `src/app/actions/guardian-auth.ts` currently discards them and does `signIn('zitadel')` (OIDC redirect). This phase makes those credentials actually authenticate. The form's "Criar conta" link currently points to a dead `#` — this phase gives it a real signup page.
+
+**Signup scope (added 2026-07-04) — open questions for SPEC:**
+- Create the Zitadel human user via the Management API (the `iam-admin` service account can create users; needs the same runtime service-account secret as login).
+- New users start with `email_verified=false`, which hits the exact block that caused the earlier login loop → SPEC must decide: require email verification (Zitadel sends the verification email) before first login, or allow provisional login. Duplicate-email handling and Zitadel password-policy error surfacing also needed.
+- A brand-new guardian has **no family** — the root/family redirects currently bounce a member-less user back to `/login`. SPEC must decide whether signup also bootstraps `families` + `familyMemberships` (guardian role) inline, or routes the new user into a dedicated family-creation flow. Signup touches `kreds_identities` + `families` + `family_memberships`.
 
 Plans:
 

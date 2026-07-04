@@ -86,6 +86,7 @@ Progress: [███████░░░] 73%
 ### Roadmap Evolution
 
 - Phase 12 added (2026-07-04): Native Guardian Login — replace OIDC hosted-login redirect with native email/password login inside Kreds via Zitadel Session API v2 (Credentials provider). Depends on Phase 2. Feasibility confirmed live (Session API reachable, iam-admin can create sessions). Route: spec → plan → execute.
+- Phase 12 scope expanded (2026-07-04): also includes native signup — create new Zitadel user via Management API. Open SPEC questions: email-verification-before-login vs provisional login, and whether signup bootstraps family+membership or routes to a family-creation flow (member-less guardian currently bounces to /login).
 
 ### Decisions
 
