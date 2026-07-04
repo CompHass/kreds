@@ -2,16 +2,19 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
+current_phase: 08
+current_phase_name: child-management
 status: verifying
-stopped_at: 08-05 code-complete; checkpoint human-verify pendente pos-deploy (kreds.hasslab.pro)
-last_updated: "2026-07-02T13:10:30.161Z"
-last_activity: 2026-07-02 -- Phase 08 execution started
+stopped_at: Phase 12 context gathered
+last_updated: "2026-07-04T18:38:55.180Z"
+last_activity: 2026-07-04
+last_activity_desc: "Added Phase 12 (Native Guardian Login); feasibility of Zitadel Session API v2 confirmed live. Next: /gsd-spec-phase 12"
 progress:
-  total_phases: 11
+  total_phases: 12
   completed_phases: 8
   total_plans: 29
   completed_plans: 29
-  percent: 73
+  percent: 67
 ---
 
 # Project State
@@ -185,6 +188,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-02T13:10:30.157Z
-Stopped at: 08-05 code-complete; checkpoint human-verify pendente pos-deploy (kreds.hasslab.pro)
-Resume file: None
+Last session: 2026-07-04T18:38:55.175Z
+Stopped at: Phase 12 context gathered
+Resume file: .planning/phases/12-native-guardian-login/12-CONTEXT.md
