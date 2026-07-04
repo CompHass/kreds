@@ -20,7 +20,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     signIn({ profile }) {
-      if (profile?.email_verified === false) return false
+      // Returning `false` here redirects to Auth.js's built-in, unbranded
+      // /api/auth/error?error=AccessDenied page (no pages.error configured) --
+      // this left users with an unverified Zitadel email silently bounced
+      // with zero visible explanation, indistinguishable from a broken login
+      // (see .planning/debug/resolved/login-stuck-after-zitadel.md). Redirect
+      // to the app's own /login route with an explicit error code instead so
+      // the reason is surfaced in the UI.
+      if (profile?.email_verified === false) return '/login?error=email-not-verified'
       return true
     },
     async jwt({ token, profile }) {
@@ -58,30 +65,42 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           token.systemRoles = []
         }
 
-        // Upsert kreds_identities on first login so resolveKredsIdentityId
-        // can find a row for this ZITADEL subject on subsequent requests.
+        // Upsert kreds_identities on EVERY login (not just first), so that
+        // emailVerified/email/displayName stay in sync with Zitadel's current
+        // claims. Previously this only inserted on first login and never
+        // updated an existing row -- an account created while email_verified
+        // was false stayed permanently false in kreds_identities even after
+        // the user verified their email in Zitadel, since the signIn callback
+        // above reads the LIVE profile claim (correct) but nothing re-synced
+        // the cached DB copy used elsewhere. See
+        // .planning/debug/resolved/login-stuck-after-zitadel.md.
         try {
-          const existing = await db
-            .select({ id: schema.identities.id })
-            .from(schema.identities)
-            .where(eq(schema.identities.zitadelSubject, profile.sub))
-            .limit(1)
+          const displayName =
+            typeof profile.name === 'string'
+              ? profile.name
+              : typeof profile.preferred_username === 'string'
+                ? profile.preferred_username
+                : null
 
-          if (existing.length === 0) {
-            await db.insert(schema.identities).values({
+          await db
+            .insert(schema.identities)
+            .values({
               zitadelSubject: profile.sub,
               email: typeof profile.email === 'string' ? profile.email : null,
               emailVerified: profile.email_verified === true,
-              displayName:
-                typeof profile.name === 'string'
-                  ? profile.name
-                  : typeof profile.preferred_username === 'string'
-                    ? profile.preferred_username
-                    : null,
+              displayName,
             })
-          }
+            .onConflictDoUpdate({
+              target: schema.identities.zitadelSubject,
+              set: {
+                email: typeof profile.email === 'string' ? profile.email : null,
+                emailVerified: profile.email_verified === true,
+                displayName,
+                updatedAt: new Date(),
+              },
+            })
         } catch (err) {
-          // Log but do not block sign-in — identity row will be created on retry
+          // Log but do not block sign-in — identity row will be created/synced on retry
           console.error('[auth] kreds_identities upsert failed:', err)
         }
       }

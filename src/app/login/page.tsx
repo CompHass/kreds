@@ -5,12 +5,33 @@ export const metadata: Metadata = {
   title: 'Entrar | kreds',
 }
 
+/** Mapeia códigos de erro de autenticação para mensagens visíveis ao usuário. */
+const LOGIN_ERROR_MESSAGES: Record<string, string> = {
+  'email-not-verified':
+    'Seu e-mail ainda não foi verificado no Zitadel. Verifique seu e-mail e tente novamente.',
+  AccessDenied: 'Acesso negado. Verifique seu e-mail e tente novamente.',
+}
+
 /**
  * Tela de login do responsável.
  * Server Component shell — GuardianLoginForm é 'use client'.
  * Fundo: var(--color-kreds-bg). Padding lateral 24px. Logo no topo (48px).
+ *
+ * Lê ?error= da query string para exibir o motivo de uma falha de login
+ * (ex.: e-mail não verificado no Zitadel) — antes essa informação era
+ * descartada silenciosamente, deixando o usuário "preso" sem explicação.
+ * Ver .planning/debug/resolved/login-stuck-after-zitadel.md.
  */
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  const params = await searchParams
+  const rawError = params.error
+  const errorCode = Array.isArray(rawError) ? rawError[0] : rawError
+  const errorMessage = errorCode ? LOGIN_ERROR_MESSAGES[errorCode] ?? 'Erro ao fazer login. Tente novamente.' : null
+
   return (
     <main
       className="min-h-screen flex flex-col"
@@ -23,6 +44,22 @@ export default function LoginPage() {
 
       {/* Formulário de login */}
       <div style={{ width: '100%', maxWidth: '392px', margin: '0 auto' }}>
+        {errorMessage && (
+          <div
+            role="alert"
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              color: 'var(--color-kreds-error)',
+              backgroundColor: 'rgba(177,74,46,.08)',
+              borderRadius: '8px',
+              padding: '10px 12px',
+              marginBottom: '16px',
+            }}
+          >
+            {errorMessage}
+          </div>
+        )}
         <GuardianLoginForm />
       </div>
     </main>
