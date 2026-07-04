@@ -32,7 +32,7 @@ Note: All 5 plans code-complete and committed, but 08-05 Task 3 is a
 blocking human-verify checkpoint that has NOT been approved yet. The
 `progress` counters below count SUMMARY.md files on disk (implementation
 completeness) and should not be read as "Phase 8 fully verified/done."
-Last activity: 2026-07-03 - Quick task 260703-cq0 code-complete (root / auth redirect), pending human-verify checkpoint against kreds.hasslab.pro
+Last activity: 2026-07-04 - Added Phase 12 (Native Guardian Login); feasibility of Zitadel Session API v2 confirmed live. Next: /gsd-spec-phase 12
 
 Progress: [███████░░░] 73%
 
@@ -82,6 +82,10 @@ Progress: [███████░░░] 73%
 | Phase 08 P05 | 35min | 3 tasks | 4 files |
 
 ## Accumulated Context
+
+### Roadmap Evolution
+
+- Phase 12 added (2026-07-04): Native Guardian Login — replace OIDC hosted-login redirect with native email/password login inside Kreds via Zitadel Session API v2 (Credentials provider). Depends on Phase 2. Feasibility confirmed live (Session API reachable, iam-admin can create sessions). Route: spec → plan → execute.
 
 ### Decisions
 

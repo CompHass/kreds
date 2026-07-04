@@ -288,3 +288,22 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |
+
+### Phase 12: Native Guardian Login
+
+**Goal:** Replace the OIDC hosted-login redirect with a native email/password login inside Kreds, using Zitadel Session API v2 (create session + password check driven by a next-auth Credentials provider), so guardians authenticate entirely within the Kreds UI and never see the Zitadel hosted login screen.
+**Requirements**: TBD (define in SPEC)
+**Depends on:** Phase 2 (Authentication)
+**UI hint:** yes
+**Plans:** 0 plans
+
+**Scope notes / known constraints (from live feasibility check 2026-07-04):**
+- Zitadel Session API v2 confirmed reachable at `https://auth.hasslab.pro`; the `iam-admin` service account can create sessions (test account returned HTTP 201 + sessionId/sessionToken). The password-check PATCH step is documented but was not exercised live.
+- **Roles:** the OIDC `urn:zitadel:iam:org:project:roles` claim is no longer available on the Session-API path — `session.user.systemRoles` must be repopulated by fetching user grants via the Management API. This is the trickiest part to preserve.
+- **Account states** the org may enforce must be handled explicitly (the hosted UI did these for free): email-not-verified (already loop-fixed separately in the OIDC path, must be surfaced here too), password-change-required, account lockout, and MFA if enabled. Determine which the org actually enforces during SPEC.
+- **Security:** the guardian's plaintext password now transits the Kreds backend (TLS only, never logged). A new `IAM_LOGIN_CLIENT` service-account secret becomes a runtime dependency of the app (previously ops-only) — needs a k8s Secret. Warrants a security review.
+- **Wiring:** `src/components/auth/guardian-login-form.tsx` already collects email/password but `src/app/actions/guardian-auth.ts` currently discards them and does `signIn('zitadel')` (OIDC redirect). This phase makes those credentials actually authenticate.
+
+Plans:
+
+- [ ] TBD (run /gsd-spec-phase 12, then /gsd-plan-phase 12 to break down)
