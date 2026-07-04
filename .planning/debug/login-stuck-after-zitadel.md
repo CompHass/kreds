@@ -1,8 +1,8 @@
 ---
-status: verifying
+status: awaiting_human_verify
 trigger: "nao estou conseguindo acessar via celular, quando faço o login no kreds, sou forçado a fazer login no zitadel tambem, isso esta estranho, mas mesmo depois de logar no zitadel, eu fico preso na tela de login."
 created: 2026-07-04T13:02:29Z
-updated: 2026-07-04T13:55:00Z
+updated: 2026-07-04T14:05:00Z
 ---
 
 ## Symptoms
@@ -199,15 +199,26 @@ verification: |
     generic error page (HTTP 403) and /login silently drops ?error=,
     both directly reproducing halves of the reported symptom before the
     fix.
-  - PENDING human-verify: deploy to production and have the user retry
-    login. Since eduardohass@outlook.com's Zitadel email is still
-    unverified, expect them to now see a VISIBLE "email not verified"
-    message on /login instead of a silent loop -- this is the expected
-    post-fix behavior for that specific account, not a regression. Full
-    happy-path confirmation (reaching the dashboard) requires either
-    testing with admin@hasslab.pro (isEmailVerified=true, already has an
-    active guardian membership) or verifying eduardohass@outlook.com's
-    email in Zitadel first.
+  - Deployed to production: CI run 28707884761 built/pushed image
+    0.1.0-72, iac commit 8eb27a0c... updated kustomization.yaml, ArgoCD
+    force-refreshed (was lagging behind a poll cycle), auto-synced, and
+    is now Synced/Healthy with kreds deployment 1/1 ready running
+    docker.io/eduhass/kreds:0.1.0-72 (migration job kreds-db-push-tlpgd
+    Succeeded first).
+  - Live curl confirms fix is active: https://kreds.hasslab.pro/login?error=email-not-verified
+    returns HTTP 200 and the response body contains the exact new message
+    "Seu e-mail ainda não foi verificado no Zitadel. Verifique seu e-mail
+    e tente novamente." -- the /login page now correctly surfaces the
+    error instead of silently dropping it.
+  - PENDING human-verify: have the user retry login end-to-end in a real
+    browser. Since eduardohass@outlook.com's Zitadel email is still
+    unverified (a genuine account state, not a bug), expect them to now
+    see a VISIBLE "email not verified" message on /login instead of a
+    silent loop -- this is the expected post-fix behavior for that
+    specific account. Full happy-path confirmation (reaching the
+    dashboard) requires either testing with admin@hasslab.pro
+    (isEmailVerified=true, already has an active guardian membership) or
+    verifying eduardohass@outlook.com's email in Zitadel first.
 files_changed:
 
   - auth.ts
