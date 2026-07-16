@@ -5,16 +5,16 @@ milestone_name: milestone
 current_phase: 08
 current_phase_name: child-management
 status: verifying
-stopped_at: Phase 12 context gathered
-last_updated: "2026-07-04T18:38:55.180Z"
-last_activity: 2026-07-04
-last_activity_desc: "Added Phase 12 (Native Guardian Login); feasibility of Zitadel Session API v2 confirmed live. Next: /gsd-spec-phase 12"
+stopped_at: Phase 14 code complete — pending avatar image assets + prod verify
+last_updated: "2026-07-16T00:00:00.000Z"
+last_activity: 2026-07-16
+last_activity_desc: "Phase 14 (Avatar Customization) implemented + locally verified: 10-preset closed registry, ChildAvatar fallback chain, garden AvatarPicker, PATCH avatar endpoint, guardian form grid. Awaiting webp assets in public/avatars/ and commit/deploy."
 progress:
-  total_phases: 12
+  total_phases: 14
   completed_phases: 8
   total_plans: 29
   completed_plans: 29
-  percent: 67
+  percent: 57
 ---
 
 # Project State
@@ -35,7 +35,7 @@ Note: All 5 plans code-complete and committed, but 08-05 Task 3 is a
 blocking human-verify checkpoint that has NOT been approved yet. The
 `progress` counters below count SUMMARY.md files on disk (implementation
 completeness) and should not be read as "Phase 8 fully verified/done."
-Last activity: 2026-07-04 - Added Phase 12 (Native Guardian Login); feasibility of Zitadel Session API v2 confirmed live. Next: /gsd-spec-phase 12
+Last activity: 2026-07-16 - Added Phase 14 (Avatar Customization); avatar_preset column already exists (Phase 8), phase makes it selectable by child + guardian. Next: /gsd-spec-phase 14
 
 Progress: [███████░░░] 73%
 

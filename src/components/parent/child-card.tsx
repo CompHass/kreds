@@ -7,6 +7,7 @@
 // (Frame C's other action) is deferred to Phase 9 and intentionally absent here.
 
 import type { ChildProfileView } from '@/types/child'
+import { ChildAvatar } from '@/components/avatar/child-avatar'
 
 interface ChildCardProps {
   child: ChildProfileView
@@ -40,24 +41,13 @@ export function ChildCard({
         opacity: child.active ? 1 : 0.55,
       }}
     >
-      {/* Avatar 52x52 — inicial + gradiente accentColor (D-08) */}
-      <div
-        style={{
-          width: 52,
-          height: 52,
-          borderRadius: '50%',
-          background: `linear-gradient(135deg, ${child.accentColor} 0%, ${child.accentColor}CC 100%)`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 20,
-          fontWeight: 700,
-          color: '#ffffff',
-          flexShrink: 0,
-        }}
-      >
-        {child.displayName.charAt(0).toUpperCase()}
-      </div>
+      {/* Avatar 52x52 — preset ilustrado (Phase 14) ou inicial + gradiente accentColor */}
+      <ChildAvatar
+        displayName={child.displayName}
+        accentColor={child.accentColor}
+        avatarPreset={child.avatarPreset}
+        size={52}
+      />
 
       {/* Nome + idade */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>

@@ -4,6 +4,8 @@
 // Chip selecionado: bg #3E6B4F, texto branco. Chip inativo: bg #FBFAF5, border #E2DECF.
 // aria-pressed em cada chip; apenas um ativo por vez (controlado pelo pai).
 
+import { ChildAvatar } from '@/components/avatar/child-avatar'
+
 interface ChildChip {
   id: string
   displayName: string
@@ -18,10 +20,12 @@ interface FilterChipsProps {
 }
 
 export function FilterChips({ familyChildren, active, onChange }: FilterChipsProps) {
-  const allChips: Array<{ id: string; displayName: string; accentColor?: string }> = [
-    { id: 'all', displayName: 'Todas' },
-    ...familyChildren,
-  ]
+  const allChips: Array<{
+    id: string
+    displayName: string
+    accentColor?: string
+    avatarPreset?: string
+  }> = [{ id: 'all', displayName: 'Todas' }, ...familyChildren]
 
   return (
     <div
@@ -54,26 +58,15 @@ export function FilterChips({ familyChildren, active, onChange }: FilterChipsPro
               cursor: 'pointer',
             }}
           >
-            {/* Mini avatar 24px para chips de criança */}
+            {/* Mini avatar 24px para chips de criança — preset ilustrado (Phase 14) */}
             {chip.id !== 'all' && chip.accentColor && (
-              <span
-                aria-hidden="true"
-                style={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: '50%',
-                  background: chip.accentColor,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: '#ffffff',
-                  flexShrink: 0,
-                }}
-              >
-                {chip.displayName.charAt(0).toUpperCase()}
-              </span>
+              <ChildAvatar
+                displayName={chip.displayName}
+                accentColor={chip.accentColor}
+                avatarPreset={chip.avatarPreset ?? 'initial'}
+                size={24}
+                background={chip.accentColor}
+              />
             )}
             {chip.displayName}
           </button>

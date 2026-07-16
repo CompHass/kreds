@@ -19,6 +19,7 @@ import { ChildPinResetPanel } from './child-pin-reset-panel'
 import { ConfirmDeactivateDialog } from './confirm-deactivate-dialog'
 import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import type { ChildProfileView } from '@/types/child'
+import { isAvatarPreset } from '@/lib/avatars/presets'
 import {
   createChild,
   updateChild,
@@ -68,6 +69,7 @@ export function ChildrenPanelView({
           displayName: saved.displayName,
           ageYears: saved.ageYears,
           accentColor: saved.accentColor,
+          avatarPreset: saved.avatarPreset,
           active: saved.active,
           hasEncryptedPin: saved.pinEncrypted !== null,
         }
@@ -86,6 +88,7 @@ export function ChildrenPanelView({
                   displayName: saved.displayName,
                   ageYears: saved.ageYears,
                   accentColor: saved.accentColor,
+                  avatarPreset: saved.avatarPreset,
                 }
               : c,
           ),
@@ -283,6 +286,10 @@ export function ChildrenPanelView({
                               displayName: child.displayName,
                               ageYears: child.ageYears,
                               accentColor: child.accentColor,
+                              // valores legados desconhecidos caem no fallback 'initial'
+                              avatarPreset: isAvatarPreset(child.avatarPreset)
+                                ? child.avatarPreset
+                                : ('initial' as const),
                             }
                           : undefined
                       })()

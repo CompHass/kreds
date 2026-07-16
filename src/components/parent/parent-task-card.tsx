@@ -7,6 +7,7 @@
 import { type ParentTask } from '@/lib/seed/parent-seed'
 import { CategoryIcon } from './category-icon'
 import { TaskToggle } from './task-toggle'
+import { ChildAvatar } from '@/components/avatar/child-avatar'
 
 interface FamilyChild {
   id: string
@@ -54,22 +55,21 @@ function AssigneeAvatars({
           key={child.id}
           aria-hidden="true"
           style={{
-            width: 19,
-            height: 19,
-            borderRadius: '50%',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 9,
-            fontWeight: 700,
-            color: '#ffffff',
-            background: child.accentColor,
+            borderRadius: '50%',
             border: '1.5px solid #FBFAF5',
             marginLeft: i === 0 ? 0 : -6,
             flexShrink: 0,
           }}
         >
-          {child.displayName.charAt(0).toUpperCase()}
+          {/* Mini avatar 19px — preset ilustrado (Phase 14) ou inicial */}
+          <ChildAvatar
+            displayName={child.displayName}
+            accentColor={child.accentColor}
+            avatarPreset={child.avatarPreset}
+            size={19}
+            background={child.accentColor}
+          />
         </span>
       ))}
     </div>

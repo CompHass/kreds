@@ -2,7 +2,9 @@
 
 // PTASK-06: AssigneeSelector — lista de crianças como botões toggle de multi-seleção.
 // Selecionado: bg #EEF3EA, border #3E6B4F, checkmark verde.
-// Avatar 32px com inicial sobre accentColor. aria-pressed por criança.
+// Avatar 32px — preset ilustrado (Phase 14) ou inicial sobre accentColor. aria-pressed por criança.
+
+import { ChildAvatar } from "@/components/avatar/child-avatar";
 
 interface FamilyChild {
   id: string;
@@ -67,25 +69,14 @@ export function AssigneeSelector({
               transition: "background .15s ease, border-color .15s ease",
             }}
           >
-            {/* Avatar 32px com inicial */}
-            <div
-              aria-hidden="true"
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                background: child.accentColor,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#ffffff",
-                fontSize: 13,
-                fontWeight: 700,
-                flexShrink: 0,
-              }}
-            >
-              {child.displayName.charAt(0).toUpperCase()}
-            </div>
+            {/* Avatar 32px — preset ilustrado (Phase 14) ou inicial */}
+            <ChildAvatar
+              displayName={child.displayName}
+              accentColor={child.accentColor}
+              avatarPreset={child.avatarPreset}
+              size={32}
+              background={child.accentColor}
+            />
 
             {/* Nome da criança */}
             <span

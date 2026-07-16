@@ -22,7 +22,8 @@ import { CreateChildSchema } from '@/types/child'
 
 // ─── createChild ─────────────────────────────────────────────────────────────
 // Inserts a new child profile and returns the persisted row (with real UUID).
-// avatarPreset is a fixed server-injected value (D-08) — never user-selectable.
+// avatarPreset is guardian-selectable since Phase 14 (supersedes D-08) —
+// validated against the preset enum, defaults to 'initial'.
 
 export async function createChild(
   data: z.infer<typeof CreateChildSchema> & { familyId: string },
@@ -31,16 +32,16 @@ export async function createChild(
   if (!session) throw new Error('Unauthorized')
 
   // Validate — throws ZodError if invalid
-  CreateChildSchema.parse(data)
+  const parsed = CreateChildSchema.parse(data)
 
   const [child] = await db
     .insert(childProfiles)
     .values({
       familyId: data.familyId,
-      displayName: data.displayName,
-      ageYears: data.ageYears,
-      accentColor: data.accentColor,
-      avatarPreset: 'initial', // D-08: fixed value, NOT user-selectable
+      displayName: parsed.displayName,
+      ageYears: parsed.ageYears,
+      accentColor: parsed.accentColor,
+      avatarPreset: parsed.avatarPreset,
     })
     .returning()
 
@@ -61,14 +62,15 @@ export async function updateChild(
   if (!session) throw new Error('Unauthorized')
 
   // Validate — throws ZodError if invalid
-  CreateChildSchema.parse(data)
+  const parsed = CreateChildSchema.parse(data)
 
   const [child] = await db
     .update(childProfiles)
     .set({
-      displayName: data.displayName,
-      ageYears: data.ageYears,
-      accentColor: data.accentColor,
+      displayName: parsed.displayName,
+      ageYears: parsed.ageYears,
+      accentColor: parsed.accentColor,
+      avatarPreset: parsed.avatarPreset,
       updatedAt: new Date(),
     })
     .where(and(eq(childProfiles.id, childId), eq(childProfiles.familyId, familyId)))

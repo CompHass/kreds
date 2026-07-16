@@ -10,6 +10,7 @@ import { GardenHero } from './garden-hero'
 import { WaterDrops } from './water-drops'
 import { HarvestButton } from './harvest-button'
 import { CelebrationOverlay } from './celebration-overlay'
+import { AvatarPicker } from './avatar-picker'
 import {
   type GardenSeed,
   getPlantStage,
@@ -47,6 +48,9 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
   // API-03: commandId estável entre re-renders para idempotência (mesmo UUID em caso de retry)
   const [harvestCommandId] = useState(() => crypto.randomUUID())
   const [harvestPending, setHarvestPending] = useState(false)
+  // Phase 14: preset de avatar da criança + estado do picker
+  const [avatarPreset, setAvatarPreset] = useState(seed.avatarPreset ?? 'initial')
+  const [avatarPickerOpen, setAvatarPickerOpen] = useState(false)
 
   // Derivados (recalculados no render)
   const doneCount = tasks.filter((t) => t.done).length
@@ -124,6 +128,18 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
     setTitheDone(false)
   }
 
+  // Phase 14: troca de avatar — otimista + fire-and-forget (padrão handleTaskToggle).
+  // Falha de rede não reverte: a criança já viu o novo avatar; o valor persistido
+  // volta a valer no próximo carregamento SSR.
+  function handleSelectAvatar(preset: string) {
+    setAvatarPreset(preset)
+    fetch(`/api/child/${childId}/avatar`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ avatarPreset: preset }),
+    }).catch((e) => console.error('Avatar update failed', e))
+  }
+
   // D-10: manter último estado ao fechar — NÃO resetar tasks nem harvested
   function handleCloseOverlay() {
     setShowOverlay(false)
@@ -149,11 +165,14 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
         paddingTop: 24,
       }}
     >
-      {/* Header da criança */}
+      {/* Header da criança — avatar clicável abre o AvatarPicker (Phase 14) */}
       <GardenHeader
         name={seed.childName}
         initial={seed.initial}
         coins={seed.coins}
+        avatarPreset={avatarPreset}
+        accentColor={seed.accentColor}
+        onAvatarClick={() => setAvatarPickerOpen(true)}
       />
 
       {/* PR6: trigger discreto para o guardião sair do perfil da criança */}
@@ -233,6 +252,16 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
         visible={showOverlay}
         verse={verse}
         onClose={handleCloseOverlay}
+      />
+
+      {/* Seletor de avatar (Phase 14) */}
+      <AvatarPicker
+        visible={avatarPickerOpen}
+        displayName={seed.childName}
+        accentColor={seed.accentColor ?? '#3E6B4F'}
+        current={avatarPreset}
+        onSelect={handleSelectAvatar}
+        onClose={() => setAvatarPickerOpen(false)}
       />
     </div>
   )

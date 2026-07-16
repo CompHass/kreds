@@ -8,6 +8,7 @@ export async function createChildProfile(input: {
   displayName: string
   ageYears: number
   accentColor: string
+  avatarPreset?: string
 }) {
   const [created] = await db
     .insert(childProfiles)
@@ -16,7 +17,8 @@ export async function createChildProfile(input: {
       displayName: input.displayName,
       ageYears: input.ageYears,
       accentColor: input.accentColor,
-      avatarPreset: 'initial', // D-08: fixed value, NOT user-selectable
+      // Phase 14 (supersedes D-08): selectable preset, 'initial' when omitted
+      avatarPreset: input.avatarPreset ?? 'initial',
     })
     .returning()
   return created
@@ -38,7 +40,12 @@ export async function deactivateChildProfile(childId: string, familyId: string) 
 export async function updateChildProfile(
   childId: string,
   familyId: string,
-  patch: { displayName?: string; ageYears?: number; accentColor?: string },
+  patch: {
+    displayName?: string
+    ageYears?: number
+    accentColor?: string
+    avatarPreset?: string
+  },
 ) {
   const [updated] = await db
     .update(childProfiles)

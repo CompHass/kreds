@@ -295,7 +295,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 11. Goals & Savings | 0/TBD | Not started | - |
 | 12. Native Guardian Login | 0/TBD | Not started | - |
 | 13. Child Secure Login Links | 0/TBD | Not started | - |
-| 14. Avatar Customization | 0/TBD | Not started | - |
+| 14. Avatar Customization | 1/1 | Code complete (pending image assets + prod verify) | 2026-07-16 |
 
 ### Phase 12: Native Guardian Login
 
@@ -373,4 +373,4 @@ Plans:
 
 Plans:
 
-- [ ] TBD (run /gsd-spec-phase 14, then /gsd-plan-phase 14 to break down)
+- [x] Implemented in a single pass 2026-07-16 (user opted out of spec/plan breakdown). Registry `src/lib/avatars/presets.ts` (closed set, 10 presets + 'initial'), shared `ChildAvatar` (img → emoji → initial fallback chain; SSR pre-hydration onError-loss handled via naturalWidth check), `AvatarPicker` overlay in garden, `PATCH /api/child/[childId]/avatar` (child-session auth, harvest pattern), guardian grid in ChildFormPanel, all render points swapped. Endpoint + child flow verified against local Docker (401/400/200/isolation + DB persist). **Pending:** final webp assets in `public/avatars/` (originals to be dropped in `public/avatars/raw/` — see README there), prod verification.

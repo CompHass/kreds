@@ -46,8 +46,8 @@ vi.mock('@/app/actions/children', () => ({
 }))
 
 const INITIAL_CHILDREN: ChildProfileView[] = [
-  { id: 'c1', displayName: 'Ana', ageYears: 8, accentColor: '#3E6B4F', active: true, hasEncryptedPin: true },
-  { id: 'c2', displayName: 'Bia', ageYears: 6, accentColor: '#B14A2E', active: true, hasEncryptedPin: false },
+  { id: 'c1', displayName: 'Ana', ageYears: 8, accentColor: '#3E6B4F', avatarPreset: 'initial', active: true, hasEncryptedPin: true },
+  { id: 'c2', displayName: 'Bia', ageYears: 6, accentColor: '#B14A2E', avatarPreset: 'initial', active: true, hasEncryptedPin: false },
 ]
 
 function renderPanel() {

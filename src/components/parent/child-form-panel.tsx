@@ -9,19 +9,25 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { z } from 'zod'
 import { CreateChildSchema } from '@/types/child'
+import { AVATAR_PRESETS, type AvatarPreset } from '@/lib/avatars/presets'
+import { ChildAvatar } from '@/components/avatar/child-avatar'
 
 // Contrato de dados do form — consumido pelo Plano 05 (ChildrenPanelView)
+// Phase 14: avatarPreset agora é campo selecionável (supersede D-06/D-07/D-08)
 export interface ChildFormData {
   displayName: string
   ageYears: number
   accentColor: string
+  avatarPreset: AvatarPreset
 }
 
 export const EMPTY_CHILD_FORM: ChildFormData = {
   displayName: '',
   ageYears: 6,
   accentColor: '#3E6B4F',
+  avatarPreset: 'initial',
 }
 
 interface ChildFormPanelProps {
@@ -32,15 +38,24 @@ interface ChildFormPanelProps {
 }
 
 export function ChildFormPanel({ mode, initialData, onSave, onCancel }: ChildFormPanelProps) {
+  // z.input: avatarPreset é opcional no input (`.default('initial')` no schema);
+  // o output validado (ChildFormData) sempre o carrega preenchido.
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
-  } = useForm<ChildFormData>({
+  } = useForm<z.input<typeof CreateChildSchema>, unknown, ChildFormData>({
     resolver: zodResolver(CreateChildSchema),
     defaultValues: initialData || EMPTY_CHILD_FORM,
   })
+
+  // Phase 14: avatarPreset controlado via setValue/watch — grid de botões, não input nativo
+  const selectedPreset = watch('avatarPreset')
+  const watchedName = watch('displayName')
+  const watchedColor = watch('accentColor')
 
   useEffect(() => {
     reset(initialData || EMPTY_CHILD_FORM)
@@ -237,6 +252,58 @@ export function ChildFormPanel({ mode, initialData, onSave, onCancel }: ChildFor
           {errors.accentColor && (
             <span style={{ fontSize: 12, color: '#B14A2E' }}>{errors.accentColor.message}</span>
           )}
+        </div>
+
+        {/* Campo Avatar (Phase 14) — grid de presets, 'initial' = fallback inicial+cor */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-kreds-muted)' }}>
+            Avatar
+          </span>
+          <div
+            role="group"
+            aria-label="Avatar"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: 6,
+            }}
+          >
+            {[{ id: 'initial', label: 'Inicial' }, ...AVATAR_PRESETS].map((preset) => {
+              const isSelected = selectedPreset === preset.id
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  aria-pressed={isSelected}
+                  aria-label={`Avatar ${preset.label}`}
+                  title={preset.label}
+                  onClick={() =>
+                    setValue('avatarPreset', preset.id as AvatarPreset, {
+                      shouldDirty: true,
+                    })
+                  }
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 4,
+                    borderRadius: 12,
+                    border: `2px solid ${isSelected ? '#3E6B4F' : '#E2DECF'}`,
+                    background: isSelected ? '#EEF3EA' : 'var(--color-kreds-card)',
+                    cursor: 'pointer',
+                    transition: 'background .15s ease, border-color .15s ease',
+                  }}
+                >
+                  <ChildAvatar
+                    displayName={watchedName || 'C'}
+                    accentColor={watchedColor || '#3E6B4F'}
+                    avatarPreset={preset.id}
+                    size={44}
+                  />
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* CTA */}

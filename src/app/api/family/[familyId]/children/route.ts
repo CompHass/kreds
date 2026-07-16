@@ -64,9 +64,10 @@ export async function POST(
   }
 
   // familyId isolation: inject familyId from URL params, never trust body (T-08-10)
+  // avatarPreset comes validated from CreateChildSchema (enum, default 'initial' — Phase 14)
   const [created] = await db
     .insert(childProfiles)
-    .values({ ...result.data, familyId, avatarPreset: 'initial' })
+    .values({ ...result.data, familyId })
     .returning()
 
   return NextResponse.json(created, { status: 201 })

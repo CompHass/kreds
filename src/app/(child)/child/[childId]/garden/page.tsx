@@ -69,6 +69,8 @@ export default async function GardenPage({
   const seed: GardenSeed = {
     childName: child?.displayName ?? 'Criança',
     initial: (child?.displayName?.[0] ?? 'C').toUpperCase(),
+    avatarPreset: child?.avatarPreset ?? 'initial',    // Phase 14: preset selecionável
+    accentColor: child?.accentColor ?? '#3E6B4F',
     coins: 0,                                          // saldo calculado futuramente via ledger
     tasks: gardenTasks,
     titheDone: false,

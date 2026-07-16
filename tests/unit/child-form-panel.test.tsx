@@ -38,6 +38,7 @@ describe('ChildFormPanel — D-06, D-07, D-09', () => {
       displayName: 'Beto',
       ageYears: 8,
       accentColor: '#b14a2e',
+      avatarPreset: 'initial', // Phase 14: default quando nenhum preset é escolhido
     })
   })
 
@@ -65,7 +66,12 @@ describe('ChildFormPanel — D-06, D-07, D-09', () => {
   })
 
   it('edit mode populates initialData and changes header/CTA', () => {
-    const initial = { displayName: 'Luna', ageYears: 10, accentColor: '#123456' }
+    const initial = {
+      displayName: 'Luna',
+      ageYears: 10,
+      accentColor: '#123456',
+      avatarPreset: 'initial' as const,
+    }
     render(<ChildFormPanel mode="edit" initialData={initial} onSave={vi.fn()} onCancel={vi.fn()} />)
 
     expect(screen.getByText('Editar criança')).toBeInTheDocument()

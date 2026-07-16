@@ -12,6 +12,9 @@ export interface GardenTask {
 export interface GardenSeed {
   childName: string
   initial: string
+  // Phase 14: preset do avatar + cor de destaque (fallback 'initial' + verde)
+  avatarPreset?: string
+  accentColor?: string
   coins: number
   tasks: GardenTask[]
   titheDone: boolean

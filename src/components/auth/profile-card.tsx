@@ -1,15 +1,20 @@
 'use client'
 import Link from 'next/link'
+import { ChildAvatar } from '@/components/avatar/child-avatar'
 
 interface ProfileCardProps {
   childId: string
   displayName: string
   accentColor: string
+  avatarPreset?: string
 }
 
-export function ProfileCard({ childId, displayName, accentColor }: ProfileCardProps) {
-  const initial = displayName.charAt(0).toUpperCase()
-
+export function ProfileCard({
+  childId,
+  displayName,
+  accentColor,
+  avatarPreset = 'initial',
+}: ProfileCardProps) {
   return (
     <Link
       href={`/child/${childId}/login`}
@@ -21,17 +26,12 @@ export function ProfileCard({ childId, displayName, accentColor }: ProfileCardPr
         } as React.CSSProperties
       }
     >
-      {/* Avatar circle */}
+      {/* Avatar circle — preset ilustrado (Phase 14) ou inicial+gradiente */}
       <div
         className="flex items-center justify-center rounded-full select-none transition-transform duration-150 ease-in-out group-hover:scale-[0.96] group-active:scale-[0.96]"
         style={{
-          width: 72,
-          height: 72,
-          background: `linear-gradient(135deg, #5A8A66 0%, #3E6B4F 100%)`,
+          borderRadius: '50%',
           boxShadow: 'var(--tw-ring-shadow, 0 0 0 0 transparent)',
-          fontSize: 28,
-          fontWeight: 700,
-          color: '#ffffff',
         }}
         onMouseEnter={(e) => {
           ;(e.currentTarget as HTMLDivElement).style.boxShadow =
@@ -41,7 +41,13 @@ export function ProfileCard({ childId, displayName, accentColor }: ProfileCardPr
           ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
         }}
       >
-        {initial}
+        <ChildAvatar
+          displayName={displayName}
+          accentColor={accentColor}
+          avatarPreset={avatarPreset}
+          size={72}
+          background="linear-gradient(135deg, #5A8A66 0%, #3E6B4F 100%)"
+        />
       </div>
 
       {/* Name label */}

@@ -31,6 +31,7 @@ export default async function ChildrenPage({
         displayName: childProfiles.displayName,
         ageYears: childProfiles.ageYears,
         accentColor: childProfiles.accentColor,
+        avatarPreset: childProfiles.avatarPreset,
         active: childProfiles.active,
         pinEncrypted: childProfiles.pinEncrypted,
       })
@@ -52,6 +53,7 @@ export default async function ChildrenPage({
     displayName: c.displayName,
     ageYears: c.ageYears,
     accentColor: c.accentColor,
+    avatarPreset: c.avatarPreset,
     active: c.active,
     hasEncryptedPin: c.pinEncrypted !== null,
   }))

@@ -20,6 +20,7 @@ export default async function SelectProfilePage({
       id: childProfiles.id,
       displayName: childProfiles.displayName,
       accentColor: childProfiles.accentColor,
+      avatarPreset: childProfiles.avatarPreset,
     })
     .from(childProfiles)
     .where(and(eq(childProfiles.familyId, familyId), eq(childProfiles.active, true)))
@@ -79,6 +80,7 @@ export default async function SelectProfilePage({
               childId={child.id}
               displayName={child.displayName}
               accentColor={child.accentColor}
+              avatarPreset={child.avatarPreset}
             />
           ))}
         </div>
