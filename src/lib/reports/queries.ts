@@ -3,9 +3,8 @@ import 'server-only'
 // Phase 9 — aggregates the weekly report per child for a given cycle.
 // Reuses existing tables (no new schema): taskTemplates/taskCompletions for
 // task progress, ledger for Kreds earned + firstfruits, wishlistGoals for
-// savings snapshot. Known gap: task completion is not yet persisted to
-// taskCompletions server-side (garden-view toggles are client-only state),
-// so tasksCompleted currently reads 0 until that write path exists.
+// savings snapshot. Task completion is persisted via
+// POST /api/child/[childId]/tasks/[taskId]/complete (garden-view.tsx).
 
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'

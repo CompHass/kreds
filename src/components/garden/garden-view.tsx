@@ -58,16 +58,25 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
 
   // Handlers
   function handleTaskToggle(taskId: string) {
+    const wasAlreadyDone = tasks.find((t) => t.id === taskId)?.done ?? false
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, done: !t.done } : t)),
     )
-    const wasAlreadyDone = tasks.find((t) => t.id === taskId)?.done ?? false
     if (!wasAlreadyDone) {
       // marcando: anima gota e pop
       setWaterTick((tick) => tick + 1)
       setShowPop(true)
       setTimeout(() => setShowPop(false), 650)
     }
+
+    // Persiste no ciclo atual (Phase 9 gap fix) — otimista, fire-and-forget.
+    // Falha de rede não reverte o toggle local: a criança já viu o feedback
+    // visual; o relatório do responsável é best-effort, não bloqueante.
+    fetch(`/api/child/${childId}/tasks/${taskId}/complete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: !wasAlreadyDone }),
+    }).catch((e) => console.error('Task completion persist failed', e))
   }
 
   // API-03: chama POST /api/child/[childId]/harvest com commandId estável (idempotência)
