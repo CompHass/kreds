@@ -11,7 +11,7 @@ interface ParentSidebarProps {
   guardianInitial: string
   onOpenProfile: () => void
   familyId: string
-  activeRoute: 'tasks' | 'children'
+  activeRoute: 'tasks' | 'children' | 'reports'
 }
 
 export function ParentSidebar({ guardianInitial, onOpenProfile, familyId, activeRoute }: ParentSidebarProps) {
@@ -180,14 +180,15 @@ export function ParentSidebar({ guardianInitial, onOpenProfile, familyId, active
           </svg>
         </button>
 
-        {/* 4. Relatórios */}
+        {/* 4. Relatórios — ativo quando activeRoute === 'reports' */}
         <button
           aria-label="Relatórios"
+          onClick={() => router.push(`/family/${familyId}/reports`)}
           style={{
             width: 44,
             height: 44,
             borderRadius: 12,
-            background: 'none',
+            background: activeRoute === 'reports' ? '#E7EFE8' : 'none',
             border: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -201,7 +202,7 @@ export function ParentSidebar({ guardianInitial, onOpenProfile, familyId, active
             height="22"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#9AA092"
+            stroke={activeRoute === 'reports' ? '#3E6B4F' : '#9AA092'}
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"

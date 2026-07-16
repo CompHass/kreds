@@ -1,4 +1,4 @@
-import { and, desc, eq, sum } from 'drizzle-orm'
+import { and, desc, eq, gte, lt, sum } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { ledgerLines, ledgerTransactions } from '@/lib/db/schema/ledger'
 
@@ -23,6 +23,46 @@ export type ChildLedgerHistoryRow = {
   lineId: string
   accountType: LedgerAccountType
   amount: number
+}
+
+export type CycleEarnings = {
+  available: number
+  firstfruits: number
+}
+
+/**
+ * Sums task_earning ledger lines for a child within [rangeStart, rangeEndExclusive).
+ * Used by the weekly reports (Phase 9) to show Kreds earned and firstfruits
+ * separated per cycle — buckets by ledgerLines.createdAt since transactions
+ * are not stamped with a cycleStart column.
+ */
+export async function getEarningsForCycle(
+  childProfileId: string,
+  rangeStart: Date,
+  rangeEndExclusive: Date,
+): Promise<CycleEarnings> {
+  const rows = await db
+    .select({
+      accountType: ledgerLines.accountType,
+      total: sum(ledgerLines.amount),
+    })
+    .from(ledgerLines)
+    .innerJoin(ledgerTransactions, eq(ledgerTransactions.id, ledgerLines.transactionId))
+    .where(
+      and(
+        eq(ledgerLines.childProfileId, childProfileId),
+        eq(ledgerTransactions.transactionType, 'task_earning'),
+        gte(ledgerLines.createdAt, rangeStart),
+        lt(ledgerLines.createdAt, rangeEndExclusive),
+      ),
+    )
+    .groupBy(ledgerLines.accountType)
+
+  const result: CycleEarnings = { available: 0, firstfruits: 0 }
+  for (const row of rows) {
+    result[row.accountType] = Number(row.total ?? 0)
+  }
+  return result
 }
 
 export async function getBalance(

@@ -202,7 +202,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 2** *(blocked on Wave 1 — consome o componente do drawer)*
 
-- [ ] 07-02-PLAN.md — Integração: guardianEmail SSR + profileOpen state + acionadores sidebar/topbar + testes + checkpoint visual *(depends_on 07-01)*
+- [x] 07-02-PLAN.md — Integração: guardianEmail SSR + profileOpen state + acionadores sidebar/topbar + testes (13 passing) *(depends_on 07-01)* (completed 2026-07-01, verificado em código 2026-07-16)
 
 **UI hint**: yes
 
@@ -234,7 +234,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Wave 4** *(blocked on Wave 3 — integração + checkpoint)*
 
-- [ ] 08-05-PLAN.md — Integração: ChildrenPanelView + rota SSR /children + suite verde + checkpoint visual *(depends_on 08-02, 08-03, 08-04)*
+- [x] 08-05-PLAN.md — Integração: ChildrenPanelView + rota SSR /children + suite verde + checkpoint visual *(depends_on 08-02, 08-03, 08-04)* (completed 2026-07-02, verificado em produção 2026-07-16)
 
 **UI hint**: yes
 
@@ -283,11 +283,13 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 4. Child Tasks | 4/4 | Complete   | 2026-06-22 |
 | 5. Parent Panel | 4/4 | Complete   | 2026-06-30 |
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
-| 7. Guardian Profile | 1/2 | Executing | 2026-07-01 |
-| 8. Child Management | 4/5 | In Progress|  |
+| 7. Guardian Profile | 2/2 | Complete    | 2026-07-01 |
+| 8. Child Management | 5/5 | Complete    | 2026-07-02 |
 | 9. Reports | 0/TBD | Not started | - |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |
+| 12. Native Guardian Login | 0/TBD | Not started | - |
+| 13. Child Secure Login Links | 0/TBD | Not started | - |
 
 ### Phase 12: Native Guardian Login
 
@@ -312,3 +314,27 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 Plans:
 
 - [ ] TBD (run /gsd-spec-phase 12, then /gsd-plan-phase 12 to break down)
+
+### Phase 13: Child Secure Login Links
+
+**Goal:** Guardian consegue gerar, por filho, um link direto e seguro que abre já no perfil daquela criança (sem seletor de perfis, sem botão "Acessar Painel do Responsável"), exigindo apenas o PIN da criança para entrar.
+**Depends on:** Phase 2 (Authentication), Phase 8 (Child Management)
+**UI hint:** yes
+**Plans:** 0 plans
+
+**Contexto:** Hoje o login da criança passa pela tela de seleção `/family/access/[familyId]` (Phase 2), que lista todos os filhos da família e também expõe o botão de acesso ao painel do responsável — indesejado quando o link é compartilhado diretamente com a criança (ex.: via WhatsApp).
+
+**Success Criteria:**
+
+  1. Painel do responsável tem ação "Compartilhar" por filho que gera/copia um link único (token opaco, não sequencial, não expõe `child_id`)
+  2. Acessar o link abre direto no perfil daquele filho — sem lista de outros filhos e sem botão "Acessar Painel do Responsável" (bloqueio de UI e de rota/servidor, não só visual)
+  3. PIN da criança continua obrigatório — o token identifica o perfil, não autentica sozinho
+  4. Tentativas de PIN nessa rota têm rate-limit/lockout (reaproveitar child-guard da Phase 2)
+  5. Responsável consegue revogar/regenerar o link de um filho a qualquer momento, invalidando o token anterior
+  6. Token e resolução de `child_id` respeitam isolamento por `family_id` (RLS) antes de qualquer query
+
+**Fora de escopo nesta fase:** expiração automática por tempo, vínculo do token a dispositivo/cookie.
+
+Plans:
+
+- [ ] TBD
