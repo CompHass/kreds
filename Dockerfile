@@ -18,6 +18,7 @@ RUN corepack enable pnpm && \
     ZITADEL_ISSUER=https://auth.hasslab.pro \
     CHILD_SESSION_SECRET=build-time-placeholder-child-session-secret \
     PIN_ENCRYPTION_KEY=dhA/bC7ugD4I5gx4omcLQOivxxwDWe8tDJa/710JQRE= \
+    IAM_LOGIN_CLIENT='{"type":"serviceaccount","keyId":"build-time-placeholder-key","key":"build-time-placeholder-private-key","userId":"build-time-placeholder-user"}' \
     NEXT_PUBLIC_APP_URL=https://kreds.hasslab.pro \
     pnpm build && \
     mkdir -p public

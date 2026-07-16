@@ -2,12 +2,15 @@
 import { signIn } from '../../../auth'
 
 /**
- * Login do responsável via Zitadel OIDC (e-mail/senha).
+ * Login nativo do responsável via Zitadel Session API v2 / Credentials provider.
  * GAUTH-01: redireciona para /family após autenticação bem-sucedida.
- * D-04: provider único Zitadel — auth.ts não modificado.
  */
-export async function loginWithCredentials(_formData: FormData): Promise<void> {
-  await signIn('zitadel', { redirectTo: '/family' })
+export async function loginWithCredentials(formData: FormData): Promise<void> {
+  await signIn('credentials', {
+    email: String(formData.get('email') ?? ''),
+    password: String(formData.get('password') ?? ''),
+    redirectTo: '/family',
+  })
 }
 
 /**

@@ -273,12 +273,15 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Goal:** Filho consegue definir e acompanhar metas de poupança
 **Depends on:** Phase 6, Phase 8
+**Status:** COMPLETE — 2026-07-16 (implementado fora do fluxo GSD; commits `737bd84` e `9dad2f0`)
 **Success Criteria:**
 
-  1. Ícone pin na sidebar abre módulo de metas
-  2. Guardian cria meta com nome, valor e prazo
-  3. Filho vê progresso visual da meta no jardim
-  4. Kreds alocados para poupança contam para a meta
+  1. [x] Ícone pin na sidebar abre módulo de metas
+  2. [x] Guardian cria, edita e arquiva metas com nome, valor e prazo
+  3. [x] Filho vê progresso visual de múltiplas metas no jardim
+  4. [x] Kreds alocados para poupança movimentam o ledger real; a criança pode desfazer a alocação
+
+**Verificação:** 31 testes direcionados passaram (`ledger-goal-allocation`, garden e child tasks); a migration `0010` (`wishlist_goals.due_date`) está aplicada no Postgres local. O `tsc --noEmit` global permanece bloqueado por módulos ausentes de fases antigas (`audit`, `invitations`, `authorization`, `glossary`), sem erros nos arquivos da Phase 11.
 
 ## Progress
 
@@ -297,7 +300,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 8. Child Management | 5/5 | Complete    | 2026-07-02 |
 | 9. Reports | sem GSD | Complete    | 2026-07-16 |
 | 10. Settings | sem GSD | Partial     | 2026-07-16 |
-| 11. Goals & Savings | 0/TBD | Not started | - |
+| 11. Goals & Savings | sem GSD | Complete    | 2026-07-16 |
 | 12. Native Guardian Login | 0/TBD | Not started | - |
 | 13. Child Secure Login Links | 0/TBD | Not started | - |
 | 14. Avatar Customization | 1/1 | Code complete (pending image assets + prod verify) | 2026-07-16 |
@@ -322,9 +325,20 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 - New users start with `email_verified=false`, which hits the exact block that caused the earlier login loop → SPEC must decide: require email verification (Zitadel sends the verification email) before first login, or allow provisional login. Duplicate-email handling and Zitadel password-policy error surfacing also needed.
 - A brand-new guardian has **no family** — the root/family redirects currently bounce a member-less user back to `/login`. SPEC must decide whether signup also bootstraps `families` + `familyMemberships` (guardian role) inline, or routes the new user into a dedicated family-creation flow. Signup touches `kreds_identities` + `families` + `family_memberships`.
 
-Plans:
+Plans: 4 plans
 
-- [ ] TBD (run /gsd-spec-phase 12, then /gsd-plan-phase 12 to break down)
+**Wave 1**
+
+- [ ] 12-01-PLAN.md — Cliente Zitadel server-only, `IAM_LOGIN_CLIENT`, Credentials provider e sincronização Auth.js
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 12-02-PLAN.md — Signup nativo, bootstrap de família e vínculo a convite pendente
+- [ ] 12-03-PLAN.md — Solicitação e confirmação de reset de senha dentro do Kreds
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 12-04-PLAN.md — Secret/runtime, regressão social/passkey e E2E final
 
 ### Phase 13: Child Secure Login Links
 
