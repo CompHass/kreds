@@ -50,17 +50,32 @@ export default async function ParentTasksPage({
 
   const familyName = familyResult[0]?.name ?? 'Família'
 
-  // Mapear rows do banco para o shape ParentTask (API-02)
-  const mappedTasks: ParentTask[] = tasks.map((t) => ({
-    id: t.id,
-    title: t.title,
-    category: (t.category ?? 'quarto') as Category,
-    reward: t.kredsValue,
-    days: (t.days ?? []) as number[],
-    assigned: [t.assignedChildId],
-    active: t.isActive,
-    approval: t.approval,
-  }))
+  // Agrupar tasks idênticas (mesmo title, category, reward, days e status)
+  // para permitir que sejam exibidas como uma única task atribuída a várias crianças (Multi-assignment)
+  const groupedTasks = new Map<string, ParentTask>()
+
+  tasks.forEach((t) => {
+    const key = `${t.title}|${t.category}|${t.kredsValue}|${JSON.stringify(t.days)}|${t.isActive}|${t.approval}`
+    if (!groupedTasks.has(key)) {
+      groupedTasks.set(key, {
+        id: t.id,
+        taskIds: [t.id],
+        title: t.title,
+        category: (t.category ?? 'quarto') as Category,
+        reward: t.kredsValue,
+        days: (t.days ?? []) as number[],
+        assigned: [t.assignedChildId],
+        active: t.isActive,
+        approval: t.approval,
+      })
+    } else {
+      const group = groupedTasks.get(key)!
+      group.assigned.push(t.assignedChildId)
+      group.taskIds?.push(t.id)
+    }
+  })
+
+  const mappedTasks: ParentTask[] = Array.from(groupedTasks.values())
 
   return (
     <ParentPanelView

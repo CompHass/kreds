@@ -24,9 +24,9 @@ export function AssigneeSelector({
 }: AssigneeSelectorProps) {
   function toggleChild(id: string) {
     if (value.includes(id)) {
-      onChange([]);
+      onChange(value.filter((v) => v !== id));
     } else {
-      onChange([id]);
+      onChange([...value, id]);
     }
   }
 

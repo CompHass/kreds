@@ -77,17 +77,21 @@ export function ParentPanelView({
 
   // Handlers de mutação otimista (D-09) + Server Actions (API-01, API-02)
   function handleToggle(taskId: string) {
-    const currentTask = tasks.find((t) => t.id === taskId);
-    if (!currentTask) return;
+  async function handleToggle(id: string, currentActive: boolean) {
     // Otimista: atualiza UI imediatamente
     setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, active: !t.active } : t)),
+      prev.map((t) => (t.id === id ? { ...t, active: !currentActive } : t)),
     );
-    // Fire-and-forget — falha silenciosa aceitável para toggle (T-06-19)
-    toggleTaskActive(taskId, _familyId, !currentTask.active).catch((err) => {
+    // Soft-update (isActive=!currentActive)
+    try {
+      const existingTask = tasks.find((t) => t.id === id);
+      const taskIds = existingTask?.taskIds || [id];
+      await Promise.all(
+        taskIds.map((tid) => toggleTaskActive(tid, _familyId, !currentActive))
+      );
+    } catch (err) {
       console.error("toggleTaskActive failed", err);
-    });
-    // toggle é completamente independente do editingId — não altera o form
+    }
   }
 
   function handleNewTask() {
@@ -105,28 +109,35 @@ export function ParentPanelView({
   async function handleSave() {
     if (formMode === "create") {
       try {
-        // Pitfall 6: usar UUID real retornado pelo servidor (não crypto.randomUUID() local)
-        const saved = await createTask({
-          title: formData.title,
-          familyId: _familyId,
-          assignedChildId: formData.assigned[0] ?? "",
-          kredsValue: formData.reward,
-          days: formData.days,
-          category: formData.category ?? undefined,
-          approval: formData.approval,
-        });
-        const newTask: ParentTask = {
-          id: saved.id, // UUID real do banco (T-06-19 mitigado)
-          title: saved.title,
-          category: (saved.category ?? "quarto") as ParentTask["category"],
-          reward: saved.kredsValue,
-          days: (saved.days ?? []) as number[],
-          assigned: [saved.assignedChildId],
-          active: saved.isActive,
-          approval: saved.approval,
-        };
-        setTasks((prev) => [...prev, newTask]);
-        flashNew(saved.id);
+        const savedList = await Promise.all(
+          formData.assigned.map((childId) =>
+            createTask({
+              title: formData.title,
+              familyId: _familyId,
+              assignedChildId: childId,
+              kredsValue: formData.reward,
+              days: formData.days,
+              category: formData.category ?? undefined,
+              approval: formData.approval,
+            })
+          )
+        );
+        const firstSaved = savedList[0];
+        if (firstSaved) {
+          const newTask: ParentTask = {
+            id: firstSaved.id,
+            taskIds: savedList.map((s) => s.id),
+            title: firstSaved.title,
+            category: (firstSaved.category ?? "quarto") as ParentTask["category"],
+            reward: firstSaved.kredsValue,
+            days: (firstSaved.days ?? []) as number[],
+            assigned: savedList.map((s) => s.assignedChildId),
+            active: firstSaved.isActive,
+            approval: firstSaved.approval,
+          };
+          setTasks((prev) => [...prev, newTask]);
+          flashNew(firstSaved.id);
+        }
       } catch (err) {
         console.error("createTask failed", err);
       }
@@ -156,14 +167,49 @@ export function ParentPanelView({
       setEditingId(null);
       // Persistência ao banco em background
       try {
-        await updateTask(editingId, _familyId, {
-          title: formData.title,
-          kredsValue: formData.reward,
-          days: formData.days,
-          category: formData.category ?? undefined,
-          approval: formData.approval,
-          assignedChildId: formData.assigned[0] ?? undefined,
-        });
+        const existingTask = tasks.find((t) => t.id === editingId);
+        if (existingTask) {
+          const oldChildren = existingTask.assigned;
+          const newChildren = formData.assigned;
+          const taskIds = existingTask.taskIds || [existingTask.id];
+
+          const childToTaskId = new Map<string, string>();
+          oldChildren.forEach((childId, i) => {
+            if (taskIds[i]) childToTaskId.set(childId, taskIds[i]);
+          });
+
+          const updatePromises = newChildren.map((childId) => {
+            const taskId = childToTaskId.get(childId);
+            if (taskId) {
+              return updateTask(taskId, _familyId, {
+                title: formData.title,
+                kredsValue: formData.reward,
+                days: formData.days,
+                category: formData.category ?? undefined,
+                approval: formData.approval,
+              });
+            } else {
+              return createTask({
+                title: formData.title,
+                familyId: _familyId,
+                assignedChildId: childId,
+                kredsValue: formData.reward,
+                days: formData.days,
+                category: formData.category ?? undefined,
+                approval: formData.approval,
+              });
+            }
+          });
+
+          const deletePromises = oldChildren
+            .filter((childId) => !newChildren.includes(childId))
+            .map((childId) => {
+              const taskId = childToTaskId.get(childId);
+              if (taskId) return deactivateTask(taskId, _familyId);
+            });
+
+          await Promise.all([...updatePromises, ...deletePromises]);
+        }
       } catch (err) {
         console.error("updateTask failed", err);
       }
@@ -178,7 +224,9 @@ export function ParentPanelView({
       setEditingId(null);
       // Soft-delete no banco (deactivatedAt=now(), isActive=false)
       try {
-        await deactivateTask(taskIdToDelete, _familyId);
+        const existingTask = tasks.find((t) => t.id === taskIdToDelete);
+        const taskIds = existingTask?.taskIds || [taskIdToDelete];
+        await Promise.all(taskIds.map((id) => deactivateTask(id, _familyId)));
       } catch (err) {
         console.error("deactivateTask failed", err);
       }

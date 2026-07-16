@@ -7,6 +7,7 @@ import { z } from "zod";
 
 export interface ParentTask {
   id: string;
+  taskIds?: string[];
   title: string;
   category: "quarto" | "higiene" | "estudos" | "casa" | "espiritual" | "pet";
   reward: number; // inteiro em R$; 0 = mordomia
