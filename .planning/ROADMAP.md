@@ -242,11 +242,16 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Goal:** Guardian consegue ver relatórios semanais de Kreds por filho
 **Depends on:** Phase 6, Phase 8
+**Status:** COMPLETE — 2026-07-16 (implementado fora do fluxo GSD, direto na conversa)
 **Success Criteria:**
 
-  1. Ícone gráfico de barras abre página de relatórios
-  2. Resumo semanal por filho: tarefas concluídas, Kreds ganhos, dízimo separado, poupança
-  3. Histórico de ciclos anteriores navegável
+  1. [x] Ícone gráfico de barras abre página de relatórios
+  2. [x] Resumo semanal por filho: tarefas concluídas, Kreds ganhos, dízimo separado, poupança
+  3. [x] Histórico de ciclos anteriores navegável
+
+**Plans:** sem plans formais (GSD não usado nesta fase) — commits `399453f` (rota + agregação), `bc86273` (fix build: server-only guard indevido em client component), `39dcf70` (fix gap: persistir task completion em `taskCompletions` via `POST /api/child/[childId]/tasks/[taskId]/complete`)
+
+**Verificado em produção 2026-07-16**: card "Ay" mostrou 2/3 tarefas, 7 Kreds ganhos, 1 dízimo — confirmado também via query direta em `task_completions` no Postgres do cluster.
 
 ### Phase 10: Settings
 
@@ -273,7 +278,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -285,11 +290,12 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. API Integration | 4/4 | Complete   | 2026-06-27 |
 | 7. Guardian Profile | 2/2 | Complete    | 2026-07-01 |
 | 8. Child Management | 5/5 | Complete    | 2026-07-02 |
-| 9. Reports | 0/TBD | Not started | - |
+| 9. Reports | sem GSD | Complete    | 2026-07-16 |
 | 10. Settings | 0/TBD | Not started | - |
 | 11. Goals & Savings | 0/TBD | Not started | - |
 | 12. Native Guardian Login | 0/TBD | Not started | - |
 | 13. Child Secure Login Links | 0/TBD | Not started | - |
+| 14. Avatar Customization | 0/TBD | Not started | - |
 
 ### Phase 12: Native Guardian Login
 
@@ -338,3 +344,33 @@ Plans:
 Plans:
 
 - [ ] TBD
+
+### Phase 14: Avatar Customization
+
+**Goal:** Criança consegue escolher um avatar ilustrado (personagens tema jardim) para o seu perfil, substituindo o avatar atual de inicial + cor; responsável também consegue definir/trocar o avatar do filho no painel.
+**Depends on:** Phase 3 (Child Garden — header/perfil da criança), Phase 8 (Child Management — ChildFormPanel)
+**UI hint:** yes
+**Plans:** 0 plans
+
+**Contexto:** Hoje o avatar é sempre a inicial do `displayName` sobre gradiente verde, com `accent_color` escolhido no cadastro (Phase 8, D-06/D-07/D-08 — "avatar customization is not a form field"). A coluna `child_profiles.avatar_preset` já existe desde a Phase 8, mas é fixada em `'initial'` server-side. Esta fase **revoga D-06/D-07/D-08**: `avatar_preset` passa a ser selecionável.
+
+**Success Criteria:**
+
+  1. Set de 5 avatares ilustrados tema jardim — folhinha, brotinho, sementinha, bolota e cogumelo — disponível como assets estáticos otimizados em `/public/avatars/`; `avatar_preset` armazena o preset escolhido (`'initial' | 'leaf' | 'sprout' | 'seed' | 'acorn' | 'mushroom'`)
+  2. Criança abre um seletor de avatar a partir do header do jardim, escolhe um dos 5 personagens e a troca persiste e reflete imediatamente no header (autenticada pela child session da Phase 2 — criança só altera o próprio avatar)
+  3. Responsável escolhe/troca o avatar do filho no ChildFormPanel (criar e editar filho), via grid de presets ao lado do campo de cor existente
+  4. Avatar escolhido substitui a inicial em todos os pontos que hoje renderizam inicial+cor: ProfileCard (`/family/access/[familyId]`), GardenHeader, ChildCard (`/children`), FilterChips, AssigneeSelector e mini-avatares do painel dos pais
+  5. Perfis sem escolha continuam no fallback inicial+cor (`avatar_preset = 'initial'`) — sem migração de dados destrutiva; `accent_color` continua como cor de anel/fundo e destaque
+  6. Validação server-side aceita apenas presets permitidos (Zod enum); toda mutação respeita isolamento por `family_id` (guardian só altera filhos da própria família)
+
+**Scope notes:**
+
+- Assets: as 5 imagens de referência (estilo 3D fofo) serão fornecidas pelo usuário como arquivos finais; otimizar (webp, ~256×256) antes de commitar.
+- Comentários "D-08: fixed value, NOT user-selectable" precisam ser atualizados em `src/types/child.ts`, `src/app/actions/children.ts`, `src/lib/families/child-profiles.ts` e `src/app/api/family/[familyId]/children/route.ts`.
+- `CreateChildSchema` ganha campo `avatarPreset` (enum, default `'initial'`).
+
+**Fora de escopo nesta fase:** upload de foto própria, geração de avatar por IA em runtime, desbloqueio gamificado de avatares por Kreds (candidato a fase futura).
+
+Plans:
+
+- [ ] TBD (run /gsd-spec-phase 14, then /gsd-plan-phase 14 to break down)
