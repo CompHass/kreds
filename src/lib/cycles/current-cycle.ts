@@ -1,4 +1,6 @@
-import 'server-only'
+// Pure calendar math — no DB/secrets involved, safe to import from both
+// Server Components (garden/page.tsx, reports/page.tsx) and Client
+// Components (reports-panel-view.tsx cycle nav), so no 'server-only' guard.
 
 /**
  * Returns the ISO date string ('YYYY-MM-DD') of the most recent Sunday in UTC.
