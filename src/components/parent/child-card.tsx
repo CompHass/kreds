@@ -6,6 +6,7 @@
 // Redefinir PIN + Desativar/Reativar controls. The activity-history control
 // (Frame C's other action) is deferred to Phase 9 and intentionally absent here.
 
+import Link from 'next/link'
 import type { ChildProfileView } from '@/types/child'
 import { ChildAvatar } from '@/components/avatar/child-avatar'
 
@@ -90,6 +91,31 @@ export function ChildCard({
           </span>
         )}
       </div>
+
+      {/* Entrar no jardim — atalho pro teclado de PIN daquele filho, sem passar
+          pela grade "Quem está aqui?" nem depender de link copiado (T-guardian-shortcut) */}
+      {child.active && (
+        <Link
+          href={`/child/${child.id}/login`}
+          aria-label={`Entrar no jardim de ${child.displayName}`}
+          style={{
+            height: 36,
+            padding: '0 14px',
+            borderRadius: 10,
+            border: '1.5px solid #CBE0D0',
+            background: '#E7EFE8',
+            color: 'var(--color-kreds-primary)',
+            fontSize: 13,
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+          }}
+        >
+          Entrar no jardim
+        </Link>
+      )}
 
       {/* Editar */}
       <button
