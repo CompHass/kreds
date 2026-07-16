@@ -1,4 +1,6 @@
-// GARD-07: Speech bubble com texto contextual e animação kredsBubble
+// GARD-07: Speech bubble contextual — ancorado no topo do céu, rabinho apontando
+// para a planta. Centralizado via flex no wrapper (sem translateX no elemento
+// animado, para o kredsBubble não sobrescrever o posicionamento).
 
 interface SpeechBubbleProps {
   text: string
@@ -12,44 +14,55 @@ export function SpeechBubble({ text, visible }: SpeechBubbleProps) {
     <div
       style={{
         position: 'absolute',
-        bottom: 60,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        background: 'var(--color-kreds-card)',
-        borderRadius: 'var(--radius-card-md)',
-        padding: '8px 14px',
-        maxWidth: 240,
-        textAlign: 'center',
-        animation: 'var(--animate-kreds-bubble)',
-        boxShadow: 'var(--shadow-card)',
+        top: 46,
+        left: 16,
+        right: 16,
+        display: 'flex',
+        justifyContent: 'center',
+        pointerEvents: 'none',
         zIndex: 10,
       }}
     >
-      <span
+      <div
         style={{
-          fontSize: 14,
-          fontWeight: 500,
-          lineHeight: 1.5,
-          color: 'var(--color-kreds-text)',
+          position: 'relative',
+          background: 'var(--color-kreds-card)',
+          border: '1px solid var(--color-kreds-border)',
+          borderRadius: 16,
+          padding: '9px 14px',
+          maxWidth: 250,
+          textAlign: 'center',
+          boxShadow: 'var(--shadow-card)',
+          animation: 'var(--animate-kreds-bubble)',
         }}
       >
-        {text}
-      </span>
-      {/* Triângulo de ponteiro */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: -6,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 0,
-          height: 0,
-          borderLeft: '6px solid transparent',
-          borderRight: '6px solid transparent',
-          borderTop: '6px solid var(--color-kreds-card)',
-        }}
-      />
+        <span
+          style={{
+            fontSize: 13,
+            fontWeight: 600,
+            lineHeight: 1.45,
+            color: 'var(--color-kreds-text)',
+          }}
+        >
+          {text}
+        </span>
+        {/* Rabinho apontando para a planta */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: -5.5,
+            left: '50%',
+            marginLeft: -5,
+            width: 10,
+            height: 10,
+            background: 'var(--color-kreds-card)',
+            borderRight: '1px solid var(--color-kreds-border)',
+            borderBottom: '1px solid var(--color-kreds-border)',
+            transform: 'rotate(45deg)',
+          }}
+        />
+      </div>
     </div>
   )
 }

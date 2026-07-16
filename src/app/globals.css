@@ -54,6 +54,7 @@
   --animate-kreds-shake:    kredsShake 0.5s cubic-bezier(.36,.07,.19,.97);
   --animate-kreds-new:      kredsNew 1.2s ease;
   --animate-kreds-spin:     kredsSpin 0.7s linear infinite;
+  --animate-kreds-sway:     kredsSway 4.5s ease-in-out infinite;
 
   /* ── Keyframes (DS-03) — dentro do @theme para tree-shaking ── */
   @keyframes kredsBreath {
@@ -120,5 +121,20 @@
   }
   @keyframes kredsSpin {
     to { transform: rotate(360deg); }
+  }
+  @keyframes kredsSway {
+    0%, 100% { transform: rotate(-1.4deg); }
+    50%      { transform: rotate(1.4deg); }
+  }
+}
+
+/* Acessibilidade: respeitar preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -87,7 +87,7 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
         body: JSON.stringify({
           commandId: harvestCommandId,
           totalAmount,
-          familyId: '',   // servidor usa familyId da sessão JWT (T-06-13 mitigado)
+          // familyId omitido de propósito: o servidor usa o familyId da sessão JWT (T-06-13)
         }),
       })
 

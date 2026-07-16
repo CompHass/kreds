@@ -107,15 +107,16 @@ export const SEED_TITHE: GardenSeed = {
 }
 
 // Mapeamento doneCount → stage (GARD-03)
-// Regra: 0→'a', 1→'b', <totalTasks→'c', senão 'd'
+// Regra: 0→'a', tudo concluído→'d', 1→'b', senão 'c'
+// Conclusão total checada antes de doneCount===1 para famílias com 1 tarefa só
 export function getPlantStage(
   doneCount: number,
   totalTasks: number,
 ): 'a' | 'b' | 'c' | 'd' {
   if (doneCount === 0) return 'a'
+  if (doneCount >= totalTasks) return 'd'
   if (doneCount === 1) return 'b'
-  if (doneCount < totalTasks) return 'c'
-  return 'd'
+  return 'c'
 }
 
 // Texto do speech bubble por estado do jardim (GARD-07)
@@ -131,7 +132,7 @@ export function getBubbleText(seed: GardenSeed): string {
   const stage = getPlantStage(doneCount, seed.tasks.length)
   switch (stage) {
     case 'a':
-      return 'Seu jardim está esperando por você! Complete uma tarefa para começar.'
+      return 'Seu jardim espera por você! Complete uma tarefa para começar.'
     case 'b':
       return 'Que começo incrível! Continue regando seu jardim.'
     case 'c':

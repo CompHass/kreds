@@ -58,7 +58,7 @@ export default async function GardenPage({
   const gardenTasks: GardenTask[] = tasks.map((t) => ({
     id: t.id,
     title: t.title,
-    emoji: '✅',
+    emoji: '🌱',
     done: completedIds.has(t.id),
     kredsValue: t.kredsValue,   // necessário para somar o total na colheita (API-03)
   }))

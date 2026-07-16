@@ -13,7 +13,7 @@ import {
 describe('getBubbleText', () => {
   it('retorna texto de início para SEED_STAGE_A (0 tarefas)', () => {
     const text = getBubbleText(SEED_STAGE_A)
-    expect(text).toContain('esperando por você')
+    expect(text).toContain('espera por você')
   })
 
   it('retorna texto encorajador para SEED_STAGE_B (1 tarefa)', () => {

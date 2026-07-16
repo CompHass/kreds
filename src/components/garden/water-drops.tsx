@@ -12,8 +12,8 @@ export function WaterDrops() {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            bottom: 80,
-            left: `${20 + i * 14}%`,
+            bottom: 150,
+            left: `${34 + i * 8}%`,
             width: 10,
             height: 14,
             borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',

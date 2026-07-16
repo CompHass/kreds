@@ -1,61 +1,94 @@
-// GARD-09: Flores decorativas SVG visíveis quando titheDone=true
+// GARD-09: Flores decorativas de dízimo — dois arranjos flanqueando o vaso,
+// no mesmo estilo vetorial da planta (margaridas rosa com centro dourado).
 
 interface DecorativeFlowersProps {
   visible: boolean
+}
+
+function FlowerCluster({ mirrored = false }: { mirrored?: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width="56"
+      height="64"
+      viewBox="0 0 56 64"
+      style={{ transform: mirrored ? 'scaleX(-1)' : undefined }}
+    >
+      {/* Caules */}
+      <path
+        d="M16 26 C 16 38 16 48 16 58"
+        stroke="#5A8A66"
+        strokeWidth="2.5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M38 34 C 38 42 38 50 38 58"
+        stroke="#5A8A66"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
+      />
+      {/* Folhas */}
+      <g transform="rotate(-40 9 44)">
+        <ellipse cx="9" cy="44" rx="7" ry="3.5" fill="#6FA07A" />
+      </g>
+      <g transform="rotate(40 45 48)">
+        <ellipse cx="45" cy="48" rx="6" ry="3" fill="#6FA07A" />
+      </g>
+      {/* Flor maior */}
+      <g>
+        <circle cx="16" cy="14" r="5" fill="var(--color-kreds-rose)" />
+        <circle cx="10" cy="20" r="5" fill="var(--color-kreds-rose)" />
+        <circle cx="22" cy="20" r="5" fill="var(--color-kreds-rose)" />
+        <circle cx="12" cy="26" r="5" fill="var(--color-kreds-rose)" />
+        <circle cx="20" cy="26" r="5" fill="var(--color-kreds-rose)" />
+        <circle cx="16" cy="21" r="4" fill="#E3C57C" />
+      </g>
+      {/* Flor menor */}
+      <g>
+        <circle cx="38" cy="26" r="4" fill="var(--color-kreds-rose)" opacity="0.9" />
+        <circle cx="33" cy="31" r="4" fill="var(--color-kreds-rose)" opacity="0.9" />
+        <circle cx="43" cy="31" r="4" fill="var(--color-kreds-rose)" opacity="0.9" />
+        <circle cx="35" cy="36" r="4" fill="var(--color-kreds-rose)" opacity="0.9" />
+        <circle cx="41" cy="36" r="4" fill="var(--color-kreds-rose)" opacity="0.9" />
+        <circle cx="38" cy="31" r="3.2" fill="#E3C57C" />
+      </g>
+    </svg>
+  )
 }
 
 export function DecorativeFlowers({ visible }: DecorativeFlowersProps) {
   if (!visible) return null
 
   return (
-    <svg
+    <div
       data-testid="decorative-flowers"
-      width="120"
-      height="80"
-      viewBox="0 0 120 80"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      style={{
-        position: 'absolute',
-        bottom: 40,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        pointerEvents: 'none',
-        zIndex: 1,
-      }}
+      style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
     >
-      {/* Flor esquerda */}
-      <circle cx="20" cy="40" r="8" fill="var(--color-kreds-rose)" opacity="0.85" />
-      <circle cx="12" cy="32" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      <circle cx="28" cy="32" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      <circle cx="12" cy="48" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      <circle cx="28" cy="48" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      {/* Centro esquerda */}
-      <circle cx="20" cy="40" r="4" fill="#F5D0DE" />
-
-      {/* Flor central */}
-      <circle cx="60" cy="35" r="10" fill="var(--color-kreds-rose)" opacity="0.9" />
-      <circle cx="50" cy="25" r="6" fill="var(--color-kreds-rose)" opacity="0.75" />
-      <circle cx="70" cy="25" r="6" fill="var(--color-kreds-rose)" opacity="0.75" />
-      <circle cx="50" cy="45" r="6" fill="var(--color-kreds-rose)" opacity="0.75" />
-      <circle cx="70" cy="45" r="6" fill="var(--color-kreds-rose)" opacity="0.75" />
-      {/* Centro */}
-      <circle cx="60" cy="35" r="5" fill="#F5D0DE" />
-
-      {/* Flor direita */}
-      <circle cx="100" cy="40" r="8" fill="var(--color-kreds-rose)" opacity="0.85" />
-      <circle cx="92" cy="32" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      <circle cx="108" cy="32" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      <circle cx="92" cy="48" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      <circle cx="108" cy="48" r="5" fill="var(--color-kreds-rose)" opacity="0.7" />
-      {/* Centro direita */}
-      <circle cx="100" cy="40" r="4" fill="#F5D0DE" />
-
-      {/* Caules */}
-      <line x1="20" y1="52" x2="20" y2="72" stroke="#5A8A66" strokeWidth="2" strokeLinecap="round" />
-      <line x1="60" y1="48" x2="60" y2="72" stroke="#5A8A66" strokeWidth="2" strokeLinecap="round" />
-      <line x1="100" y1="52" x2="100" y2="72" stroke="#5A8A66" strokeWidth="2" strokeLinecap="round" />
-    </svg>
+      <div
+        style={{
+          position: 'absolute',
+          left: '9%',
+          bottom: 36,
+          animation: 'var(--animate-kreds-sprout)',
+          transformOrigin: 'bottom center',
+        }}
+      >
+        <FlowerCluster />
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          right: '9%',
+          bottom: 36,
+          animation: 'var(--animate-kreds-sprout)',
+          transformOrigin: 'bottom center',
+        }}
+      >
+        <FlowerCluster mirrored />
+      </div>
+    </div>
   )
 }

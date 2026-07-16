@@ -12,6 +12,10 @@ export function WaterTracker({ filled }: WaterTrackerProps) {
         display: 'flex',
         gap: 6,
         alignItems: 'center',
+        background: 'var(--color-kreds-card)',
+        border: '1px solid var(--color-kreds-border)',
+        borderRadius: 'var(--radius-pill)',
+        padding: '7px 10px',
       }}
     >
       {Array.from({ length: 4 }, (_, i) => (

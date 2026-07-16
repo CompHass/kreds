@@ -22,4 +22,8 @@ describe('getPlantStage', () => {
   it('retorna "d" quando doneCount é igual ao total (4)', () => {
     expect(getPlantStage(4, 4)).toBe('d')
   })
+
+  it('retorna "d" quando há apenas 1 tarefa e ela está concluída', () => {
+    expect(getPlantStage(1, 1)).toBe('d')
+  })
 })

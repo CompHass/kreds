@@ -8,10 +8,10 @@ import { verifyChildSession } from '@/lib/families/child-session'
 import { validateChildSessionScope } from '@/lib/auth/child-guard'
 
 // Zod schema — rejects floats, zero, negative, and non-UUID commandId
+// familyId NÃO é aceito no body: o servidor usa sempre session.familyId (JWT assinado, T-06-13)
 const HarvestBodySchema = z.object({
   commandId: z.string().uuid('commandId must be a UUID'),
   totalAmount: z.number().int().positive('totalAmount must be a positive integer'),
-  familyId: z.string().uuid('familyId must be a UUID'),
 })
 
 export async function POST(
@@ -75,21 +75,26 @@ export async function POST(
         })
         .returning()
 
-      // Insert two ledger lines — available and firstfruits
-      await tx.insert(ledgerLines).values([
+      // Insert ledger lines — available and firstfruits.
+      // Linhas com amount 0 são omitidas: o constraint non_zero_amount as rejeita
+      // (ex.: totalAmount=1 → firstfruits=1, available=0). A soma das linhas
+      // continua igual ao totalAmount.
+      const lines = [
         {
           transactionId: header.id,
           childProfileId: childId,
-          accountType: 'available',
+          accountType: 'available' as const,
           amount: available,
         },
         {
           transactionId: header.id,
           childProfileId: childId,
-          accountType: 'firstfruits',
+          accountType: 'firstfruits' as const,
           amount: firstfruits,
         },
-      ])
+      ].filter((line) => line.amount !== 0)
+
+      await tx.insert(ledgerLines).values(lines)
 
       return header
     })
