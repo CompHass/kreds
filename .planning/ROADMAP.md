@@ -257,12 +257,17 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Goal:** Guardian consegue configurar preferências da família
 **Depends on:** Phase 7
+**Status:** PARTIAL — 2026-07-16 (escopo reduzido de propósito, decisão do usuário; sem GSD)
 **Success Criteria:**
 
-  1. Engrenagem abre página de configurações
-  2. Editar nome da família
-  3. Configurar dia de início do ciclo semanal
-  4. Gerenciar notificações
+  1. [x] Engrenagem abre página de configurações
+  2. [x] Editar nome da família
+  3. [ ] Configurar dia de início do ciclo semanal — **deferido**: `getCurrentCycleStart()` hardcoded domingo, já usado em produção por jardim/tarefas/relatórios (Fase 9); tornar configurável exige migração + revisitar esses 3 pontos. Precisa de decisão de design própria antes de implementar.
+  4. [ ] Gerenciar notificações — **deferido**: não existe infra (sem email/push, sem tabela de preferências). Feature nova do zero, sem spec ainda.
+
+**Plans:** sem plans formais (GSD não usado) — commit `4aa31b9` (rota `/settings` + `updateFamilyName` Server Action, ícone engrenagem ligado)
+
+**Verificado em produção 2026-07-16** pelo usuário: editar nome da família funciona, breadcrumb atualiza na hora.
 
 ### Phase 11: Goals & Savings
 
@@ -291,7 +296,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. Guardian Profile | 2/2 | Complete    | 2026-07-01 |
 | 8. Child Management | 5/5 | Complete    | 2026-07-02 |
 | 9. Reports | sem GSD | Complete    | 2026-07-16 |
-| 10. Settings | 0/TBD | Not started | - |
+| 10. Settings | sem GSD | Partial     | 2026-07-16 |
 | 11. Goals & Savings | 0/TBD | Not started | - |
 | 12. Native Guardian Login | 0/TBD | Not started | - |
 | 13. Child Secure Login Links | 0/TBD | Not started | - |
