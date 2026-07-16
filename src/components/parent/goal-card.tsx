@@ -1,16 +1,12 @@
 'use client'
 
-// Phase 11 — GoalCard: mostra a meta ativa de um filho (ou "sem meta" com
-// botão criar). Mesma linguagem visual de child-report-card.tsx.
+// Phase 11 — GoalCard: mostra uma meta (um filho pode ter várias em
+// paralelo). Mesma linguagem visual de child-report-card.tsx.
 
 import type { GoalView } from '@/types/goal'
 
 interface GoalCardProps {
-  childId: string
-  displayName: string
-  accentColor: string
-  goal: GoalView | null
-  onCreate: () => void
+  goal: GoalView
   onEdit: () => void
   onArchive: () => void
 }
@@ -20,9 +16,9 @@ function formatDueDate(dueDate: string): string {
   return `${d}/${m}/${y}`
 }
 
-export function GoalCard({ childId: _childId, displayName, accentColor, goal, onCreate, onEdit, onArchive }: GoalCardProps) {
+export function GoalCard({ goal, onEdit, onArchive }: GoalCardProps) {
   const pct =
-    goal && goal.targetAmount > 0
+    goal.targetAmount > 0
       ? Math.min(100, Math.round((goal.allocatedAmount / goal.targetAmount) * 100))
       : 0
 
@@ -34,121 +30,82 @@ export function GoalCard({ childId: _childId, displayName, accentColor, goal, on
         flexDirection: 'column',
         gap: 12,
         width: '100%',
-        padding: 20,
-        borderRadius: 24,
-        background: 'var(--color-kreds-card)',
+        padding: 16,
+        borderRadius: 18,
+        background: '#ffffff',
+        border: '1px solid var(--color-kreds-border)',
         boxSizing: 'border-box',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: '50%',
-            background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColor}CC 100%)`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 17,
-            fontWeight: 700,
-            color: '#ffffff',
-            flexShrink: 0,
-          }}
-        >
-          {displayName.charAt(0).toUpperCase()}
-        </div>
-        <span style={{ fontSize: 15, fontWeight: 700, color: '#27372C' }}>{displayName}</span>
-        <div style={{ flex: 1 }} />
-        {goal ? (
-          <>
-            <button
-              aria-label={`Editar meta de ${displayName}`}
-              onClick={onEdit}
-              style={{
-                padding: '6px 14px',
-                borderRadius: 'var(--radius-pill)',
-                border: '1px solid var(--color-kreds-border)',
-                background: '#ffffff',
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--color-kreds-text)',
-                cursor: 'pointer',
-              }}
-            >
-              Editar
-            </button>
-            <button
-              aria-label={`Arquivar meta de ${displayName}`}
-              onClick={onArchive}
-              style={{
-                padding: '6px 14px',
-                borderRadius: 'var(--radius-pill)',
-                border: '1px solid var(--color-kreds-border)',
-                background: '#ffffff',
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--color-kreds-orange)',
-                cursor: 'pointer',
-              }}
-            >
-              Arquivar
-            </button>
-          </>
-        ) : (
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
+        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-kreds-text)' }}>
+          {goal.title}
+          {goal.status === 'achieved' && (
+            <span style={{ marginLeft: 8, fontSize: 12, fontWeight: 600, color: 'var(--color-kreds-primary)' }}>
+              ✓ Concluída
+            </span>
+          )}
+        </span>
+        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
           <button
-            aria-label={`Criar meta para ${displayName}`}
-            onClick={onCreate}
+            aria-label={`Editar meta ${goal.title}`}
+            onClick={onEdit}
             style={{
-              padding: '6px 14px',
+              padding: '4px 10px',
               borderRadius: 'var(--radius-pill)',
-              border: 'none',
-              background: 'var(--color-kreds-primary)',
-              fontSize: 13,
-              fontWeight: 700,
-              color: '#ffffff',
+              border: '1px solid var(--color-kreds-border)',
+              background: '#ffffff',
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-kreds-text)',
               cursor: 'pointer',
             }}
           >
-            + Criar meta
+            Editar
           </button>
-        )}
-      </div>
-
-      {goal ? (
-        <>
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-kreds-text)' }}>
-              {goal.title}
-            </span>
-            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-kreds-muted)' }}>
-              {goal.allocatedAmount}/{goal.targetAmount} Kreds
-              {goal.dueDate ? ` · até ${formatDueDate(goal.dueDate)}` : ''}
-            </span>
-          </div>
-          <div
+          <button
+            aria-label={`Arquivar meta ${goal.title}`}
+            onClick={onArchive}
             style={{
-              width: '100%',
-              height: 8,
+              padding: '4px 10px',
               borderRadius: 'var(--radius-pill)',
-              background: 'var(--color-kreds-hover)',
-              overflow: 'hidden',
+              border: '1px solid var(--color-kreds-border)',
+              background: '#ffffff',
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'var(--color-kreds-orange)',
+              cursor: 'pointer',
             }}
           >
-            <div
-              style={{
-                width: `${pct}%`,
-                height: '100%',
-                borderRadius: 'var(--radius-pill)',
-                background: 'var(--color-kreds-water)',
-                transition: 'width .6s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}
-            />
-          </div>
-        </>
-      ) : (
-        <span style={{ fontSize: 13, color: 'var(--color-kreds-muted)' }}>Sem meta ativa</span>
-      )}
+            Arquivar
+          </button>
+        </div>
+      </div>
+
+      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-kreds-muted)' }}>
+        {goal.allocatedAmount}/{goal.targetAmount} Kreds
+        {goal.dueDate ? ` · até ${formatDueDate(goal.dueDate)}` : ''}
+      </span>
+
+      <div
+        style={{
+          width: '100%',
+          height: 8,
+          borderRadius: 'var(--radius-pill)',
+          background: 'var(--color-kreds-hover)',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            width: `${pct}%`,
+            height: '100%',
+            borderRadius: 'var(--radius-pill)',
+            background: 'var(--color-kreds-water)',
+            transition: 'width .6s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        />
+      </div>
     </div>
   )
 }

@@ -20,11 +20,18 @@ export interface GardenSeed {
   titheDone: boolean
   harvested: boolean
   season: 'primavera' | 'verao' | 'outono' | 'inverno'
-  savings: number
-  goal: number
-  // Phase 11: id da meta ativa — null quando a criança não tem meta definida
-  // (SavingsCard só permite alocar Kreds quando há uma meta real).
-  goalId?: string | null
+  // Phase 11: uma criança pode ter várias metas simultâneas — ela escolhe em
+  // qual guardar/retirar Kreds (SavingsSection renderiza um SavingsCard por meta).
+  goals: GardenGoal[]
+}
+
+export interface GardenGoal {
+  id: string
+  title: string
+  allocatedAmount: number
+  targetAmount: number
+  status: 'active' | 'achieved' | 'archived'
+  dueDate: string | null
 }
 
 const BASE_TASKS: GardenTask[] = [
@@ -43,8 +50,7 @@ export const SEED_STAGE_A: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'primavera',
-  savings: 25,
-  goal: 100,
+  goals: [],
 }
 
 // 1 tarefa concluída — planta no estágio 'b'
@@ -56,8 +62,7 @@ export const SEED_STAGE_B: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'primavera',
-  savings: 25,
-  goal: 100,
+  goals: [],
 }
 
 // 3 tarefas concluídas — planta no estágio 'c'
@@ -69,8 +74,7 @@ export const SEED_STAGE_C: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'verao',
-  savings: 25,
-  goal: 100,
+  goals: [],
 }
 
 // 4 tarefas concluídas, não colhida — planta no estágio 'd'
@@ -82,8 +86,7 @@ export const SEED_STAGE_D: GardenSeed = {
   titheDone: false,
   harvested: false,
   season: 'verao',
-  savings: 25,
-  goal: 100,
+  goals: [],
 }
 
 // Todas concluídas, jardim colhido
@@ -95,8 +98,7 @@ export const SEED_HARVESTED: GardenSeed = {
   titheDone: false,
   harvested: true,
   season: 'verao',
-  savings: 25,
-  goal: 100,
+  goals: [],
 }
 
 // Dízimo marcado
@@ -108,8 +110,7 @@ export const SEED_TITHE: GardenSeed = {
   titheDone: true,
   harvested: false,
   season: 'primavera',
-  savings: 25,
-  goal: 100,
+  goals: [],
 }
 
 // Mapeamento doneCount → stage (GARD-03)

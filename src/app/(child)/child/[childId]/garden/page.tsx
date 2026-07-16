@@ -5,7 +5,7 @@
 
 import { db } from '@/lib/db'
 import { bibleVerses, taskTemplates, taskCompletions, childProfiles, wishlistGoals } from '@/lib/db/schema'
-import { sql, eq, and } from 'drizzle-orm'
+import { sql, eq, and, ne } from 'drizzle-orm'
 import { GardenView } from '@/components/garden/garden-view'
 import { type GardenSeed, type GardenTask } from '@/lib/seed/garden-seed'
 import { getCurrentCycleStart } from '@/lib/cycles/current-cycle'
@@ -19,7 +19,7 @@ export default async function GardenPage({
   const { childId } = await params
   const cycleStart = getCurrentCycleStart()
 
-  // Queries paralelas: tarefas, completions do ciclo atual, perfil da criança, meta ativa, versículo, saldo disponível
+  // Queries paralelas: tarefas, completions do ciclo atual, perfil da criança, metas (Phase 11: várias por filho), versículo, saldo disponível
   // T-06-16: todas filtradas por childId — sem vazamento de dados entre crianças
   const [tasks, completions, childResult, goals, verseResult, availableBalance] = await Promise.all([
     db
@@ -41,8 +41,7 @@ export default async function GardenPage({
     db
       .select()
       .from(wishlistGoals)
-      .where(and(eq(wishlistGoals.childProfileId, childId), eq(wishlistGoals.status, 'active')))
-      .limit(1),
+      .where(and(eq(wishlistGoals.childProfileId, childId), ne(wishlistGoals.status, 'archived'))),
 
     db
       .select()
@@ -67,7 +66,6 @@ export default async function GardenPage({
   }))
 
   const child = childResult[0]
-  const goal = goals[0]
 
   const seed: GardenSeed = {
     childName: child?.displayName ?? 'Criança',
@@ -79,9 +77,14 @@ export default async function GardenPage({
     titheDone: false,
     harvested: false,
     season: 'primavera',
-    savings: goal?.allocatedAmount ?? 0,
-    goal: goal?.targetAmount ?? 0,
-    goalId: goal?.id ?? null,
+    goals: goals.map((g) => ({
+      id: g.id,
+      title: g.title,
+      allocatedAmount: g.allocatedAmount,
+      targetAmount: g.targetAmount,
+      status: g.status,
+      dueDate: g.dueDate,
+    })),
   }
 
   return (

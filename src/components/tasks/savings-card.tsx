@@ -7,24 +7,29 @@
 import { useState, useEffect, useRef } from 'react'
 
 interface SavingsCardProps {
+  title?: string
   savings: number
   goal: number
   goalId?: string | null
   availableBalance?: number
   onAllocate?: (amount: number) => void
+  onDeallocate?: (amount: number) => void
   allocatePending?: boolean
 }
 
 export function SavingsCard({
+  title = 'Cofrinho',
   savings,
   goal,
   goalId,
   availableBalance = 0,
   onAllocate,
+  onDeallocate,
   allocatePending = false,
 }: SavingsCardProps) {
   const [animated, setAnimated] = useState(false)
   const [allocateInput, setAllocateInput] = useState('')
+  const [deallocateInput, setDeallocateInput] = useState('')
   const targetWidth = Math.min(100, goal > 0 ? (savings / goal) * 100 : 0)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -85,7 +90,7 @@ export function SavingsCard({
               margin: 0,
             }}
           >
-            Cofrinho
+            {title}
           </h3>
           <span
             style={{
@@ -189,6 +194,62 @@ export function SavingsCard({
               }}
             >
               Guardar
+            </button>
+          </div>
+        )}
+
+        {/* Phase 11: retirar Kreds da meta de volta pro saldo — corrige meta/valor errado */}
+        {goalId && onDeallocate && savings > 0 && (
+          <div style={{ display: 'flex', gap: 8, marginTop: 8, alignItems: 'center' }}>
+            <input
+              type="number"
+              min={1}
+              max={savings}
+              value={deallocateInput}
+              onChange={(e) => setDeallocateInput(e.target.value)}
+              placeholder="Quanto retirar?"
+              aria-label={`Quanto retirar de ${title}`}
+              style={{
+                flex: 1,
+                padding: '8px 12px',
+                borderRadius: 12,
+                border: '1px solid #D6E2CC',
+                fontSize: 14,
+                minWidth: 0,
+              }}
+            />
+            <button
+              type="button"
+              disabled={
+                allocatePending ||
+                !deallocateInput ||
+                Number(deallocateInput) <= 0 ||
+                Number(deallocateInput) > savings
+              }
+              onClick={() => {
+                const amount = Number(deallocateInput)
+                if (amount > 0 && amount <= savings) {
+                  onDeallocate(amount)
+                  setDeallocateInput('')
+                }
+              }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: 'var(--radius-pill)',
+                border: '1px solid #D6E2CC',
+                background: '#ffffff',
+                color: 'var(--color-kreds-orange)',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                opacity:
+                  allocatePending || !deallocateInput || Number(deallocateInput) <= 0 || Number(deallocateInput) > savings
+                    ? 0.5
+                    : 1,
+                flexShrink: 0,
+              }}
+            >
+              Retirar
             </button>
           </div>
         )}

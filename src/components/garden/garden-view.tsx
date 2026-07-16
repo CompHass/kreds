@@ -19,7 +19,7 @@ import {
 // Fase 4 — componentes de tarefas, dízimo, cofrinho e navegação (CTASK-01..05)
 import { TaskCard } from '@/components/tasks/task-card'
 import { TitheCard } from '@/components/tasks/tithe-card'
-import { SavingsCard } from '@/components/tasks/savings-card'
+import { SavingsSection } from '@/components/tasks/savings-section'
 import { BottomNav } from '@/components/tasks/bottom-nav'
 
 interface Verse {
@@ -51,10 +51,11 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
   // Phase 14: preset de avatar da criança + estado do picker
   const [avatarPreset, setAvatarPreset] = useState(seed.avatarPreset ?? 'initial')
   const [avatarPickerOpen, setAvatarPickerOpen] = useState(false)
-  // Phase 11: saldo disponível e progresso do cofrinho — otimistas, corrigidos no próximo SSR
+  // Phase 11: saldo disponível e metas — otimistas, corrigidos no próximo SSR.
+  // A criança pode ter várias metas; pendingGoalId trava apenas o card em voo.
   const [availableBalance, setAvailableBalance] = useState(seed.coins)
-  const [savings, setSavings] = useState(seed.savings)
-  const [allocatePending, setAllocatePending] = useState(false)
+  const [goals, setGoals] = useState(seed.goals)
+  const [pendingGoalId, setPendingGoalId] = useState<string | null>(null)
 
   // Derivados (recalculados no render)
   const doneCount = tasks.filter((t) => t.done).length
@@ -144,33 +145,64 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
     }).catch((e) => console.error('Avatar update failed', e))
   }
 
-  // Phase 11 — aloca Kreds do saldo disponível para a meta ativa. Otimista:
-  // debita o saldo e credita o cofrinho na hora; reverte ambos se o servidor
+  function adjustGoalAllocated(goalId: string, delta: number) {
+    setGoals((prev) => prev.map((g) => (g.id === goalId ? { ...g, allocatedAmount: g.allocatedAmount + delta } : g)))
+  }
+
+  // Phase 11 — aloca Kreds do saldo disponível para a meta escolhida. Otimista:
+  // debita o saldo e credita a meta na hora; reverte ambos se o servidor
   // rejeitar (saldo insuficiente detectado tarde, meta arquivada nesse meio-tempo, etc).
-  async function handleAllocate(amount: number) {
-    if (!seed.goalId || allocatePending) return
-    setAllocatePending(true)
+  async function handleAllocate(goalId: string, amount: number) {
+    if (pendingGoalId) return
+    setPendingGoalId(goalId)
     setAvailableBalance((v) => v - amount)
-    setSavings((v) => v + amount)
+    adjustGoalAllocated(goalId, amount)
 
     try {
-      const res = await fetch(`/api/child/${childId}/goals/${seed.goalId}/allocate`, {
+      const res = await fetch(`/api/child/${childId}/goals/${goalId}/allocate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ commandId: crypto.randomUUID(), amount }),
       })
       if (!res.ok && res.status !== 409) {
-        // Reverte o otimismo — servidor rejeitou (ex.: saldo insuficiente)
         setAvailableBalance((v) => v + amount)
-        setSavings((v) => v - amount)
+        adjustGoalAllocated(goalId, -amount)
         console.error('Goal allocation failed', res.status)
       }
     } catch (e) {
       setAvailableBalance((v) => v + amount)
-      setSavings((v) => v - amount)
+      adjustGoalAllocated(goalId, -amount)
       console.error('Goal allocation network error', e)
     } finally {
-      setAllocatePending(false)
+      setPendingGoalId(null)
+    }
+  }
+
+  // Phase 11 — desfaz uma alocação (meta ou valor errado): credita o saldo de
+  // volta e debita a meta. Mesmo padrão otimista de handleAllocate.
+  async function handleDeallocate(goalId: string, amount: number) {
+    if (pendingGoalId) return
+    setPendingGoalId(goalId)
+    setAvailableBalance((v) => v + amount)
+    adjustGoalAllocated(goalId, -amount)
+
+    try {
+      const res = await fetch(`/api/child/${childId}/goals/${goalId}/deallocate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ commandId: crypto.randomUUID(), amount }),
+      })
+      if (!res.ok && res.status !== 409) {
+        setAvailableBalance((v) => v - amount)
+        adjustGoalAllocated(goalId, amount)
+        console.error('Goal deallocation failed', res.status)
+      }
+    } catch (e) {
+      setAvailableBalance((v) => v - amount)
+      adjustGoalAllocated(goalId, amount)
+      console.error('Goal deallocation network error', e)
+    } finally {
+      setPendingGoalId(null)
     }
   }
 
@@ -273,15 +305,14 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
       {/* Card de dízimo (CTASK-03) — titheDone state passado a GardenHero via handleTithe/handleUntithe */}
       <TitheCard done={titheDone} onPlant={handleTithe} onUnplant={handleUntithe} />
 
-      {/* Card de cofrinho (CTASK-04) — ancora #section-savings para BottomNav */}
+      {/* Cofrinho (CTASK-04) — uma SavingsCard por meta (Phase 11) — ancora #section-savings para BottomNav */}
       <div id="section-savings">
-        <SavingsCard
-          savings={savings}
-          goal={seed.goal}
-          goalId={seed.goalId}
+        <SavingsSection
+          goals={goals}
           availableBalance={availableBalance}
           onAllocate={handleAllocate}
-          allocatePending={allocatePending}
+          onDeallocate={handleDeallocate}
+          pendingGoalId={pendingGoalId}
         />
       </div>
 

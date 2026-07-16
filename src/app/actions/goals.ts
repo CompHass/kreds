@@ -4,10 +4,9 @@
 // src/app/actions/children.ts: auth() check, familyId in the WHERE clause,
 // revalidatePath after mutation.
 //
-// One active goal per child at a time (matches the single `.limit(1)`
-// active-goal read already relied on by garden/page.tsx and
-// lib/reports/queries.ts): createGoal archives any existing active goal
-// for that child before inserting the new one.
+// A child can have several active goals at once — the child picks which
+// goal to allocate Kreds into (see SavingsSection). createGoal just inserts;
+// it does not touch any other goal.
 
 import { revalidatePath } from 'next/cache'
 import { auth } from '../../../auth'
@@ -26,33 +25,20 @@ export async function createGoal(
 
   const parsed = GoalFormSchema.parse(data)
 
-  return await db.transaction(async (tx) => {
-    await tx
-      .update(wishlistGoals)
-      .set({ status: 'archived', updatedAt: new Date() })
-      .where(
-        and(
-          eq(wishlistGoals.childProfileId, childId),
-          eq(wishlistGoals.familyId, familyId),
-          eq(wishlistGoals.status, 'active'),
-        ),
-      )
+  const [goal] = await db
+    .insert(wishlistGoals)
+    .values({
+      familyId,
+      childProfileId: childId,
+      title: parsed.title,
+      targetAmount: parsed.targetAmount,
+      dueDate: parsed.dueDate ?? null,
+    })
+    .returning()
 
-    const [goal] = await tx
-      .insert(wishlistGoals)
-      .values({
-        familyId,
-        childProfileId: childId,
-        title: parsed.title,
-        targetAmount: parsed.targetAmount,
-        dueDate: parsed.dueDate ?? null,
-      })
-      .returning()
+  revalidatePath(`/family/${familyId}/goals`)
 
-    revalidatePath(`/family/${familyId}/goals`)
-
-    return goal
-  })
+  return goal
 }
 
 export async function updateGoal(

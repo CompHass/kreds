@@ -49,14 +49,15 @@ export async function getFamilyWeeklyReport(
 
         getEarningsForCycle(child.id, start, endExclusive),
 
+        // Phase 11: a child can have several active goals — the report shows
+        // an aggregate total (sum allocated / sum target) across all of them.
         db
           .select({ allocatedAmount: wishlistGoals.allocatedAmount, targetAmount: wishlistGoals.targetAmount })
           .from(wishlistGoals)
-          .where(and(eq(wishlistGoals.childProfileId, child.id), eq(wishlistGoals.status, 'active')))
-          .limit(1),
+          .where(and(eq(wishlistGoals.childProfileId, child.id), eq(wishlistGoals.status, 'active'))),
       ])
 
-      const goal = goals[0]
+      const hasGoals = goals.length > 0
 
       return {
         childId: child.id,
@@ -66,8 +67,8 @@ export async function getFamilyWeeklyReport(
         tasksTotal: tasks.length,
         kredsEarned: earnings.available + earnings.firstfruits,
         firstfruitsSeparated: earnings.firstfruits,
-        savingsAllocated: goal?.allocatedAmount ?? null,
-        savingsGoal: goal?.targetAmount ?? null,
+        savingsAllocated: hasGoals ? goals.reduce((s, g) => s + g.allocatedAmount, 0) : null,
+        savingsGoal: hasGoals ? goals.reduce((s, g) => s + g.targetAmount, 0) : null,
       }
     }),
   )

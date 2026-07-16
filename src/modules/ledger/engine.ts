@@ -153,6 +153,69 @@ export async function postGoalAllocation(command: GoalAllocationCommand) {
   })
 }
 
+// Phase 11 — undoes an allocation: credits 'available' back and debits
+// wishlistGoals.allocatedAmount. Lets a child correct a wrong goal or a
+// wrong amount without a guardian in the loop — it's just moving Kreds
+// between the child's own accounts, never creating or destroying value.
+// Allowed on any goal status (including 'achieved'/'archived') since the
+// child's Kreds don't stop being theirs to move just because a goal was
+// archived or already hit its target; dropping below target un-achieves it.
+export async function postGoalDeallocation(command: GoalAllocationCommand) {
+  return await db.transaction(async (tx) => {
+    const [goal] = await tx
+      .select()
+      .from(wishlistGoals)
+      .where(
+        and(
+          eq(wishlistGoals.id, command.goalId),
+          eq(wishlistGoals.childProfileId, command.childProfileId),
+          eq(wishlistGoals.familyId, command.familyId),
+        ),
+      )
+      .limit(1)
+
+    if (!goal) {
+      throw new Error('Goal not found')
+    }
+    if (command.amount > goal.allocatedAmount) {
+      throw new Error('Insufficient goal balance: deallocation amount exceeds allocated amount')
+    }
+
+    const [txHeader] = await tx
+      .insert(ledgerTransactions)
+      .values({
+        id: crypto.randomUUID(),
+        familyId: command.familyId,
+        childProfileId: command.childProfileId,
+        commandId: command.commandId,
+        transactionType: 'goal_allocation',
+        note: JSON.stringify({ goalId: command.goalId, direction: 'deallocation' }),
+      })
+      .returning()
+
+    await tx.insert(ledgerLines).values({
+      id: crypto.randomUUID(),
+      transactionId: txHeader.id,
+      childProfileId: command.childProfileId,
+      accountType: 'available',
+      amount: command.amount,
+    })
+
+    const newAllocated = goal.allocatedAmount - command.amount
+
+    await tx
+      .update(wishlistGoals)
+      .set({
+        allocatedAmount: newAllocated,
+        status: goal.status === 'achieved' && newAllocated < goal.targetAmount ? 'active' : goal.status,
+        updatedAt: new Date(),
+      })
+      .where(eq(wishlistGoals.id, command.goalId))
+
+    return txHeader
+  })
+}
+
 export async function postReversal(command: ReversalCommand) {
   const [original] = await db
     .select({ familyId: ledgerTransactions.familyId })

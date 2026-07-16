@@ -2,7 +2,8 @@
 
 // Phase 11 — Client Component raiz do painel /goals. Clone estrutural de
 // children-panel-view.tsx: Sidebar + Topbar + GuardianProfileDrawer
-// page-local, lista de GoalCard por filho + GoalFormPanel à direita.
+// page-local. Cada filho pode ter várias metas simultâneas — GoalFormPanel
+// à direita cria/edita uma de cada vez.
 
 import { useState } from 'react'
 import { ParentSidebar } from './parent-sidebar'
@@ -25,7 +26,7 @@ interface GoalsPanelViewProps {
   currentUserName: string
   guardianEmail: string
   children: ChildSummary[]
-  initialGoals: Record<string, GoalView | null>
+  initialGoals: Record<string, GoalView[]>
 }
 
 export function GoalsPanelView({
@@ -40,11 +41,24 @@ export function GoalsPanelView({
   const [goals, setGoals] = useState(initialGoals)
   // editingChildId: qual filho tem o GoalFormPanel aberto; null = nenhum
   const [editingChildId, setEditingChildId] = useState<string | null>(null)
-  const [editingMode, setEditingMode] = useState<'create' | 'edit'>('create')
+  const [editingGoalId, setEditingGoalId] = useState<string | null>(null) // null = criar nova
 
   const guardianInitial = currentUserName.charAt(0).toUpperCase()
   const editingChild = children.find((c) => c.id === editingChildId) ?? null
-  const editingGoal = editingChildId ? goals[editingChildId] : null
+  const editingGoal = editingGoalId
+    ? (goals[editingChildId ?? '']?.find((g) => g.id === editingGoalId) ?? null)
+    : null
+  const editingMode: 'idle' | 'create' | 'edit' = !editingChildId ? 'idle' : editingGoalId ? 'edit' : 'create'
+
+  function openCreate(childId: string) {
+    setEditingChildId(childId)
+    setEditingGoalId(null)
+  }
+
+  function openEdit(childId: string, goalId: string) {
+    setEditingChildId(childId)
+    setEditingGoalId(goalId)
+  }
 
   async function handleSave(data: GoalFormData) {
     if (!editingChildId) return
@@ -53,40 +67,44 @@ export function GoalsPanelView({
         const saved = await createGoal(familyId, editingChildId, data)
         setGoals((prev) => ({
           ...prev,
-          [editingChildId]: {
-            id: saved.id,
-            childId: editingChildId,
-            title: saved.title,
-            targetAmount: saved.targetAmount,
-            allocatedAmount: saved.allocatedAmount,
-            status: saved.status,
-            dueDate: saved.dueDate,
-          },
+          [editingChildId]: [
+            ...(prev[editingChildId] ?? []),
+            {
+              id: saved.id,
+              childId: editingChildId,
+              title: saved.title,
+              targetAmount: saved.targetAmount,
+              allocatedAmount: saved.allocatedAmount,
+              status: saved.status,
+              dueDate: saved.dueDate,
+            },
+          ],
         }))
       } else if (editingGoal) {
         const saved = await updateGoal(editingGoal.id, familyId, data)
         setGoals((prev) => ({
           ...prev,
-          [editingChildId]: {
-            ...prev[editingChildId]!,
-            title: saved.title,
-            targetAmount: saved.targetAmount,
-            dueDate: saved.dueDate,
-          },
+          [editingChildId]: (prev[editingChildId] ?? []).map((g) =>
+            g.id === editingGoal.id
+              ? { ...g, title: saved.title, targetAmount: saved.targetAmount, dueDate: saved.dueDate }
+              : g,
+          ),
         }))
       }
     } catch (err) {
       console.error('saveGoal failed', err)
     }
     setEditingChildId(null)
+    setEditingGoalId(null)
   }
 
-  async function handleArchive(childId: string) {
-    const goal = goals[childId]
-    if (!goal) return
+  async function handleArchive(childId: string, goalId: string) {
     try {
-      await archiveGoal(goal.id, familyId)
-      setGoals((prev) => ({ ...prev, [childId]: null }))
+      await archiveGoal(goalId, familyId)
+      setGoals((prev) => ({
+        ...prev,
+        [childId]: (prev[childId] ?? []).filter((g) => g.id !== goalId),
+      }))
     } catch (err) {
       console.error('archiveGoal failed', err)
     }
@@ -123,7 +141,7 @@ export function GoalsPanelView({
               padding: '16px 24px',
               display: 'flex',
               flexDirection: 'column',
-              gap: 12,
+              gap: 20,
             }}
           >
             {children.length === 0 ? (
@@ -132,29 +150,71 @@ export function GoalsPanelView({
               </span>
             ) : (
               children.map((child) => (
-                <GoalCard
-                  key={child.id}
-                  childId={child.id}
-                  displayName={child.displayName}
-                  accentColor={child.accentColor}
-                  goal={goals[child.id] ?? null}
-                  onCreate={() => {
-                    setEditingChildId(child.id)
-                    setEditingMode('create')
-                  }}
-                  onEdit={() => {
-                    setEditingChildId(child.id)
-                    setEditingMode('edit')
-                  }}
-                  onArchive={() => handleArchive(child.id)}
-                />
+                <div key={child.id} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: '50%',
+                        background: `linear-gradient(135deg, ${child.accentColor} 0%, ${child.accentColor}CC 100%)`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        color: '#ffffff',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {child.displayName.charAt(0).toUpperCase()}
+                    </div>
+                    <span style={{ fontSize: 15, fontWeight: 700, color: '#27372C' }}>
+                      {child.displayName}
+                    </span>
+                    <div style={{ flex: 1 }} />
+                    <button
+                      aria-label={`Nova meta para ${child.displayName}`}
+                      onClick={() => openCreate(child.id)}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: 'var(--radius-pill)',
+                        border: 'none',
+                        background: 'var(--color-kreds-primary)',
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: '#ffffff',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      + Nova meta
+                    </button>
+                  </div>
+
+                  {(goals[child.id] ?? []).length === 0 ? (
+                    <span style={{ fontSize: 13, color: 'var(--color-kreds-muted)', paddingLeft: 48 }}>
+                      Sem metas ativas
+                    </span>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingLeft: 48 }}>
+                      {(goals[child.id] ?? []).map((goal) => (
+                        <GoalCard
+                          key={goal.id}
+                          goal={goal}
+                          onEdit={() => openEdit(child.id, goal.id)}
+                          onArchive={() => handleArchive(child.id, goal.id)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))
             )}
           </div>
 
           <div style={{ padding: '16px 24px 16px 0' }}>
             <GoalFormPanel
-              mode={editingChildId ? editingMode : 'idle'}
+              mode={editingMode}
               childName={editingChild?.displayName ?? ''}
               initialData={
                 editingMode === 'edit' && editingGoal
@@ -166,7 +226,10 @@ export function GoalsPanelView({
                   : EMPTY_GOAL_FORM
               }
               onSave={handleSave}
-              onCancel={() => setEditingChildId(null)}
+              onCancel={() => {
+                setEditingChildId(null)
+                setEditingGoalId(null)
+              }}
             />
           </div>
         </div>

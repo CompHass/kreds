@@ -1,11 +1,12 @@
 // Phase 11 — Rota SSR /family/[familyId]/goals — mesma forma de children/page.tsx.
 // Auth gate executado pelo layout.tsx compartilhado.
-// Um filho ativo por vez tem no máximo uma meta 'active' (D-01, ver goals.ts).
+// Um filho pode ter várias metas simultâneas (active/achieved) — arquivadas
+// ficam ocultas do painel do responsável.
 
 import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
 import { childProfiles, families, wishlistGoals } from '@/lib/db/schema'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, ne } from 'drizzle-orm'
 import { GoalsPanelView } from '@/components/parent/goals-panel-view'
 import type { GoalView } from '@/types/goal'
 
@@ -17,7 +18,7 @@ export default async function GoalsPage({
   const { familyId } = await params
   const session = await auth()
 
-  const [children, activeGoals, familyResult] = await Promise.all([
+  const [children, goals, familyResult] = await Promise.all([
     db
       .select({ id: childProfiles.id, displayName: childProfiles.displayName, accentColor: childProfiles.accentColor })
       .from(childProfiles)
@@ -26,31 +27,28 @@ export default async function GoalsPage({
     db
       .select()
       .from(wishlistGoals)
-      .where(and(eq(wishlistGoals.familyId, familyId), eq(wishlistGoals.status, 'active'))),
+      .where(and(eq(wishlistGoals.familyId, familyId), ne(wishlistGoals.status, 'archived'))),
 
     db.select({ name: families.name }).from(families).where(eq(families.id, familyId)),
   ])
 
-  const goalByChildId = new Map(activeGoals.map((g) => [g.childProfileId, g]))
+  const goalsByChildId = new Map<string, GoalView[]>()
+  for (const g of goals) {
+    const list = goalsByChildId.get(g.childProfileId) ?? []
+    list.push({
+      id: g.id,
+      childId: g.childProfileId,
+      title: g.title,
+      targetAmount: g.targetAmount,
+      allocatedAmount: g.allocatedAmount,
+      status: g.status,
+      dueDate: g.dueDate,
+    })
+    goalsByChildId.set(g.childProfileId, list)
+  }
 
-  const initialGoals: Record<string, GoalView | null> = Object.fromEntries(
-    children.map((c) => {
-      const g = goalByChildId.get(c.id)
-      return [
-        c.id,
-        g
-          ? {
-              id: g.id,
-              childId: c.id,
-              title: g.title,
-              targetAmount: g.targetAmount,
-              allocatedAmount: g.allocatedAmount,
-              status: g.status,
-              dueDate: g.dueDate,
-            }
-          : null,
-      ]
-    }),
+  const initialGoals: Record<string, GoalView[]> = Object.fromEntries(
+    children.map((c) => [c.id, goalsByChildId.get(c.id) ?? []]),
   )
 
   const familyName = familyResult[0]?.name ?? 'Família'
