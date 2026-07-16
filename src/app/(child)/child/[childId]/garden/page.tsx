@@ -4,7 +4,7 @@
 // getCurrentCycleStart(): ciclo semanal (Domingo-Sábado) em UTC.
 
 import { db } from '@/lib/db'
-import { bibleVerses, taskTemplates, taskCompletions, childProfiles, wishlistGoals } from '@/lib/db/schema'
+import { bibleVerses, taskTemplates, taskCompletions, childProfiles, wishlistGoals, families } from '@/lib/db/schema'
 import { sql, eq, and, ne } from 'drizzle-orm'
 import { GardenView } from '@/components/garden/garden-view'
 import { type GardenSeed, type GardenTask } from '@/lib/seed/garden-seed'
@@ -17,11 +17,20 @@ export default async function GardenPage({
   params: Promise<{ childId: string }>
 }) {
   const { childId } = await params
-  const cycleStart = getCurrentCycleStart()
 
-  // Queries paralelas: tarefas, completions do ciclo atual, perfil da criança, metas (Phase 11: várias por filho), versículo, saldo disponível
+  // O ciclo semanal depende do cycleStartDay da família (Phase 10) — precisa
+  // do familyId antes de calcular cycleStart, então essa query roda primeiro.
+  const childResult = await db.select().from(childProfiles).where(eq(childProfiles.id, childId)).limit(1)
+  const child = childResult[0]
+
+  const familyResult = child
+    ? await db.select({ cycleStartDay: families.cycleStartDay }).from(families).where(eq(families.id, child.familyId)).limit(1)
+    : []
+  const cycleStart = getCurrentCycleStart(familyResult[0]?.cycleStartDay ?? 0)
+
+  // Queries paralelas: tarefas, completions do ciclo atual, metas (Phase 11: várias por filho), versículo, saldo disponível
   // T-06-16: todas filtradas por childId — sem vazamento de dados entre crianças
-  const [tasks, completions, childResult, goals, verseResult, availableBalance] = await Promise.all([
+  const [tasks, completions, goals, verseResult, availableBalance] = await Promise.all([
     db
       .select()
       .from(taskTemplates)
@@ -31,12 +40,6 @@ export default async function GardenPage({
       .select()
       .from(taskCompletions)
       .where(and(eq(taskCompletions.childProfileId, childId), eq(taskCompletions.cycleStart, cycleStart))),
-
-    db
-      .select()
-      .from(childProfiles)
-      .where(eq(childProfiles.id, childId))
-      .limit(1),
 
     db
       .select()
@@ -64,8 +67,6 @@ export default async function GardenPage({
     done: completedIds.has(t.id),
     kredsValue: t.kredsValue,   // necessário para somar o total na colheita (API-03)
   }))
-
-  const child = childResult[0]
 
   const seed: GardenSeed = {
     childName: child?.displayName ?? 'Criança',

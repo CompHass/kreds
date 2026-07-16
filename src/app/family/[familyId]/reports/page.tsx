@@ -1,6 +1,8 @@
 // Phase 9 — Rota SSR /family/[familyId]/reports — mesma forma de children/page.tsx.
 // Auth gate executado pelo layout.tsx compartilhado.
 // ?cycle=YYYY-MM-DD seleciona o ciclo exibido; default é o ciclo atual.
+// Phase 10: cycleStartDay da família decide onde a semana começa — precisa
+// ser lido antes de calcular o ciclo default e a lista de ciclos recentes.
 
 import { auth } from '../../../../../auth'
 import { db } from '@/lib/db'
@@ -19,14 +21,16 @@ export default async function ReportsPage({
 }) {
   const { familyId } = await params
   const { cycle } = await searchParams
-  const cycleStart = cycle ?? getCurrentCycleStart()
 
-  const session = await auth()
-
-  const [report, familyResult] = await Promise.all([
-    getFamilyWeeklyReport(familyId, cycleStart),
-    db.select({ name: families.name }).from(families).where(eq(families.id, familyId)),
+  const [session, familyResult] = await Promise.all([
+    auth(),
+    db.select({ name: families.name, cycleStartDay: families.cycleStartDay }).from(families).where(eq(families.id, familyId)),
   ])
+
+  const cycleStartDay = familyResult[0]?.cycleStartDay ?? 0
+  const cycleStart = cycle ?? getCurrentCycleStart(cycleStartDay)
+
+  const report = await getFamilyWeeklyReport(familyId, cycleStart)
 
   const familyName = familyResult[0]?.name ?? 'Família'
 
@@ -37,7 +41,8 @@ export default async function ReportsPage({
       currentUserName={session?.user?.name ?? ''}
       guardianEmail={session?.user?.email ?? ''}
       report={report}
-      recentCycles={listRecentCycleStarts(8)}
+      recentCycles={listRecentCycleStarts(8, cycleStartDay)}
+      currentCycleStart={getCurrentCycleStart(cycleStartDay)}
     />
   )
 }

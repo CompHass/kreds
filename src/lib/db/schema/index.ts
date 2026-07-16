@@ -38,17 +38,29 @@ export const identities = pgTable('kreds_identities', {
 })
 
 // Families — extended with creator identity and soft deactivation
-export const families = pgTable('families', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull(),
-  timezone: varchar('timezone', { length: 64 }).notNull().default('America/Sao_Paulo'),
-  createdByIdentityId: uuid('created_by_identity_id').references(
-    () => identities.id,
-  ),
-  deactivatedAt: timestamp('deactivated_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
+export const families = pgTable(
+  'families',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: text('name').notNull(),
+    timezone: varchar('timezone', { length: 64 }).notNull().default('America/Sao_Paulo'),
+    createdByIdentityId: uuid('created_by_identity_id').references(
+      () => identities.id,
+    ),
+    // Phase 10: 0=Sunday..6=Saturday — day the weekly activity cycle begins.
+    // Read by getCurrentCycleStart() (garden, task completion, reports).
+    cycleStartDay: integer('cycle_start_day').notNull().default(0),
+    deactivatedAt: timestamp('deactivated_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    cycleStartDayCheck: check(
+      'cycle_start_day_range',
+      sql`${table.cycleStartDay} >= 0 AND ${table.cycleStartDay} <= 6`,
+    ),
+  }),
+)
 
 // Child profiles — parent-managed (FAM-03, D-09 through D-12)
 export const childProfiles = pgTable(
@@ -295,4 +307,16 @@ export const bibleVerses = pgTable('bible_verses', {
   reference: text('reference').notNull(),
   text: text('text').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+// Notification preferences — Phase 10. One row per family; toggles are
+// stored/managed only. There is no delivery channel yet (no email/push
+// infra in this project) — these booleans exist so the settings UI is
+// truthful and ready to wire to a real sender later without a schema change.
+export const notificationPreferences = pgTable('notification_preferences', {
+  familyId: uuid('family_id').primaryKey().references(() => families.id),
+  taskCompleted: boolean('task_completed').notNull().default(true),
+  goalAchieved: boolean('goal_achieved').notNull().default(true),
+  weeklyReportReady: boolean('weekly_report_ready').notNull().default(true),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })

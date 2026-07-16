@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { z } from 'zod'
 import { eq, and } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { taskCompletions, taskTemplates } from '@/lib/db/schema'
+import { taskCompletions, taskTemplates, families } from '@/lib/db/schema'
 import { verifyChildSession } from '@/lib/families/child-session'
 import { validateChildSessionScope } from '@/lib/auth/child-guard'
 import { getCurrentCycleStart } from '@/lib/cycles/current-cycle'
@@ -66,7 +66,12 @@ export async function POST(
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  const cycleStart = getCurrentCycleStart()
+  const [family] = await db
+    .select({ cycleStartDay: families.cycleStartDay })
+    .from(families)
+    .where(eq(families.id, session.familyId))
+    .limit(1)
+  const cycleStart = getCurrentCycleStart(family?.cycleStartDay ?? 0)
   const status = completed ? 'completed' : 'pending'
 
   const [row] = await db

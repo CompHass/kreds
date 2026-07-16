@@ -12,7 +12,7 @@ import { ParentTopbar } from './parent-topbar'
 import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import { ChildReportCard } from './child-report-card'
 import type { FamilyWeeklyReport } from '@/types/report'
-import { getPreviousCycleStart, getNextCycleStart, getCurrentCycleStart } from '@/lib/cycles/current-cycle'
+import { getPreviousCycleStart, getNextCycleStart } from '@/lib/cycles/current-cycle'
 
 interface ReportsPanelViewProps {
   familyId: string
@@ -21,6 +21,9 @@ interface ReportsPanelViewProps {
   guardianEmail: string
   report: FamilyWeeklyReport
   recentCycles: string[]
+  // Phase 10: computado no servidor com o cycleStartDay da família — o client
+  // não tem esse dado, então não pode recalcular getCurrentCycleStart() sozinho.
+  currentCycleStart: string
 }
 
 function formatCycleLabel(cycleStart: string): string {
@@ -38,12 +41,13 @@ export function ReportsPanelView({
   guardianEmail,
   report,
   recentCycles,
+  currentCycleStart,
 }: ReportsPanelViewProps) {
   const router = useRouter()
   const [profileOpen, setProfileOpen] = useState(false)
 
   const guardianInitial = currentUserName.charAt(0).toUpperCase()
-  const isCurrentCycle = report.cycleStart === getCurrentCycleStart()
+  const isCurrentCycle = report.cycleStart === currentCycleStart
 
   function goToCycle(cycleStart: string) {
     router.push(`/family/${familyId}/reports?cycle=${cycleStart}`)
