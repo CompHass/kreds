@@ -221,6 +221,7 @@ export const wishlistGoals = pgTable(
     targetAmount: integer('target_amount').notNull(),
     allocatedAmount: integer('allocated_amount').notNull().default(0),
     status: wishlistGoalStatusEnum('status').notNull().default('active'),
+    dueDate: text('due_date'), // nullable ISO date string 'YYYY-MM-DD' (Phase 11) — no time/deadline enforcement, display-only
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },

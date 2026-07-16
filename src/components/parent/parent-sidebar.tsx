@@ -11,7 +11,7 @@ interface ParentSidebarProps {
   guardianInitial: string
   onOpenProfile: () => void
   familyId: string
-  activeRoute: 'tasks' | 'children' | 'reports' | 'settings'
+  activeRoute: 'tasks' | 'children' | 'reports' | 'settings' | 'goals'
 }
 
 export function ParentSidebar({ guardianInitial, onOpenProfile, familyId, activeRoute }: ParentSidebarProps) {
@@ -177,6 +177,40 @@ export function ParentSidebar({ guardianInitial, onOpenProfile, familyId, active
             <path d="M12 22V12" />
             <path d="M12 12C12 12 8 9 8 5a4 4 0 0 1 8 0c0 4-4 7-4 7z" />
             <path d="M5 22h14" />
+          </svg>
+        </button>
+
+        {/* 4. Metas — ativo quando activeRoute === 'goals' (Phase 11) */}
+        <button
+          aria-label="Metas"
+          onClick={() => router.push(`/family/${familyId}/goals`)}
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 12,
+            background: activeRoute === 'goals' ? '#E7EFE8' : 'none',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            flexShrink: 0,
+          }}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={activeRoute === 'goals' ? '#3E6B4F' : '#9AA092'}
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 17v5" />
+            <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1z" />
+            <path d="M7 6h10" />
           </svg>
         </button>
 

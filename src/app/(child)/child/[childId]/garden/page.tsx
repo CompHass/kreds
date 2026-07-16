@@ -9,6 +9,7 @@ import { sql, eq, and } from 'drizzle-orm'
 import { GardenView } from '@/components/garden/garden-view'
 import { type GardenSeed, type GardenTask } from '@/lib/seed/garden-seed'
 import { getCurrentCycleStart } from '@/lib/cycles/current-cycle'
+import { getBalance } from '@/modules/ledger/queries'
 
 export default async function GardenPage({
   params,
@@ -18,9 +19,9 @@ export default async function GardenPage({
   const { childId } = await params
   const cycleStart = getCurrentCycleStart()
 
-  // Queries paralelas: tarefas, completions do ciclo atual, perfil da criança, meta ativa, versículo
+  // Queries paralelas: tarefas, completions do ciclo atual, perfil da criança, meta ativa, versículo, saldo disponível
   // T-06-16: todas filtradas por childId — sem vazamento de dados entre crianças
-  const [tasks, completions, childResult, goals, verseResult] = await Promise.all([
+  const [tasks, completions, childResult, goals, verseResult, availableBalance] = await Promise.all([
     db
       .select()
       .from(taskTemplates)
@@ -48,6 +49,8 @@ export default async function GardenPage({
       .from(bibleVerses)
       .orderBy(sql`RANDOM()`)
       .limit(1),
+
+    getBalance(childId, 'available'),
   ])
 
   // Construir GardenSeed a partir dos dados reais do banco
@@ -71,13 +74,14 @@ export default async function GardenPage({
     initial: (child?.displayName?.[0] ?? 'C').toUpperCase(),
     avatarPreset: child?.avatarPreset ?? 'initial',    // Phase 14: preset selecionável
     accentColor: child?.accentColor ?? '#3E6B4F',
-    coins: 0,                                          // saldo calculado futuramente via ledger
+    coins: availableBalance,                           // saldo real do ledger (Phase 11)
     tasks: gardenTasks,
     titheDone: false,
     harvested: false,
     season: 'primavera',
     savings: goal?.allocatedAmount ?? 0,
-    goal: goal?.targetAmount ?? 100,
+    goal: goal?.targetAmount ?? 0,
+    goalId: goal?.id ?? null,
   }
 
   return (

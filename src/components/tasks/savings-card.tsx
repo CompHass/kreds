@@ -1,16 +1,30 @@
 'use client'
 
 // CTASK-04: SavingsCard — cofrinho com progress bar animada ao entrar na viewport
+// Phase 11: quando há uma meta ativa (goalId), a criança pode alocar Kreds do
+// saldo disponível para o cofrinho via onAllocate.
 
 import { useState, useEffect, useRef } from 'react'
 
 interface SavingsCardProps {
   savings: number
   goal: number
+  goalId?: string | null
+  availableBalance?: number
+  onAllocate?: (amount: number) => void
+  allocatePending?: boolean
 }
 
-export function SavingsCard({ savings, goal }: SavingsCardProps) {
+export function SavingsCard({
+  savings,
+  goal,
+  goalId,
+  availableBalance = 0,
+  onAllocate,
+  allocatePending = false,
+}: SavingsCardProps) {
   const [animated, setAnimated] = useState(false)
+  const [allocateInput, setAllocateInput] = useState('')
   const targetWidth = Math.min(100, goal > 0 ? (savings / goal) * 100 : 0)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -122,6 +136,62 @@ export function SavingsCard({ savings, goal }: SavingsCardProps) {
             }}
           />
         </div>
+
+        {/* Phase 11: alocar Kreds do saldo disponível para a meta */}
+        {goalId && onAllocate && (
+          <div style={{ display: 'flex', gap: 8, marginTop: 12, alignItems: 'center' }}>
+            <input
+              type="number"
+              min={1}
+              max={availableBalance}
+              value={allocateInput}
+              onChange={(e) => setAllocateInput(e.target.value)}
+              placeholder="Quanto guardar?"
+              aria-label="Quanto guardar no cofrinho"
+              style={{
+                flex: 1,
+                padding: '8px 12px',
+                borderRadius: 12,
+                border: '1px solid #D6E2CC',
+                fontSize: 14,
+                minWidth: 0,
+              }}
+            />
+            <button
+              type="button"
+              disabled={
+                allocatePending ||
+                !allocateInput ||
+                Number(allocateInput) <= 0 ||
+                Number(allocateInput) > availableBalance
+              }
+              onClick={() => {
+                const amount = Number(allocateInput)
+                if (amount > 0 && amount <= availableBalance) {
+                  onAllocate(amount)
+                  setAllocateInput('')
+                }
+              }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: 'var(--radius-pill)',
+                border: 'none',
+                background: '#3E6B4F',
+                color: '#ffffff',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                opacity:
+                  allocatePending || !allocateInput || Number(allocateInput) <= 0 || Number(allocateInput) > availableBalance
+                    ? 0.5
+                    : 1,
+                flexShrink: 0,
+              }}
+            >
+              Guardar
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

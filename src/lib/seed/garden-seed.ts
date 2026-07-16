@@ -22,6 +22,9 @@ export interface GardenSeed {
   season: 'primavera' | 'verao' | 'outono' | 'inverno'
   savings: number
   goal: number
+  // Phase 11: id da meta ativa — null quando a criança não tem meta definida
+  // (SavingsCard só permite alocar Kreds quando há uma meta real).
+  goalId?: string | null
 }
 
 const BASE_TASKS: GardenTask[] = [

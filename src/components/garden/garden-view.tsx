@@ -51,6 +51,10 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
   // Phase 14: preset de avatar da criança + estado do picker
   const [avatarPreset, setAvatarPreset] = useState(seed.avatarPreset ?? 'initial')
   const [avatarPickerOpen, setAvatarPickerOpen] = useState(false)
+  // Phase 11: saldo disponível e progresso do cofrinho — otimistas, corrigidos no próximo SSR
+  const [availableBalance, setAvailableBalance] = useState(seed.coins)
+  const [savings, setSavings] = useState(seed.savings)
+  const [allocatePending, setAllocatePending] = useState(false)
 
   // Derivados (recalculados no render)
   const doneCount = tasks.filter((t) => t.done).length
@@ -140,6 +144,36 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
     }).catch((e) => console.error('Avatar update failed', e))
   }
 
+  // Phase 11 — aloca Kreds do saldo disponível para a meta ativa. Otimista:
+  // debita o saldo e credita o cofrinho na hora; reverte ambos se o servidor
+  // rejeitar (saldo insuficiente detectado tarde, meta arquivada nesse meio-tempo, etc).
+  async function handleAllocate(amount: number) {
+    if (!seed.goalId || allocatePending) return
+    setAllocatePending(true)
+    setAvailableBalance((v) => v - amount)
+    setSavings((v) => v + amount)
+
+    try {
+      const res = await fetch(`/api/child/${childId}/goals/${seed.goalId}/allocate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ commandId: crypto.randomUUID(), amount }),
+      })
+      if (!res.ok && res.status !== 409) {
+        // Reverte o otimismo — servidor rejeitou (ex.: saldo insuficiente)
+        setAvailableBalance((v) => v + amount)
+        setSavings((v) => v - amount)
+        console.error('Goal allocation failed', res.status)
+      }
+    } catch (e) {
+      setAvailableBalance((v) => v + amount)
+      setSavings((v) => v - amount)
+      console.error('Goal allocation network error', e)
+    } finally {
+      setAllocatePending(false)
+    }
+  }
+
   // D-10: manter último estado ao fechar — NÃO resetar tasks nem harvested
   function handleCloseOverlay() {
     setShowOverlay(false)
@@ -169,7 +203,7 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
       <GardenHeader
         name={seed.childName}
         initial={seed.initial}
-        coins={seed.coins}
+        coins={availableBalance}
         avatarPreset={avatarPreset}
         accentColor={seed.accentColor}
         onAvatarClick={() => setAvatarPickerOpen(true)}
@@ -241,7 +275,14 @@ export function GardenView({ childId, seed, verse }: GardenViewProps) {
 
       {/* Card de cofrinho (CTASK-04) — ancora #section-savings para BottomNav */}
       <div id="section-savings">
-        <SavingsCard savings={seed.savings} goal={seed.goal} />
+        <SavingsCard
+          savings={savings}
+          goal={seed.goal}
+          goalId={seed.goalId}
+          availableBalance={availableBalance}
+          onAllocate={handleAllocate}
+          allocatePending={allocatePending}
+        />
       </div>
 
       {/* BottomNav fixo 80px (CTASK-05) — consome #section-garden/#section-tasks/#section-savings */}

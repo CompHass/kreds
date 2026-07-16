@@ -1,10 +1,16 @@
 import 'server-only'
 
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { ledgerLines, ledgerTransactions } from '@/lib/db/schema/ledger'
+import { wishlistGoals } from '@/lib/db/schema'
 import { calculateFirstfruits } from './calculate'
-import type { AdjustmentCommand, EarningCommand, ReversalCommand } from './commands'
+import type {
+  AdjustmentCommand,
+  EarningCommand,
+  GoalAllocationCommand,
+  ReversalCommand,
+} from './commands'
 import { getBalance } from './queries'
 
 export async function postEarning(command: EarningCommand) {
@@ -79,6 +85,69 @@ export async function postNegativeAdjustment(command: AdjustmentCommand) {
       accountType: 'available',
       amount: -command.amount,
     })
+
+    return txHeader
+  })
+}
+
+// Phase 11 — moves Kreds from the child's available balance into a savings
+// goal: debits 'available' (real ledger line, auditable) and credits
+// wishlistGoals.allocatedAmount in the same DB transaction. Flips the goal
+// to 'achieved' when the running total reaches targetAmount.
+export async function postGoalAllocation(command: GoalAllocationCommand) {
+  return await db.transaction(async (tx) => {
+    const availableBalance = await getBalance(command.childProfileId, 'available')
+    if (command.amount > availableBalance) {
+      throw new Error('Insufficient balance: allocation amount exceeds available balance')
+    }
+
+    const [goal] = await tx
+      .select()
+      .from(wishlistGoals)
+      .where(
+        and(
+          eq(wishlistGoals.id, command.goalId),
+          eq(wishlistGoals.childProfileId, command.childProfileId),
+          eq(wishlistGoals.familyId, command.familyId),
+          eq(wishlistGoals.status, 'active'),
+        ),
+      )
+      .limit(1)
+
+    if (!goal) {
+      throw new Error('Goal not found or not active')
+    }
+
+    const [txHeader] = await tx
+      .insert(ledgerTransactions)
+      .values({
+        id: crypto.randomUUID(),
+        familyId: command.familyId,
+        childProfileId: command.childProfileId,
+        commandId: command.commandId,
+        transactionType: 'goal_allocation',
+        note: JSON.stringify({ goalId: command.goalId }),
+      })
+      .returning()
+
+    await tx.insert(ledgerLines).values({
+      id: crypto.randomUUID(),
+      transactionId: txHeader.id,
+      childProfileId: command.childProfileId,
+      accountType: 'available',
+      amount: -command.amount,
+    })
+
+    const newAllocated = goal.allocatedAmount + command.amount
+
+    await tx
+      .update(wishlistGoals)
+      .set({
+        allocatedAmount: newAllocated,
+        status: newAllocated >= goal.targetAmount ? 'achieved' : 'active',
+        updatedAt: new Date(),
+      })
+      .where(eq(wishlistGoals.id, command.goalId))
 
     return txHeader
   })

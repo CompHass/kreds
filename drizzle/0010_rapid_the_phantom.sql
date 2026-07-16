@@ -1,0 +1,1 @@
+ALTER TABLE "wishlist_goals" ADD COLUMN "due_date" text;

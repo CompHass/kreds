@@ -71,6 +71,13 @@
       "when": 1782962068656,
       "tag": "0009_tricky_living_mummy",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1784216704088,
+      "tag": "0010_rapid_the_phantom",
+      "breakpoints": true
     }
   ]
 }
