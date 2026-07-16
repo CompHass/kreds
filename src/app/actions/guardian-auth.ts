@@ -1,16 +1,31 @@
 'use server'
 import { signIn } from '../../../auth'
 
+export type GuardianLoginResult =
+  | { ok: true }
+  | { ok: false; error: 'E-mail ou senha inválidos' }
+
 /**
  * Login nativo do responsável via Zitadel Session API v2 / Credentials provider.
  * GAUTH-01: redireciona para /family após autenticação bem-sucedida.
  */
-export async function loginWithCredentials(formData: FormData): Promise<void> {
-  await signIn('credentials', {
-    email: String(formData.get('email') ?? ''),
-    password: String(formData.get('password') ?? ''),
-    redirectTo: '/family',
-  })
+export async function loginWithCredentials(formData: FormData): Promise<GuardianLoginResult> {
+  try {
+    await signIn('credentials', {
+      email: String(formData.get('email') ?? ''),
+      password: String(formData.get('password') ?? ''),
+      redirectTo: '/family',
+    })
+    return { ok: true }
+  } catch (error) {
+    // Auth.js throws CredentialsSignin for both unknown users and wrong passwords.
+    // Convert only that expected authentication failure into a safe UI result;
+    // redirect errors and unexpected infrastructure failures must still propagate.
+    if (error && typeof error === 'object' && 'type' in error && error.type === 'CredentialsSignin') {
+      return { ok: false, error: 'E-mail ou senha inválidos' }
+    }
+    throw error
+  }
 }
 
 /**

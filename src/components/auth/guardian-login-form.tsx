@@ -104,7 +104,8 @@ export function GuardianLoginForm() {
       const formData = new FormData()
       formData.set('email', email)
       formData.set('password', password)
-      await loginWithCredentials(formData)
+      const result = await loginWithCredentials(formData)
+      if (!result.ok) setError(result.error)
     } catch (e) {
       // signIn() throws NEXT_REDIRECT to trigger navigation — must re-throw
       if (e && typeof e === 'object' && 'digest' in e && String((e as { digest: unknown }).digest).startsWith('NEXT_REDIRECT')) {
