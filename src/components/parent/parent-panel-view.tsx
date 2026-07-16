@@ -77,21 +77,22 @@ export function ParentPanelView({
 
   // Handlers de mutação otimista (D-09) + Server Actions (API-01, API-02)
   function handleToggle(taskId: string) {
-  async function handleToggle(id: string, currentActive: boolean) {
+    const currentTask = tasks.find((t) => t.id === taskId);
+    if (!currentTask) return;
+    const currentActive = currentTask.active;
+    
     // Otimista: atualiza UI imediatamente
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, active: !currentActive } : t)),
+      prev.map((t) => (t.id === taskId ? { ...t, active: !currentActive } : t)),
     );
+    
     // Soft-update (isActive=!currentActive)
-    try {
-      const existingTask = tasks.find((t) => t.id === id);
-      const taskIds = existingTask?.taskIds || [id];
-      await Promise.all(
-        taskIds.map((tid) => toggleTaskActive(tid, _familyId, !currentActive))
-      );
-    } catch (err) {
+    const taskIds = currentTask.taskIds || [taskId];
+    Promise.all(
+      taskIds.map((tid) => toggleTaskActive(tid, _familyId, !currentActive))
+    ).catch((err) => {
       console.error("toggleTaskActive failed", err);
-    }
+    });
   }
 
   function handleNewTask() {
