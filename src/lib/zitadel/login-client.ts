@@ -65,14 +65,17 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   return (await response.json()) as T
 }
 
-export async function createGuardianSession(email: string, password: string): Promise<{ userId: string | null; sessionToken: string }> {
-  const body = await request<{ userId?: string; sessionToken?: string; session?: { factors?: { user?: { id?: string } } }; factors?: { user?: { id?: string } } }>('/v2/sessions', {
+export async function createGuardianSession(email: string, password: string): Promise<{ userId: string; sessionToken: string }> {
+  const body = await request<{ sessionId?: string; sessionToken?: string }>('/v2/sessions', {
     method: 'POST',
     body: JSON.stringify({ checks: { user: { loginName: email }, password: { password } } }),
   })
-  const userId = body.userId ?? body.factors?.user?.id ?? body.session?.factors?.user?.id
-  if (!body.sessionToken) throw new ZitadelApiError(502)
-  return { userId: userId ?? null, sessionToken: body.sessionToken }
+  if (!body.sessionId || !body.sessionToken) throw new ZitadelApiError(502)
+
+  const session = await request<{ session?: { factors?: { user?: { id?: string } } } }>(`/v2/sessions/${encodeURIComponent(body.sessionId)}`)
+  const userId = session.session?.factors?.user?.id
+  if (!userId) throw new ZitadelApiError(502)
+  return { userId, sessionToken: body.sessionToken }
 }
 
 export async function findGuardianUserId(loginName: string): Promise<string> {

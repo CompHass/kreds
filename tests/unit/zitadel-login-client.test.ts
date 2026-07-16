@@ -43,6 +43,21 @@ describe('Zitadel login client', () => {
     expect(firstError.message).not.toContain('wrong')
   })
 
+  it('reads the verified guardian ID from the session instead of searching the email as a login name', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ sessionId: 'session-1', sessionToken: 'session-token' }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ session: { factors: { user: { id: 'guardian-1' } } } }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await expect(client.createGuardianSession('guardian@example.com', 'secret')).resolves.toEqual({
+      userId: 'guardian-1',
+      sessionToken: 'session-token',
+    })
+    expect(fetchMock.mock.calls[3]?.[0]).toBe('https://auth.hasslab.pro/v2/sessions/session-1')
+  })
+
   it('normalizes the v2 user profile and extracts grant role keys', async () => {
     vi.stubGlobal('fetch', vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
