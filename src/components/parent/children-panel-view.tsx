@@ -21,7 +21,6 @@ import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import type { ChildProfileView } from '@/types/child'
 import {
   createChild,
-  createChild,
   updateChild,
   resetChildPin,
   revealChildPin,
