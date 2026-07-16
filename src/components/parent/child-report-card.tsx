@@ -46,7 +46,7 @@ export function ChildReportCard({ report }: ChildReportCardProps) {
         <ChildAvatar
           displayName={report.displayName}
           accentColor={report.accentColor}
-          avatarPreset={report.avatarPreset}
+          avatarPreset={report.avatarPreset ?? 'initial'}
           size={52}
         />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
