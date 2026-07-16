@@ -5,6 +5,7 @@
 // ChildCard (avatar por inicial + accentColor).
 
 import type { ChildWeeklyReport } from '@/types/report'
+import { ChildAvatar } from '@/components/avatar/child-avatar'
 
 interface ChildReportCardProps {
   report: ChildWeeklyReport
@@ -42,23 +43,12 @@ export function ChildReportCard({ report }: ChildReportCardProps) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: '50%',
-            background: `linear-gradient(135deg, ${report.accentColor} 0%, ${report.accentColor}CC 100%)`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 20,
-            fontWeight: 700,
-            color: '#ffffff',
-            flexShrink: 0,
-          }}
-        >
-          {report.displayName.charAt(0).toUpperCase()}
-        </div>
+        <ChildAvatar
+          displayName={report.displayName}
+          accentColor={report.accentColor}
+          avatarPreset={report.avatarPreset}
+          size={52}
+        />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
           <span style={{ fontSize: 15, fontWeight: 700, color: '#27372C' }}>
             {report.displayName}

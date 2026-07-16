@@ -24,6 +24,7 @@ export async function getFamilyWeeklyReport(
       id: childProfiles.id,
       displayName: childProfiles.displayName,
       accentColor: childProfiles.accentColor,
+      avatarPreset: childProfiles.avatarPreset,
     })
     .from(childProfiles)
     .where(and(eq(childProfiles.familyId, familyId), eq(childProfiles.active, true)))
@@ -63,6 +64,7 @@ export async function getFamilyWeeklyReport(
         childId: child.id,
         displayName: child.displayName,
         accentColor: child.accentColor,
+        avatarPreset: child.avatarPreset,
         tasksCompleted: completions.length,
         tasksTotal: tasks.length,
         kredsEarned: earnings.available + earnings.firstfruits,

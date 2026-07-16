@@ -4,6 +4,7 @@ export interface ChildWeeklyReport {
   childId: string
   displayName: string
   accentColor: string
+  avatarPreset: string | null
   tasksCompleted: number
   tasksTotal: number
   kredsEarned: number // available + firstfruits earned this cycle
