@@ -44,6 +44,7 @@ async function getAccessToken(): Promise<string> {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      scope: 'openid urn:zitadel:iam:org:project:id:zitadel:aud',
       assertion: createAssertion(),
     }),
   })

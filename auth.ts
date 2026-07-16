@@ -4,7 +4,7 @@ import Credentials from 'next-auth/providers/credentials'
 import Zitadel from 'next-auth/providers/zitadel'
 import { env } from '@/lib/env'
 import { syncGuardianIdentity } from '@/lib/auth/guardian-sync'
-import { createGuardianSession, extractSystemRoles, findGuardianUserId, getGuardianGrants, getGuardianUser } from '@/lib/zitadel/login-client'
+import { createGuardianSession, extractSystemRoles, findGuardianUserId, getGuardianGrants, getGuardianUser, ZitadelApiError } from '@/lib/zitadel/login-client'
 
 class InvalidGuardianCredentialsError extends CredentialsSignin {
   code = 'invalid-credentials'
@@ -40,7 +40,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           session = await createGuardianSession(email, password)
           const user = await getGuardianUser(session.userId ?? await findGuardianUserId(email))
           return { id: user.id, email: user.email, name: user.name, emailVerified: user.emailVerified }
-        } catch {
+        } catch (error) {
+          if (error instanceof ZitadelApiError) {
+            console.error('[auth] native credential verification failed', { status: error.status })
+          } else {
+            console.error('[auth] native credential verification failed', { name: error instanceof Error ? error.name : 'unknown' })
+          }
           throw new InvalidGuardianCredentialsError()
         }
       },
