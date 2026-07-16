@@ -1,10 +1,10 @@
 'use client'
 
 // D-01, D-04, D-08, D-09, D-12, D-13, D-14, D-15: Client Component raiz que orquestra
-// o painel /children — clone de parent-panel-view.tsx. Gerencia lista + add + reset PIN +
+// o painel /children — clone de parent-panel-view.tsx. Gerencia lista + add + edit + reset PIN +
 // reveal PIN + deactivate/reactivate via Server Actions com otimista + fire-and-forget
 // (mesmo padrão de handleToggle em ParentPanelView).
-// editingId: null=idle, 'new'=create — sem modo edit (D-06, sem update-name flow).
+// editingId: null=idle, 'new'=create, UUID=edit.
 // confirmTargetId: qual criança tem o dialog de confirmação de deactivate/reactivate aberto (D-14).
 // resetTargetId: qual criança tem o painel de reset de PIN aberto.
 // revealedPins: cache client-side de PINs já decifrados via revealChildPin (D-12).
@@ -21,6 +21,8 @@ import { GuardianProfileDrawer } from './guardian-profile-drawer'
 import type { ChildProfileView } from '@/types/child'
 import {
   createChild,
+  createChild,
+  updateChild,
   resetChildPin,
   revealChildPin,
   toggleChildActive,
@@ -43,7 +45,7 @@ export function ChildrenPanelView({
 }: ChildrenPanelViewProps) {
   // Estado raiz — padrão parent-panel-view.tsx
   const [children, setChildren] = useState<ChildProfileView[]>(initialChildren)
-  // editingId sentinela: null=idle, 'new'=create — sem modo edit (D-06)
+  // editingId: null=idle, 'new'=create, UUID=edit
   const [editingId, setEditingId] = useState<string | 'new' | null>(null)
   // D-04: estado de abertura do drawer de perfil — page-local, não compartilhado com /tasks
   const [profileOpen, setProfileOpen] = useState(false)
@@ -58,21 +60,40 @@ export function ChildrenPanelView({
 
   // ─── Handlers de mutação otimista + fire-and-forget (padrão parent-panel-view.tsx) ───
 
-  async function handleAddChild(data: ChildFormData) {
-    try {
-      // Pitfall 6: usar UUID real retornado pelo servidor (não crypto.randomUUID() local)
-      const saved = await createChild({ ...data, familyId })
-      const newChild: ChildProfileView = {
-        id: saved.id,
-        displayName: saved.displayName,
-        ageYears: saved.ageYears,
-        accentColor: saved.accentColor,
-        active: saved.active,
-        hasEncryptedPin: saved.pinEncrypted !== null,
+  async function handleSaveChild(data: ChildFormData) {
+    if (editingId === 'new') {
+      try {
+        const saved = await createChild({ ...data, familyId })
+        const newChild: ChildProfileView = {
+          id: saved.id,
+          displayName: saved.displayName,
+          ageYears: saved.ageYears,
+          accentColor: saved.accentColor,
+          active: saved.active,
+          hasEncryptedPin: saved.pinEncrypted !== null,
+        }
+        setChildren((prev) => [...prev, newChild])
+      } catch (err) {
+        console.error('createChild failed', err)
       }
-      setChildren((prev) => [...prev, newChild])
-    } catch (err) {
-      console.error('createChild failed', err)
+    } else if (editingId) {
+      try {
+        const saved = await updateChild(editingId, familyId, data)
+        setChildren((prev) =>
+          prev.map((c) =>
+            c.id === editingId
+              ? {
+                  ...c,
+                  displayName: saved.displayName,
+                  ageYears: saved.ageYears,
+                  accentColor: saved.accentColor,
+                }
+              : c,
+          ),
+        )
+      } catch (err) {
+        console.error('updateChild failed', err)
+      }
     }
     setEditingId(null)
   }
@@ -174,10 +195,10 @@ export function ChildrenPanelView({
               flexDirection: 'column',
             }}
           >
-            {/* Botão "+ Adicionar filho" */}
+            {/* Botão "+ Adicionar criança" */}
             <button
               onClick={handleNewChild}
-              aria-label="Adicionar filho"
+              aria-label="Adicionar criança"
               style={{
                 alignSelf: 'flex-start',
                 height: 40,
@@ -195,7 +216,7 @@ export function ChildrenPanelView({
                 gap: 4,
               }}
             >
-              + Adicionar filho
+              + Adicionar criança
             </button>
 
             {/* Lista de child cards — âncora visual primária (08-UI-SPEC.md) */}
@@ -212,7 +233,7 @@ export function ChildrenPanelView({
                 }}
               >
                 <h3 style={{ fontSize: 18, fontWeight: 700, color: '#27372C', margin: 0 }}>
-                  Nenhum filho cadastrado ainda
+                  Nenhuma criança cadastrada ainda
                 </h3>
                 <p
                   style={{
@@ -222,7 +243,7 @@ export function ChildrenPanelView({
                     textAlign: 'center',
                   }}
                 >
-                  Adicione o primeiro filho da família para começar a atribuir tarefas e
+                  Adicione a primeira criança da família para começar a atribuir tarefas e
                   acompanhar o jardim.
                 </p>
               </div>
@@ -236,6 +257,7 @@ export function ChildrenPanelView({
                     onToggleReveal={() => handleToggleReveal(child.id)}
                     onResetPin={() => setResetTargetId(child.id)}
                     onToggleActive={() => setConfirmTargetId(child.id)}
+                    onEdit={() => setEditingId(child.id)}
                   />
                 ))}
               </div>
@@ -252,8 +274,22 @@ export function ChildrenPanelView({
               />
             ) : (
               <ChildFormPanel
-                mode={editingId === 'new' ? 'create' : 'idle'}
-                onSave={handleAddChild}
+                mode={editingId === 'new' ? 'create' : editingId ? 'edit' : 'idle'}
+                initialData={
+                  editingId && editingId !== 'new'
+                    ? (() => {
+                        const child = children.find((c) => c.id === editingId)
+                        return child
+                          ? {
+                              displayName: child.displayName,
+                              ageYears: child.ageYears,
+                              accentColor: child.accentColor,
+                            }
+                          : undefined
+                      })()
+                    : undefined
+                }
+                onSave={handleSaveChild}
                 onCancel={handleCancelForm}
               />
             )}

@@ -6,6 +6,7 @@
 // update-name flow), no delete button. Uses react-hook-form + zodResolver(CreateChildSchema)
 // (D-07's native color picker is exactly the RHF register use case).
 
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CreateChildSchema } from '@/types/child'
@@ -24,20 +25,26 @@ export const EMPTY_CHILD_FORM: ChildFormData = {
 }
 
 interface ChildFormPanelProps {
-  mode: 'idle' | 'create'
+  mode: 'idle' | 'create' | 'edit'
+  initialData?: ChildFormData
   onSave: (data: ChildFormData) => void
   onCancel: () => void
 }
 
-export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) {
+export function ChildFormPanel({ mode, initialData, onSave, onCancel }: ChildFormPanelProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ChildFormData>({
     resolver: zodResolver(CreateChildSchema),
-    defaultValues: EMPTY_CHILD_FORM,
+    defaultValues: initialData || EMPTY_CHILD_FORM,
   })
+
+  useEffect(() => {
+    reset(initialData || EMPTY_CHILD_FORM)
+  }, [mode, initialData, reset])
 
   // Container base — clonado verbatim de TaskFormPanel (largura fixa 336px, padding
   // 20px — exceção documentada em 08-UI-SPEC.md, NÃO arredondar para 16/24).
@@ -75,7 +82,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
               letterSpacing: '-0.01em',
             }}
           >
-            Adicionar filho
+            Adicionar criança
           </h3>
           <p
             style={{
@@ -85,7 +92,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
               lineHeight: 1.5,
             }}
           >
-            Adicione o primeiro filho da família para começar a atribuir tarefas e acompanhar o
+            Adicione a primeira criança da família para começar a atribuir tarefas e acompanhar o
             jardim.
           </p>
         </div>
@@ -111,7 +118,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
               letterSpacing: '-0.01em',
             }}
           >
-            Adicionar filho
+            {mode === 'create' ? 'Adicionar criança' : 'Editar criança'}
           </h3>
           <button
             type="button"
@@ -149,7 +156,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
             id="child-display-name"
             aria-label="Nome"
             type="text"
-            placeholder="Nome do filho..."
+            placeholder="Nome da criança..."
             {...register('displayName')}
             style={{
               height: 46,
@@ -232,7 +239,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
           )}
         </div>
 
-        {/* CTA — Adicionar filho */}
+        {/* CTA */}
         <button
           type="submit"
           style={{
@@ -249,7 +256,7 @@ export function ChildFormPanel({ mode, onSave, onCancel }: ChildFormPanelProps) 
             width: '100%',
           }}
         >
-          Adicionar filho
+          {mode === 'create' ? 'Adicionar criança' : 'Salvar alterações'}
         </button>
       </form>
     </aside>

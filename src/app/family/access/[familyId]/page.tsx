@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { childProfiles } from '@/lib/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { ProfileCard } from '@/components/auth/profile-card'
+import Link from 'next/link'
 
 export default async function SelectProfilePage({
   params,
@@ -83,6 +84,17 @@ export default async function SelectProfilePage({
           ))}
         </div>
       )}
+
+      {/* Guardian access */}
+      <div className="mt-12 flex flex-col items-center">
+        <Link
+          href={`/family/${familyId}/tasks`}
+          className="text-[15px] font-bold px-6 py-3 rounded-[13px] border-[1.5px] border-[#E2DECF] bg-white transition-transform active:scale-[0.98]"
+          style={{ color: 'var(--color-kreds-text)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}
+        >
+          Acessar Painel do Responsável
+        </Link>
+      </div>
 
       {/* Footer spacer */}
       <div className="flex-1" />

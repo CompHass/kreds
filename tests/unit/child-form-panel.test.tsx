@@ -11,7 +11,7 @@ describe('ChildFormPanel — D-06, D-07, D-09', () => {
     const onSave = vi.fn()
     render(<ChildFormPanel mode="create" onSave={onSave} onCancel={vi.fn()} />)
 
-    fireEvent.click(screen.getByRole('button', { name: /adicionar filho/i }))
+    fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }))
 
     await waitFor(() => {
       expect(screen.getByText('Nome obrigatório')).toBeInTheDocument()
@@ -26,7 +26,7 @@ describe('ChildFormPanel — D-06, D-07, D-09', () => {
     fireEvent.change(screen.getByLabelText('Nome'), { target: { value: 'Beto' } })
     fireEvent.change(screen.getByLabelText('Idade'), { target: { value: '8' } })
     fireEvent.change(screen.getByLabelText('Cor'), { target: { value: '#b14a2e' } })
-    fireEvent.click(screen.getByRole('button', { name: /adicionar filho/i }))
+    fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }))
 
     await waitFor(() => {
       expect(onSave).toHaveBeenCalled()
@@ -47,7 +47,7 @@ describe('ChildFormPanel — D-06, D-07, D-09', () => {
 
     fireEvent.change(screen.getByLabelText('Nome'), { target: { value: 'Beto' } })
     fireEvent.change(screen.getByLabelText('Idade'), { target: { value: '25' } })
-    fireEvent.click(screen.getByRole('button', { name: /adicionar filho/i }))
+    fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }))
 
     await waitFor(() => {
       expect(onSave).not.toHaveBeenCalled()
@@ -55,12 +55,23 @@ describe('ChildFormPanel — D-06, D-07, D-09', () => {
     expect(EMPTY_CHILD_FORM.ageYears).toBe(6)
   })
 
-  it('idle mode renders "Adicionar filho" placeholder header without form inputs', () => {
+  it('idle mode renders "Adicionar criança" placeholder header without form inputs', () => {
     render(<ChildFormPanel mode="idle" onSave={vi.fn()} onCancel={vi.fn()} />)
 
-    expect(screen.getByText('Adicionar filho')).toBeInTheDocument()
+    expect(screen.getByText('Adicionar criança')).toBeInTheDocument()
     expect(screen.queryByLabelText('Nome')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Idade')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Cor')).not.toBeInTheDocument()
+  })
+
+  it('edit mode populates initialData and changes header/CTA', () => {
+    const initial = { displayName: 'Luna', ageYears: 10, accentColor: '#123456' }
+    render(<ChildFormPanel mode="edit" initialData={initial} onSave={vi.fn()} onCancel={vi.fn()} />)
+
+    expect(screen.getByText('Editar criança')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /salvar alterações/i })).toBeInTheDocument()
+    expect(screen.getByLabelText('Nome')).toHaveValue('Luna')
+    expect(screen.getByLabelText('Idade')).toHaveValue(10)
+    expect(screen.getByLabelText('Cor')).toHaveValue('#123456')
   })
 })

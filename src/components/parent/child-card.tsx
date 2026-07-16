@@ -14,6 +14,7 @@ interface ChildCardProps {
   onToggleReveal: () => void
   onResetPin: () => void
   onToggleActive: () => void
+  onEdit: () => void
 }
 
 export function ChildCard({
@@ -22,6 +23,7 @@ export function ChildCard({
   onToggleReveal,
   onResetPin,
   onToggleActive,
+  onEdit,
 }: ChildCardProps) {
   return (
     <div
@@ -98,6 +100,26 @@ export function ChildCard({
           </span>
         )}
       </div>
+
+      {/* Editar */}
+      <button
+        type="button"
+        onClick={onEdit}
+        style={{
+          height: 36,
+          padding: '0 14px',
+          borderRadius: 10,
+          border: '1.5px solid #E2DECF',
+          background: '#ffffff',
+          color: 'var(--color-kreds-text)',
+          fontSize: 13,
+          fontWeight: 600,
+          cursor: 'pointer',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        Editar
+      </button>
 
       {/* Redefinir PIN */}
       <button
