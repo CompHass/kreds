@@ -69,7 +69,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // the reason is surfaced in the UI.
       const credentialsUser = user as unknown as { emailVerified?: boolean; provisionalSignup?: boolean } | undefined
       return guardianSignInDecision({
-        profileEmailVerified: profile?.email_verified,
+        profileEmailVerified: profile?.email_verified ?? undefined,
         credentialsEmailVerified: credentialsUser?.emailVerified,
         provisionalSignup: credentialsUser?.provisionalSignup,
       })
