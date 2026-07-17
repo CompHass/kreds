@@ -301,7 +301,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 9. Reports | sem GSD | Complete    | 2026-07-16 |
 | 10. Settings | sem GSD | Partial     | 2026-07-16 |
 | 11. Goals & Savings | sem GSD | Complete    | 2026-07-16 |
-| 12. Native Guardian Login | 0/TBD | Not started | - |
+| 12. Native Guardian Login | 3/4 | In progress | 2026-07-17 |
 | 13. Child Secure Login Links | 0/TBD | Not started | - |
 | 14. Avatar Customization | 1/1 | Code complete (pending image assets + prod verify) | 2026-07-16 |
 
@@ -329,12 +329,12 @@ Plans: 4 plans
 
 **Wave 1**
 
-- [ ] 12-01-PLAN.md — Cliente Zitadel server-only, `IAM_LOGIN_CLIENT`, Credentials provider e sincronização Auth.js
+- [x] 12-01-PLAN.md — Cliente Zitadel server-only, `IAM_LOGIN_CLIENT`, Credentials provider e sincronização Auth.js (completed 2026-07-16)
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 12-02-PLAN.md — Signup nativo, bootstrap de família e vínculo a convite pendente
-- [ ] 12-03-PLAN.md — Solicitação e confirmação de reset de senha dentro do Kreds
+- [x] 12-02-PLAN.md — Signup nativo, bootstrap de família e vínculo a convite pendente (completed 2026-07-17)
+- [x] 12-03-PLAN.md — Solicitação e confirmação de reset de senha dentro do Kreds (completed 2026-07-17)
 
 **Wave 3** *(blocked on Wave 2)*
 

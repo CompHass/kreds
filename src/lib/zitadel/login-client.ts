@@ -22,6 +22,10 @@ export interface GuardianProfile {
   name: string | null
 }
 
+export interface CreatedGuardianUser {
+  userId: string
+}
+
 function encode(value: string): string {
   return Buffer.from(value).toString('base64url')
 }
@@ -63,6 +67,36 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(`${issuer}${path}`, { ...init, headers })
   if (!response.ok) throw new ZitadelApiError(response.status)
   return (await response.json()) as T
+}
+
+export async function createGuardianUser(email: string, password: string): Promise<CreatedGuardianUser> {
+  const body = await request<{ userId?: string; user?: { userId?: string } }>('/v2/users/human', {
+    method: 'POST',
+    body: JSON.stringify({
+      user: {
+        profile: { displayName: email.split('@')[0] || 'Guardian' },
+        email: { email, verification: 'EMAIL_VERIFICATION' },
+        password: { password },
+      },
+    }),
+  })
+  const userId = body.userId ?? body.user?.userId
+  if (!userId) throw new ZitadelApiError(502)
+  return { userId }
+}
+
+export async function requestGuardianPasswordReset(userId: string, urlTemplate: string): Promise<void> {
+  await request(`/v2/users/${encodeURIComponent(userId)}/password_reset`, {
+    method: 'POST',
+    body: JSON.stringify({ sendLink: { notificationType: 'NOTIFICATION_TYPE_EMAIL', urlTemplate } }),
+  })
+}
+
+export async function setGuardianPassword(userId: string, verificationCode: string, password: string): Promise<void> {
+  await request(`/v2/users/${encodeURIComponent(userId)}/password`, {
+    method: 'POST',
+    body: JSON.stringify({ newPassword: { password }, verificationCode }),
+  })
 }
 
 export async function createGuardianSession(email: string, password: string): Promise<{ userId: string; sessionToken: string }> {

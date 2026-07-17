@@ -20,7 +20,7 @@ export default async function GoalsPage({
 
   const [children, goals, familyResult] = await Promise.all([
     db
-      .select({ id: childProfiles.id, displayName: childProfiles.displayName, accentColor: childProfiles.accentColor })
+      .select({ id: childProfiles.id, displayName: childProfiles.displayName, accentColor: childProfiles.accentColor, avatarPreset: childProfiles.avatarPreset })
       .from(childProfiles)
       .where(and(eq(childProfiles.familyId, familyId), eq(childProfiles.active, true))),
 

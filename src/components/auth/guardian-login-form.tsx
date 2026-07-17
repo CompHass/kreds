@@ -259,7 +259,7 @@ export function GuardianLoginForm() {
       >
         Não tem conta?{' '}
         <Link
-          href="#"
+          href="/signup"
           style={{
             color: '#3E6B4F',
             textDecoration: 'none',

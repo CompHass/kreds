@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { AuthInput } from '@/components/auth/auth-input'
 import { SpinnerButton } from '@/components/auth/spinner-button'
+import { requestGuardianPasswordResetAction } from '@/app/actions/guardian-reset'
 
 /** Ícone envelope (e-mail) */
 function IconEnvelope() {
@@ -92,14 +93,7 @@ export function PasswordResetForm() {
     if (!email.trim()) return
     setLoading(true)
     try {
-      // Melhor tentativa de reset: Zitadel hosted reset flow.
-      // GAUTH-05/RESEARCH OQ2: endpoint de reset é [ASSUMED].
-      // A UI dos 2 estados é o entregável verificável (threat model T-02-RESET-ASSUME: accept).
-      // Em integração real: redirect para hosted reset do Zitadel ou chamada de API.
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('Password reset not implemented — replace stub before deploying')
-      }
-      await new Promise((resolve) => setTimeout(resolve, 600))
+      await requestGuardianPasswordResetAction(email)
     } finally {
       setLoading(false)
       setStep('sent')

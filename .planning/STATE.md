@@ -5,16 +5,16 @@ milestone_name: milestone
 current_phase: 12
 current_phase_name: native-guardian-login
 status: executing
-stopped_at: Phase 12 plan 01 complete — ready for Wave 2 plans 02 and 03
-last_updated: "2026-07-16T15:20:00.000Z"
-last_activity: 2026-07-16
-last_activity_desc: "Phase 12 plan 01 executed: Zitadel server-only client, IAM_LOGIN_CLIENT validation, Credentials provider, guardian sync and focused tests. Ready for Wave 2."
+stopped_at: Phase 12 plans 02 and 03 complete — plan 04 blocked at runtime/E2E checkpoint
+last_updated: "2026-07-17T11:30:00.000Z"
+last_activity: 2026-07-17
+last_activity_desc: "Phase 12 Wave 2 executed: native signup and Kreds-hosted password reset. Plan 04 awaits IAM_LOGIN_CLIENT and safe E2E/production verification."
 progress:
   total_phases: 14
   completed_phases: 10
   total_plans: 29
-  completed_plans: 29
-  percent: 71
+  completed_plans: 32
+  percent: 76
 ---
 
 # Project State
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-06-20)
 
 ## Current Position
 
-Phase: 12 (native-guardian-login) — PLANNING
-Plan: not created yet
-Status: SPEC, CONTEXT and RESEARCH complete — ready for plan-phase
+Phase: 12 (native-guardian-login) — EXECUTING
+Plan: 02 and 03 complete; 04 pending checkpoint
+Status: Wave 2 complete — runtime/E2E checkpoint pending
 Note: Phase 11 was implemented outside GSD and audited in this session. The global
 TypeScript check still has known missing-module failures from older phases; targeted
 Phase 11 tests are green.
@@ -166,6 +166,8 @@ Recent decisions affecting current work:
 None yet.
 
 ### Blockers/Concerns
+
+- Phase 12 plan 04 checkpoint: a dedicated `IAM_LOGIN_CLIENT` JWT-profile key and approved test fixture are required before E2E/production verification. No real secret was created or committed.
 
 - 08-05 Task 3 (checkpoint:human-verify, gate=blocking): implementacao completa e commitada, mas verificacao visual/funcional NAO aprovada. Usuario ira verificar contra https://kreds.hasslab.pro apos deploy via GitOps CI. Nao avancar para Fase 09 ate confirmacao.
 - 260703-cq0 Task 2 (checkpoint:human-verify, gate=blocking): root `/` auth redirect implementado e commitado (4cb1f3d), mas verificacao contra https://kreds.hasslab.pro (logout->/login, login->/family/{familyId}/tasks, sem loop) ainda NAO aprovada pelo usuario.

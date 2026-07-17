@@ -6,6 +6,7 @@
 // à direita cria/edita uma de cada vez.
 
 import { useState } from 'react'
+import { ChildAvatar } from '@/components/avatar/child-avatar'
 import { ParentSidebar } from './parent-sidebar'
 import { ParentTopbar } from './parent-topbar'
 import { GuardianProfileDrawer } from './guardian-profile-drawer'
@@ -18,6 +19,7 @@ interface ChildSummary {
   id: string
   displayName: string
   accentColor: string
+  avatarPreset: string
 }
 
 interface GoalsPanelViewProps {
@@ -152,23 +154,12 @@ export function GoalsPanelView({
               children.map((child) => (
                 <div key={child.id} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        background: `linear-gradient(135deg, ${child.accentColor} 0%, ${child.accentColor}CC 100%)`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 14,
-                        fontWeight: 700,
-                        color: '#ffffff',
-                        flexShrink: 0,
-                      }}
-                    >
-                      {child.displayName.charAt(0).toUpperCase()}
-                    </div>
+                    <ChildAvatar
+                      displayName={child.displayName}
+                      accentColor={child.accentColor}
+                      avatarPreset={child.avatarPreset}
+                      size={36}
+                    />
                     <span style={{ fontSize: 15, fontWeight: 700, color: '#27372C' }}>
                       {child.displayName}
                     </span>
