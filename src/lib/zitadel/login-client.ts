@@ -93,9 +93,10 @@ export async function getGuardianUser(userId: string): Promise<GuardianProfile> 
   const user = payload.user ?? payload
   const human = user.human ?? {}
   const email = human.email?.email
-  if (typeof user.id !== 'string' || typeof email !== 'string') throw new ZitadelApiError(502)
+  const id = user.userId ?? user.id
+  if (typeof id !== 'string' || typeof email !== 'string') throw new ZitadelApiError(502)
   return {
-    id: user.id,
+    id,
     email,
     emailVerified: human.email?.isVerified === true,
     name: typeof human.profile?.displayName === 'string' ? human.profile.displayName : null,

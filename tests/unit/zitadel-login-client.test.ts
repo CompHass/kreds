@@ -62,7 +62,7 @@ describe('Zitadel login client', () => {
     vi.stubGlobal('fetch', vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({
-        user: { id: 'user-1', human: { email: { email: 'guardian@example.com' }, profile: { displayName: 'Guardian' } } },
+        user: { userId: 'user-1', human: { email: { email: 'guardian@example.com' }, profile: { displayName: 'Guardian' } } },
       }), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
       .mockResolvedValueOnce(new Response(JSON.stringify({ result: [{ roleKeys: ['system_owner', 'report_reader'] }, { roleKeys: ['system_owner'] }] }), { status: 200 })))
