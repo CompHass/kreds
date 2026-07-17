@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 /** Mapeia códigos de erro de autenticação para mensagens visíveis ao usuário. */
 const LOGIN_ERROR_MESSAGES: Record<string, string> = {
   'email-not-verified':
-    'Seu e-mail ainda não foi verificado no Zitadel. Verifique seu e-mail e tente novamente.',
+    'Seu e-mail ainda não foi verificado. Verifique sua caixa de entrada e tente novamente.',
   AccessDenied: 'Acesso negado. Verifique seu e-mail e tente novamente.',
 }
 
