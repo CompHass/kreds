@@ -80,4 +80,33 @@ describe('Zitadel login client', () => {
       'system_owner',
     ])
   })
+
+  it('creates a human user with the Zitadel v2 fields at the request root', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ userId: 'created-user' }), { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await expect(client.createGuardianUser('new@example.com', 'Secret123!')).resolves.toEqual({ userId: 'created-user' })
+    const init = fetchMock.mock.calls[1]?.[1] as RequestInit
+    const payload = JSON.parse(String(init.body)) as Record<string, unknown>
+    expect(payload).not.toHaveProperty('user')
+    expect(payload).toMatchObject({
+      username: 'new@example.com',
+      email: { email: 'new@example.com', sendCode: {} },
+      password: { password: 'Secret123!', changeRequired: false },
+    })
+    expect(payload).toHaveProperty('profile')
+  })
+
+  it('retains a sanitized provider policy message without exposing an email', async () => {
+    vi.stubGlobal('fetch', vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ access_token: 'token' }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ message: 'Password weak failed for private@example.com (COMMAND-Ab12)' }), { status: 400 })))
+
+    const error = await client.createGuardianUser('private@example.com', 'weak').catch((caught) => caught)
+    expect(error).toBeInstanceOf(client.ZitadelApiError)
+    expect(error.status).toBe(400)
+    expect(error.publicMessage).toBe('Password [redacted] failed for [redacted]')
+  })
 })

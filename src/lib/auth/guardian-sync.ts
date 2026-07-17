@@ -2,7 +2,7 @@ import 'server-only'
 
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
-import { families, familyMemberships, identities } from '@/lib/db/schema'
+import { families, familyMemberships, guardianInvitations, identities } from '@/lib/db/schema'
 
 export interface GuardianIdentityInput {
   subject: string
@@ -29,6 +29,15 @@ export async function syncGuardianIdentity(input: GuardianIdentityInput): Promis
       .where(and(eq(familyMemberships.identityId, identity.id), eq(familyMemberships.status, 'active')))
       .limit(1)
     if (membership) return
+    const [invite] = await tx.select().from(guardianInvitations).where(and(
+      eq(guardianInvitations.email, input.email.toLowerCase()),
+      eq(guardianInvitations.status, 'pending'),
+    )).limit(1)
+    if (invite) {
+      await tx.insert(familyMemberships).values({ familyId: invite.familyId, identityId: identity.id, role: 'guardian' }).onConflictDoNothing()
+      await tx.update(guardianInvitations).set({ status: 'accepted', acceptedByIdentityId: identity.id, updatedAt: new Date() }).where(eq(guardianInvitations.id, invite.id))
+      return
+    }
     const [family] = await tx.insert(families).values({ name: 'Família', createdByIdentityId: identity.id }).returning({ id: families.id })
     if (!family) throw new Error('Guardian family bootstrap failed')
     await tx.insert(familyMemberships).values({ familyId: family.id, identityId: identity.id, role: 'guardian' })

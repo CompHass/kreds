@@ -8,10 +8,12 @@ const tokenEndpoint = `${issuer}/oauth/v2/token`
 
 export class ZitadelApiError extends Error {
   readonly status: number
-  constructor(status: number) {
+  readonly publicMessage: string | null
+  constructor(status: number, publicMessage: string | null = null) {
     super('Zitadel request failed')
     this.name = 'ZitadelApiError'
     this.status = status
+    this.publicMessage = publicMessage
   }
 }
 
@@ -65,21 +67,47 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   headers.set('Content-Type', 'application/json')
   if (env.IAM_LOGIN_CLIENT.orgId) headers.set('x-zitadel-orgid', env.IAM_LOGIN_CLIENT.orgId)
   const response = await fetch(`${issuer}${path}`, { ...init, headers })
-  if (!response.ok) throw new ZitadelApiError(response.status)
+  if (!response.ok) {
+    let publicMessage: string | null = null
+    try {
+      const errorBody = await response.json() as { message?: unknown }
+      if (typeof errorBody.message === 'string') {
+        publicMessage = errorBody.message
+          .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted]')
+          .replace(/\s*\([^)]*\)\s*$/, '')
+          .slice(0, 240)
+      }
+    } catch {
+      // A malformed provider error body must never replace the safe local fallback.
+    }
+    throw new ZitadelApiError(response.status, publicMessage)
+  }
   return (await response.json()) as T
 }
 
 export async function createGuardianUser(email: string, password: string): Promise<CreatedGuardianUser> {
-  const body = await request<{ userId?: string; user?: { userId?: string } }>('/v2/users/human', {
-    method: 'POST',
-    body: JSON.stringify({
-      user: {
-        profile: { displayName: email.split('@')[0] || 'Guardian' },
-        email: { email, verification: 'EMAIL_VERIFICATION' },
-        password: { password },
-      },
-    }),
-  })
+  let body: { userId?: string; user?: { userId?: string } }
+  try {
+    body = await request('/v2/users/human', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: email,
+        profile: {
+          givenName: email.split('@')[0] || 'Guardian',
+          familyName: 'Família',
+          displayName: email.split('@')[0] || 'Guardian',
+          preferredLanguage: 'pt',
+        },
+        email: { email, sendCode: {} },
+        password: { password, changeRequired: false },
+      }),
+    })
+  } catch (error) {
+    if (error instanceof ZitadelApiError && error.publicMessage) {
+      throw new ZitadelApiError(error.status, error.publicMessage.split(password).join('[redacted]'))
+    }
+    throw error
+  }
   const userId = body.userId ?? body.user?.userId
   if (!userId) throw new ZitadelApiError(502)
   return { userId }

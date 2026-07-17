@@ -168,6 +168,7 @@ None yet.
 ### Blockers/Concerns
 
 - Phase 12 plan 04 checkpoint: a dedicated `IAM_LOGIN_CLIENT` JWT-profile key and approved test fixture are required before E2E/production verification. No real secret was created or committed.
+- Native signup payload/first-session defect resolved locally on 2026-07-17; migration 0012 must run before deploying the matching app image.
 
 - 08-05 Task 3 (checkpoint:human-verify, gate=blocking): implementacao completa e commitada, mas verificacao visual/funcional NAO aprovada. Usuario ira verificar contra https://kreds.hasslab.pro apos deploy via GitOps CI. Nao avancar para Fase 09 ate confirmacao.
 - 260703-cq0 Task 2 (checkpoint:human-verify, gate=blocking): root `/` auth redirect implementado e commitado (4cb1f3d), mas verificacao contra https://kreds.hasslab.pro (logout->/login, login->/family/{familyId}/tasks, sem loop) ainda NAO aprovada pelo usuario.

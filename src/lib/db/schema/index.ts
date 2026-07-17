@@ -37,6 +37,23 @@ export const identities = pgTable('kreds_identities', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
+// One-time, short-lived capability used only to establish the first session
+// immediately after native guardian signup. Raw tokens are never persisted.
+export const guardianSignupTokens = pgTable(
+  'guardian_signup_tokens',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    identityId: uuid('identity_id').notNull().references(() => identities.id),
+    tokenHash: text('token_hash').notNull().unique(),
+    expiresAt: timestamp('expires_at').notNull(),
+    consumedAt: timestamp('consumed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    identityIdIdx: index('guardian_signup_tokens_identity_id_idx').on(table.identityId),
+  }),
+)
+
 // Families — extended with creator identity and soft deactivation
 export const families = pgTable(
   'families',

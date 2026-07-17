@@ -5,6 +5,8 @@ import Zitadel from 'next-auth/providers/zitadel'
 import { env } from '@/lib/env'
 import { syncGuardianIdentity } from '@/lib/auth/guardian-sync'
 import { createGuardianSession, extractSystemRoles, getGuardianGrants, getGuardianUser, ZitadelApiError } from '@/lib/zitadel/login-client'
+import { consumeProvisionalSignupToken } from '@/lib/auth/provisional-signup'
+import { guardianSignInDecision } from '@/lib/auth/guardian-signin-policy'
 
 class InvalidGuardianCredentialsError extends CredentialsSignin {
   code = 'invalid-credentials'
@@ -30,6 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: 'E-mail', type: 'email' },
         password: { label: 'Senha', type: 'password' },
+        provisionalSignupToken: { label: 'Provisional signup token', type: 'hidden' },
       },
       async authorize(credentials) {
         const email = typeof credentials?.email === 'string' ? credentials.email.trim() : ''
@@ -39,7 +42,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         try {
           session = await createGuardianSession(email, password)
           const user = await getGuardianUser(session.userId)
-          return { id: user.id, email: user.email, name: user.name, emailVerified: user.emailVerified }
+          const suppliedToken = typeof credentials?.provisionalSignupToken === 'string' ? credentials.provisionalSignupToken : ''
+          const provisionalSignup = !user.emailVerified && suppliedToken
+            ? await consumeProvisionalSignupToken({ zitadelSubject: user.id, email: user.email, token: suppliedToken })
+            : false
+          return { id: user.id, email: user.email, name: user.name, emailVerified: user.emailVerified, provisionalSignup }
         } catch (error) {
           if (error instanceof ZitadelApiError) {
             console.error('[auth] native credential verification failed', { status: error.status })
@@ -60,16 +67,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // (see .planning/debug/resolved/login-stuck-after-zitadel.md). Redirect
       // to the app's own /login route with an explicit error code instead so
       // the reason is surfaced in the UI.
-      if (profile?.email_verified === false) return '/login?error=email-not-verified'
-      const credentialsUser = user as unknown as { emailVerified?: boolean } | undefined
-      if (profile?.email_verified === undefined && credentialsUser?.emailVerified === false) {
-        return '/login?error=email-not-verified'
-      }
-      return true
+      const credentialsUser = user as unknown as { emailVerified?: boolean; provisionalSignup?: boolean } | undefined
+      return guardianSignInDecision({
+        profileEmailVerified: profile?.email_verified,
+        credentialsEmailVerified: credentialsUser?.emailVerified,
+        provisionalSignup: credentialsUser?.provisionalSignup,
+      })
     },
     async jwt({ token, profile, user, account }) {
       const credentialsUser = account?.provider === 'credentials'
-        ? user as { id?: string; email?: string; name?: string | null; emailVerified?: boolean }
+        ? user as { id?: string; email?: string; name?: string | null; emailVerified?: boolean; provisionalSignup?: boolean }
         : undefined
       const subject = account?.provider === 'credentials' ? credentialsUser?.id : profile?.sub
       if (subject) {
