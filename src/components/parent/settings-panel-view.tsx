@@ -5,8 +5,11 @@
 // Três seções independentes, cada uma com seu próprio save/feedback: nome da
 // família, dia de início do ciclo semanal, preferências de notificação
 // (armazenadas apenas — sem canal de envio, ver notificationPreferences).
+//
+// Phase 13 — seção adicional "Segurança" para redefinir o PIN do responsável.
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ParentSidebar } from './parent-sidebar'
 import { ParentTopbar } from './parent-topbar'
 import { GuardianProfileDrawer } from './guardian-profile-drawer'
@@ -15,6 +18,7 @@ import {
   updateFamilyCycleStartDay,
   updateNotificationPreferences,
 } from '@/app/actions/family'
+import { exitGuardianSession } from '@/app/actions/guardian-pin'
 
 interface NotificationPrefs {
   taskCompleted: boolean
@@ -42,6 +46,8 @@ export function SettingsPanelView({
   notificationPreferences,
 }: SettingsPanelViewProps) {
   const [profileOpen, setProfileOpen] = useState(false)
+  const router = useRouter()
+  const [resettingPin, setResettingPin] = useState(false)
 
   // Nome da família
   const [name, setName] = useState(familyName)
@@ -114,6 +120,21 @@ export function SettingsPanelView({
       setPrefsFeedback('error')
     } finally {
       setSavingPrefs(false)
+    }
+  }
+
+  // Phase 13 — Redefinir PIN do responsável. Limpa o guardian-session atual
+  // (trancando o painel) e vai ao setup, onde um novo PIN é cadastrado e um
+  // novo step-up é emitido. Reaproveita o mesmo fluxo do 1º acesso.
+  async function handleResetGuardianPin() {
+    if (resettingPin) return
+    setResettingPin(true)
+    try {
+      await exitGuardianSession()
+      router.push(`/family/${familyId}/guardian-setup`)
+    } catch (err) {
+      console.error('exitGuardianSession failed', err)
+      setResettingPin(false)
     }
   }
 
@@ -337,6 +358,42 @@ export function SettingsPanelView({
             {prefsFeedback === 'error' && (
               <span style={{ fontSize: 13, color: 'var(--color-kreds-error)' }}>Erro ao salvar</span>
             )}
+          </div>
+
+          {/* Segurança — Phase 13: redefinir PIN do responsável */}
+          <div
+            style={{
+              padding: 20,
+              borderRadius: 24,
+              background: 'var(--color-kreds-card)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+            }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 700, color: '#27372C' }}>
+              Segurança
+            </span>
+            <span style={{ fontSize: 13, color: 'var(--color-kreds-muted)', marginTop: -8 }}>
+              PIN usado para acessar este painel. A troca tranca a sessão atual.
+            </span>
+            <button
+              onClick={handleResetGuardianPin}
+              disabled={resettingPin}
+              style={{
+                alignSelf: 'flex-start',
+                padding: '10px 20px',
+                borderRadius: 'var(--radius-pill)',
+                border: '1.5px solid var(--color-kreds-border)',
+                background: '#ffffff',
+                color: 'var(--color-kreds-text)',
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: resettingPin ? 'default' : 'pointer',
+              }}
+            >
+              {resettingPin ? 'Indo…' : 'Redefinir PIN do responsável'}
+            </button>
           </div>
         </div>
       </main>

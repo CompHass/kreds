@@ -86,14 +86,20 @@ export default async function SelectProfilePage({
         </div>
       )}
 
-      {/* Guardian access */}
+      {/* Guardian step-up entry — Phase 13.
+          O link antigo "Acessar Painel do Responsável" levava direto a
+          /family/{id}/tasks sem checar role, permitindo que qualquer criança na
+          tela de seleção de perfis entrasse no painel de gerenciamento. Agora o
+          guardião passa por um gate de PIN (guardian-login / guardian-setup),
+          e o botão é discreto/pequeno para não chamar atenção de crianças
+          pequenas que consigam ler. */}
       <div className="mt-12 flex flex-col items-center">
         <a
-          href={`/family/${familyId}/tasks`}
-          className="text-[15px] font-bold px-6 py-3 rounded-[13px] border-[1.5px] border-[#E2DECF] bg-white transition-transform active:scale-[0.98]"
-          style={{ color: 'var(--color-kreds-text)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}
+          href={`/family/${familyId}/guardian-login`}
+          className="text-[13px] font-medium underline"
+          style={{ color: 'var(--color-kreds-hint)' }}
         >
-          Acessar Painel do Responsável
+          Sou responsável
         </a>
       </div>
 

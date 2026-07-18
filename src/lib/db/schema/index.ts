@@ -67,6 +67,11 @@ export const families = pgTable(
     // Phase 10: 0=Sunday..6=Saturday — day the weekly activity cycle begins.
     // Read by getCurrentCycleStart() (garden, task completion, reports).
     cycleStartDay: integer('cycle_start_day').notNull().default(0),
+    // Phase 13: guardian PIN gate. bcrypt hash, shared by all guardians of the
+    // family (mirrors childProfiles.pinHash). Null until first "guardian-setup";
+    // while null, /family/* routes redirect to the setup flow. See
+    // src/lib/families/guardian-session.ts + src/app/actions/guardian-auth.ts.
+    guardianPinHash: text('guardian_pin_hash'),
     deactivatedAt: timestamp('deactivated_at'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
