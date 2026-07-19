@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { AuthInput } from '@/components/auth/auth-input'
 import { SpinnerButton } from '@/components/auth/spinner-button'
 import { signupGuardian } from '@/app/actions/guardian-signup'
 
 export function GuardianSignupForm() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -21,7 +23,13 @@ export function GuardianSignupForm() {
     try {
       const data = new FormData(event.currentTarget)
       const result = await signupGuardian(data)
-      if (!result.ok) setError(result.error)
+      if (!result.ok) {
+        setError(result.error)
+      } else {
+        // Account created + ZITADEL has emailed a verification code.
+        // Send the user to the in-app verify screen.
+        router.push(`/verify?userID=${encodeURIComponent(result.userId)}`)
+      }
     } catch (caught) {
       if (caught && typeof caught === 'object' && 'digest' in caught && String((caught as { digest: unknown }).digest).startsWith('NEXT_REDIRECT')) throw caught
       setError('Não foi possível criar a conta. Tente novamente.')

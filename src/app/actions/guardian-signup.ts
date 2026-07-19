@@ -1,16 +1,18 @@
 'use server'
 
-import { signIn } from '../../../auth'
 import { and, eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { families, familyMemberships, guardianInvitations, identities } from '@/lib/db/schema'
 import { createGuardianUser, ZitadelApiError } from '@/lib/zitadel/login-client'
-import { issueProvisionalSignupToken } from '@/lib/auth/provisional-signup'
+import { setPendingVerify } from '@/lib/auth/pending-verify'
 
 const INVALID = 'Não foi possível criar a conta. Verifique os dados e tente novamente.'
 const DUPLICATE = 'Não foi possível criar a conta. Verifique os dados e tente novamente.'
 
-export type GuardianSignupResult = { ok: true } | { ok: false; error: string }
+// Returns userId on success so the form can navigate to /verify?userID=...
+// We intentionally do NOT auto-login here anymore: the guardian must verify
+// their email code on the /verify screen before a session is issued.
+export type GuardianSignupResult = { ok: true; userId: string } | { ok: false; error: string }
 
 export async function signupGuardian(formData: FormData): Promise<GuardianSignupResult> {
   const email = String(formData.get('email') ?? '').trim().toLowerCase()
@@ -64,7 +66,11 @@ export async function signupGuardian(formData: FormData): Promise<GuardianSignup
     return { ok: false, error: INVALID }
   }
 
-  const provisionalSignupToken = await issueProvisionalSignupToken(identityId)
-  await signIn('credentials', { email, password, provisionalSignupToken, redirectTo: '/family' })
-  return { ok: true }
+  // Stash credentials in a 5-minute signed httpOnly cookie so the /verify
+  // action can complete signIn('credentials') right after the email code is
+  // validated — without the user re-typing the password and without auto-login
+  // before verification.
+  void identityId // identity row already created above; kept for clarity.
+  await setPendingVerify({ userId: created.userId, email, password })
+  return { ok: true, userId: created.userId }
 }

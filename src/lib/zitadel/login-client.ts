@@ -120,6 +120,24 @@ export async function requestGuardianPasswordReset(userId: string, urlTemplate: 
   })
 }
 
+// Email verification (in-app code flow). ZITADEL generates a code and emails it
+// when the human user is created with email.sendCode (createGuardianUser above),
+// and again on resend below. The user reads the code from their inbox and types
+// it into the /verify screen; verifyGuardianEmail submits it to ZITADEL.
+export async function verifyGuardianEmail(userId: string, verificationCode: string): Promise<void> {
+  await request(`/v2/users/${encodeURIComponent(userId)}/email/verify`, {
+    method: 'POST',
+    body: JSON.stringify({ verificationCode }),
+  })
+}
+
+export async function resendGuardianEmailCode(userId: string): Promise<void> {
+  await request(`/v2/users/${encodeURIComponent(userId)}/email/send`, {
+    method: 'POST',
+    body: JSON.stringify({}),
+  })
+}
+
 export async function setGuardianPassword(userId: string, verificationCode: string, password: string): Promise<void> {
   await request(`/v2/users/${encodeURIComponent(userId)}/password`, {
     method: 'POST',
