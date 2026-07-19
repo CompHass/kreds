@@ -68,19 +68,19 @@ export function PinScreen({ childId, familyId, displayName }: PinScreenProps) {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         background: 'radial-gradient(120% 100% at 50% 0%, #ECE7DB 0%, #E0DACB 100%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: 48,
-        paddingBottom: 48,
+        paddingTop: 24,
+        paddingBottom: 'calc(24px + env(safe-area-inset-bottom))',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
       {/* 1. Logo */}
-      <div style={{ marginBottom: 120 }}>
+      <div>
         <svg
           width="80"
           height="32"
@@ -112,10 +112,13 @@ export function PinScreen({ childId, familyId, displayName }: PinScreenProps) {
         </svg>
       </div>
 
+      {/* Espaço flexível: mínimo 24px em viewports baixos (Safari iOS), até 120px em telas altas */}
+      <div aria-hidden="true" style={{ flexGrow: 1, minHeight: 24, maxHeight: 120 }} />
+
       {/* 2. Plant hero SVG — kredsBreath */}
       <div
         style={{
-          marginBottom: 32,
+          marginBottom: 24,
           animation: 'var(--animate-kreds-breath)',
         }}
       >
@@ -155,7 +158,7 @@ export function PinScreen({ childId, familyId, displayName }: PinScreenProps) {
           fontWeight: 700,
           color: 'var(--color-kreds-text)',
           margin: 0,
-          marginBottom: 24,
+          marginBottom: 16,
           letterSpacing: '-0.01em',
         }}
       >
@@ -163,12 +166,12 @@ export function PinScreen({ childId, familyId, displayName }: PinScreenProps) {
       </h1>
 
       {/* 4. Dots do PIN — CAUTH-02 (shake no container) */}
-      <div style={{ marginBottom: 32 }}>
+      <div style={{ marginBottom: 24 }}>
         <PinDots count={pin.length} error={error} />
       </div>
 
       {/* 5. Teclado numérico */}
-      <div style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 16 }}>
         <NumericKeypad onDigit={handleDigit} onBackspace={handleBackspace} />
       </div>
 
