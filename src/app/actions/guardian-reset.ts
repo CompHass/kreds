@@ -13,8 +13,11 @@ export async function requestGuardianPasswordResetAction(email: string): Promise
     const url = `${env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '')}/login/reset/confirm?userID={{.UserID}}&code={{.Code}}&orgID={{.OrgID}}`
     await requestGuardianPasswordReset(userId, url)
   } catch (error) {
-    // The response is intentionally identical for unknown users and provider failures.
-    if (!(error instanceof ZitadelApiError)) return { ok: true, message: GENERIC }
+    // The response is intentionally identical for unknown users and provider failures,
+    // but failures must reach the logs (no e-mail in the line) or they disappear silently.
+    console.error('[auth] password reset request failed', error instanceof ZitadelApiError
+      ? { status: error.status }
+      : { name: error instanceof Error ? error.name : 'unknown' })
   }
   return { ok: true, message: GENERIC }
 }
