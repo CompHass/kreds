@@ -4,7 +4,7 @@ Este guia explica como configurar o ZITADEL como provedor de identidade para rod
 
 ## Pré-requisitos
 
-- Acesso ao console ZITADEL em <https://auth.hasslab.pro> (solicite ao administrador caso não tenha)
+- Acesso ao console ZITADEL em <https://auth.comphass.com.br> (solicite ao administrador caso não tenha)
 - Node.js (v22+) e pnpm instalados
 - Banco de dados PostgreSQL acessível (conforme `DATABASE_URL`)
 
@@ -12,7 +12,7 @@ Este guia explica como configurar o ZITADEL como provedor de identidade para rod
 
 ## Passo 1: Criar ou localizar o Application no ZITADEL
 
-1. Acesse <https://auth.hasslab.pro> e faça login com sua conta de administrador.
+1. Acesse <https://auth.comphass.com.br> e faça login com sua conta de administrador.
 2. Navegue até: **Organization → Projects → kreds** (crie o projeto se ainda não existir).
 3. Dentro do projeto, vá em **Applications → Add Application**.
 4. Configure:
@@ -77,7 +77,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 AUTH_SECRET=<output do openssl rand -base64 33>
 AUTH_ZITADEL_ID=<client-id do ZITADEL>
 AUTH_ZITADEL_SECRET=<client-secret do ZITADEL>
-AUTH_ZITADEL_ISSUER=https://auth.hasslab.pro
+AUTH_ZITADEL_ISSUER=https://auth.comphass.com.br
 ```
 
 > O arquivo `.env.local` já está no `.gitignore`. **Nunca commite segredos**.
@@ -95,7 +95,7 @@ bash scripts/check-auth-config.sh
 O script vai:
 
 - Confirmar que `AUTH_SECRET`, `AUTH_ZITADEL_ID` e `AUTH_ZITADEL_SECRET` estão definidos (não placeholders)
-- Testar conectividade com `https://auth.hasslab.pro/.well-known/openid-configuration`
+- Testar conectividade com `https://auth.comphass.com.br/.well-known/openid-configuration`
 - Exibir o Redirect URI que precisa estar cadastrado no ZITADEL
 
 Todas as verificações devem passar (sem `[FAIL]`) antes de prosseguir.
@@ -112,7 +112,7 @@ Todas as verificações devem passar (sem `[FAIL]`) antes de prosseguir.
 
 2. Abra <http://localhost:3000> no navegador.
 3. Você deve ver a tela Sylvan com gradiente e o botão **"Entrar com ZITADEL"**.
-4. Clique no botão — o navegador deve redirecionar para `https://auth.hasslab.pro`.
+4. Clique no botão — o navegador deve redirecionar para `https://auth.comphass.com.br`.
 5. Faça login com suas credenciais no ZITADEL.
 6. Após o login, o ZITADEL redireciona para `http://localhost:3000/api/auth/callback/zitadel`.
 7. O Next.js Auth.js processa o callback e redireciona para:

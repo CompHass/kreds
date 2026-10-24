@@ -1,6 +1,6 @@
 ---
 name: kreds-deploy-debug
-description: Diagnose why kreds.hasslab.pro is running a stale version, deploy didn't show up, or ArgoCD looks out of sync. Use whenever a bug report says "not seeing my changes in prod", "deploy didn't work", "still old version", "ArgoCD out of sync", or after pushing to main and the site doesn't reflect it.
+description: Diagnose why kreds.comphass.com.br is running a stale version, deploy didn't show up, or ArgoCD looks out of sync. Use whenever a bug report says "not seeing my changes in prod", "deploy didn't work", "still old version", "ArgoCD out of sync", or after pushing to main and the site doesn't reflect it.
 metadata:
   domain: devops
   triggers: deploy, argocd, stale version, out of sync, image tag, rollout, gitops, kustomize, prod not updated

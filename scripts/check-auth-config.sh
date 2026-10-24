@@ -113,7 +113,7 @@ fi
 # ------------------------------------------------------------------
 section "[5] AUTH_ZITADEL_ISSUER"
 
-ISSUER="${AUTH_ZITADEL_ISSUER:-https://auth.hasslab.pro}"
+ISSUER="${AUTH_ZITADEL_ISSUER:-https://auth.comphass.com.br}"
 
 if [ -z "${AUTH_ZITADEL_ISSUER:-}" ]; then
   warn "AUTH_ZITADEL_ISSUER não definido — usando default: $ISSUER"

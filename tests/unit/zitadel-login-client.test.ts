@@ -55,7 +55,7 @@ describe('Zitadel login client', () => {
       userId: 'guardian-1',
       sessionToken: 'session-token',
     })
-    expect(fetchMock.mock.calls[3]?.[0]).toBe('https://auth.hasslab.pro/v2/sessions/session-1')
+    expect(fetchMock.mock.calls[3]?.[0]).toBe('https://auth.comphass.com.br/v2/sessions/session-1')
   })
 
   it('normalizes the v2 user profile and extracts grant role keys', async () => {

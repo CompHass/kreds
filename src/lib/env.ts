@@ -17,7 +17,7 @@ const envSchema = z.object({
   CHILD_SESSION_SECRET: z.string().min(32),
   AUTH_ZITADEL_ID: z.string().min(1),
   AUTH_ZITADEL_SECRET: z.string().min(1),
-  AUTH_ZITADEL_ISSUER: z.string().url().default('https://auth.hasslab.pro'),
+  AUTH_ZITADEL_ISSUER: z.string().url().default('https://auth.comphass.com.br'),
   PIN_ENCRYPTION_KEY: z.string().refine(
     (v) => Buffer.from(v, 'base64').length === 32,
     'PIN_ENCRYPTION_KEY must be a base64-encoded 32-byte (256-bit) key',

@@ -91,7 +91,7 @@ The initial audience is Christian parents and guardians who want to educate chil
 
 | Technology | Recommended Version / Family | Purpose | Why | Confidence |
 |------------|------------------------------|---------|-----|------------|
-| **ZITADEL OIDC** | HassLab instance at `https://auth.hasslab.pro` | Authentication / identity provider | Project decision. OIDC discovery confirms issuer, authorization/token/userinfo/JWKS endpoints, PKCE support, `openid profile email offline_access` scopes, and English/Portuguese UI locales. | HIGH |
+| **ZITADEL OIDC** | HassLab instance at `https://auth.comphass.com.br` | Authentication / identity provider | Project decision. OIDC discovery confirms issuer, authorization/token/userinfo/JWKS endpoints, PKCE support, `openid profile email offline_access` scopes, and English/Portuguese UI locales. | HIGH |
 | **Custom authorization layer** | Project code | Parent/guardian/child permissions | Do not rely only on generic auth roles. Kreds needs domain roles: guardian, child, possibly secondary guardian, and child-managed profile constraints. | HIGH |
 | **Parent-managed child profiles** | Project code | Minor-safe account model | For v1, children should be profiles under a family, not fully independent public accounts. This avoids overbuilding identity flows for minors. | MEDIUM |
 
@@ -153,7 +153,7 @@ This project follows the global model hierarchy defined in `~/.config/opencode/A
 | Node.js/TypeScript over Go | HIGH | Strong fit for Next.js PWA, shared validation, and rapid product iteration. |
 | PostgreSQL + append-only ledger | HIGH | Required by PRD and standard for auditable relational financial records. |
 | Drizzle ORM | HIGH | Verified docs show PostgreSQL schema, relations, and transactions; explicit SQL is valuable for ledger work. |
-| ZITADEL OIDC | HIGH | OIDC discovery verified against `https://auth.hasslab.pro`; exact Next.js integration library/session strategy still needs implementation design. |
+| ZITADEL OIDC | HIGH | OIDC discovery verified against `https://auth.comphass.com.br`; exact Next.js integration library/session strategy still needs implementation design. |
 | Serwist for PWA | MEDIUM-HIGH | Official docs show Next.js setup; should be verified against chosen Next.js version/Turbopack config during implementation. |
 | Tailwind CSS 4 | HIGH | Official 2025 release docs confirm v4 architecture and benefits. |
 | pg-boss jobs | MEDIUM | Good fit because it avoids Redis, but job semantics should be validated with weekly cycle requirements. |
@@ -162,7 +162,7 @@ This project follows the global model hierarchy defined in `~/.config/opencode/A
 
 - Context7: Next.js `/vercel/next.js` docs for App Router, Server Actions, PWA guidance, and `refresh` behavior. Confidence: HIGH.
 - Context7: Drizzle ORM `/drizzle-team/drizzle-orm-docs` docs for PostgreSQL schema, relations, migrations, and transactions. Confidence: HIGH.
-- ZITADEL OIDC discovery: `https://auth.hasslab.pro/.well-known/openid-configuration` verified issuer, endpoints, scopes, PKCE, and locales. Confidence: HIGH for provider availability; MEDIUM for app integration details until Phase 2.
+- ZITADEL OIDC discovery: `https://auth.comphass.com.br/.well-known/openid-configuration` verified issuer, endpoints, scopes, PKCE, and locales. Confidence: HIGH for provider availability; MEDIUM for app integration details until Phase 2.
 - Node.js official release page: `https://nodejs.org/en/about/previous-releases` — production apps should use Active/Maintenance LTS; Node 24 and Node 22 LTS status observed. Confidence: HIGH.
 - PostgreSQL official versioning policy: `https://www.postgresql.org/support/versioning/` — major versions supported for 5 years; PostgreSQL 18 and 17 currently supported. Confidence: HIGH.
 - Tailwind CSS v4 official release notes: `https://tailwindcss.com/blog/tailwindcss-v4` — v4 released Jan 22, 2025 with performance and CSS-first changes. Confidence: HIGH.
@@ -199,7 +199,7 @@ The app runs via **Docker Compose**, not `pnpm dev` or npm locally.
 
 | Resource | Details |
 |---|---|
-| App URL | `https://kreds.hasslab.pro` |
+| App URL | `https://kreds.comphass.com.br` |
 | Ingress | `nginx`, `force-ssl-redirect: true`, cert-manager `letsencrypt-prod` |
 | App service | `kreds:3000` (ClusterIP) |
 | Database | `postgres` StatefulSet (ClusterIP, port 5432) |
@@ -209,22 +209,22 @@ The app runs via **Docker Compose**, not `pnpm dev` or npm locally.
 
 | Key | Value |
 |---|---|
-| `AUTH_URL` | `https://kreds.hasslab.pro` |
+| `AUTH_URL` | `https://kreds.comphass.com.br` |
 | `AUTH_TRUST_HOST` | `true` |
-| `AUTH_ZITADEL_ISSUER` | `https://auth.hasslab.pro` |
-| `NEXT_PUBLIC_APP_URL` | `https://kreds.hasslab.pro` |
+| `AUTH_ZITADEL_ISSUER` | `https://auth.comphass.com.br` |
+| `NEXT_PUBLIC_APP_URL` | `https://kreds.comphass.com.br` |
 | `NODE_ENV` | `production` |
 
 ### Zitadel (namespace: zitadel)
 
-- **URL:** `https://auth.hasslab.pro`
+- **URL:** `https://auth.comphass.com.br`
 - **Project:** `kreds` (ID: `376396522276782110`)
 - **OIDC App:** `application` (clientId: `376397200093151262`)
-- **Redirect URI registered:** `https://kreds.hasslab.pro/api/auth/callback/zitadel`
+- **Redirect URI registered:** `https://kreds.comphass.com.br/api/auth/callback/zitadel`
 - **Login UI:** V2 at `/ui/v2/login` (separate `zitadel-login` service)
 - **Service Account secret:** `iam-admin` in `zitadel` namespace
 
-**Rule — always check live config before login/auth work:** Before implementing, debugging, or changing anything related to login/auth (OIDC flow, redirect URIs, scopes, session/callback handling, roles, login UI), query the live Zitadel API for the current project configuration first — do not assume the values above are still accurate. Config drifts (redirect URIs, apps, roles get added/changed directly in Zitadel). Use the `iam-admin` service account secret (namespace `zitadel`) to authenticate against `https://auth.hasslab.pro`'s management API and confirm project/app/OIDC settings before making changes.
+**Rule — always check live config before login/auth work:** Before implementing, debugging, or changing anything related to login/auth (OIDC flow, redirect URIs, scopes, session/callback handling, roles, login UI), query the live Zitadel API for the current project configuration first — do not assume the values above are still accurate. Config drifts (redirect URIs, apps, roles get added/changed directly in Zitadel). Use the `iam-admin` service account secret (namespace `zitadel`) to authenticate against `https://auth.comphass.com.br`'s management API and confirm project/app/OIDC settings before making changes.
 
 ### Deploy Strategy
 

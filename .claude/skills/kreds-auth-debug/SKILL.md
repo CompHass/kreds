@@ -27,18 +27,18 @@ Treat `/tmp/iam-admin.json` as a secret — delete it when done (`rm /tmp/iam-ad
 
 Use `zitadel-tools` if installed:
 ```bash
-zitadel-tools key2jwt --audience=https://auth.hasslab.pro --key=/tmp/iam-admin.json --issuer=$(jq -r .userId /tmp/iam-admin.json) > /tmp/assertion.jwt
+zitadel-tools key2jwt --audience=https://auth.comphass.com.br --key=/tmp/iam-admin.json --issuer=$(jq -r .userId /tmp/iam-admin.json) > /tmp/assertion.jwt
 ```
 
 If `zitadel-tools` isn't available, build the JWT manually (RS256, `kid` header = `keyId` from the
-key file, `iss`/`sub` = `userId`, `aud` = `https://auth.hasslab.pro`, short `exp`) — a small Node
+key file, `iss`/`sub` = `userId`, `aud` = `https://auth.comphass.com.br`, short `exp`) — a small Node
 script using `jsonwebtoken` is fine since this is already a Node/TS project.
 
 ## Step 3 — Exchange for an access token
 
 ```bash
 curl --request POST \
-  --url https://auth.hasslab.pro/oauth/v2/token \
+  --url https://auth.comphass.com.br/oauth/v2/token \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --data grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer \
   --data scope='openid profile urn:zitadel:iam:org:project:id:zitadel:aud' \
@@ -59,17 +59,17 @@ APP_ID=376397200093151262
 
 # Confirm project still exists / is active
 curl -s -H "Authorization: Bearer $TOKEN" \
-  "https://auth.hasslab.pro/management/v1/projects/$PROJECT_ID" | jq .
+  "https://auth.comphass.com.br/management/v1/projects/$PROJECT_ID" | jq .
 
 # Get the OIDC app config — redirect URIs, grant types, response types, auth method
 curl -s -H "Authorization: Bearer $TOKEN" \
-  "https://auth.hasslab.pro/management/v1/projects/$PROJECT_ID/apps/$APP_ID" | jq .
+  "https://auth.comphass.com.br/management/v1/projects/$PROJECT_ID/apps/$APP_ID" | jq .
 ```
 
 If `PROJECT_ID`/`APP_ID` return 404, list all apps in the org to find the current ones:
 ```bash
 curl -s -H "Authorization: Bearer $TOKEN" \
-  "https://auth.hasslab.pro/management/v1/projects/$PROJECT_ID/apps/_search" \
+  "https://auth.comphass.com.br/management/v1/projects/$PROJECT_ID/apps/_search" \
   -X POST -H 'Content-Type: application/json' -d '{}' | jq .
 ```
 
@@ -77,7 +77,7 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 
 | Symptom | Check |
 |---|---|
-| Redirect loop / stuck on login | `redirectUris` on the OIDC app must include exactly `https://kreds.hasslab.pro/api/auth/callback/zitadel` (no trailing slash mismatch) |
+| Redirect loop / stuck on login | `redirectUris` on the OIDC app must include exactly `https://kreds.comphass.com.br/api/auth/callback/zitadel` (no trailing slash mismatch) |
 | `invalid_client` | `clientId` in `AUTH_ZITADEL_ISSUER`/app config vs. `kreds-config` ConfigMap and app secrets |
 | Session not persisting | `AUTH_TRUST_HOST=true` and `AUTH_URL` match the OIDC app's registered redirect host |
 | Wrong locale on login screen | Confirm login UI version — V2 at `/ui/v2/login` per CLAUDE.md; check if it changed |

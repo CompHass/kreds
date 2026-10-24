@@ -14,12 +14,12 @@ RUN corepack enable pnpm && \
     AUTH_SECRET=build-time-placeholder-secret \
     AUTH_ZITADEL_ID=build-time-placeholder-client-id \
     AUTH_ZITADEL_SECRET=build-time-placeholder-client-secret \
-    AUTH_ZITADEL_ISSUER=https://auth.hasslab.pro \
-    ZITADEL_ISSUER=https://auth.hasslab.pro \
+    AUTH_ZITADEL_ISSUER=https://auth.comphass.com.br \
+    ZITADEL_ISSUER=https://auth.comphass.com.br \
     CHILD_SESSION_SECRET=build-time-placeholder-child-session-secret \
     PIN_ENCRYPTION_KEY=dhA/bC7ugD4I5gx4omcLQOivxxwDWe8tDJa/710JQRE= \
     IAM_LOGIN_CLIENT='{"type":"serviceaccount","keyId":"build-time-placeholder-key","key":"build-time-placeholder-private-key","userId":"build-time-placeholder-user"}' \
-    NEXT_PUBLIC_APP_URL=https://kreds.hasslab.pro \
+    NEXT_PUBLIC_APP_URL=https://kreds.comphass.com.br \
     pnpm build && \
     mkdir -p public
 
